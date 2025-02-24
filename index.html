@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="tr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Üyelik Sistemi</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                background-color: #43414b;
+            }
+            .container {
+                width: 402px;
+                margin: 47px auto;
+                background: #cacaca;
+                padding: 22px;
+                border-radius: 22px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            }
+            input {
+                width: 93%;
+                padding: 10px;
+                margin: 10px 0;
+                border: 0px solid #ccc;
+                border-radius: 5px;
+            }
+            .button-group {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px;
+                border-radius: 5px;
+            }
+            .button-green,
+            .button-black {
+                padding: 12px 20px;
+                border: none;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: 0.3s;
+                font-size: 16px;
+                font-weight: bold;
+                display: block;
+                width: 100%;
+                margin-top: 11px;
+            }
+            .button-green {
+                background-color: #43414b;
+                color: white;
+                box-shadow: 0px 11px 6px rgba(0, 0, 0, 0.2);
+            }
+            .button-green:hover {
+                background-color: #218838;
+            }
+            .button-black {
+                background-color: #43414b;
+                color: white;
+                box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.2);
+            }
+            .button-black:hover {
+                background-color: #313039;
+            }
+            .forgot-password {
+                display: block;
+                margin-top: 10px;
+                padding: 5px;
+                background-color: #d9534f;
+                color: white;
+                text-decoration: none;
+                border-radius: 3px;
+                font-size: 14px;
+            }
+            .forgot-password:hover {
+                background-color: #c9302c;
+            }
+            .panel {
+                display: none;
+                margin-top: 100px;
+            }
+            .admin-panel {
+                width: 74%;
+                margin: auto;
+                background: #e4d3d3;
+                padding: 18px;
+                border-radius: 18px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 25);
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th,
+            td {
+                padding: 10px;
+                border: 1px solid #ddd;
+            }
+            th {
+                background-color: #4b5560;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container" id="questionPanel">
+            <h2>Üye misiniz?</h2>
+            <div class="button-group">
+                <button class="button-green" onclick="showLogin()">Evet, giriş yap</button>
+                <button class="button-black" onclick="showRegister()">Hayır, üye ol</button>
+            </div>
+        </div>
+
+        <div class="container panel" id="loginPanel">
+            <h2>Giriş Yap</h2>
+            <input type="text" id="username" placeholder="Kullanıcı Adı" />
+            <input type="password" id="password" placeholder="Şifre" />
+            <button class="button-green" onclick="login()">Giriş Yap</button>
+            <a
+                class="forgot-password"
+                href="https://wa.me/6282245924114?text=%20Merhabalar%2C%20kullan%C4%B1c%C4%B1%20ad%C4%B1m%3D%0A%C5%9Eifremi%20unuttum%20yard%C4%B1mc%C4%B1%20olur%20musunuz%3F"
+                >Şifremi Unuttum</a
+            >
+        </div>
+
+        <div class="container panel" id="registerPanel">
+            <h2>Üye Ol</h2>
+            <input type="text" id="newUsername" placeholder="Kullanıcı Adı" />
+            <input type="password" id="newPassword" placeholder="Şifre" />
+            <button class="button-green" onclick="register()">Üye Ol</button>
+        </div>
+
+        <div class="admin-panel panel" id="adminPanel">
+            <h2>Üye Listesi</h2>
+            <table>
+                <tr>
+                    <th>Kullanıcı Adı</th>
+                    <th>Şifre</th>
+                </tr>
+                <tr>
+                    <td>1122</td>
+                    <td>1122</td>
+                </tr>
+            </table>
+        </div>
+
+        <script>
+            function showLogin() {
+                document.getElementById("questionPanel").style.display = "none";
+                document.getElementById("loginPanel").style.display = "block";
+            }
+
+            function showRegister() {
+                document.getElementById("questionPanel").style.display = "none";
+                document.getElementById("registerPanel").style.display = "block";
+            }
+
+            function login() {
+                var user = document.getElementById("username").value;
+                var pass = document.getElementById("password").value;
+
+                // Yerel depolamadan kullanıcı bilgilerini al
+                var registeredUser = localStorage.getItem("username");
+                var registeredPass = localStorage.getItem("password");
+
+                if (user === "1122" && pass === "1122") {
+                    // Başarılı girişte yönlendirme
+                    document.getElementById("loginPanel").style.display = "none";
+                    document.getElementById("adminPanel").style.display = "block";
+                } else if (user === registeredUser && pass === registeredPass) {
+                    alert("Giriş başarılı!");
+                    // Kullanıcı bilgileri doğruysa admin panelini göster
+                    window.location.href = "https://www.theleng.site";
+                } else {
+                    alert("Hatalı giriş!");
+                }
+            }
+
+            function register() {
+                var newUser = document.getElementById("newUsername").value;
+                var newPass = document.getElementById("newPassword").value;
+
+                // Kullanıcı bilgilerini yerel depolamaya kaydet
+                localStorage.setItem("username", newUser);
+                localStorage.setItem("password", newPass);
+
+                alert("Üyelik kaydı oluşturuldu. Lütfen giriş yapın.");
+                document.getElementById("registerPanel").style.display = "none";
+                document.getElementById("loginPanel").style.display = "block";
+            }
+        </script>
+    </body>
+</html>
