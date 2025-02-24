@@ -1,6 +1,30 @@
 <!doctype html>
 <html lang="tr">
     <head>
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Başlığı</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #222029; /* Barın arka plan rengi */
+            color: #cacaca; /* Yazı rengi */
+            display: flex;
+            align-items: center;
+            padding: -3px 17px;
+        }
+        .navbar img {
+            height: 57px; /* Logo yüksekliği */
+            margin-right: 7px; /* Yazı ile logo arasındaki boşluk */
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+    </style>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Üyelik Sistemi</title>
@@ -101,6 +125,10 @@
         </style>
     </head>
     <body>
+        <div class="navbar">
+        <img src="theleng.png" alt="Logo"> <!-- Buraya logo resminin yolunu ekle -->
+        <h1>THE LENG</h1>
+    </div>
         <div class="container" id="questionPanel">
             <h2>Üye misiniz?</h2>
             <div class="button-group">
