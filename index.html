@@ -57,8 +57,8 @@
 
             /* İçerik Alanı */
             .container {
-                max-width: 400px;
-                margin: 40px auto;
+                max-width: 933px;
+                margin: 96px auto;
                 text-align: center;
                 background: white;
                 padding: 20px;
@@ -75,8 +75,8 @@
             /* Arama Kutusu */
             .search-box input {
                 width: 100%;
-                padding: 12px;
-                font-size: 16px;
+                padding: 18px;
+                font-size: 30px;
                 border: 1px solid #ccc;
                 border-radius: 5px;
                 outline: none;
@@ -95,7 +95,7 @@
 
             /* Arama Sonuçları */
             .search-results {
-                margin-top: 10px;
+                margin-top: Z;
                 max-height: 200px;
                 overflow-y: auto;
                 border-radius: 5px;
@@ -131,9 +131,9 @@
             /* Ayet Paneli */
             .ayat-panel {
                 display: none;
-                margin-top: 20px;
+                margin-top: 7px;
                 background: white;
-                padding: 15px;
+                padding: 11px;
                 border-radius: 10px;
                 box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
                 transition: background 0.3s;
@@ -463,176 +463,119 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Rasgele Ayet Paneli</title>
         <style>
-            /* Gece Modu için Ayarlar */
-            body.night-mode {
-                background-color: #121212;
-                color: white;
-            }
-
-            /* Ana İçerik */
-            .main-content {
-                padding: 20px;
-                text-align: center;
-            }
-
             /* Rasgele Ayet Paneli */
             .random-ayat-panel {
-                margin-top: 20px;
-                padding: 20px;
+                width: 24%;
                 background-color: white;
-                border-radius: 8px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                transition: background 0.3s;
-            }
-
-            .night-mode .random-ayat-panel {
-                background-color: #222;
-                color: white;
-            }
-
-            .random-ayat-panel button {
-                width: 100%;
-                padding: 12px;
-                background-color: #444;
-                color: white;
-                border: none;
-                font-size: 16px;
-                cursor: pointer;
-                border-radius: 8px;
-                transition: background 0.3s;
-            }
-
-            .random-ayat-panel button:hover {
-                background-color: #666;
-            }
-
-            .night-mode .random-ayat-panel button {
-                background-color: #666;
-            }
-
-            .night-mode .random-ayat-panel button:hover {
-                background-color: #888;
+                padding: 14px;
+                border-radius: 42px;
+                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+                transition: background 0.4s, color 0.4s;
+                text-align: center;
+                position: absolute;
+                top: 85%;
+                left: 67%;
+                transform: translate(-50%, -50%);
             }
 
             .random-ayat-panel p {
-                margin-top: 15px;
-                font-size: 18px;
+                font-size: 17px;
+                font-weight: bold;
+                color: #666;
+                margin-bottom: 3px;
+            }
+
+            /* Meal Kaynakça */
+            .meal-source {
+                font-size: 14px;
+                color: #666;
                 font-style: italic;
-                color: #555;
+            }
+
+            /* Gece Modu Desteği */
+            .night-mode .random-ayat-panel {
+                background-color: #222;
+                color: white;
+                box-shadow: 0px 2px 5px rgba(255, 255, 255, 0.2);
             }
 
             .night-mode .random-ayat-panel p {
-                color: #e0e0e0;
+                color: #ddd;
+            }
+
+            .night-mode .meal-source {
+                color: #bbb;
             }
         </style>
     </head>
     <body>
-        <!-- Ana İçerik -->
-
         <!-- Rasgele Ayet Paneli -->
         <div class="random-ayat-panel" id="randomAyetPanel">
             <p id="randomAyetText">Ayet meali burada görünecek...</p>
+            <p class="meal-source" id="mealSource"></p>
         </div>
 
         <script>
-            // Rasgele Ayet Listesi (Örnek olarak 3 ayet meali ekledim)
+            // Rasgele Ayet Listesi
             const randomAyets = [
-                {
-                    ayet: "Allah, gökleri ve yeri hak olarak yaratmıştır. O, dilediğini yaratır. O, her şeye kadirdir.",
-                    meal: "İbrahim, 2"
-                },
-                {
-                    ayet: "Ey insanlar! Sizi bir tek nefisten yaratan Rabbinize kulluk edin. O, sizi ve sizden öncekileri yaratandır.",
-                    meal: "Bakara, 21"
-                },
-                { ayet: "Allah, göklerin ve yerin nurudur.", meal: "Nur, 35" },
-                { ayet: "O, gökleri ve yeri altı günde yaratan, sonra arşa istiva eden Allah'tır.", meal: "Araf, 54" },
-                {
-                    ayet: "De ki: 'O Allah, tekdir; Allah sameddir (her şey Ona muhtaçtır, O hiçbir şeye muhtaç değildir).'",
-                    meal: "İhlas, 1-2"
-                },
-                { ayet: "Kim Allah'a ve Resûlüne itaat ederse, büyük bir başarıya ulaşmış olur.", meal: "Ahzab, 71" },
-                { ayet: "Sadece Allah'ın yardımına güvenin, çünkü O her zaman yanınızdadır.", meal: "Ali İmran, 159" },
-                { ayet: "Gerçekten sabır, ancak Allah'tan yardım dileyenler içindir.", meal: "Bakara, 153" },
-                { ayet: "Kendiniz için sevmediğiniz şeyleri, başkaları için istemeyin.", meal: "Hucurat, 11" },
-                { ayet: "Ve Rabbiniz dedi ki: 'Bana dua edin, size cevap vereyim.'", meal: "Müminun, 60" },
-                {
-                    ayet: "İman edenler, Allah'ın yolunda savaşanlar ve sabredenler, kurtuluşa erenlerdir.",
-                    meal: "Al-i İmran, 146"
-                },
-                {
-                    ayet: "O, sizden mallarınızı ve canlarınızı alacak. Ama sonunda her şeyin karşılığını size verecektir.",
-                    meal: "Tövbe, 111"
-                },
-                {
-                    ayet: "O, Allah'tır. Ondan başka ilah yoktur. Her şey O'nun kudretiyle var olur.",
-                    meal: "Al-i İmran, 2"
-                },
-                {
-                    ayet: "Kim Allah'a, Resûlüne, Allah'ın indirdiği kitaba, peygamberlerine ve ahiret gününe inanırsa, doğruları söylemiş olur.",
-                    meal: "Bakara, 177"
-                },
-                { ayet: "Sizi bir tek nefisten yaratan, sonra onun eşini yaratandır.", meal: "Araf, 189" },
-                { ayet: "O Allah, her zaman sizinle beraberdir.", meal: "Müminun, 35" },
-                { ayet: "Bütün işler Allah'a aittir. O her şeyi en iyi şekilde düzenler.", meal: "Tahrim, 1" },
-                { ayet: "Dünyanın hayatı geçici, ahiretin ise ebedi olandır.", meal: "Ali İmran, 185" },
-                { ayet: "Allah, en güzel örnekleri verir. O, her şeyin en iyisini yapandır.", meal: "Zümer, 23" },
-                {
-                    ayet: "Ey iman edenler! Namazda Allah'tan yardım isteyin. Çünkü namaz, Allah'ın huzurunda olmaktır.",
-                    meal: "Bakara, 45"
-                },
-                {
-                    ayet: "Allah her şeyin en güzelini yaratandır. Onun yarattığı her şeyde hikmet vardır.",
-                    meal: "Mülk, 3"
-                },
-                {
-                    ayet: "Kim Allah'a ve Resûlüne inanır ve salih ameller işlerse, onun karşılığı kat kat verilecektir.",
-                    meal: "Furkan, 70"
-                },
-                { ayet: "İman eden ve salih ameller işleyenler, her zaman başarılı olacaklardır.", meal: "Casiye, 15" },
-                { ayet: "Allah, kendisinden başka ilah olmayan tek kudrettir.", meal: "Tevbe, 51" },
-                { ayet: "Sabır, inançlı bir insan için en büyük yardımcısıdır.", meal: "Bakara, 153" },
-                { ayet: "Allah, her an sizinle beraberdir.", meal: "Müminun, 34" },
-                {
-                    ayet: "İman edenler ve salih ameller işleyenler, sonsuza kadar cennette kalacaklardır.",
-                    meal: "Müminun, 11"
-                },
-                { ayet: "Yüce Allah, müminleri daima kurtarır ve onlara zafer verir.", meal: "Fetih, 1" },
-                { ayet: "İyilikle kötülük bir olmaz. Sen kötülüğü en güzel şekilde sav.", meal: "Fussilet, 34" },
-                {
-                    ayet: "Her şeyin bir zamanı vardır, sabır gösterin ve Allah'tan yardım isteyin.",
-                    meal: "Ali İmran, 200"
-                },
-                { ayet: "İman edin ve sabredin. Sabır edenler için büyük mükafat vardır.", meal: "Ali İmran, 146" },
-                { ayet: "Şüphesiz ki Allah, adaletli bir hüküm verendir.", meal: "Maide, 8" },
-                { ayet: "Kim Allah'ın rızasını istiyorsa, O'nun yolunda yürüsün.", meal: "Tahrim, 8" },
-                { ayet: "Allah'ın yardımına güvenin. Her şeyin sahibi O'dur.", meal: "Enfal, 10" },
-                { ayet: "Birbirinize iyi şeyleri öğretin, kötüye karşı uyarın.", meal: "Ali İmran, 110" },
-                { ayet: "Rabbinizden korkun, O'nun yolunda sebat edin.", meal: "Bakarah, 214" },
-                { ayet: "Allah her şeye kadirdir, her işin sonu O'na bağlıdır.", meal: "Araf, 54" },
-                { ayet: "Kimse diğerini küçümsemesin. Herkesin hesap günü vardır.", meal: "Hucurat, 11" },
-                { ayet: "Gerçekten Allah, sabırlılara yardım eder.", meal: "Bakara, 249" },
-                { ayet: "O, her şeye kadir olan, her şeyi kontrol eden Allah'tır.", meal: "Ankabut, 69" },
-                { ayet: "Kim kendisine zulmetmedikçe, başkalarına da zulmetmesin.", meal: "Nisa, 28" },
-                { ayet: "Allah, insana sadece kendisine iyi davranılmasını emreder.", meal: "İsra, 23" },
-                { ayet: "Kim Allah'a ve Resûlüne itaat ederse, o kişi gerçekten doğru yoldadır.", meal: "Ahzab, 71" },
-                { ayet: "İyi davranış sergileyenler, Allah'a en yakın olanlardır.", meal: "Bakara, 195" },
-                { ayet: "Allah'ın yardımına güvenin, her zaman O'nun koruması altındasınız.", meal: "Müminun, 118" },
-                { ayet: "İyilik ve takva konusunda yarışın.", meal: "Maide, 2" },
-                { ayet: "Allah, sizleri yalnız bırakmaz, her zaman yanınızdadır.", meal: "Fetih, 4" },
-                { ayet: "Doğrular her zaman başarılı olacaktır.", meal: "Furkan, 62" },
-                { ayet: "Sizlere zor bir şey gelirse, Allah onu kolaylaştıracaktır.", meal: "Enfal, 11" },
-                { ayet: "Allah, insanları sınamak için dünya hayatını yaratmıştır.", meal: "Mulk, 2" },
-                {
-                    ayet: "Kimse, başkalarının hatalarını görmesin, önce kendi hatalarına bakmalıdır.",
-                    meal: "Hucurat, 11"
-                },
-                { ayet: "Yeryüzünde Allah'ın kudretini görebilirsiniz.", meal: "Rum, 48" },
-                { ayet: "Allah, iyilik ve güzellik konusunda emretmiştir.", meal: "Nahl, 90" },
-                { ayet: "İyi işler yapmak, Allah'ın rızasını kazandırır.", meal: "Al-i İmran, 133" },
-                { ayet: "Birbirinize karşı hoşgörülü olun, birbirinizi sevin.", meal: "Hucurat, 10" },
-                { ayet: "Kim Allah'ın işlerini yaparsa, O'na ödüllerini verecektir.", meal: "Fussilet, 8" },
-                { ayet: "Ve Allah, zorluklardan sonra kolaylık sağlar.", meal: "Şerh, 6" }
+        { "ayet": "Allah, gökleri ve yeri hak olarak yaratmıştır. O, dilediğini yaratır. O, her şeye kadirdir.", "meal": "İbrahim, 2" },
+        { "ayet": "Ey insanlar! Sizi bir tek nefisten yaratan Rabbinize kulluk edin. O, sizi ve sizden öncekileri yaratandır.", "meal": "Bakara, 21" },
+        { "ayet": "Allah, göklerin ve yerin nurudur.", "meal": "Nur, 35" },
+        { "ayet": "O, gökleri ve yeri altı günde yaratan, sonra arşa istiva eden Allah'tır.", "meal": "Araf, 54" },
+        { "ayet": "De ki: 'O Allah, tekdir; Allah sameddir (her şey Ona muhtaçtır, O hiçbir şeye muhtaç değildir).'", "meal": "İhlas, 1-2" },
+        { "ayet": "Kim Allah'a ve Resûlüne itaat ederse, büyük bir başarıya ulaşmış olur.", "meal": "Ahzab, 71" },
+        { "ayet": "Sadece Allah'ın yardımına güvenin, çünkü O her zaman yanınızdadır.", "meal": "Ali İmran, 159" },
+        { "ayet": "Gerçekten sabır, ancak Allah'tan yardım dileyenler içindir.", "meal": "Bakara, 153" },
+        { "ayet": "Kendiniz için sevmediğiniz şeyleri, başkaları için istemeyin.", "meal": "Hucurat, 11" },
+        { "ayet": "Ve Rabbiniz dedi ki: 'Bana dua edin, size cevap vereyim.'", "meal": "Müminun, 60" },
+        { "ayet": "İman edenler, Allah'ın yolunda savaşanlar ve sabredenler, kurtuluşa erenlerdir.", "meal": "Al-i İmran, 146" },
+        { "ayet": "O, sizden mallarınızı ve canlarınızı alacak. Ama sonunda her şeyin karşılığını size verecektir.", "meal": "Tövbe, 111" },
+        { "ayet": "O, Allah'tır. Ondan başka ilah yoktur. Her şey O'nun kudretiyle var olur.", "meal": "Al-i İmran, 2" },
+        { "ayet": "Kim Allah'a, Resûlüne, Allah'ın indirdiği kitaba, peygamberlerine ve ahiret gününe inanırsa, doğruları söylemiş olur.", "meal": "Bakara, 177" },
+        { "ayet": "Sizi bir tek nefisten yaratan, sonra onun eşini yaratandır.", "meal": "Araf, 189" },
+        { "ayet": "O Allah, her zaman sizinle beraberdir.", "meal": "Müminun, 35" },
+        { "ayet": "Bütün işler Allah'a aittir. O her şeyi en iyi şekilde düzenler.", "meal": "Tahrim, 1" },
+        { "ayet": "Dünyanın hayatı geçici, ahiretin ise ebedi olandır.", "meal": "Ali İmran, 185" },
+        { "ayet": "Allah, en güzel örnekleri verir. O, her şeyin en iyisini yapandır.", "meal": "Zümer, 23" },
+        { "ayet": "Ey iman edenler! Namazda Allah'tan yardım isteyin. Çünkü namaz, Allah'ın huzurunda olmaktır.", "meal": "Bakara, 45" },
+        { "ayet": "Allah her şeyin en güzelini yaratandır. Onun yarattığı her şeyde hikmet vardır.", "meal": "Mülk, 3" },
+        { "ayet": "Kim Allah'a ve Resûlüne inanır ve salih ameller işlerse, onun karşılığı kat kat verilecektir.", "meal": "Furkan, 70" },
+        { "ayet": "İman eden ve salih ameller işleyenler, her zaman başarılı olacaklardır.", "meal": "Casiye, 15" },
+        { "ayet": "Allah, kendisinden başka ilah olmayan tek kudrettir.", "meal": "Tevbe, 51" },
+        { "ayet": "Sabır, inançlı bir insan için en büyük yardımcısıdır.", "meal": "Bakara, 153" },
+        { "ayet": "Allah, her an sizinle beraberdir.", "meal": "Müminun, 34" },
+        { "ayet": "İman edenler ve salih ameller işleyenler, sonsuza kadar cennette kalacaklardır.", "meal": "Müminun, 11" },
+        { "ayet": "Yüce Allah, müminleri daima kurtarır ve onlara zafer verir.", "meal": "Fetih, 1" },
+        { "ayet": "İyilikle kötülük bir olmaz. Sen kötülüğü en güzel şekilde sav.", "meal": "Fussilet, 34" },
+        { "ayet": "Her şeyin bir zamanı vardır, sabır gösterin ve Allah'tan yardım isteyin.", "meal": "Ali İmran, 200" },
+        { "ayet": "İman edin ve sabredin. Sabır edenler için büyük mükafat vardır.", "meal": "Ali İmran, 146" },
+        { "ayet": "Şüphesiz ki Allah, adaletli bir hüküm verendir.", "meal": "Maide, 8" },
+        { "ayet": "Kim Allah'ın rızasını istiyorsa, O'nun yolunda yürüsün.", "meal": "Tahrim, 8" },
+        { "ayet": "Allah'ın yardımına güvenin. Her şeyin sahibi O'dur.", "meal": "Enfal, 10" },
+        { "ayet": "Birbirinize iyi şeyleri öğretin, kötüye karşı uyarın.", "meal": "Ali İmran, 110" },
+        { "ayet": "Rabbinizden korkun, O'nun yolunda sebat edin.", "meal": "Bakarah, 214" },
+        { "ayet": "Allah her şeye kadirdir, her işin sonu O'na bağlıdır.", "meal": "Araf, 54" },
+        { "ayet": "Kimse diğerini küçümsemesin. Herkesin hesap günü vardır.", "meal": "Hucurat, 11" },
+        { "ayet": "Gerçekten Allah, sabırlılara yardım eder.", "meal": "Bakara, 249" },
+        { "ayet": "O, her şeye kadir olan, her şeyi kontrol eden Allah'tır.", "meal": "Ankabut, 69" },
+        { "ayet": "Kim kendisine zulmetmedikçe, başkalarına da zulmetmesin.", "meal": "Nisa, 28" },
+        { "ayet": "Allah, insana sadece kendisine iyi davranılmasını emreder.", "meal": "İsra, 23" },
+        { "ayet": "Kim Allah'a ve Resûlüne itaat ederse, o kişi gerçekten doğru yoldadır.", "meal": "Ahzab, 71" },
+        { "ayet": "İyi davranış sergileyenler, Allah'a en yakın olanlardır.", "meal": "Bakara, 195" },
+        { "ayet": "Allah'ın yardımına güvenin, her zaman O'nun koruması altındasınız.", "meal": "Müminun, 118" },
+        { "ayet": "İyilik ve takva konusunda yarışın.", "meal": "Maide, 2" },
+        { "ayet": "Allah, sizleri yalnız bırakmaz, her zaman yanınızdadır.", "meal": "Fetih, 4" },
+        { "ayet": "Doğrular her zaman başarılı olacaktır.", "meal": "Furkan, 62" },
+        { "ayet": "Sizlere zor bir şey gelirse, Allah onu kolaylaştıracaktır.", "meal": "Enfal, 11" },
+        { "ayet": "Allah, insanları sınamak için dünya hayatını yaratmıştır.", "meal": "Mulk, 2" },
+        { "ayet": "Kimse, başkalarının hatalarını görmesin, önce kendi hatalarına bakmalıdır.", "meal": "Hucurat, 11" },
+        { "ayet": "Yeryüzünde Allah'ın kudretini görebilirsiniz.", "meal": "Rum, 48" },
+        { "ayet": "Allah, iyilik ve güzellik konusunda emretmiştir.", "meal": "Nahl, 90" },
+        { "ayet": "İyi işler yapmak, Allah'ın rızasını kazandırır.", "meal": "Al-i İmran, 133" },
+        { "ayet": "Birbirinize karşı hoşgörülü olun, birbirinizi sevin.", "meal": "Hucurat, 10" },
+        { "ayet": "Kim Allah'ın işlerini yaparsa, O'na ödüllerini verecektir.", "meal": "Fussilet, 8" },
+        { "ayet": "Ve Allah, zorluklardan sonra kolaylık sağlar.", "meal": "Şerh, 6" }
+
             ];
 
             // Sayfa yüklendiğinde otomatik olarak rasgele bir ayet gösterme fonksiyonu
@@ -646,8 +589,8 @@
                 const randomAyet = randomAyets[randomIndex];
 
                 // Ayet ve Meal metnini göstermek
-                document.getElementById("randomAyetText").innerHTML =
-                    `"${randomAyet.ayet}" - <i>${randomAyet.meal}</i>`;
+                document.getElementById("randomAyetText").innerText = `"${randomAyet.ayet}"`;
+                document.getElementById("mealSource").innerText = `(${randomAyet.meal})`;
             }
         </script>
     </body>
