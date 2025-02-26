@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="tr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ARŞİV</title>
+        <style>
+            :root {
+                --bg-color: #2c2c2c;
+                --text-color: #c5acac;
+                --panel-bg: #5c0b0b;
+                --list-bg: #341313;
+                --list-hover: #777;
+            }
+
+            body {
+                background: url("cbh3.jpg") no-repeat center center fixed;
+                background-size: cover;
+                color: var(--text-color);
+            }
+
+            .light-mode {
+                --bg-color: #f5f5f5;
+                --text-color: #333;
+                --panel-bg: #ddd;
+                --list-bg: #eee;
+                --list-hover: #bbb;
+            }
+
+            body {
+                font-family: Arial, sans-serif;
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                text-align: center;
+                margin: 0;
+                padding: 20px;
+                transition: 0.3s;
+            }
+
+            .container {
+                max-width: 600px;
+                margin: auto;
+                background: var(--panel-bg);
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            }
+
+            h1 {
+                font-size: 36px;
+                margin-bottom: 20px;
+            }
+
+            .search-container input,
+            .password-container input {
+                background-color: #5c0b0b; /* İç rengini koyu gri yapar */
+                color: white; /* Yazı rengini beyaz yapar */
+                border: 1px solid white; /* Kenarlık ekler */
+                padding: 8px; /* İç boşluk ekleyerek daha şık görünmesini sağlar */
+                border-radius: 5px; /* Kenarları hafif yuvarlatır */
+            }
+
+            .search-container input::placeholder,
+            .password-container input::placeholder {
+                color: #bbb; /* Placeholder (örnek metin) rengini açık gri yapar */
+            }
+
+            .search-container button,
+            .password-container button {
+                background-color: black; /* Butonları siyah yapar */
+                color: white; /* Buton yazı rengini beyaz yapar */
+                border: 1px solid white;
+                padding: 8px 12px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .search-container button:hover,
+            .password-container button:hover {
+                background-color: #444; /* Üzerine gelince griye döner */
+            }
+
+            input {
+                width: 80%;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+            }
+
+            li {
+                background-color: var(--list-bg);
+                padding: 15px;
+                margin: 10px 0;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+            li:hover {
+                background-color: var(--list-hover);
+            }
+
+            #content-panel {
+                background-color: var(--panel-bg);
+                padding: 20px;
+                border-radius: 10px;
+                display: none;
+                text-align: left;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            .toggle-mode,
+            .password-btn {
+                padding: 16px;
+                border: none;
+                background-color: var(--list-bg);
+                color: var(--text-color);
+                cursor: pointer;
+                border-radius: 5px;
+                font-size: 14px;
+                transition: 0.3s;
+            }
+
+            .toggle-mode {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+
+            .toggle-mode:hover,
+            .password-btn:hover {
+                background-color: var(--list-hover);
+            }
+
+            .error {
+                color: red;
+                font-size: 14px;
+                margin-top: 10px;
+            }
+
+            button {
+                background-color: red;
+                color: white;
+                padding: 10px;
+                border: none;
+                cursor: pointer;
+                margin-bottom: 10px;
+                border-radius: 5px;
+            }
+
+            button:hover {
+                background-color: darkred;
+            }
+
+            #announcement-panel {
+                background-color: #a16969;
+                color: #333;
+                padding: 15px;
+                margin-bottom: 20px;
+                border-radius: 5px;
+                font-weight: bold;
+            }
+
+            #footer {
+                margin-top: 30px;
+                color: #bbb;
+                font-size: 14px;
+            }
+
+            .topic-image {
+                width: 100%;
+                height: auto;
+                margin-top: 20px;
+                border-radius: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <button class="toggle-mode" onclick="toggleMode()">Gündüz Modu</button>
+
+        <div id="password-screen" class="container">
+            <h1>Giriş Yap</h1>
+            <div class="password-container">
+                <input type="password" id="password" placeholder="Şifrenizi girin" />
+            </div>
+            <button class="password-btn" onclick="checkPassword()">Giriş</button>
+            <p id="error-message" class="error hidden">Şifre yanlış!</p>
+        </div>
+
+        <div id="main-content" class="container hidden">
+            <h1>ARŞİV.</h1>
+
+            <!-- Duyuru Paneli -->
+            <div id="announcement-panel">
+                <p><strong>ANKARA'DA TOPLANIYORUZ! Detaylı bilgi WhatsApp grubunda.</strong></p>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Konuları ara..." onkeyup="searchTopics()" />
+            </div>
+
+            <ul id="topic-list">
+                <li onclick="openTopic('tarih')">Tarih ve Medeniyet</li>
+                <li onclick="openTopic('bilim')">Bilim ve Teknoloji</li>
+                <li onclick="openTopic('sanat')">Sanat ve Kültür</li>
+                <li onclick="openTopic('felsefe')">Felsefe ve Düşünce</li>
+                <li onclick="openTopic('mitoloji')">Mitoloji ve Efsaneler</li>
+                <li onclick="openTopic('tarım')">TARIM</li>
+            </ul>
+
+            <div id="content-panel" class="hidden">
+                <button onclick="closePanel()">Geri</button>
+                <h2 id="content-title"></h2>
+                <img id="content-image" class="topic-image" src="content-image" />
+                <p id="content-text"></p>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <div id="footer">
+            <p>THE Leng @2025</p>
+        </div>
+
+        <script>
+            const validPasswords = ["11225417923", "223656"];
+
+            function checkPassword() {
+                const passwordInput = document.getElementById("password").value;
+                const errorMessage = document.getElementById("error-message");
+
+                if (validPasswords.includes(passwordInput)) {
+                    document.getElementById("password-screen").style.display = "none";
+                    document.getElementById("main-content").classList.remove("hidden");
+                } else {
+                    errorMessage.classList.remove("hidden");
+                }
+            }
+
+            const topics = {
+                tarih: {
+                    title: "Tarih ve Medeniyet",
+                    image: "cbh.jpg",
+                    text: "Medeniyetin doğuşu, tarımın gelişmesiyle başladı. İlk büyük şehirler Mezopotamya’da kuruldu..."
+                },
+                bilim: {
+                    title: "Bilim ve Teknoloji",
+                    text: "Bilim tarih boyunca insanlığın ilerlemesini sağladı. Antik Yunan’da Arşimet, suyun kaldırma kuvvetini keşfetti...",
+                    image: "cbh.jpg"
+                },
+                sanat: {
+                    title: "Sanat ve Kültür",
+                    text: "Sanat, insanlığın duygu ve düşüncelerini ifade etme biçimlerinden biridir. Rönesans döneminde sanatçılar eşsiz eserler ortaya koydular...",
+                    image: "cbh2.jpg"
+                },
+                felsefe: {
+                    title: "Felsefe ve Düşünce",
+                    text: "Sokrates, 'Sorgulanmamış bir hayat yaşanmaya değmez.' diyerek insanları düşünmeye teşvik etti...",
+                    image: "cbh.jpg"
+                },
+                mitoloji: {
+                    title: "Mitoloji ve Efsaneler",
+                    text: "Yunan mitolojisinde Zeus, tanrıların kralı olarak bilinir. Prometheus, insanlara ateşi getirerek onlara medeniyeti armağan etti...",
+                    image: "cbh3.jpg"
+                },
+                tarım: {
+                    title: "TARIM",
+                    text: "Sanat, insanlığın duygu ve düşüncelerini ifade etme biçimlerinden biridir. Rönesans döneminde sanatçılar eşsiz eserler ortaya koydular...",
+                    image: "cbh2.jpg"
+                }
+            };
+
+            function openTopic(topicKey) {
+                // Başlık
+                document.getElementById("content-title").innerText = topics[topicKey].title;
+
+                // Resim (Varsa)
+                const contentImage = document.getElementById("content-image");
+                if (topics[topicKey].image) {
+                    contentImage.src = topics[topicKey].image;
+                    contentImage.style.display = "block"; // Görünür yap
+                } else {
+                    contentImage.style.display = "none"; // Görünmez yap
+                }
+
+                // Metin
+                document.getElementById("content-text").innerText = topics[topicKey].text;
+
+                // Paneli aç
+                document.getElementById("announcement-panel").style.display = "none";
+                document.getElementById("search").style.display = "none";
+                document.getElementById("topic-list").style.display = "none";
+
+                document.getElementById("content-panel").style.display = "block";
+            }
+
+            function closePanel() {
+                document.getElementById("announcement-panel").style.display = "block";
+                document.getElementById("search").style.display = "block";
+                document.getElementById("topic-list").style.display = "block";
+                document.getElementById("content-panel").style.display = "none";
+            }
+
+            function searchTopics() {
+                let input = document.getElementById("search").value.toLowerCase();
+                let topics = document.querySelectorAll("#topic-list li");
+
+                topics.forEach((topic) => {
+                    topic.style.display = topic.innerText.toLowerCase().includes(input) ? "block" : "none";
+                });
+            }
+
+            function toggleMode() {
+                document.body.classList.toggle("light-mode");
+                document.querySelector(".toggle-mode").innerText = document.body.classList.contains("light-mode")
+                    ? "Gece Modu"
+                    : "Gündüz Modu";
+            }
+        </script>
+    </body>
+</html>
