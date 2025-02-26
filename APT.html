@@ -1,297 +1,327 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apartman Yönetim Sistemi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f1f5f8;
-            color: #333;
-            text-align: center;
-        }
-        header {
-            background: #2d3b42;
-            color: #fff;
-            padding: 25px 0;
-            font-size: 28px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        header span {
-            font-size: 16px;
-            opacity: 0.7;
-            display: block;
-            margin-top: 8px;
-        }
-        .container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 40px;
-        }
-        .panel {
-            background: #fff;
-            padding: 20px;
-            margin: 15px;
-            width: 180px;
-            height: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            font-size: 18px;
-            font-weight: 600;
-            color: #2d3b42;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .panel:hover {
-            background: #2d3b42;
-            color: white;
-            transform: scale(1.1);
-        }
-        .button {
-            padding: 12px 24px;
-            background: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-            margin-top: 15px;
-        }
-        .button:hover {
-            background: #0056b3;
-        }
-        .hidden {
-            display: none;
-        }
-        .announcement {
-            background-color: #ffcc00;
-            color: #2d3b42;
-            padding: 15px;
-            font-size: 18px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            display: none;
-        }
-        .password-panel {
-            padding: 30px;
-            background: #fff;
-            border-radius: 43px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 333px;
-            margin: 65px auto;
-            text-align: center;
-        }
-        .password-panel input {
-            padding: 8px;
-            width: 80%;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-        .password-panel button {
-            padding: 13px 98px;
-            background: rgba(45, 59, 66, 0.8);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
-        .password-panel button:hover {
-            background: #333;
-        }
-        .payment-panel {
-            background: #fff;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-            text-align: center;
-            font-size: 16px;
-        }
-        .payment-details {
-            font-weight: bold;
-            font-size: 18px;
-            color: #333;
-        }
-        .debt {
-            font-size: 20px;
-            margin: 15px;
-            font-weight: bold;
-            color: #ff6347;
-        }
-        .payment-info-button {
-            background: #28a745;
-            margin-top: 10px;
-        }
-        .payment-info-button:hover {
-            background: #218838;
-        }
-        .debt-container {
-            margin-top: 20px;
-        }
-        .debt-container p {
-            font-size: 18px;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>THE LENG</h1>
-        <span>YÖNETİM SİSTEMİ</span>
-    </header>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Apartman Yönetim Sistemi</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto:wght@400;500&display=swap"
+            rel="stylesheet" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body {
+                font-family: "Roboto", sans-serif;
+                background-color: rgba(45, 59, 66, 0.5);
+                color: #333;
+                text-align: center;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background: #35424a;
+                color: white;
+                text-align: center;
+                padding: 10px;
+                font-weight: bold;
+                font-family: "Georgia", serif;
+            }
+            header {
+                background: #2d3b42;
+                color: #fff;
+                padding: 25px 0;
+                font-size: 28px;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+            header span {
+                font-size: 16px;
+                opacity: 0.7;
+                display: block;
+                margin-top: 8px;
+            }
+            .container {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-top: 40px;
+            }
+            .panel {
+                background: rgba(255, 255, 255, 0.48);
+                padding: 20px;
+                margin: 15px;
+                width: 180px;
+                height: 180px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                font-size: 18px;
+                font-weight: 600;
+                color: #2d3b42;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            .panel:hover {
+                background: #2d3b42;
+                color: white;
+                transform: scale(1.1);
+            }
+            .button {
+                padding: 12px 24px;
+                background: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background 0.3s;
+                margin-top: 15px;
+            }
+            .button:hover {
+                background: #0056b3;
+            }
+            .hidden {
+                display: none;
+            }
+            .announcement {
+                background-color: #ffcc00;
+                color: #2d3b42;
+                padding: 15px;
+                font-size: 18px;
+                margin-bottom: 20px;
+                border-radius: 8px;
+                display: none;
+            }
+            .password-panel {
+                padding: 30px;
+                background: rgba(255, 255, 255, 0.48);
+                border-radius: 43px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                width: 333px;
+                margin: 65px auto;
+                text-align: center;
+            }
+            .password-panel input {
+                padding: 8px;
+                width: 80%;
+                margin-bottom: 20px;
+                border-radius: 8px;
+                border: 1px solid #2d3b42;
+                font-size: 16px;
+            }
+            .password-panel button {
+                padding: 13px 98px;
+                background: rgba(45, 59, 66, 0.8);
+                border: none;
+                border-radius: 8px;
+                color: white;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background 0.3s;
+            }
+            .password-panel button:hover {
+                background: #333;
+            }
+            .payment-panel {
+                background: #fff;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                margin-top: 20px;
+                text-align: center;
+                font-size: 16px;
+            }
+            .payment-details {
+                font-weight: bold;
+                font-size: 18px;
+                color: #333;
+            }
+            .debt {
+                font-size: 20px;
+                margin: 15px;
+                font-weight: bold;
+                color: #ff6347;
+            }
+            .payment-info-button {
+                background: #2d3b42;
+                margin-top: 10px;
+            }
+            .payment-info-button:hover {
+                background: #218838;
+            }
+            .debt-container {
+                margin-top: 20px;
+            }
+            .debt-container p {
+                font-size: 18px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>THE LENG</h1>
+            <span>YÖNETİM SİSTEMİ</span>
+        </header>
 
-    <!-- Duyuru Paneli -->
-    <div id="announcement" class="announcement"></div>
+        <!-- Duyuru Paneli -->
+        <div id="announcement" class="announcement"></div>
 
-    <div id="apartments" class="container">
-        <div class="panel" onclick="selectApartment('A Blok')">A Blok</div>
-        <div class="panel" onclick="selectApartment('B Blok')">B Blok</div>
-    </div>
-
-    <div id="flats" class="container hidden"></div>
-    
-    <!-- Şifre Paneli -->
-    <div id="passwordPanel" class="password-panel hidden">
-        <h3>ŞİFRE GİRİNİZ</h3>
-        <input type="password" id="passwordInput">
-        <button class="button" onclick="checkPassword()">Giriş</button>
-    </div>
-
-    <div id="paymentPage" class="hidden">
-        <h2>Borçlar</h2>
-        
-        <div id="paymentDetailsContainer"></div>
-
-        <div class="payment-panel">
-            <p>Ödeme Bilgileri:</p>
-            <p id="paymentDetails" class="payment-details">İsim: Mehmet Yılmaz | IBAN: TR00 0000 0000 0000 0000 0000 00</p>
-            <button class="button payment-info-button" onclick="copyPaymentInfo()">Kopyala</button>
+        <div id="apartments" class="container">
+            <div class="panel" onclick="selectApartment('A Blok')">A Blok</div>
+            <div class="panel" onclick="selectApartment('B Blok')">B Blok</div>
+            <div class="panel" onclick="selectApartment('MELİSSA APT.')">MELİSSA APT.</div>
         </div>
 
-        <div id="debtsContainer" class="debt-container">
-            <div id="debtDetails"></div>
+        <div id="flats" class="container hidden"></div>
+
+        <!-- Şifre Paneli -->
+        <div id="passwordPanel" class="password-panel hidden">
+            <h3>ŞİFRE GİRİNİZ</h3>
+            <input type="password" id="passwordInput" />
+            <button class="button" onclick="checkPassword()">Giriş</button>
         </div>
-    </div>
 
-    <script>
-        // Şifreler ve Borçlar
-        const flatPasswords = {
-            "A Blok - 1": "1234",
-            "A Blok - 2": "5678",
-            "A Blok - 3": "abcd",
-            "A Blok - 4": "efgh",
-            "A Blok - 5": "ijkl",
-            "B Blok - 1": "mnop",
-            "B Blok - 2": "qrst",
-            "B Blok - 3": "uvwx",
-            "B Blok - 4": "yzab",
-            "B Blok - 5": "cdef"
-        };
+        <div id="paymentPage" class="hidden">
+            <h2>Borçlar</h2>
 
-        const debts = {
-            "A Blok - 1": 500,
-            "A Blok - 2": 1200,
-            "A Blok - 3": 800,
-            "A Blok - 4": 1500,
-            "A Blok - 5": 2500,
-            "B Blok - 1": 1000,
-            "B Blok - 2": 1100,
-            "B Blok - 3": 2000,
-            "B Blok - 4": 900,
-            "B Blok - 5": 1700
-        };
+            <div id="paymentDetailsContainer"></div>
 
-        const announcements = {
-            "A Blok": "A Blok sakinlerine duyuru: 15:00'te temizlik yapılacaktır. Lütfen dairelerinizi boşaltınız.",
-            "B Blok": "B Blok sakinlerine hatırlatma: 2025 aidat ödemesi için son tarih 30 Şubat."
-        };
+            <div class="payment-panel">
+                <p>Ödeme Bilgileri:</p>
+                <p id="paymentDetails" class="payment-details">
+                    İsim: Mehmet Yılmaz | IBAN: TR00 0000 0000 0000 0000 0000 00
+                </p>
+                <button class="button payment-info-button" onclick="copyPaymentInfo()">Kopyala</button>
+            </div>
 
-        let selectedFlat = "";
-        let selectedApartment = "";
+            <div id="debtsContainer" class="debt-container">
+                <div id="debtDetails"></div>
+            </div>
+        </div>
 
-        function selectApartment(apartment) {
-            selectedApartment = apartment;
-            showAnnouncement(announcements[apartment]);
-            document.getElementById("apartments").classList.add("hidden");
-            let flatsContainer = document.getElementById("flats");
-            flatsContainer.innerHTML = "";
-            for (let i = 1; i <= 5; i++) {
-                let div = document.createElement("div");
-                div.className = "panel";
-                div.innerText = `${apartment} - ${i}`;
-                div.onclick = function() { selectFlat(`${apartment} - ${i}`); };
-                flatsContainer.appendChild(div);
+        <script>
+            // Şifreler ve Borçlar
+            const flatPasswords = {
+                "A Blok - 1": "1234",
+                "A Blok - 2": "5678",
+                "A Blok - 3": "abcd",
+                "A Blok - 4": "efgh",
+                "A Blok - 5": "ijkl",
+                "B Blok - 1": "mnop",
+                "B Blok - 2": "qrst",
+                "B Blok - 3": "uvwx",
+                "B Blok - 4": "yzab",
+                "B Blok - 5": "cdef",
+                "MELİSSA APT. - 1": "1234",
+                "MELİSSA APT. - 2": "5678",
+                "MELİSSA APT. - 3": "abcd",
+                "MELİSSA APT. - 4": "efgh",
+                "MELİSSA APT. - 5": "ijkl"
+            };
+
+            const debts = {
+                "A Blok - 1": 500,
+                "A Blok - 2": 1200,
+                "A Blok - 3": 800,
+                "A Blok - 4": 1500,
+                "A Blok - 5": 2500,
+                "B Blok - 1": 1000,
+                "B Blok - 2": 1100,
+                "B Blok - 3": 2000,
+                "B Blok - 4": 900,
+                "B Blok - 5": 1700,
+                "MELİSSA APT.1": "1234",
+                "MELİSSA APT.2": "5678",
+                "MELİSSA APT.3": "551",
+                "MELİSSA APT.4": "500",
+                "MELİSSA APT.5": "500"
+            };
+
+            const announcements = {
+                "A Blok": "A Blok sakinlerine duyuru: 15:00'te temizlik yapılacaktır. Lütfen dairelerinizi boşaltınız.",
+                "B Blok": "B Blok sakinlerine hatırlatma: 2025 aidat ödemesi için son tarih 30 Şubat.",
+                "MELİSSA APT.": "B Blok sakinlerine hatırlatma: 2025 aidat ödemesi için son tarih 30 Şubat."
+            };
+
+            let selectedFlat = "";
+            let selectedApartment = "";
+
+            function selectApartment(apartment) {
+                selectedApartment = apartment;
+                showAnnouncement(announcements[apartment]);
+                document.getElementById("apartments").classList.add("hidden");
+                let flatsContainer = document.getElementById("flats");
+                flatsContainer.innerHTML = "";
+                for (let i = 1; i <= 5; i++) {
+                    let div = document.createElement("div");
+                    div.className = "panel";
+                    div.innerText = `${apartment} - ${i}`;
+                    div.onclick = function () {
+                        selectFlat(`${apartment} - ${i}`);
+                    };
+                    flatsContainer.appendChild(div);
+                }
+                flatsContainer.classList.remove("hidden");
             }
-            flatsContainer.classList.remove("hidden");
-        }
 
-        function selectFlat(flat) {
-            document.getElementById("flats").classList.add("hidden");
-            selectedFlat = flat;
-            document.getElementById("passwordPanel").classList.remove("hidden");
-        }
-
-        function checkPassword() {
-            let password = document.getElementById("passwordInput").value;
-            if (password === flatPasswords[selectedFlat]) {
-                document.getElementById("passwordPanel").classList.add("hidden");
-                document.getElementById("paymentPage").classList.remove("hidden");
-                displayPaymentDetails();
-                displayDebt();
-            } else {
-                alert("Yanlış şifre!");
+            function selectFlat(flat) {
+                document.getElementById("flats").classList.add("hidden");
+                selectedFlat = flat;
+                document.getElementById("passwordPanel").classList.remove("hidden");
             }
-        }
 
-        function displayPaymentDetails() {
-            const paymentDetailsContainer = document.getElementById("paymentDetailsContainer");
-            paymentDetailsContainer.innerHTML = `
+            function checkPassword() {
+                let password = document.getElementById("passwordInput").value;
+                if (password === flatPasswords[selectedFlat]) {
+                    document.getElementById("passwordPanel").classList.add("hidden");
+                    document.getElementById("paymentPage").classList.remove("hidden");
+                    displayPaymentDetails();
+                    displayDebt();
+                } else {
+                    alert("Yanlış şifre!");
+                }
+            }
+
+            function displayPaymentDetails() {
+                const paymentDetailsContainer = document.getElementById("paymentDetailsContainer");
+                paymentDetailsContainer.innerHTML = `
                 <p>İsim: Mehmet Yılmaz</p>
                 <p>Açıklama: ${selectedFlat}</p>
             `;
-        }
+            }
 
-        function displayDebt() {
-            const debtDetails = document.getElementById("debtDetails");
-            debtDetails.innerHTML = `
+            function displayDebt() {
+                const debtDetails = document.getElementById("debtDetails");
+                debtDetails.innerHTML = `
                 <div class="debt">
                     <p>Borç: ${debts[selectedFlat]} TL</p>
                 </div>
             `;
-        }
+            }
 
-        function copyPaymentInfo() {
-            const paymentInfo = document.getElementById("paymentDetails").innerText;
-            navigator.clipboard.writeText(paymentInfo).then(function() {
-                alert("Ödeme bilgileri panoya kopyalandı!");
-            });
-        }
+            function copyPaymentInfo() {
+                const paymentInfo = document.getElementById("paymentDetails").innerText;
+                navigator.clipboard.writeText(paymentInfo).then(function () {
+                    alert("Ödeme bilgileri panoya kopyalandı!");
+                });
+            }
 
-        function showAnnouncement(message) {
-            const announcement = document.getElementById("announcement");
-            announcement.innerText = message;
-            announcement.style.display = "block";
-            setTimeout(function() {
-                announcement.style.display = "none";
-            }, 5000);
-        }
-    </script>
-</body>
+            function showAnnouncement(message) {
+                const announcement = document.getElementById("announcement");
+                announcement.innerText = message;
+                announcement.style.display = "block";
+                setTimeout(function () {
+                    announcement.style.display = "none";
+                }, 5000);
+            }
+        </script>
+    </body>
 </html>
+<footer>© 2025 THE LENG</footer>
