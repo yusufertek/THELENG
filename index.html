@@ -29,12 +29,12 @@
             text-align: center;
         }
         .logo-container img {
-            width: 30px;
+            width: 50px; /* Logoyu biraz büyüttüm (önceki: 30px) */
             display: block;
             margin: 0 auto;
         }
         .logo-container span {
-            display: none;
+            display: none; /* THE LENG yazısı gizli */
         }
         .quote {
             position: absolute;
@@ -153,13 +153,13 @@
         .menu a {
             color: white;
             text-decoration: none;
-            font-size: 28px; /* Normal boyutu */
+            font-size: 28px;
             margin: 20px 0;
-            transition: font-size 0.3s ease; /* Font büyümesi için geçiş */
+            transition: font-size 0.3s ease;
             background: none;
         }
         .menu a:hover {
-            font-size: 40px; /* Mouse gelince font büyüsün */
+            font-size: 40px;
             color: #ffffff;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
         }
@@ -205,7 +205,7 @@
     <canvas id="waveCanvas"></canvas>
 
     <div class="logo-container">
-        <img src="logo.png" alt="THE LENG Logo">
+        <img src="logo.PNG" alt="THE LENG Logo">
     </div>
 
     <div class="menu-btn" onclick="toggleMenu()">
