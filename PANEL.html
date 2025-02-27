@@ -188,6 +188,28 @@
             transform: scale(1.05);
         }
 
+        .settings-menu button {
+            width: 100%;
+            padding: 10px;
+            background: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-family);
+            font-weight: var(--font-weight);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .settings-menu button:hover {
+            transform: scale(1.05);
+        }
+
+        .settings-menu input[type="range"] {
+            width: 100%;
+            margin-top: 10px;
+        }
+
         .clock {
             position: fixed;
             top: 80px;
@@ -535,16 +557,15 @@
             box-shadow: var(--shadow);
         }
 
-        /* Uzun Metinler için Stil */
         #panel-text {
             line-height: 1.8;
             max-width: 1000px;
             margin: 30px auto;
             font-size: 18px;
-            font-weight: 400; /* Uzun metinlerde kalınlık azaltıldı, okunabilirlik için */
+            font-weight: 400;
             text-align: justify;
             animation: textUnfold 1.4s ease-out;
-            white-space: pre-wrap; /* Satır sonlarını korur */
+            white-space: pre-wrap;
         }
 
         #panel-text h3 {
@@ -663,7 +684,7 @@
     </style>
 </head>
 <body>
-    <audio autoplay loop>
+    <audio id="background-music" autoplay loop>
         <source src="uzunince.mp3" type="audio/mpeg">
         Tarayıcınız ses dosyasını oynatmayı desteklemiyor.
     </audio>
@@ -699,6 +720,10 @@
             <option value="16px">Normal</option>
             <option value="18px">Büyük</option>
         </select>
+        <label>Müzik Kontrolü:</label>
+        <button id="music-toggle" onclick="toggleMusic()">Müziği Durdur</button>
+        <label for="volume">Ses Seviyesi:</label>
+        <input type="range" id="volume" min="0" max="1" step="0.1" value="1" onchange="changeVolume()">
     </div>
 
     <div id="password-screen">
@@ -750,6 +775,8 @@
         let currentTopic = null;
         let currentImageIndex = 0;
         const { jsPDF } = window.jspdf;
+        const audio = document.getElementById("background-music");
+        let isPlaying = true;
 
         const topics = {
             tarih: { 
@@ -848,6 +875,25 @@
             showNotification(`${userName}, yazı boyutu: ${size} olarak değiştirildi`);
         }
 
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                document.getElementById("music-toggle").innerText = "Müziği Çal";
+                showNotification("Müzik durduruldu.");
+            } else {
+                audio.play();
+                document.getElementById("music-toggle").innerText = "Müziği Durdur";
+                showNotification("Müzik çalıyor.");
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function changeVolume() {
+            const volume = document.getElementById("volume").value;
+            audio.volume = volume;
+            showNotification(`Ses seviyesi: ${Math.round(volume * 100)}%`);
+        }
+
         function searchTopics() {
             const query = document.getElementById("search").value.toLowerCase();
             const cards = document.querySelectorAll(".topic-card");
@@ -862,7 +908,7 @@
             currentTopic = key;
             currentImageIndex = 0;
             document.getElementById("panel-title").innerText = topics[key].title;
-            document.getElementById("panel-text").innerHTML = topics[key].text; // HTML olarak uzun metin
+            document.getElementById("panel-text").innerHTML = topics[key].text;
             panel.style.background = topics[key].bg;
             updateGallery();
             updateTimeline();
@@ -902,7 +948,7 @@
         }
 
         function shareTopic(key) {
-            const text = `${topics[key].title}: ${topics[key].text.replace(/<[^>]+>/g, '')}`; // HTML etiketlerini kaldır
+            const text = `${topics[key].title}: ${topics[key].text.replace(/<[^>]+>/g, '')}`;
             const url = window.location.href;
             window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text.substring(0, 280))}&url=${encodeURIComponent(url)}`, "_blank");
             showNotification(`${topics[key].title} paylaşılıyor!`);
@@ -911,7 +957,7 @@
         function downloadPDF() {
             const doc = new jsPDF();
             const title = topics[currentTopic].title;
-            const text = topics[currentTopic].text.replace(/<[^>]+>/g, ''); // HTML etiketlerini kaldır
+            const text = topics[currentTopic].text.replace(/<[^>]+>/g, '');
             const timeline = topics[currentTopic].timeline;
 
             doc.setFont("Georgia");
