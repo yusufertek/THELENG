@@ -226,8 +226,8 @@
 
         .notification {
             position: fixed;
-            top: 80px;
-            left: 25px;
+            top: 130px;
+            right: 25px;
             padding: 15px 25px;
             background: var(--card-bg);
             border-radius: 12px;
@@ -236,7 +236,71 @@
             animation: notifyPop 0.8s ease-out forwards;
             opacity: 0;
             z-index: 10;
-            border-left: 4px solid var(--accent-color);
+            border-right: 4px solid var(--accent-color);
+        }
+
+        .login-toggle {
+            position: fixed;
+            top: 80px;
+            left: 25px;
+            padding: 10px 20px;
+            background: var(--accent-color);
+            color: var(--text-color);
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: var(--font-family);
+            font-weight: var(--font-weight);
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            z-index: 15;
+            animation: loginPulse 2s infinite ease-in-out;
+        }
+
+        .login-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .login-toggle.logged-in {
+            background: var(--card-bg);
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .logout-menu {
+            position: fixed;
+            top: 120px;
+            left: 25px;
+            background: var(--card-bg);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            display: none;
+            width: 120px;
+            z-index: 15;
+            transition: all 0.3s ease;
+            transform-origin: top;
+        }
+
+        .logout-menu.open {
+            display: block;
+            animation: expandLogout 0.3s ease-out forwards;
+        }
+
+        .logout-menu button {
+            width: 100%;
+            padding: 8px;
+            background: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-family);
+            font-weight: var(--font-weight);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logout-menu button:hover {
+            transform: scale(1.05);
         }
 
         #password-screen {
@@ -246,7 +310,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.9);
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 100;
@@ -315,7 +379,6 @@
 
         #main-content {
             padding: 100px 25px;
-            display: none;
             opacity: 0;
             animation: realmReveal 1.5s ease-out forwards;
         }
@@ -620,9 +683,9 @@
         }
 
         @keyframes notifyPop {
-            0% { transform: translateX(-60px) scale(0.8); opacity: 0; }
-            50% { transform: translateX(15px) scale(1.1); opacity: 0.8; }
-            100% { transform: translateX(0) scale(1); opacity: 1; }
+            0% { transform: translateX(-60px); opacity: 0; }
+            50% { transform: translateX(15px); opacity: 0.8; }
+            100% { transform: translateX(0); opacity: 1; }
         }
 
         @keyframes voidFade {
@@ -681,6 +744,17 @@
             0% { transform: translateY(20px); opacity: 0; clip-path: inset(100% 0 0 0); }
             100% { transform: translateY(0); opacity: 1; clip-path: inset(0 0 0 0); }
         }
+
+        @keyframes loginPulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes expandLogout {
+            0% { transform: scaleY(0); opacity: 0; }
+            100% { transform: scaleY(1); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -692,6 +766,11 @@
     <div class="top-nav">
         <img src="logo.PNG" class="logo-emblem" alt="ARŞİV Arması">
         <div class="nav-logo">THE LENG</div>
+    </div>
+
+    <div class="login-toggle" id="login-toggle" onclick="toggleLogin()">Giriş Yap</div>
+    <div class="logout-menu" id="logout-menu">
+        <button onclick="logout()">Çıkış Yap</button>
     </div>
 
     <div class="clock" id="clock"></div>
@@ -726,7 +805,7 @@
         <input type="range" id="volume" min="0" max="1" step="0.1" value="1" onchange="changeVolume()">
     </div>
 
-    <div id="password-screen">
+    <div id="password-screen" style="display: none;">
         <div class="password-box">
             <h1>Hoş Geldiniz</h1>
             <input type="text" id="name" placeholder="Adınızı girin">
@@ -735,7 +814,7 @@
         </div>
     </div>
 
-    <div id="main-content">
+    <div id="main-content" class="visible">
         <h1></h1>
         <div class="search-bar">
             <input type="text" id="search" placeholder="Konuları ara..." onkeyup="searchTopics()">
@@ -777,6 +856,7 @@
         const { jsPDF } = window.jspdf;
         const audio = document.getElementById("background-music");
         let isPlaying = true;
+        let isLoggedIn = false;
 
         const topics = {
             tarih: { 
@@ -838,17 +918,41 @@
             "Sanat Bilgisi: Mona Lisa, Leonardo da Vinci tarafından 1503-1506 yıllarında çizildi."
         ];
 
+        function toggleLogin() {
+            const loginScreen = document.getElementById("password-screen");
+            const loginToggle = document.getElementById("login-toggle");
+            const logoutMenu = document.getElementById("logout-menu");
+
+            if (isLoggedIn) {
+                logoutMenu.classList.toggle("open");
+            } else {
+                loginScreen.style.display = "flex";
+            }
+        }
+
         function login() {
             const name = document.getElementById("name").value.trim();
             if (name) {
                 userName = name;
+                isLoggedIn = true;
                 document.getElementById("password-screen").style.display = "none";
+                document.getElementById("login-toggle").innerText = userName;
+                document.getElementById("login-toggle").classList.add("logged-in");
                 document.getElementById("main-content").classList.add("visible");
                 showNotification(`Hoş geldin, ${userName}!`);
                 startDailyTips();
             } else {
                 document.getElementById("error").style.display = "block";
             }
+        }
+
+        function logout() {
+            userName = "";
+            isLoggedIn = false;
+            document.getElementById("login-toggle").innerText = "Giriş Yap";
+            document.getElementById("login-toggle").classList.remove("logged-in");
+            document.getElementById("logout-menu").classList.remove("open");
+            showNotification("Çıkış yapıldı!");
         }
 
         function toggleSettings() {
