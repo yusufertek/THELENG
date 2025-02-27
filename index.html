@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>THE LENG</title>
+        <link rel="icon" type="image/png" href="/logo.PNG"> <!-- Favicon -->
         <style>
             body {
                 margin: 0;
@@ -23,18 +24,14 @@
                 position: absolute;
                 top: 50%;
                 left: 50%;
-                transform: translate(-50%, -50%);
                 z-index: 1;
-                animation: floatLogo 15s infinite linear;
+                animation: floatAndRotate 15s infinite linear; /* Birleştirilmiş animasyon */
                 text-align: center;
             }
             .logo-container img {
-                width: 50px; /* Logo boyutu */
+                width: 50px;
                 display: block;
                 margin: 0 auto;
-            }
-            .logo-container span {
-                display: none;
             }
             .quote {
                 position: absolute;
@@ -52,7 +49,7 @@
                 color: white;
                 font-size: 40px;
                 font-weight: bold;
-                animation: pulse 3s ease-in-out;
+                animation: pulse 3s ease-in-out, fadeInOut 3s ease-in-out;
             }
             .menu-btn {
                 position: fixed;
@@ -106,7 +103,7 @@
             .menu.active {
                 display: flex;
                 flex-direction: column;
-                align-items: center;
+                align-items: flex-end;
                 justify-content: center;
                 transform: translateX(0);
             }
@@ -158,11 +155,9 @@
                 font-size: 28px;
                 margin: 20px 0;
                 transition: font-size 0.3s ease;
-                background: none;
             }
             .menu a:hover {
                 font-size: 40px;
-                color: #ffffff;
                 text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
             }
             .menu.active a {
@@ -176,87 +171,62 @@
                 background: white;
                 border-radius: 50%;
                 z-index: 1;
-                animation: twinkle 5s infinite ease-in-out;
+                animation: twinkle 5s infinite ease-in-out, shine 2s infinite alternate;
             }
-            @keyframes floatLogo {
-                0% {
-                    transform: translate(-50%, -50%) translate(0, 0);
-                }
-                25% {
-                    transform: translate(-50%, -50%) translate(60px, -30px);
-                }
-                50% {
-                    transform: translate(-50%, -50%) translate(-40px, 50px);
-                }
-                75% {
-                    transform: translate(-50%, -50%) translate(20px, -60px);
-                }
-                100% {
-                    transform: translate(-50%, -50%) translate(0, 0);
-                }
+            @keyframes floatAndRotate {
+                0% { transform: translate(-50%, -50%) translate(0, 0) rotate(0deg); }
+                25% { transform: translate(-50%, -50%) translate(60px, -30px) rotate(90deg); }
+                50% { transform: translate(-50%, -50%) translate(-40px, 50px) rotate(180deg); }
+                75% { transform: translate(-50%, -50%) translate(20px, -60px) rotate(270deg); }
+                100% { transform: translate(-50%, -50%) translate(0, 0) rotate(360deg); }
             }
             @keyframes pulse {
-                0% {
-                    transform: scale(1);
-                    opacity: 1;
-                }
-                50% {
-                    transform: scale(1.1);
-                    opacity: 1;
-                }
-                100% {
-                    transform: scale(1);
-                    opacity: 0;
-                }
+                0% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.1); opacity: 1; }
+                100% { transform: scale(1); opacity: 0; }
+            }
+            @keyframes fadeInOut {
+                0% { opacity: 0; }
+                20% { opacity: 1; }
+                80% { opacity: 1; }
+                100% { opacity: 0; }
             }
             @keyframes slideIn {
-                from {
-                    opacity: 0;
-                    transform: translateX(50px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
+                from { opacity: 0; transform: translateX(50px); }
+                to { opacity: 1; transform: translateX(0); }
             }
             @keyframes twinkle {
-                0% {
-                    transform: scale(1) translate(0, 0);
-                    opacity: 0.5;
-                }
-                25% {
-                    transform: scale(1.5) translate(5px, -5px);
-                    opacity: 1;
-                }
-                50% {
-                    transform: scale(1) translate(-5px, 5px);
-                    opacity: 0.7;
-                }
-                75% {
-                    transform: scale(1.3) translate(3px, 3px);
-                    opacity: 0.9;
-                }
-                100% {
-                    transform: scale(1) translate(0, 0);
-                    opacity: 0.5;
-                }
+                0% { transform: scale(1) translate(0, 0); opacity: 0.5; }
+                25% { transform: scale(1.5) translate(5px, -5px); opacity: 1; }
+                50% { transform: scale(1) translate(-5px, 5px); opacity: 0.7; }
+                75% { transform: scale(1.3) translate(3px, 3px); opacity: 0.9; }
+                100% { transform: scale(1) translate(0, 0); opacity: 0.5; }
+            }
+            @keyframes shine {
+                0% { opacity: 0.3; }
+                100% { opacity: 1; }
+            }
+            @media (max-width: 768px) {
+                .menu { width: 100vw; padding: 20px; }
+                .menu .title { font-size: 24px; }
+                .menu a { font-size: 20px; }
+                .menu a:hover { font-size: 24px; }
+                .logo-container img { width: 40px; }
+                .quote { font-size: 12px; }
+                .quote:hover { font-size: 14px; }
+                .quote.active { font-size: 20px; }
+                .menu-btn { width: 35px; height: 35px; }
+                .menu-btn span { width: 20px; }
             }
         </style>
     </head>
     <body>
         <canvas id="waveCanvas"></canvas>
-
         <div class="logo-container">
-            <img
-                src="logo2.PNG"
-                alt="THE LENG Logo"
-                onerror="this.onerror=null; this.src='https://via.placeholder.com/50'; this.alt='Logo Yüklenemedi';" />
+            <img src="logo2.PNG" alt="THE LENG Logo" onerror="this.src='https://via.placeholder.com/50'; this.alt='Logo Yüklenemedi';" />
         </div>
-
         <div class="menu-btn" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
         </div>
         <div class="menu" id="menu">
             <div class="title">THE LENG</div>
@@ -264,14 +234,11 @@
             <a href="https://theleng.site/PANEL.html" style="--i: 1">PANEL</a>
             <a href="https://theleng.site/logo.html" style="--i: 2">NEDEN BU LOGO</a>
         </div>
-
         <audio id="backgroundMusic" autoplay>
             <source src="uzunince.mp3" type="audio/mpeg" />
             Tarayıcınız ses dosyasını desteklemiyor.
         </audio>
-
         <script>
-            // Dalgalı arka plan
             const canvas = document.getElementById("waveCanvas");
             const ctx = canvas.getContext("2d");
             let time = 0;
@@ -286,12 +253,11 @@
             function drawWaves() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 time += 0.02;
-
                 for (let i = 0; i < 5; i++) {
                     ctx.beginPath();
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 + i * 0.05})`;
+                    const hue = (time * 10 + i * 30) % 360;
+                    ctx.strokeStyle = `hsla(${hue}, 70%, 80%, ${0.1 + i * 0.05})`;
                     ctx.lineWidth = 2;
-
                     for (let x = 0; x < canvas.width; x++) {
                         const y = canvas.height / 2 + Math.sin(x * 0.01 + time + i) * 100 * Math.sin(time * 0.5 + i);
                         if (x === 0) ctx.moveTo(x, y);
@@ -299,12 +265,10 @@
                     }
                     ctx.stroke();
                 }
-
                 requestAnimationFrame(drawWaves);
             }
             drawWaves();
 
-            // Yüzlerce felsefi söz
             const quotes = [
                 "“Evrenin sonsuzluğu, insanın aklını zorlar.” - Carl Sagan",
                 "“Cogito, ergo sum.” - René Descartes",
@@ -327,7 +291,6 @@
             }
             addQuotes();
 
-            // Her 3 saniyede bir sözü büyütme
             const allQuotes = document.querySelectorAll(".quote");
             function highlightQuote() {
                 allQuotes.forEach((q) => q.classList.remove("active"));
@@ -337,34 +300,32 @@
             }
             setInterval(highlightQuote, 3000);
 
-            // Farklı süzülme animasyonları
             const styleSheet = document.createElement("style");
             styleSheet.textContent = `
-            @keyframes float0 {
-                0% { transform: translate(0, 0); }
-                25% { transform: translate(30px, -20px); }
-                50% { transform: translate(-20px, 30px); }
-                75% { transform: translate(20px, 20px); }
-                100% { transform: translate(0, 0); }
-            }
-            @keyframes float1 {
-                0% { transform: translate(0, 0); }
-                25% { transform: translate(-40px, 10px); }
-                50% { transform: translate(30px, -40px); }
-                75% { transform: translate(-10px, 50px); }
-                100% { transform: translate(0, 0); }
-            }
-            @keyframes float2 {
-                0% { transform: translate(0, 0); }
-                25% { transform: translate(20px, 40px); }
-                50% { transform: translate(-30px, -20px); }
-                75% { transform: translate(40px, 10px); }
-                100% { transform: translate(0, 0); }
-            }
-        `;
+                @keyframes float0 {
+                    0% { transform: translate(0, 0); }
+                    25% { transform: translate(30px, -20px); }
+                    50% { transform: translate(-20px, 30px); }
+                    75% { transform: translate(20px, 20px); }
+                    100% { transform: translate(0, 0); }
+                }
+                @keyframes float1 {
+                    0% { transform: translate(0, 0); }
+                    25% { transform: translate(-40px, 10px); }
+                    50% { transform: translate(30px, -40px); }
+                    75% { transform: translate(-10px, 50px); }
+                    100% { transform: translate(0, 0); }
+                }
+                @keyframes float2 {
+                    0% { transform: translate(0, 0); }
+                    25% { transform: translate(20px, 40px); }
+                    50% { transform: translate(-30px, -20px); }
+                    75% { transform: translate(40px, 10px); }
+                    100% { transform: translate(0, 0); }
+                }
+            `;
             document.head.appendChild(styleSheet);
 
-            // Menü açma/kapama
             function toggleMenu() {
                 const menu = document.getElementById("menu");
                 const btn = document.querySelector(".menu-btn");
@@ -372,7 +333,6 @@
                 btn.classList.toggle("active");
             }
 
-            // Yıldız efekti ve animasyon
             for (let i = 0; i < 100; i++) {
                 const star = document.createElement("div");
                 star.className = "star";
