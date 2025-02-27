@@ -832,6 +832,10 @@
                 <img src="cbh.jpg" alt="Sanat Görseli">
                 <h3>Sanat</h3>
             </div>
+            <div class="topic-card" onclick="openTopic('türk-sanatı')">
+                <img src="turksanat2.jpg" alt="Türk Sanatı Görseli">
+                <h3>Türk Sanatı</h3>
+            </div>
         </div>
     </div>
 
@@ -909,6 +913,23 @@
                     { year: "1889", event: "Van Gogh’un Yıldızlı Gece tablosu" }
                 ],
                 bg: "linear-gradient(135deg, #800080, #1e2529)"
+            },
+            "türk-sanatı": { 
+                title: "Türk Sanatı", 
+                text: `
+                    <h3>Türk Sanatının Kökenleri</h3>
+                    <p>Türk sanatı, göçebe kültürlerden Osmanlı İmparatorluğu’na uzanan zengin bir mirasa sahiptir. Minyatürler, hat sanatı ve çini işçiliği gibi alanlarda benzersiz eserler ortaya çıkmıştır.</p>
+                    <h3>Osmanlı Dönemi</h3>
+                    <p>Osmanlı’da sanat, özellikle mimari ve süsleme sanatlarında zirveye ulaşmıştır. Osman Hamdi Bey gibi sanatçılar, modern Türk resminin temellerini atmıştır. "Kaplumbağa Terbiyecisi" gibi eserler bu dönemin simgelerindendir.</p>
+                    <p>Günümüzde Türk sanatı, geleneksel motiflerle modern teknikleri birleştirerek dünya sahnesinde yer bulmaktadır.</p>
+                `,
+                images: ["turksanat2.jpg","turksanat4.jpg", "turksanat3.jpg"], // Kapak ve içerik fotoğrafları
+                timeline: [
+                    { year: "13. Yüzyıl", event: "Selçuklu çini sanatının başlangıcı" },
+                    { year: "1905", event: "Kaplumbağa Terbiyecisi’nin tamamlanması" },
+                    { year: "1923", event: "Cumhuriyet ile modern sanatın yükselişi" }
+                ],
+                bg: "linear-gradient(135deg, #DAA520, #1e2529)" // Türk sanatına uygun bir renk tonu
             }
         };
 
