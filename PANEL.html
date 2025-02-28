@@ -1,0 +1,1445 @@
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YAZILAR</title>
+    <link rel="icon" type="image/png" href="/logo.PNG">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #0f1419;
+            --text-color: #e8ecef;
+            --card-bg: #1e2529;
+            --accent-color: #ad8a3d;
+            --font-family: 'Georgia', serif;
+            --font-size: 16px;
+            --font-weight: 700;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            --scroll: 0;
+            --blur-bg: rgba(0, 0, 0, 0.7);
+        }
+
+        .light-theme {
+            --bg-color: #f4f6f9;
+            --text-color: #2d3748;
+            --card-bg: #ffffff;
+            --accent-color: #f56565;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --blur-bg: rgba(50, 50, 50, 0.7);
+        }
+
+        .blue-theme {
+            --bg-color: #1a365d;
+            --text-color: #e6f1fa;
+            --card-bg: #2b5285;
+            --accent-color: #63b3ed;
+        }
+
+        .green-theme {
+            --bg-color: #1a3c34;
+            --text-color: #e6f0ea;
+            --card-bg: #2e5e4e;
+            --accent-color: #34c759;
+        }
+
+        .purple-theme {
+            --bg-color: #2e1a47;
+            --text-color: #e8d9ff;
+            --card-bg: #4b2e6b;
+            --accent-color: #b19cd9;
+        }
+
+        .orange-theme {
+            --bg-color: #3c2f2f;
+            --text-color: #fff4e6;
+            --card-bg: #5e4a4a;
+            --accent-color: #ff9f1c;
+        }
+
+        .red-theme {
+            --bg-color: #2b0f0f;
+            --text-color: #f4e6e6;
+            --card-bg: #4a1c1c;
+            --accent-color: #e63946;
+        }
+
+        body.light-theme::before {
+            background: radial-gradient(circle at top, rgba(255, 223, 0, 0.2), transparent 70%);
+            animation: sunGlow 15s infinite ease-in-out;
+        }
+
+        body.blue-theme::before,
+        body.green-theme::before,
+        body.purple-theme::before,
+        body.orange-theme::before,
+        body.red-theme::before {
+            background: linear-gradient(135deg, var(--accent-color) 0%, transparent 70%);
+            animation: waveFlow 12s infinite ease-in-out;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            font-size: var(--font-size);
+            font-weight: var(--font-weight);
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, var(--accent-color) 0%, transparent 70%);
+            opacity: 0.15;
+            animation: bgPulse 10s infinite ease-in-out;
+            transform: translateY(calc(var(--scroll) * -0.2px));
+            z-index: -2;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 0, 0, 0.2), transparent);
+            z-index: -1;
+        }
+
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 15px 30px;
+            box-shadow: var(--shadow);
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: descendGlow 1s ease-out;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .nav-logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-emblem {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-emblem:hover {
+            transform: scale(1.2);
+        }
+
+        .nav-logo {
+            font-size: 34px;
+            font-weight: var(--font-weight);
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-left: 15px;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.05);
+            color: #d4a95e;
+        }
+
+        .settings-icon {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 20;
+        }
+
+        .settings-icon:hover {
+            transform: scale(1.2) rotate(90deg);
+        }
+
+        .settings-icon svg {
+            fill: var(--text-color);
+            width: 28px;
+            height: 28px;
+        }
+
+        .settings-menu {
+            position: fixed;
+            bottom: 100px;
+            right: 25px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            display: none;
+            width: 240px;
+            animation: settingsRise 0.6s ease-out forwards;
+            z-index: 20;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .settings-menu.open {
+            display: block;
+        }
+
+        .settings-menu label {
+            display: block;
+            margin: 15px 0 8px;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            opacity: 0.85;
+        }
+
+        .settings-menu select {
+            width: 100%;
+            padding: 10px;
+            background: var(--text-color);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-family);
+            font-weight: var(--font-weight);
+            transition: transform 0.3s ease;
+        }
+
+        .settings-menu select:hover {
+            transform: scale(1.05);
+        }
+
+        .settings-menu button {
+            width: 100%;
+            padding: 10px;
+            background: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-family);
+            font-weight: var(--font-weight);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .settings-menu button:hover {
+            transform: scale(1.05);
+        }
+
+        .settings-menu input[type="range"] {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .clock {
+            position: fixed;
+            top: 80px;
+            right: 25px;
+            padding: 12px 25px;
+            background: var(--card-bg);
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            font-size: 18px;
+            letter-spacing: 1px;
+            animation: clockFade 1.2s ease-out;
+            z-index: 10;
+        }
+
+        .notification {
+            position: fixed;
+            top: 130px;
+            right: 25px;
+            padding: 15px 25px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            max-width: 300px;
+            animation: notifyPop 0.8s ease-out forwards;
+            opacity: 0;
+            z-index: 10;
+            border-right: 4px solid var(--accent-color);
+        }
+
+        .login-toggle {
+            position: fixed;
+            top: 80px;
+            left: 25px;
+            padding: 10px 20px;
+            background: var(--accent-color);
+            color: var(--text-color);
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: var(--font-family);
+            font-weight: var(--font-weight);
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            z-index: 15;
+            animation: loginPulse 2s infinite ease-in-out;
+        }
+
+        .login-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .login-toggle.logged-in {
+            background: var(--card-bg);
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .logout-menu {
+            position: fixed;
+            top: 130px;
+            left: 25px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            display: none;
+            width: 180px;
+            z-index: 15;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-origin: top left;
+            transition: all 0.3s ease;
+        }
+
+        .logout-menu.open {
+            display: block;
+            animation: menuExpand 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+        }
+
+        .logout-menu button {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            background: transparent;
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-family);
+            font-weight: 500;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
+        }
+
+        .logout-menu button:hover {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            transform: translateX(5px);
+        }
+
+        #password-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            animation: voidFade 1.5s ease-in;
+        }
+
+        .password-box {
+            background: var(--card-bg);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            animation: portalEntry 1s ease-out;
+            border: 1px solid var(--accent-color);
+        }
+
+        .password-box h1 {
+            font-size: 36px;
+            margin-bottom: 25px;
+            color: var(--accent-color);
+        }
+
+        .password-box input {
+            padding: 14px;
+            width: 100%;
+            margin-bottom: 25px;
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            background: var(--text-color);
+            color: var(--bg-color);
+            font-size: 16px;
+            font-weight: var(--font-weight);
+            transition: all 0.3s ease;
+        }
+
+        .password-box input:focus {
+            border-color: #fff;
+            transform: scale(1.05);
+            outline: none;
+        }
+
+        .password-box button {
+            padding: 14px 30px;
+            background: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: var(--font-weight);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .password-box button:hover {
+            transform: scale(1.15) rotate(3deg);
+            box-shadow: var(--shadow);
+        }
+
+        .error {
+            color: #ff4d4d;
+            margin-top: 15px;
+            font-size: 15px;
+            display: none;
+            animation: errorWobble 0.6s ease-in-out;
+        }
+
+        #main-content {
+            padding: 100px 25px;
+            opacity: 0;
+            animation: realmReveal 1.5s ease-out forwards;
+        }
+
+        #main-content.visible {
+            display: block;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 40px;
+            color: var(--accent-color);
+            font-weight: var(--font-weight);
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-size: 16px;
+            font-weight: var(--font-weight);
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            animation: searchExpand 1s ease-out;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            transform: scale(1.02);
+        }
+
+        .topics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .favorites-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .favorites-view .topic-card {
+            animation: cardFadeIn 0.8s ease-out forwards;
+            animation-delay: calc(var(--order) * 0.2s);
+            opacity: 0;
+            transform: translateY(50px) rotateX(-10deg);
+        }
+
+        .back-to-normal {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .back-to-normal button {
+            padding: 10px 20px;
+            background: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-family);
+            font-weight: var(--font-weight);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .back-to-normal button:hover {
+            transform: scale(1.05);
+        }
+
+        .topic-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.5s ease, filter 0.5s ease;
+            animation: cardEmerge 1s ease-out forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topic-card:hover {
+            transform: scale(1.1) translateY(-15px) rotate(2deg);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            filter: brightness(0.8);
+        }
+
+        .topic-card .preview-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            color: var(--text-color);
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 5;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .topic-card:hover .preview-text {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .topic-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: filter 0.5s ease, transform 0.5s ease;
+        }
+
+        .topic-card:hover img {
+            filter: brightness(0.5);
+            transform: scale(1.1);
+        }
+
+        .topic-card h3 {
+            font-size: 22px;
+            margin-top: 15px;
+            letter-spacing: 0.5px;
+            font-weight: var(--font-weight);
+            transition: transform 0.5s ease, color 0.5s ease;
+        }
+
+        .topic-card:hover h3 {
+            transform: translateY(5px) scale(1.05);
+            color: var(--accent-color);
+        }
+
+        #content-panel {
+            position: fixed;
+            top: 0;
+            left: 100%;
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg);
+            padding: 70px 30px;
+            transition: left 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 50;
+            overflow-y: auto;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        #content-panel.open {
+            left: 0;
+        }
+
+        #content-panel button {
+            padding: 14px 30px;
+            background: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: var(--font-weight);
+            transition: all 0.4s ease;
+            animation: buttonSlide 0.8s ease-out;
+            margin: 5px;
+        }
+
+        #content-panel button:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow);
+        }
+
+        #content-panel button.added {
+            background: #4CAF50;
+            cursor: default;
+        }
+
+        #content-panel h2 {
+            font-size: 36px;
+            margin-bottom: 25px;
+            color: var(--accent-color);
+            font-weight: var(--font-weight);
+        }
+
+        .gallery {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 25px auto;
+            max-width: 1000px;
+        }
+
+        .gallery img {
+            max-width: 300px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            animation: imageBloom 1.2s ease-out;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .gallery-controls button {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-color);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            text-align: left;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-item:nth-child(odd)::before {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even)::before {
+            left: -10px;
+        }
+
+        .timeline-content {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        #panel-text {
+            background: var(--blur-bg);
+            backdrop-filter: blur(5px);
+            line-height: 1.8;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 400;
+            text-align: justify;
+            animation: textUnfold 1.4s ease-out;
+            white-space: pre-wrap;
+            color: var(--text-color);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        #panel-text h3 {
+            font-size: 24px;
+            margin: 20px 0 10px;
+            color: var(--accent-color);
+            font-weight: var(--font-weight);
+        }
+
+        #panel-text p {
+            margin-bottom: 15px;
+        }
+
+        /* Mobil Uyumluluk */
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 10px 20px;
+            }
+            .nav-logo {
+                font-size: 24px;
+            }
+            .logo-emblem {
+                width: 40px;
+                height: 40px;
+            }
+            .topics, .favorites-view {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            #content-panel {
+                padding: 50px 15px;
+            }
+            #panel-text {
+                font-size: 16px;
+            }
+            .settings-menu {
+                width: 200px;
+            }
+            .logout-menu {
+                width: 150px;
+            }
+        }
+
+        @keyframes bgPulse {
+            0% { transform: scale(1); opacity: 0.15; }
+            50% { transform: scale(1.1); opacity: 0.25; }
+            100% { transform: scale(1); opacity: 0.15; }
+        }
+
+        @keyframes sunGlow {
+            0% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.2); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 0.2; }
+        }
+
+        @keyframes waveFlow {
+            0% { transform: translateX(-10%) translateY(-10%); opacity: 0.3; }
+            50% { transform: translateX(10%) translateY(10%); opacity: 0.4; }
+            100% { transform: translateX(-10%) translateY(-10%); opacity: 0.3; }
+        }
+
+        @keyframes descendGlow {
+            0% { transform: translateY(-100%) scale(0.9); opacity: 0; }
+            60% { transform: translateY(10%) scale(1.05); opacity: 0.8; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        @keyframes emblemSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes settingsRise {
+            0% { transform: translateY(30px) scale(0.8); opacity: 0; }
+            70% { transform: translateY(-10px) scale(1.05); opacity: 0.9; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        @keyframes clockFade {
+            0% { transform: translateX(50px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes notifyPop {
+            0% { transform: translateX(-60px); opacity: 0; }
+            50% { transform: translateX(15px); opacity: 0.8; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes voidFade {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes portalEntry {
+            0% { transform: scale(0.7) rotate(-5deg); opacity: 0; }
+            60% { transform: scale(1.1) rotate(3deg); opacity: 0.9; }
+            80% { transform: scale(0.95); }
+            100% { transform: scale(1) rotate(0); opacity: 1; }
+        }
+
+        @keyframes errorWobble {
+            0% { transform: translateX(0); }
+            15% { transform: translateX(-15px); }
+            30% { transform: translateX(15px); }
+            45% { transform: translateX(-10px); }
+            60% { transform: translateX(10px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes realmReveal {
+            0% { opacity: 0; transform: translateY(60px) scale(0.95); }
+            50% { opacity: 0.6; transform: translateY(-15px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes searchExpand {
+            0% { transform: scale(0.8); opacity: 0; }
+            60% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes cardEmerge {
+            0% { transform: translateY(50px) scale(0.9) rotate(-3deg); opacity: 0; }
+            50% { transform: translateY(-10px) scale(1.05) rotate(2deg); opacity: 0.7; }
+            75% { transform: translateY(5px) scale(0.98); }
+            100% { transform: translateY(0) scale(1) rotate(0); opacity: 1; }
+        }
+
+        @keyframes cardFadeIn {
+            0% { opacity: 0; transform: translateY(50px) rotateX(-10deg); }
+            100% { opacity: 1; transform: translateY(0) rotateX(0deg); }
+        }
+
+        @keyframes buttonSlide {
+            0% { transform: translateX(-30px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes imageBloom {
+            0% { transform: scale(0.8) translateY(30px); opacity: 0; }
+            60% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        @keyframes textUnfold {
+            0% { transform: translateY(20px); opacity: 0; clip-path: inset(100% 0 0 0); }
+            100% { transform: translateY(0); opacity: 1; clip-path: inset(0 0 0 0); }
+        }
+
+        @keyframes loginPulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes menuExpand {
+            0% { transform: scale(0.8) translateY(-20px); opacity: 0; }
+            60% { transform: scale(1.05) translateY(5px); opacity: 0.9; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <audio id="background-music" autoplay loop>
+        <source src="uzunince.mp3" type="audio/mpeg">
+        Tarayıcınız ses dosyasını oynatmayı desteklemiyor.
+    </audio>
+
+    <div class="top-nav">
+        <div class="nav-logo-container">
+            <img src="logo.PNG" class="logo-emblem" alt="ARŞİV Arması" onclick="window.location.href='https://theleng.site'">
+            <div class="nav-logo">THE LENG</div>
+        </div>
+    </div>
+
+    <div class="login-toggle" id="login-toggle" onclick="toggleLogin()">Giriş Yap</div>
+    <div class="logout-menu" id="logout-menu">
+        <button onclick="showFavorites()">Favoriler</button>
+        <button onclick="logout()">Çıkış Yap</button>
+    </div>
+
+    <div class="clock" id="clock"></div>
+    <div id="notification" class="notification" style="display: none;"></div>
+
+    <div class="settings-icon" onclick="toggleSettings()">
+        <svg viewBox="0 0 24 24">
+            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.43-.48-.43h-3.84c-.24 0-.43.19-.47.43l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.07-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.3-.06.62-.06.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12-.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.43.48.43h3.84c.24 0 .43-.19.47-.43l-.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.07.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+        </svg>
+    </div>
+    <div class="settings-menu" id="settings-menu">
+        <label for="theme">Tema:</label>
+        <select id="theme" onchange="changeTheme()">
+            <option value="dark">Gece Modu</option>
+            <option value="light">Açık</option>
+            <option value="blue">Mavi</option>
+            <option value="green">Yeşil</option>
+            <option value="purple">Mor</option>
+            <option value="orange">Turuncu</option>
+            <option value="red">Kırmızı</option>
+        </select>
+        <label for="font">Yazı Tipi:</label>
+        <select id="font" onchange="changeFont()">
+            <option value="Georgia">Georgia</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Arial">Arial</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Helvetica">Helvetica</option>
+        </select>
+        <label for="font-size">Yazı Boyutu:</label>
+        <input type="range" id="font-size" min="10" max="24" step="1" value="16" onchange="changeFontSize()">
+        <label>Müzik Kontrolü:</label>
+        <button id="music-toggle" onclick="toggleMusic()">Müziği Durdur</button>
+        <label for="volume">Ses Seviyesi:</label>
+        <input type="range" id="volume" min="0" max="1" step="0.1" value="1" onchange="changeVolume()">
+        <label>Mod:</label>
+        <button onclick="toggleDarkLight()">Karanlık/Açık Mod</button>
+    </div>
+
+    <div id="password-screen" style="display: none;">
+        <div class="password-box">
+            <h1>Hoş Geldiniz</h1>
+            <input type="text" id="name" placeholder="Adınızı girin">
+            <button onclick="login()">Giriş Yap</button>
+            <div id="error" class="error">Lütfen bir isim girin!</div>
+        </div>
+    </div>
+
+    <div id="main-content" class="visible">
+        <h1></h1>
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="Konuları ara..." onkeyup="searchTopics()">
+        </div>
+        <div class="topics" id="topics">
+            <div class="topic-card" onclick="openTopic('tarih')">
+                <img src="cbh2.jpg" alt="Tarih Görseli">
+                <div class="preview-text">Tarih, insanlığın geçmişini anlamak için...</div>
+                <h3>Tarih</h3>
+            </div>
+            <div class="topic-card" onclick="openTopic('bilim')">
+                <img src="cbh3.jpg" alt="Bilim Görseli">
+                <div class="preview-text">Bilim, evreni anlama çabasının bir...</div>
+                <h3>Bilim</h3>
+            </div>
+            <div class="topic-card" onclick="openTopic('sanat')">
+                <img src="cbh.jpg" alt="Sanat Görseli">
+                <div class="preview-text">Sanat, insanlık tarihinin en eski...</div>
+                <h3>Sanat</h3>
+            </div>
+            <div class="topic-card" onclick="openTopic('türk-sanatı')">
+                <img src="turksanat2.jpg" alt="Türk Sanatı Görseli">
+                <div class="preview-text">Türk sanatı, zengin bir mirasa...</div>
+                <h3>Türk Sanatı</h3>
+            </div>
+        </div>
+        <div class="favorites-view" id="favorites" style="display: none;"></div>
+        <div class="back-to-normal" id="back-to-normal" style="display: none;">
+            <button onclick="backToNormal()">Normale Dön</button>
+        </div>
+    </div>
+
+    <div id="content-panel">
+        <button onclick="closePanel()">Geri</button>
+        <button onclick="shareTopicTwitter(currentTopic)">Twitter'da Paylaş</button>
+        <button onclick="shareTopicWhatsApp(currentTopic)">WhatsApp'ta Paylaş</button>
+        <button onclick="downloadPDF()">PDF İndir</button>
+        <button id="favorite-btn" onclick="addToFavorites(currentTopic)">Favorilere Ekle</button>
+        <h2 id="panel-title"></h2>
+        <div class="gallery" id="panel-gallery"></div>
+        <div class="gallery-controls">
+            <button onclick="prevImage()">Önceki</button>
+            <button onclick="nextImage()">Sonraki</button>
+        </div>
+        <div class="timeline" id="panel-timeline"></div>
+        <div id="panel-text"></div>
+    </div>
+
+    <script>
+        let userName = localStorage.getItem("userName") || "";
+        let currentTopic = null;
+        let currentImageIndex = 0;
+        let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+        const { jsPDF } = window.jspdf;
+        const audio = document.getElementById("background-music");
+        let isPlaying = true;
+        let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+        const topics = {
+            tarih: { 
+                title: "Tarih", 
+                text: `
+                    <h3>Tarihin Önemi</h3>
+                    <p>Tarih, insanlığın geçmişini anlamak için temel bir disiplindir. Medeniyetlerin doğuşu, gelişimi ve çöküşü hakkında bilgi verir. İnsanlar, tarih sayesinde hatalardan ders çıkarır ve geleceği daha bilinçli bir şekilde şekillendirir. Örneğin, antik çağlardan beri yazının icadı, toplumların bilgi birikimini artırmış ve kültürel gelişimi hızlandırmıştır.</p>
+                    <h3>Önemli Dönemler</h3>
+                    <p>Antik Çağ, insanlık tarihindeki en önemli dönemlerden biridir. Bu dönemde Mısır’da piramitler inşa edilmiş, Yunanistan’da demokrasinin temelleri atılmıştır. Orta Çağ ise karanlık bir dönem olarak bilinse de, aslında bilim ve sanatın yavaş yavaş filizlendiği bir zaman dilimidir. Rönesans ile birlikte Avrupa’da büyük bir dönüşüm yaşanmış, modern bilim ve sanatın temelleri atılmıştır.</p>
+                    <p>Yakın tarih ise sanayi devrimi, dünya savaşları ve teknolojik ilerlemelerle doludur. 20. yüzyıl, insanlığın hem en büyük başarılarını hem de en büyük felaketlerini gördüğü bir dönemdir. Bugün, tarih bize geçmişi anlamanın yanı sıra geleceği inşa etmek için bir rehber sunar.</p>
+                `,
+                images: ["cbh2.jpg", "cbh3.jpg", "cbh.jpg"],
+                timeline: [
+                    { year: "MÖ 3000", event: "Yazının icadı" },
+                    { year: "1453", event: "İstanbul’un fethi" },
+                    { year: "1789", event: "Fransız Devrimi" }
+                ],
+                bg: "linear-gradient(135deg, #8B4513, #0f1419)"
+            },
+            bilim: { 
+                title: "Bilim", 
+                text: `
+                    <h3>Bilimin Kökenleri</h3>
+                    <p>Bilim, insanın evreni anlama çabasının bir ürünüdür. Antik Yunan’dan beri filozoflar doğayı anlamaya çalışmış, gözlemler yapmış ve teoriler geliştirmiştir. Aristoteles’in doğa üzerine yazıları, Kopernik’in Güneş merkezli evren modeli gibi çalışmalar bilimin temel taşlarını oluşturur.</p>
+                    <h3>Modern Bilim</h3>
+                    <p>17. yüzyılda başlayan Bilim Devrimi, Newton’un yerçekimi kanunları ve Galileo’nun teleskopu gibi yeniliklerle şekillenmiştir. 20. yüzyılda ise Einstein’ın Görelilik Teorisi ve kuantum mekaniği, bilim dünyasında devrim yaratmıştır. Günümüzde yapay zeka, genetik mühendisliği ve uzay araştırmaları bilimin sınırlarını zorlamaktadır.</p>
+                    <p>Bilim, sadece teorik bir alan değil, aynı zamanda pratik bir disiplindir. Teknolojik ilerlemeler, tıp alanındaki buluşlar ve çevre çözümleri hep bilimin ürünleridir. İnsanlık, bilim sayesinde Ay’a ayak basmış, hastalıkları tedavi etmiş ve iletişimde devrim yaratmıştır.</p>
+                `,
+                images: ["cbh3.jpg", "bilim2.jpg", "bilim3.jpg"],
+                timeline: [
+                    { year: "1543", event: "Kopernik’in Güneş merkezli teori" },
+                    { year: "1905", event: "Einstein’ın Görelilik Teorisi" },
+                    { year: "1969", event: "Ay’a ilk iniş" }
+                ],
+                bg: "linear-gradient(135deg, #4682B4, #1a365d)"
+            },
+            sanat: { 
+                title: "Sanat", 
+                text: `
+                    <h3>Sanatın Tarihi</h3>
+                    <p>Sanat, insanlık tarihinin en eski ifadelerinden biridir. Mağara duvarlarındaki resimler, antik heykeller ve tiyatro oyunları, insanın duygularını ve düşüncelerini dışa vurma çabasını gösterir. Antik Yunan’da sanat, güzellik ve uyum arayışıyla şekillenirken, Orta Çağ’da dini temalar ön plandaydı.</p>
+                    <h3>Rönesans ve Sonrası</h3>
+                    <p>Rönesans, sanatın altın çağıdır. Leonardo da Vinci, Michelangelo ve Rafael gibi ustalar, insan figürlerini ve doğayı kusursuzca resmetmiştir. Barok dönemde dramatik ışık ve gölge oyunları, Romantizm’de ise duygusal derinlik ön plana çıkmıştır.</p>
+                    <p>Modern sanat ise kuralları yıkan bir yaklaşım getirmiştir. Picasso’nun kübizmi, Dali’nin sürrealizmi ve Warhol’un pop sanatı, sanatın sınırlarını genişletmiştir. Bugün sanat, dijital platformlarda ve sokaklarda bile kendini ifade etmeye devam ediyor.</p>
+                `,
+                images: ["cbh.jpg", "sanat2.jpg", "sanat3.jpg"],
+                timeline: [
+                    { year: "1503", event: "Mona Lisa’nın çizimi" },
+                    { year: "1605", event: "Don Quixote’un yayımlanması" },
+                    { year: "1889", event: "Van Gogh’un Yıldızlı Gece tablosu" }
+                ],
+                bg: "linear-gradient(135deg, #800080, #1e2529)"
+            },
+            "türk-sanatı": { 
+                title: "Türk Sanatı", 
+                text: `
+                    <h3>Türk Sanatının Kökenleri</h3>
+                    <p>Türk sanatı, göçebe kültürlerden Osmanlı İmparatorluğu’na uzanan zengin bir mirasa sahiptir. Minyatürler, hat sanatı ve çini işçiliği gibi alanlarda benzersiz eserler ortaya çıkmıştır.</p>
+                    <h3>Osmanlı Dönemi</h3>
+                    <p>Osmanlı’da sanat, özellikle mimari ve süsleme sanatlarında zirveye ulaşmıştır. Osman Hamdi Bey gibi sanatçılar, modern Türk resminin temellerini atmıştır. "Kaplumbağa Terbiyecisi" gibi eserler bu dönemin simgelerindendir.</p>
+                    <p>Günümüzde Türk sanatı, geleneksel motiflerle modern teknikleri birleştirerek dünya sahnesinde yer bulmaktadır.</p>
+                `,
+                images: ["turksanat2.jpg", "turksanat4.jpg", "turksanat3.jpg"],
+                timeline: [
+                    { year: "13. Yüzyıl", event: "Selçuklu çini sanatının başlangıcı" },
+                    { year: "1905", event: "Kaplumbağa Terbiyecisi’nin tamamlanması" },
+                    { year: "1923", event: "Cumhuriyet ile modern sanatın yükselişi" }
+                ],
+                bg: "linear-gradient(135deg, #DAA520, #1e2529)"
+            }
+        };
+
+        const dailyTips = [
+            "Bugün Tarihte: 1453’te İstanbul fethedildi.",
+            "Bilim Notu: Işık hızı yaklaşık 299,792 km/s’dir.",
+            "Sanat Bilgisi: Mona Lisa, Leonardo da Vinci tarafından 1503-1506 yıllarında çizildi."
+        ];
+
+        window.onload = function() {
+            const savedTheme = localStorage.getItem("theme");
+            const savedFont = localStorage.getItem("font");
+            const savedFontSize = localStorage.getItem("fontSize");
+
+            if (savedTheme && savedTheme !== "dark") {
+                document.body.classList.add(`${savedTheme}-theme`);
+                document.getElementById("theme").value = savedTheme;
+            }
+            if (savedFont) {
+                document.documentElement.style.setProperty("--font-family", `${savedFont}, serif`);
+                document.getElementById("font").value = savedFont;
+            }
+            if (savedFontSize) {
+                document.documentElement.style.setProperty("--font-size", `${savedFontSize}px`);
+                document.getElementById("font-size").value = savedFontSize;
+            }
+
+            if (isLoggedIn) {
+                document.getElementById("login-toggle").innerText = userName;
+                document.getElementById("login-toggle").classList.add("logged-in");
+                document.getElementById("main-content").classList.add("visible");
+                startDailyTips();
+            } else {
+                document.getElementById("password-screen").style.display = "flex";
+            }
+
+            audio.onerror = () => {
+                showNotification("Müzik dosyası yüklenemedi!");
+                document.getElementById("music-toggle").disabled = true;
+            };
+        };
+
+        function toggleLogin() {
+            const loginScreen = document.getElementById("password-screen");
+            const loginToggle = document.getElementById("login-toggle");
+            const logoutMenu = document.getElementById("logout-menu");
+
+            if (isLoggedIn) {
+                logoutMenu.classList.toggle("open");
+            } else {
+                loginScreen.style.display = "flex";
+            }
+        }
+
+        function login() {
+            const name = document.getElementById("name").value.trim();
+            if (name) {
+                userName = name;
+                isLoggedIn = true;
+                localStorage.setItem("userName", userName);
+                localStorage.setItem("isLoggedIn", "true");
+                document.getElementById("password-screen").style.display = "none";
+                document.getElementById("login-toggle").innerText = userName;
+                document.getElementById("login-toggle").classList.add("logged-in");
+                document.getElementById("main-content").classList.add("visible");
+                showNotification(`Hoş geldin, ${userName}!`);
+                startDailyTips();
+            } else {
+                document.getElementById("error").style.display = "block";
+            }
+        }
+
+        function logout() {
+            userName = "";
+            isLoggedIn = false;
+            favorites = [];
+            localStorage.clear();
+            document.getElementById("login-toggle").innerText = "Giriş Yap";
+            document.getElementById("login-toggle").classList.remove("logged-in");
+            document.getElementById("logout-menu").classList.remove("open");
+            document.getElementById("topics").style.display = "block";
+            document.getElementById("favorites").style.display = "none";
+            document.getElementById("back-to-normal").style.display = "none";
+            showNotification("Çıkış yapıldı, sayfa sıfırlandı!");
+            setTimeout(() => location.reload(), 1000);
+        }
+
+        function toggleSettings() {
+            document.getElementById("settings-menu").classList.toggle("open");
+        }
+
+        function changeTheme() {
+            const theme = document.getElementById("theme").value;
+            document.body.className = "";
+            if (theme !== "dark") document.body.classList.add(`${theme}-theme`);
+            localStorage.setItem("theme", theme);
+            showNotification(`${userName}, tema: ${theme} olarak değiştirildi`);
+        }
+
+        function changeFont() {
+            const font = document.getElementById("font").value;
+            document.documentElement.style.setProperty("--font-family", `${font}, serif`);
+            localStorage.setItem("font", font);
+            showNotification(`${userName}, yazı tipi: ${font} olarak değiştirildi`);
+        }
+
+        function changeFontSize() {
+            const size = document.getElementById("font-size").value;
+            document.documentElement.style.setProperty("--font-size", `${size}px`);
+            localStorage.setItem("fontSize", size);
+            showNotification(`${userName}, yazı boyutu: ${size}px olarak değiştirildi`);
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                document.getElementById("music-toggle").innerText = "Müziği Çal";
+                showNotification("Müzik durduruldu.");
+            } else {
+                audio.play().catch(() => showNotification("Müzik çalınamadı!"));
+                document.getElementById("music-toggle").innerText = "Müziği Durdur";
+                showNotification("Müzik çalıyor.");
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function changeVolume() {
+            const volume = document.getElementById("volume").value;
+            audio.volume = volume;
+            showNotification(`Ses seviyesi: ${Math.round(volume * 100)}%`);
+        }
+
+        function toggleDarkLight() {
+            const currentTheme = localStorage.getItem("theme") || "dark";
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            document.body.className = newTheme === "light" ? "light-theme" : "";
+            localStorage.setItem("theme", newTheme);
+            document.getElementById("theme").value = newTheme;
+            showNotification(`${userName}, ${newTheme === "dark" ? "Karanlık" : "Açık"} moda geçildi`);
+        }
+
+        function searchTopics() {
+            const query = document.getElementById("search").value.toLowerCase();
+            const cards = document.querySelectorAll(".topic-card");
+            cards.forEach(card => {
+                const key = card.getAttribute("onclick").match(/'([^']+)'/)[1];
+                const title = card.querySelector("h3").innerText.toLowerCase();
+                const content = topics[key].text.toLowerCase();
+                card.style.display = (title.includes(query) || content.includes(query)) ? "block" : "none";
+            });
+        }
+
+        function openTopic(key) {
+            const panel = document.getElementById("content-panel");
+            currentTopic = key;
+            currentImageIndex = 0;
+            document.getElementById("panel-title").innerText = topics[key].title;
+            document.getElementById("panel-text").innerHTML = topics[key].text;
+            panel.style.background = topics[key].bg;
+            updateGallery();
+            updateTimeline();
+            panel.classList.add("open");
+            const favoriteBtn = document.getElementById("favorite-btn");
+            if (favorites.includes(key)) {
+                favoriteBtn.innerText = "Eklendi";
+                favoriteBtn.classList.add("added");
+                favoriteBtn.setAttribute("onclick", `removeFromFavorites('${key}')`);
+            } else {
+                favoriteBtn.innerText = "Favorilere Ekle";
+                favoriteBtn.classList.remove("added");
+                favoriteBtn.setAttribute("onclick", `addToFavorites('${key}')`);
+            }
+            showNotification(`${userName}, "${topics[key].title}" açıldı`);
+        }
+
+        function updateGallery() {
+            const gallery = document.getElementById("panel-gallery");
+            gallery.innerHTML = `<img src="${topics[currentTopic].images[currentImageIndex]}" alt="${topics[currentTopic].title} Görseli">`;
+        }
+
+        function nextImage() {
+            if (currentTopic && currentImageIndex < topics[currentTopic].images.length - 1) {
+                currentImageIndex++;
+                updateGallery();
+            }
+        }
+
+        function prevImage() {
+            if (currentTopic && currentImageIndex > 0) {
+                currentImageIndex--;
+                updateGallery();
+            }
+        }
+
+        function updateTimeline() {
+            const timeline = document.getElementById("panel-timeline");
+            timeline.innerHTML = topics[currentTopic].timeline.map((item, index) => `
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>${item.year}</h3>
+                        <p>${item.event}</p>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function shareTopicTwitter(key) {
+            const text = `${topics[key].title}: ${topics[key].text.replace(/<[^>]+>/g, '')}`;
+            const url = window.location.href;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text.substring(0, 280))}&url=${encodeURIComponent(url)}`, "_blank");
+            showNotification(`${topics[key].title} Twitter'da paylaşılıyor!`);
+        }
+
+        function shareTopicWhatsApp(key) {
+            const text = `${topics[key].title}: ${topics[key].text.replace(/<[^>]+>/g, '')}`;
+            const url = window.location.href;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text.substring(0, 280) + " " + url)}`, "_blank");
+            showNotification(`${topics[key].title} WhatsApp'ta paylaşılıyor!`);
+        }
+
+        function downloadPDF() {
+            const doc = new jsPDF();
+            const title = topics[currentTopic].title;
+            const text = topics[currentTopic].text.replace(/<[^>]+>/g, '');
+            const timeline = topics[currentTopic].timeline;
+
+            doc.setFont("Georgia");
+            doc.setFontSize(20);
+            doc.text(title, 10, 20);
+            doc.setFontSize(12);
+            doc.text(doc.splitTextToSize(text, 180), 10, 30);
+            doc.text("Zaman Çizelgesi", 10, 100);
+            timeline.forEach((item, index) => {
+                doc.text(`${item.year}: ${item.event}`, 10, 110 + index * 10);
+            });
+            doc.save(`${title}.pdf`);
+            showNotification(`${title} PDF olarak indirildi!`);
+        }
+
+        function closePanel() {
+            document.getElementById("content-panel").classList.remove("open");
+            document.getElementById("content-panel").style.background = "var(--card-bg)";
+            currentTopic = null;
+        }
+
+        function addToFavorites(key) {
+            const favoriteBtn = document.getElementById("favorite-btn");
+            if (!favorites.includes(key)) {
+                favorites.push(key);
+                localStorage.setItem("favorites", JSON.stringify(favorites));
+                favoriteBtn.innerText = "Eklendi";
+                favoriteBtn.classList.add("added");
+                favoriteBtn.setAttribute("onclick", `removeFromFavorites('${key}')`);
+                showNotification(`"${topics[key].title}" favorilere eklendi!`);
+            }
+        }
+
+        function removeFromFavorites(key) {
+            const favoriteBtn = document.getElementById("favorite-btn");
+            favorites = favorites.filter(fav => fav !== key);
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+            favoriteBtn.innerText = "Favorilere Ekle";
+            favoriteBtn.classList.remove("added");
+            favoriteBtn.setAttribute("onclick", `addToFavorites('${key}')`);
+            showNotification(`"${topics[key].title}" favorilerden çıkarıldı!`);
+        }
+
+        function showFavorites() {
+            const topicsDiv = document.getElementById("topics");
+            const favoritesDiv = document.getElementById("favorites");
+            const logoutMenu = document.getElementById("logout-menu");
+            const backToNormalDiv = document.getElementById("back-to-normal");
+
+            if (favorites.length === 0) {
+                showNotification("Henüz favori eklenmedi!");
+                return;
+            }
+
+            topicsDiv.style.display = "none";
+            favoritesDiv.style.display = "grid";
+            backToNormalDiv.style.display = "flex";
+            logoutMenu.classList.remove("open");
+
+            favoritesDiv.innerHTML = favorites.map((key, index) => `
+                <div class="topic-card" onclick="openTopic('${key}')" style="--order: ${index};">
+                    <img src="${topics[key].images[0]}" alt="${topics[key].title} Görseli">
+                    <div class="preview-text">${topics[key].text.replace(/<[^>]+>/g, '').substring(0, 50)}...</div>
+                    <h3>${topics[key].title}</h3>
+                </div>
+            `).join("");
+
+            showNotification("Favoriler gösteriliyor!");
+        }
+
+        function backToNormal() {
+            const topicsDiv = document.getElementById("topics");
+            const favoritesDiv = document.getElementById("favorites");
+            const backToNormalDiv = document.getElementById("back-to-normal");
+
+            topicsDiv.style.display = "grid";
+            favoritesDiv.style.display = "none";
+            backToNormalDiv.style.display = "none";
+            showNotification("Normale dönüldü!");
+        }
+
+        function showNotification(message) {
+            const notif = document.getElementById("notification");
+            notif.innerText = message;
+            notif.style.display = "block";
+            setTimeout(() => notif.style.display = "none", 3000);
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const time = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
+            document.getElementById("clock").innerText = time;
+        }
+
+        function startDailyTips() {
+            const showTip = () => {
+                const randomTip = dailyTips[Math.floor(Math.random() * dailyTips.length)];
+                showNotification(randomTip);
+            };
+            showTip();
+            setInterval(showTip, 24 * 60 * 60 * 1000);
+        }
+
+        window.addEventListener("scroll", () => {
+            document.documentElement.style.setProperty("--scroll", window.scrollY);
+        });
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
