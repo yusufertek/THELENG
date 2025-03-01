@@ -1,398 +1,562 @@
 <!doctype html>
 <html lang="tr">
-    <head>
-		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6785168572073733"
-     crossorigin="anonymous"></script>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-        <title>SONSUZ MİRAS</title>
-		<meta name="description" content="SONSUZ MİRAS">
-        <link rel="icon" type="image/png" href="/logo.PNG">
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-            html, body {
-                background: black;
-                font-family: Arial, sans-serif;
-                width: 100%;
-                min-height: 100vh;
-                overflow-x: hidden;
-                overflow-y: auto; /* Aşağı kaydırmayı açtım */
-                -webkit-overflow-scrolling: touch; /* Mobil kaydırma yumuşaklığı */
-            }
-            .navbar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 70px; /* Mobil için daha kompakt */
-                background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9));
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 0 15px;
-                z-index: 11;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-            }
-            .navbar-logo {
-                width: 50px;
-                height: auto;
-                margin-right: 10px;
-                position: relative;
-                top: 10px;
-                animation: logoGlow 2s infinite ease-in-out;
-            }
-            .navbar-title {
-                position: relative;
-                color: white;
-                font-size: 20px;
-                font-weight: bold;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                flex-grow: 1;
-            }
-            .navbar-title span {
-                position: absolute;
-                top: 0;
-                left: 0;
-                animation: textCycle 6s infinite ease-in-out;
-            }
-            .navbar-title .alt-text {
-                animation-delay: 3s;
-                opacity: 0;
-            }
-            .menu-btn {
-                width: 35px;
-                height: 35px;
-                cursor: pointer;
-                background: rgba(0, 0, 0, 0.1);
-                border-radius: 8px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                transition: all 0.3s ease;
-                z-index: 12;
-            }
-            .menu-btn:hover {
-                background: rgba(255, 255, 255, 0.25);
-                transform: rotate(90deg) scale(1.1);
-            }
-            .menu-btn span {
-                width: 20px;
-                height: 2px;
-                background: white;
-                margin: 3px 0;
-                transition: all 0.4s ease;
-                box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-            }
-            .menu-btn.active span:nth-child(1) {
-                transform: translateY(7px) rotate(45deg);
-            }
-            .menu-btn.active span:nth-child(2) {
-                opacity: 0;
-                transform: scale(0);
-            }
-            .menu-btn.active span:nth-child(3) {
-                transform: translateY(-7px) rotate(-45deg);
-            }
-            .content {
-                position: relative;
-                width: 100%;
-                min-height: 150vh; /* Ekranı aşağıya büyüttüm */
-                padding-top: 80px; /* Navbar için boşluk */
-                overflow: hidden;
-            }
-            canvas {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: 0;
-            }
-            .logo-container {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                z-index: 1;
-                animation: floatAndRotate 15s infinite ease-in-out;
-                text-align: center;
-            }
-            .logo-container img {
-                width: 50px;
-                max-width: 90vw;
-                display: block;
-                margin: 0 auto;
-            }
-            .quote {
-                position: absolute;
-                color: transparent;
-                font-size: 14px;
-                transition: all 0.4s ease;
-                z-index: 1;
-            }
-            .quote:hover {
-                color: white;
-                font-weight: bold;
-                font-size: 18px;
-                text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-            }
-            .quote.active {
-                color: white;
-                font-size: 36px;
-                font-weight: bold;
-                animation: pulseGlow 3s ease-in-out, fadeInOut 3s ease-in-out;
-            }
-            .menu {
-                position: fixed;
-                top: 70px;
-                right: 0;
-                width: 100%;
-                max-width: 300px;
-                height: calc(100vh - 70px);
-                background: #000;
-                z-index: 10;
-                transform: translateX(100%);
-                transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-                display: flex;
-                flex-direction: column;
-                padding: 20px;
-                box-shadow: -8px 0 25px rgba(0, 0, 0, 0.7);
-            }
-            .menu.active {
-                transform: translateX(0);
-            }
-            .menu .title {
-                color: white;
-                font-size: 26px;
-                font-weight: bold;
-                margin-bottom: 40px;
-                text-align: center;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                background: linear-gradient(45deg, #fff, #aaa);
-                -webkit-background-clip: text;
-                background-clip: text;
-                -webkit-text-fill-color: transparent;
-                animation: titleShine 4s infinite;
-            }
-            .menu a {
-                color: white;
-                text-decoration: none;
-                font-size: 20px;
-                padding: 12px 15px;
-                text-align: center;
-                transition: all 0.4s ease;
-                background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1));
-                margin: 8px 0;
-                border: 1px solid rgba(0, 0, 0, 0.2);
-                border-radius: 10px;
-                font-weight: 500;
-                letter-spacing: 1px;
-                position: relative;
-                overflow: hidden;
-            }
-            .menu a::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-                transition: all 0.5s ease;
-            }
-            .menu a:hover::before {
-                left: 100%;
-            }
-            .menu a:hover {
-                color: #fff;
-                transform: translateY(-3px);
-                box-shadow: 0 5px 15px rgba(255, 255, 255, 0.15);
-                background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.15));
-            }
-            .menu.active a {
-                animation: slideInGlow 0.6s ease forwards;
-                animation-delay: calc(0.15s * var(--i));
-            }
-            .star {
-                position: absolute;
-                width: 2px;
-                height: 2px;
-                background: white;
-                border-radius: 50%;
-                z-index: 1;
-                animation: twinkleGlow 5s infinite ease-in-out;
-            }
-            @keyframes floatAndRotate {
-                0% { transform: translate(-50%, -50%) translate(0, 0) rotate(0deg); }
-                25% { transform: translate(-50%, -50%) translate(70px, -40px) rotate(90deg); }
-                50% { transform: translate(-50%, -50%) translate(-50px, 60px) rotate(180deg); }
-                75% { transform: translate(-50%, -50%) translate(30px, -70px) rotate(270deg); }
-                100% { transform: translate(-50%, -50%) translate(0, 0) rotate(360deg); }
-            }
-            @keyframes pulseGlow {
-                0% { transform: scale(1); opacity: 1; text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
-                50% { transform: scale(1.15); opacity: 1; text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
-                100% { transform: scale(1); opacity: 0; text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
-            }
-            @keyframes fadeInOut {
-                0% { opacity: 0; }
-                20% { opacity: 1; }
-                80% { opacity: 1; }
-                100% { opacity: 0; }
-            }
-            @keyframes slideInGlow {
-                from { opacity: 0; transform: translateX(60px); box-shadow: 0 0 0 rgba(255, 255, 255, 0); }
-                to { opacity: 1; transform: translateX(0); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
-            }
-            @keyframes twinkleGlow {
-                0% { opacity: 0.4; transform: scale(1); }
-                50% { opacity: 1; transform: scale(1.5); }
-                100% { opacity: 0.4; transform: scale(1); }
-            }
-            @keyframes logoGlow {
-                0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)); }
-                50% { transform: scale(1.1); filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); }
-            }
-            @keyframes textCycle {
-                0%, 40% { opacity: 1; transform: translateY(0); }
-                45% { opacity: 0; transform: translateY(-10px); }
-                50%, 90% { opacity: 0; transform: translateY(10px); }
-                95% { opacity: 1; transform: translateY(0); }
-                100% { opacity: 1; transform: translateY(0); }
-            }
-            @keyframes titleShine {
-                0% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
-            }
-            /* Mobil Uyumluluk */
-            @media (max-width: 768px) {
-                .navbar { height: 60px; padding: 0 10px; }
-                .navbar-logo { width: 40px; top: 10px; }
-                .navbar-title { font-size: 18px; }
-                .content { padding-top: 70px; min-height: 120vh; }
-                .canvas { height: 100%; }
-                .logo-container img { width: 40px; }
-                .quote { font-size: 12px; }
-                .quote:hover { font-size: 14px; }
-                .quote.active { font-size: 24px; }
-                .menu-btn { width: 30px; height: 30px; }
-                .menu-btn span { width: 18px; height: 2px; margin: 2px 0; }
-                .menu { top: 60px; height: calc(100vh - 60px); max-width: 100%; padding: 15px; }
-                .menu .title { font-size: 22px; margin-bottom: 30px; }
-                .menu a { font-size: 18px; padding: 10px 12px; }
-            }
-            @media (max-width: 480px) {
-                .navbar { height: 50px; padding: 0 8px; }
-                .navbar-logo { width: 35px; top: 8px; }
-                .navbar-title { font-size: 16px; }
-                .content { padding-top: 60px; min-height: 100vh; }
-                .canvas { height: 100%; }
-                .logo-container img { width: 30px; }
-                .quote { font-size: 10px; }
-                .quote:hover { font-size: 12px; }
-                .quote.active { font-size: 20px; }
-                .menu-btn { width: 25px; height: 25px; }
-                .menu-btn span { width: 15px; height: 2px; margin: 2px 0; }
-                .menu { top: 50px; height: calc(100vh - 50px); padding: 10px; }
-                .menu .title { font-size: 20px; margin-bottom: 20px; }
-                .menu a { font-size: 16px; padding: 8px 10px; }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="navbar">
-            <img src="logo2.PNG" alt="Navbar Logo" class="navbar-logo" onerror="this.src='https://via.placeholder.com/40'; this.alt='Logo Yüklenemedi';" />
-            <div class="navbar-title">
-                <span>THE LENG</span>
-                <span class="alt-text">SONSUZ MİRAS</span>
-            </div>
-            <div class="menu-btn" onclick="toggleMenu()">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-        <div class="content">
-            <canvas id="waveCanvas"></canvas>
-            <div class="logo-container">
-                <img src="logo2.PNG" alt="THE LENG Logo" onerror="this.src='https://via.placeholder.com/50'; this.alt='Logo Yüklenemedi';" />
-            </div>
-        </div>
-        <div class="menu" id="menu">
-            <div class="title">THE LENG</div>
-            <a href="https://theleng.site/PANEL" style="--i: 1">PANEL</a>
+	<head>
+		<script
+			async
+			src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6785168572073733"
+			crossorigin="anonymous"></script>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+		<title>SONSUZ MİRAS</title>
+		<meta name="description" content="SONSUZ MİRAS" />
+		<link rel="icon" type="image/png" href="/logo.PNG" />
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				background: black;
+				font-family: Arial, sans-serif;
+				width: 100%;
+				min-height: 100vh;
+				overflow-x: hidden;
+				overflow-y: auto; /* Aşağı kaydırmayı açtım */
+				-webkit-overflow-scrolling: touch; /* Mobil kaydırma yumuşaklığı */
+			}
+			.navbar {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 70px; /* Mobil için daha kompakt */
+				background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9));
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 15px;
+				z-index: 11;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+			}
+			.navbar-logo {
+				width: 50px;
+				height: auto;
+				margin-right: 10px;
+				position: relative;
+				top: 10px;
+				animation: logoGlow 2s infinite ease-in-out;
+			}
+			.navbar-title {
+				position: relative;
+				color: white;
+				font-size: 20px;
+				font-weight: bold;
+				text-transform: uppercase;
+				letter-spacing: 2px;
+				flex-grow: 1;
+			}
+			.navbar-title span {
+				position: absolute;
+				top: 0;
+				left: 0;
+				animation: textCycle 6s infinite ease-in-out;
+			}
+			.navbar-title .alt-text {
+				animation-delay: 3s;
+				opacity: 0;
+			}
+			.menu-btn {
+				width: 35px;
+				height: 35px;
+				cursor: pointer;
+				background: rgba(0, 0, 0, 0.1);
+				border-radius: 8px;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				transition: all 0.3s ease;
+				z-index: 12;
+			}
+			.menu-btn:hover {
+				background: rgba(255, 255, 255, 0.25);
+				transform: rotate(90deg) scale(1.1);
+			}
+			.menu-btn span {
+				width: 20px;
+				height: 2px;
+				background: white;
+				margin: 3px 0;
+				transition: all 0.4s ease;
+				box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+			}
+			.menu-btn.active span:nth-child(1) {
+				transform: translateY(7px) rotate(45deg);
+			}
+			.menu-btn.active span:nth-child(2) {
+				opacity: 0;
+				transform: scale(0);
+			}
+			.menu-btn.active span:nth-child(3) {
+				transform: translateY(-7px) rotate(-45deg);
+			}
+			.content {
+				position: relative;
+				width: 100%;
+				min-height: 150vh; /* Ekranı aşağıya büyüttüm */
+				padding-top: 80px; /* Navbar için boşluk */
+				overflow: hidden;
+			}
+			canvas {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				z-index: 0;
+			}
+			.logo-container {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				z-index: 1;
+				animation: floatAndRotate 15s infinite ease-in-out;
+				text-align: center;
+			}
+			.logo-container img {
+				width: 50px;
+				max-width: 90vw;
+				display: block;
+				margin: 0 auto;
+			}
+			.quote {
+				position: absolute;
+				color: transparent;
+				font-size: 14px;
+				transition: all 0.4s ease;
+				z-index: 1;
+			}
+			.quote:hover {
+				color: white;
+				font-weight: bold;
+				font-size: 18px;
+				text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+			}
+			.quote.active {
+				color: white;
+				font-size: 36px;
+				font-weight: bold;
+				animation:
+					pulseGlow 3s ease-in-out,
+					fadeInOut 3s ease-in-out;
+			}
+			.menu {
+				position: fixed;
+				top: 70px;
+				right: 0;
+				width: 100%;
+				max-width: 300px;
+				height: calc(100vh - 70px);
+				background: #000;
+				z-index: 10;
+				transform: translateX(100%);
+				transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+				display: flex;
+				flex-direction: column;
+				padding: 20px;
+				box-shadow: -8px 0 25px rgba(0, 0, 0, 0.7);
+			}
+			.menu.active {
+				transform: translateX(0);
+			}
+			.menu .title {
+				color: white;
+				font-size: 26px;
+				font-weight: bold;
+				margin-bottom: 40px;
+				text-align: center;
+				text-transform: uppercase;
+				letter-spacing: 2px;
+				background: linear-gradient(45deg, #fff, #aaa);
+				-webkit-background-clip: text;
+				background-clip: text;
+				-webkit-text-fill-color: transparent;
+				animation: titleShine 4s infinite;
+			}
+			.menu a {
+				color: white;
+				text-decoration: none;
+				font-size: 20px;
+				padding: 12px 15px;
+				text-align: center;
+				transition: all 0.4s ease;
+				background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1));
+				margin: 8px 0;
+				border: 1px solid rgba(0, 0, 0, 0.2);
+				border-radius: 10px;
+				font-weight: 500;
+				letter-spacing: 1px;
+				position: relative;
+				overflow: hidden;
+			}
+			.menu a::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: -100%;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+				transition: all 0.5s ease;
+			}
+			.menu a:hover::before {
+				left: 100%;
+			}
+			.menu a:hover {
+				color: #fff;
+				transform: translateY(-3px);
+				box-shadow: 0 5px 15px rgba(255, 255, 255, 0.15);
+				background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.15));
+			}
+			.menu.active a {
+				animation: slideInGlow 0.6s ease forwards;
+				animation-delay: calc(0.15s * var(--i));
+			}
+			.star {
+				position: absolute;
+				width: 2px;
+				height: 2px;
+				background: white;
+				border-radius: 50%;
+				z-index: 1;
+				animation: twinkleGlow 5s infinite ease-in-out;
+			}
+			@keyframes floatAndRotate {
+				0% {
+					transform: translate(-50%, -50%) translate(0, 0) rotate(0deg);
+				}
+				25% {
+					transform: translate(-50%, -50%) translate(70px, -40px) rotate(90deg);
+				}
+				50% {
+					transform: translate(-50%, -50%) translate(-50px, 60px) rotate(180deg);
+				}
+				75% {
+					transform: translate(-50%, -50%) translate(30px, -70px) rotate(270deg);
+				}
+				100% {
+					transform: translate(-50%, -50%) translate(0, 0) rotate(360deg);
+				}
+			}
+			@keyframes pulseGlow {
+				0% {
+					transform: scale(1);
+					opacity: 1;
+					text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+				}
+				50% {
+					transform: scale(1.15);
+					opacity: 1;
+					text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+				}
+				100% {
+					transform: scale(1);
+					opacity: 0;
+					text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+				}
+			}
+			@keyframes fadeInOut {
+				0% {
+					opacity: 0;
+				}
+				20% {
+					opacity: 1;
+				}
+				80% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			@keyframes slideInGlow {
+				from {
+					opacity: 0;
+					transform: translateX(60px);
+					box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+				}
+				to {
+					opacity: 1;
+					transform: translateX(0);
+					box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+				}
+			}
+			@keyframes twinkleGlow {
+				0% {
+					opacity: 0.4;
+					transform: scale(1);
+				}
+				50% {
+					opacity: 1;
+					transform: scale(1.5);
+				}
+				100% {
+					opacity: 0.4;
+					transform: scale(1);
+				}
+			}
+			@keyframes logoGlow {
+				0%,
+				100% {
+					transform: scale(1);
+					filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+				}
+				50% {
+					transform: scale(1.1);
+					filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+				}
+			}
+			@keyframes textCycle {
+				0%,
+				40% {
+					opacity: 1;
+					transform: translateY(0);
+				}
+				45% {
+					opacity: 0;
+					transform: translateY(-10px);
+				}
+				50%,
+				90% {
+					opacity: 0;
+					transform: translateY(10px);
+				}
+				95% {
+					opacity: 1;
+					transform: translateY(0);
+				}
+				100% {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+			@keyframes titleShine {
+				0% {
+					background-position: 0% 50%;
+				}
+				50% {
+					background-position: 100% 50%;
+				}
+				100% {
+					background-position: 0% 50%;
+				}
+			}
+			/* Mobil Uyumluluk */
+			@media (max-width: 768px) {
+				.navbar {
+					height: 60px;
+					padding: 0 10px;
+				}
+				.navbar-logo {
+					width: 40px;
+					top: 10px;
+				}
+				.navbar-title {
+					font-size: 18px;
+				}
+				.content {
+					padding-top: 70px;
+					min-height: 120vh;
+				}
+				.canvas {
+					height: 100%;
+				}
+				.logo-container img {
+					width: 40px;
+				}
+				.quote {
+					font-size: 12px;
+				}
+				.quote:hover {
+					font-size: 14px;
+				}
+				.quote.active {
+					font-size: 24px;
+				}
+				.menu-btn {
+					width: 30px;
+					height: 30px;
+				}
+				.menu-btn span {
+					width: 18px;
+					height: 2px;
+					margin: 2px 0;
+				}
+				.menu {
+					top: 60px;
+					height: calc(100vh - 60px);
+					max-width: 100%;
+					padding: 15px;
+				}
+				.menu .title {
+					font-size: 22px;
+					margin-bottom: 30px;
+				}
+				.menu a {
+					font-size: 18px;
+					padding: 10px 12px;
+				}
+			}
+			@media (max-width: 480px) {
+				.navbar {
+					height: 50px;
+					padding: 0 8px;
+				}
+				.navbar-logo {
+					width: 35px;
+					top: 8px;
+				}
+				.navbar-title {
+					font-size: 16px;
+				}
+				.content {
+					padding-top: 60px;
+					min-height: 100vh;
+				}
+				.canvas {
+					height: 100%;
+				}
+				.logo-container img {
+					width: 30px;
+				}
+				.quote {
+					font-size: 10px;
+				}
+				.quote:hover {
+					font-size: 12px;
+				}
+				.quote.active {
+					font-size: 20px;
+				}
+				.menu-btn {
+					width: 25px;
+					height: 25px;
+				}
+				.menu-btn span {
+					width: 15px;
+					height: 2px;
+					margin: 2px 0;
+				}
+				.menu {
+					top: 50px;
+					height: calc(100vh - 50px);
+					padding: 10px;
+				}
+				.menu .title {
+					font-size: 20px;
+					margin-bottom: 20px;
+				}
+				.menu a {
+					font-size: 16px;
+					padding: 8px 10px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="navbar">
+			<img
+				src="logo2.PNG"
+				alt="Navbar Logo"
+				class="navbar-logo"
+				onerror="this.src='https://via.placeholder.com/40'; this.alt='Logo Yüklenemedi';" />
+			<div class="navbar-title">
+				<span>THE LENG</span>
+				<span class="alt-text">SONSUZ MİRAS</span>
+			</div>
+			<div class="menu-btn" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+		</div>
+		<div class="content">
+			<canvas id="waveCanvas"></canvas>
+			<div class="logo-container">
+				<img
+					src="logo2.PNG"
+					alt="THE LENG Logo"
+					onerror="this.src='https://via.placeholder.com/50'; this.alt='Logo Yüklenemedi';" />
+			</div>
+		</div>
+		<div class="menu" id="menu">
+			<div class="title">THE LENG</div>
+			<a href="https://theleng.site/PANEL" style="--i: 1">PANEL</a>
 			<a href="https://theleng.site/kuran" style="--i: 1">SADECE KURAN</a>
-            <a href="https://theleng.site/logo" style="--i: 2">LOGOMUZ</a>
-        </div>
-        <script>
-            const canvas = document.getElementById("waveCanvas");
-            const ctx = canvas.getContext("2d");
-            let time = 0;
+			<a href="https://theleng.site/logo" style="--i: 2">LOGOMUZ</a>
+		</div>
+		<script>
+			const canvas = document.getElementById("waveCanvas");
+			const ctx = canvas.getContext("2d");
+			let time = 0;
 
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = document.querySelector('.content').offsetHeight;
-            }
-            window.addEventListener("resize", resizeCanvas);
-            resizeCanvas();
+			function resizeCanvas() {
+				canvas.width = window.innerWidth;
+				canvas.height = document.querySelector(".content").offsetHeight;
+			}
+			window.addEventListener("resize", resizeCanvas);
+			resizeCanvas();
 
-            function drawWaves() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                time += 0.02;
-                for (let i = 0; i < 5; i++) {
-                    ctx.beginPath();
-                    const hue = (time * 10 + i * 30) % 360;
-                    ctx.strokeStyle = `hsla(${hue}, 70%, 80%, ${0.1 + i * 0.05})`;
-                    ctx.lineWidth = 2;
-                    for (let x = 0; x < canvas.width; x++) {
-                        const y = canvas.height / 2 + Math.sin(x * 0.01 + time + i) * 100 * Math.sin(time * 0.5 + i);
-                        if (x === 0) ctx.moveTo(x, y);
-                        else ctx.lineTo(x, y);
-                    }
-                    ctx.stroke();
-                }
-                requestAnimationFrame(drawWaves);
-            }
-            drawWaves();
+			function drawWaves() {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				time += 0.02;
+				for (let i = 0; i < 5; i++) {
+					ctx.beginPath();
+					const hue = (time * 10 + i * 30) % 360;
+					ctx.strokeStyle = `hsla(${hue}, 70%, 80%, ${0.1 + i * 0.05})`;
+					ctx.lineWidth = 2;
+					for (let x = 0; x < canvas.width; x++) {
+						const y = canvas.height / 2 + Math.sin(x * 0.01 + time + i) * 100 * Math.sin(time * 0.5 + i);
+						if (x === 0) ctx.moveTo(x, y);
+						else ctx.lineTo(x, y);
+					}
+					ctx.stroke();
+				}
+				requestAnimationFrame(drawWaves);
+			}
+			drawWaves();
 
-            const quotes = [
-                "“Evrenin sonsuzluğu, insanın aklını zorlar.” - Carl Sagan",
-                "“Cogito, ergo sum.” - René Descartes",
-                "“Bilgi güçtür.” - Francis Bacon",
-                "“Hayat, çözülmesi gereken bir problem değildir, yaşanması gereken bir gerçekliktir.” - Søren Kierkegaard",
-                "“Mutluluk, anlam ve amaç bulmaktır.” - Aristotle"
-            ];
+			const quotes = [
+				"“Evrenin sonsuzluğu, insanın aklını zorlar.” - Carl Sagan",
+				"“Cogito, ergo sum.” - René Descartes",
+				"“Bilgi güçtür.” - Francis Bacon",
+				"“Hayat, çözülmesi gereken bir problem değildir, yaşanması gereken bir gerçekliktir.” - Søren Kierkegaard",
+				"“Mutluluk, anlam ve amaç bulmaktır.” - Aristotle"
+			];
 
-            function addQuotes() {
-                for (let i = 0; i < 100; i++) {
-                    const quoteText = quotes[Math.floor(Math.random() * quotes.length)];
-                    const quote = document.createElement("div");
-                    quote.className = "quote";
-                    quote.textContent = quoteText;
-                    quote.style.left = Math.random() * 100 + "vw";
-                    quote.style.top = Math.random() * 85 + 15 + "vh";
-                    quote.style.animation = `float${Math.floor(Math.random() * 3)} ${8 + Math.random() * 10}s infinite linear`;
-                    document.querySelector('.content').appendChild(quote);
-                }
-            }
-            addQuotes();
+			function addQuotes() {
+				for (let i = 0; i < 100; i++) {
+					const quoteText = quotes[Math.floor(Math.random() * quotes.length)];
+					const quote = document.createElement("div");
+					quote.className = "quote";
+					quote.textContent = quoteText;
+					quote.style.left = Math.random() * 100 + "vw";
+					quote.style.top = Math.random() * 85 + 15 + "vh";
+					quote.style.animation = `float${Math.floor(Math.random() * 3)} ${8 + Math.random() * 10}s infinite linear`;
+					document.querySelector(".content").appendChild(quote);
+				}
+			}
+			addQuotes();
 
-            const allQuotes = document.querySelectorAll(".quote");
-            function highlightQuote() {
-                allQuotes.forEach((q) => q.classList.remove("active"));
-                const randomQuote = allQuotes[Math.floor(Math.random() * allQuotes.length)];
-                randomQuote.classList.add("active");
-                setTimeout(() => randomQuote.classList.remove("active"), 3000);
-            }
-            setInterval(highlightQuote, 3000);
+			const allQuotes = document.querySelectorAll(".quote");
+			function highlightQuote() {
+				allQuotes.forEach((q) => q.classList.remove("active"));
+				const randomQuote = allQuotes[Math.floor(Math.random() * allQuotes.length)];
+				randomQuote.classList.add("active");
+				setTimeout(() => randomQuote.classList.remove("active"), 3000);
+			}
+			setInterval(highlightQuote, 3000);
 
-            const styleSheet = document.createElement("style");
-            styleSheet.textContent = `
+			const styleSheet = document.createElement("style");
+			styleSheet.textContent = `
                 @keyframes float0 {
                     0% { transform: translate(0, 0); }
                     25% { transform: translate(30px, -20px); }
@@ -415,23 +579,23 @@
                     100% { transform: translate(0, 0); }
                 }
             `;
-            document.head.appendChild(styleSheet);
+			document.head.appendChild(styleSheet);
 
-            function toggleMenu() {
-                const menu = document.getElementById("menu");
-                const btn = document.querySelector(".menu-btn");
-                menu.classList.toggle("active");
-                btn.classList.toggle("active");
-            }
+			function toggleMenu() {
+				const menu = document.getElementById("menu");
+				const btn = document.querySelector(".menu-btn");
+				menu.classList.toggle("active");
+				btn.classList.toggle("active");
+			}
 
-            for (let i = 0; i < 100; i++) {
-                const star = document.createElement("div");
-                star.className = "star";
-                star.style.left = Math.random() * 100 + "vw";
-                star.style.top = Math.random() * 85 + 15 + "vh";
-                star.style.animationDelay = Math.random() * 5 + "s";
-                document.querySelector('.content').appendChild(star);
-            }
-        </script>
-    </body>
+			for (let i = 0; i < 100; i++) {
+				const star = document.createElement("div");
+				star.className = "star";
+				star.style.left = Math.random() * 100 + "vw";
+				star.style.top = Math.random() * 85 + 15 + "vh";
+				star.style.animationDelay = Math.random() * 5 + "s";
+				document.querySelector(".content").appendChild(star);
+			}
+		</script>
+	</body>
 </html>
