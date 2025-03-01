@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SADECE KURAN</title>
+    <link rel="icon" type="image/png" href="logo.PNG">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #333, #555);
+            color: #fff;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+        }
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeOutSplash 1s ease forwards 2s;
+        }
+        #splash-screen img {
+            width: 200px;
+            animation: logoDrop 1.5s ease-out forwards;
+        }
+        #splash-screen span {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeInText 1s ease-out forwards 0.5s;
+        }
+        header {
+            background: linear-gradient(135deg, #333, #555);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: slideInFromTop 0.6s ease-out;
+            animation-delay: 2.5s;
+            animation-fill-mode: forwards;
+            opacity: 0;
+            width: 100%;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+        .container {
+            flex: 1;
+            width: 100%;
+            padding: 0 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #controls {
+            background: #444;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            animation: fadeIn 0.8s ease-out;
+            animation-delay: 2.5s;
+            animation-fill-mode: forwards;
+            opacity: 0;
+            transition: padding 0.3s ease;
+        }
+        #search {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #666;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: #333;
+            color: #fff;
+        }
+        #search:focus {
+            border-color: #bbb;
+            box-shadow: 0 0 8px rgba(187, 187, 187, 0.5);
+        }
+        select, button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            background: #888;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        select:hover, button:hover {
+            background: #777;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(119, 119, 119, 0.3);
+        }
+        #progress-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 4px;
+            background: #666;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards 2.5s;
+            transition: height 0.3s ease;
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0;
+            background: #bbb;
+            transition: width 0.6s ease;
+        }
+        #status-message {
+            text-align: center;
+            padding: 12px;
+            margin-bottom: 20px;
+            background: #fff3cd;
+            color: #856404;
+            border-radius: 8px;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+            width: 100%;
+            max-width: 1200px;
+        }
+        #surahs {
+            display: grid;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .surah {
+            background: #444;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: slideInFromBottom 0.6s ease-out forwards;
+            animation-delay: calc(2.5s + 0.1s * var(--index));
+        }
+        .surah:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .surah h2 {
+            font-size: 1.4rem;
+            color: #bbb;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        .verses {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s ease;
+        }
+        .surah.active .verses { max-height: 2000px; }
+        .verse {
+            padding: 10px 0;
+            border-bottom: 1px solid #666;
+            font-size: 1rem;
+            opacity: 0;
+            animation: fadeInVerse 0.4s ease-out forwards;
+            animation-delay: calc(0.05s * var(--verse-index));
+            transition: padding 0.3s ease;
+        }
+        .verse:last-child { border-bottom: none; }
+        footer {
+            background: linear-gradient(135deg, #333, #555);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            width: 100%;
+        }
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: #888;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #theme-toggle:hover { transform: rotate(180deg); }
+        /* Gündüz Modu */
+        body.day-mode {
+            background: linear-gradient(135deg, #eee, #ddd);
+            color: #333;
+        }
+        body.day-mode header,
+        body.day-mode footer {
+            background: linear-gradient(135deg, #bbb, #aaa);
+        }
+        body.day-mode #controls,
+        body.day-mode .surah {
+            background: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        body.day-mode #search {
+            border-color: #ccc;
+            background: #fff;
+            color: #333;
+        }
+        body.day-mode #search:focus {
+            border-color: #888;
+            box-shadow: 0 0 8px rgba(136, 136, 136, 0.5);
+        }
+        body.day-mode select,
+        body.day-mode button,
+        body.day-mode #theme-toggle {
+            background: #888;
+        }
+        body.day-mode #progress-container { background: #ccc; }
+        body.day-mode #progress-bar { background: #888; }
+        body.day-mode .surah h2 { color: #888; }
+        body.day-mode .verse { border-bottom-color: #ccc; }
+        /* Animasyonlar */
+        @keyframes slideInFromTop {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideInFromBottom {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOutSplash {
+            to { opacity: 0; visibility: hidden; }
+        }
+        @keyframes logoDrop {
+            from { transform: translateY(-100px) scale(0.5); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        @keyframes fadeInVerse {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            #controls { padding: 15px; flex-direction: column; }
+            #search, select, button { width: 100%; padding: 12px; }
+            header h1 { font-size: 1.8rem; }
+            .surah { padding: 15px; }
+            .verse { padding: 8px 0; }
+            #progress-container { height: 3px; }
+        }
+        @media (max-width: 480px) {
+            header h1 { font-size: 1.5rem; }
+            #controls { padding: 10px; }
+            #search, select, button { padding: 10px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body class="night-mode">
+    <div id="splash-screen">
+        <img src="logo.PNG" alt="Logo">
+        <span>THE LENG FARKIYLA</span>
+    </div>
+    <header>
+        <h1>SADECE KURAN</h1>
+    </header>
+    <div class="container">
+        <div id="controls">
+            <input type="text" id="search" placeholder="Sure veya ayet ara...">
+            <select id="meal-selector"></select>
+            <button id="random-verse-btn">Rastgele Ayet</button>
+        </div>
+        <div id="progress-container"><div id="progress-bar"></div></div>
+        <div id="status-message"></div>
+        <div id="surahs"></div>
+    </div>
+    <footer>
+        <p>Açık Kuran API ile Güçlendirilmiştir</p>
+    </footer>
+    <button id="theme-toggle">☀️</button>
+    <script>
+        let quranData = [];
+        let authors = [];
+        let currentAuthorId = null;
+        const totalSurahs = 114;
+
+        // Yerel depolama kontrolü
+        function checkStorageAvailability() {
+            try {
+                const test = 'test';
+                localStorage.setItem(test, test);
+                localStorage.removeItem(test);
+                return true;
+            } catch (e) {
+                console.warn('LocalStorage kullanılamıyor:', e);
+                return false;
+            }
+        }
+
+        // Yazarları çekme ve locale kaydetme
+        async function fetchAuthors() {
+            const statusMessage = document.getElementById('status-message');
+            const cacheKey = 'quranAuthors';
+            const cachedAuthors = localStorage.getItem(cacheKey);
+
+            if (cachedAuthors && checkStorageAvailability()) {
+                authors = JSON.parse(cachedAuthors);
+                populateMealSelector();
+                currentAuthorId = authors[0].id;
+                fetchQuranData(currentAuthorId);
+                return;
+            }
+
+            statusMessage.textContent = 'Mealler yükleniyor...';
+            statusMessage.style.display = 'block';
+            try {
+                const response = await fetch('https://api.acikkuran.com/authors', {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' },
+                    timeout: 5000
+                });
+                if (!response.ok) throw new Error(`HTTP hatası! Durum: ${response.status}`);
+                const data = await response.json();
+                authors = data.data || [];
+                if (authors.length === 0) throw new Error('Yazar listesi boş');
+                if (checkStorageAvailability()) {
+                    localStorage.setItem(cacheKey, JSON.stringify(authors));
+                }
+                populateMealSelector();
+                currentAuthorId = authors[0].id;
+                statusMessage.style.display = 'none';
+                fetchQuranData(currentAuthorId);
+            } catch (error) {
+                console.error('Yazarlar çekilirken hata:', error);
+                statusMessage.textContent = 'Mealler yüklenemedi, tekrar deneniyor...';
+                setTimeout(fetchAuthors, 2000);
+            }
+        }
+
+        // Meal seçiciyi doldurma
+        function populateMealSelector() {
+            const mealSelector = document.getElementById('meal-selector');
+            mealSelector.innerHTML = '';
+            authors.forEach(author => {
+                const option = document.createElement('option');
+                option.value = author.id;
+                option.textContent = `${author.name} (${author.description})`;
+                mealSelector.appendChild(option);
+            });
+        }
+
+        // Sureleri ve ayetleri çekme ve locale kaydetme
+        async function fetchQuranData(authorId) {
+            const statusMessage = document.getElementById('status-message');
+            const cacheKey = `quranData_${authorId}`;
+            const cachedData = localStorage.getItem(cacheKey);
+
+            if (cachedData && checkStorageAvailability()) {
+                const { data } = JSON.parse(cachedData);
+                quranData = data;
+                document.getElementById('progress-bar').style.width = '100%';
+                displayQuran(quranData);
+                statusMessage.style.display = 'none';
+                return;
+            }
+
+            statusMessage.textContent = 'Sureler yükleniyor...';
+            statusMessage.style.display = 'block';
+            document.getElementById('progress-bar').style.width = '0%';
+
+            try {
+                quranData = [];
+                for (let i = 1; i <= totalSurahs; i++) {
+                    const response = await fetch(`https://api.acikkuran.com/surah/${i}?author=${authorId}`, {
+                        method: 'GET',
+                        headers: { 'Accept': 'application/json' },
+                        timeout: 8000
+                    });
+                    if (!response.ok) {
+                        console.warn(`Sure ${i} için hata: ${response.status}`);
+                        continue;
+                    }
+                    const data = await response.json();
+                    const ayetler = data.data.verses.map(verse => `${verse.verse_number}. ${verse.translation.text}`);
+                    quranData.push({ sure: data.data.name, ayetler: ayetler });
+                    updateProgress(i, totalSurahs);
+                }
+                displayQuran(quranData);
+
+                if (checkStorageAvailability()) {
+                    localStorage.setItem(cacheKey, JSON.stringify({
+                        data: quranData,
+                        timestamp: Date.now()
+                    }));
+                }
+                statusMessage.style.display = 'none';
+            } catch (error) {
+                console.error('Veri çekilirken hata:', error);
+                statusMessage.textContent = 'Veriler yüklenemedi, lütfen internet bağlantınızı kontrol edin.';
+                setTimeout(() => statusMessage.style.display = 'none', 5000);
+            }
+        }
+
+        // İlerleme çubuğunu güncelle
+        function updateProgress(current, total) {
+            const progress = (current / total) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+
+        // Sureleri ekrana yazdırma
+        function displayQuran(data, autoOpenFirst = false) {
+            const surahsDiv = document.getElementById('surahs');
+            surahsDiv.innerHTML = '';
+            if (data.length === 0) {
+                surahsDiv.innerHTML = '<p>Veri bulunamadı.</p>';
+                return;
+            }
+            data.forEach((sure, index) => {
+                const surahDiv = document.createElement('div');
+                surahDiv.className = 'surah';
+                surahDiv.style.setProperty('--index', index);
+                surahDiv.innerHTML = `
+                    <h2>${sure.sure}</h2>
+                    <div class="verses">
+                        ${sure.ayetler.map((ayet, verseIndex) => `<p class="verse" style="--verse-index: ${verseIndex}">${ayet}</p>`).join('')}
+                    </div>
+                `;
+                surahDiv.addEventListener('click', () => {
+                    surahDiv.classList.toggle('active');
+                });
+                surahsDiv.appendChild(surahDiv);
+                if (autoOpenFirst && index === 0) {
+                    surahDiv.classList.add('active');
+                }
+            });
+        }
+
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAuthors();
+            loadTheme();
+        });
+
+        // Arama özelliği
+        let searchTimeout;
+        document.getElementById('search').addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredData = quranData.filter(sure => 
+                    sure.sure.toLowerCase().includes(searchTerm) || 
+                    sure.ayetler.some(ayet => ayet.toLowerCase().includes(searchTerm))
+                );
+                displayQuran(filteredData);
+            }, 300);
+        });
+
+        // Meal seçimi
+        document.getElementById('meal-selector').addEventListener('change', (e) => {
+            currentAuthorId = e.target.value;
+            fetchQuranData(currentAuthorId);
+        });
+
+        // Rastgele ayet
+        document.getElementById('random-verse-btn').addEventListener('click', () => {
+            if (quranData.length > 0) {
+                const randomSureIndex = Math.floor(Math.random() * quranData.length);
+                const randomSure = quranData[randomSureIndex];
+                const randomVerseIndex = Math.floor(Math.random() * randomSure.ayetler.length);
+                displayQuran([{ sure: randomSure.sure, ayetler: [randomSure.ayetler[randomVerseIndex]] }], true);
+            }
+        });
+
+        // Tema yönetimi
+        function toggleTheme() {
+            document.body.classList.toggle('day-mode');
+            localStorage.setItem('theme', document.body.classList.contains('day-mode') ? 'day' : 'night');
+            updateThemeIcon();
+        }
+
+        function loadTheme() {
+            const theme = localStorage.getItem('theme') || 'night';
+            if (theme === 'day') {
+                document.body.classList.add('day-mode');
+            }
+            updateThemeIcon();
+        }
+
+        function updateThemeIcon() {
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.textContent = document.body.classList.contains('day-mode') ? '🌙' : '☀️';
+        }
+
+        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+    </script>
+</body>
+</html>
