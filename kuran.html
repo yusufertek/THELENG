@@ -38,7 +38,7 @@
                 animation: fadeOutSplash 1s ease forwards 2s;
             }
             #splash-screen img {
-                width: 120px; /* Mobilde küçültüldü */
+                width: 120px;
                 animation: fadeInLogo 1.5s ease-in-out;
             }
             #splash-screen span {
@@ -83,7 +83,7 @@
                 padding: 15px;
                 border-radius: 12px;
                 display: flex;
-                flex-direction: column; /* Mobilde yığılı olacak */
+                flex-direction: column;
                 gap: 10px;
                 width: 100%;
                 margin-bottom: 20px;
@@ -117,7 +117,7 @@
                 font-size: 0.9rem;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                width: 100%; /* Mobilde tam genişlik */
+                width: 100%;
             }
             button:hover {
                 background: #868e96;
@@ -162,7 +162,7 @@
             }
             #verse-panel.active {
                 display: block;
-                animation: slideInDown 0.4s ease-out; /* Daha sade animasyon */
+                animation: slideInDown 0.4s ease-out;
             }
             #verse-panel h3 {
                 font-size: 1.4rem;
@@ -223,7 +223,7 @@
                 font-size: 1.1rem;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                padding: 5px; /* Dokunmatik için alan artırıldı */
+                padding: 5px;
             }
             .favorite-btn:hover,
             .share-btn:hover {
@@ -238,7 +238,7 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                width: 90%; /* Mobilde daha dar */
+                width: 90%;
                 max-width: 500px;
                 background: #495057;
                 padding: 15px;
@@ -278,7 +278,7 @@
             #single-verse-panel button {
                 padding: 8px 15px;
                 font-size: 0.9rem;
-                min-width: 80px; /* Dokunmatik için minimum genişlik */
+                min-width: 80px;
             }
             #close-single-panel {
                 position: absolute;
@@ -545,10 +545,11 @@
                     flex-direction: row;
                     gap: 5px;
                 }
-                #single-verse-panel button {
-                    padding: 8px 10px;
-                    font-size: 0.85rem;
-                    min-width: 60px;
+                #single-verse-panel .navigation button {
+                    padding: 6px 10px; /* Mobil için küçültüldü */
+                    font-size: 0.8rem;
+                    min-width: 0; /* Minimum genişlik kaldırıldı */
+                    width: 48%; /* Yan yana sığması için */
                 }
                 #single-verse-panel .actions {
                     gap: 15px;
@@ -583,11 +584,13 @@
                     width: 98%;
                 }
                 #single-verse-panel .navigation {
-                    flex-direction: column; /* Çok küçük ekranlarda yığılı */
-                    gap: 8px;
+                    flex-direction: row; /* Yan yana kalır */
+                    gap: 5px;
                 }
-                #single-verse-panel button {
-                    width: 100%;
+                #single-verse-panel .navigation button {
+                    padding: 5px 8px; /* Daha da küçültüldü */
+                    font-size: 0.75rem;
+                    width: 48%; /* Yan yana sığar */
                 }
             }
         </style>
@@ -634,7 +637,7 @@
         <footer>
             <p>THE LENG</p>
         </footer>
-        <button id="theme-toggle">x</button>
+        <button id="theme-toggle">Gündüz Modu</button>
         <script>
             let quranData = [];
             const mehmetOkuyanId = 107;
