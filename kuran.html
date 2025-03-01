@@ -59,8 +59,8 @@
             }
             header h1 {
                 font-size: 2rem;
-                font-family: "Verdana", sans-serif; /* Font Verdana olarak güncellendi */
-                font-weight: 700; /* Kalın font (bold) */
+                font-family: "Verdana", sans-serif;
+                font-weight: 700;
                 color: #ced4da;
                 letter-spacing: 1px;
                 text-shadow:
@@ -196,8 +196,11 @@
                 border-bottom: none;
             }
             .verse-actions {
-                display: flex;
+                display: none; /* Butonlar varsayılan olarak gizli */
                 gap: 10px;
+            }
+            .verse:hover .verse-actions {
+                display: flex; /* Ayet üzerine gelindiğinde görünür */
             }
             .favorite-btn,
             .share-btn {
@@ -313,7 +316,7 @@
                 color: #ced4da;
             }
             body.day-mode .favorite-btn.active {
-                color: #ffd700; /* Altın rengi gündüz modunda da geçerli */
+                color: #ffd700;
             }
             #favorites {
                 width: 100%;
@@ -325,7 +328,7 @@
                 display: none;
             }
             #favorites .verse {
-                color: #ffffff; /* Beyaz renk */
+                color: #ffffff;
             }
             #favorites h2 {
                 font-size: 1.6rem;
@@ -632,7 +635,7 @@
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => {
                     const searchTerm = e.target.value.trim().toLowerCase();
-                    const numberMatch = searchTerm.match(/^(\d+)[:\s](\d+)$/); // "2:1" veya "2 1" kabul eder
+                    const numberMatch = searchTerm.match(/^(\d+)[:\s](\d+)$/);
                     if (numberMatch) {
                         const [_, surahNum, verseNum] = numberMatch.map(Number);
                         if (surahNum > 0 && surahNum <= 114 && quranData[surahNum - 1]) {
