@@ -49,13 +49,15 @@
                 animation: fadeInText 1s ease-out forwards 0.5s;
             }
             header {
-                background: #495057;
+                background: rgba(73, 80, 87, 0.52);
                 padding: 15px;
-                text-align: center;
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
                 position: sticky;
                 top: 0;
                 z-index: 10;
+                display: flex;
+                justify-content: space-between; /* Simge sağda, başlık ortada kalacak */
+                align-items: center;
             }
             header h1 {
                 font-size: 1.8rem;
@@ -67,6 +69,8 @@
                     0 0 5px rgba(206, 212, 218, 0.7),
                     0 0 10px rgba(206, 212, 218, 0.5),
                     0 0 15px rgba(206, 212, 218, 0.3);
+                flex-grow: 1; /* Başlık ortada yer kaplasın */
+                text-align: center; /* Yazıyı ortala */
             }
             .container {
                 flex: 1;
@@ -152,25 +156,25 @@
             }
             #verse-panel {
                 width: 100%;
-                background: #343a40; /* Daha koyu ve modern bir renk */
-                padding: 25px; /* Daha ferah */
-                border-radius: 16px; /* Yumuşak köşeler */
+                background: #343a40;
+                padding: 25px;
+                border-radius: 16px;
                 display: none;
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Daha derin gölge */
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
                 position: relative;
                 transition: all 0.3s ease;
-                backdrop-filter: blur(5px); /* Modern bulanıklık efekti */
+                backdrop-filter: blur(5px);
             }
             #verse-panel.active {
                 display: block;
                 animation: slideInDown 0.4s ease-out;
             }
             #verse-panel h3 {
-                font-size: 1.6rem; /* Daha büyük başlık */
+                font-size: 1.6rem;
                 color: #ced4da;
                 margin-bottom: 20px;
                 font-weight: 400;
-                text-align: center; /* Ortalanmış başlık */
+                text-align: center;
                 letter-spacing: 0.5px;
             }
             #close-panel {
@@ -180,7 +184,7 @@
                 background: none;
                 border: none;
                 color: rgba(206, 212, 218, 0);
-                font-size: 1.3rem; /* Daha büyük kapatma düğmesi */
+                font-size: 1.3rem;
                 cursor: pointer;
                 transition: all 0.3s ease;
             }
@@ -189,9 +193,9 @@
                 transform: scale(1.15);
             }
             .verse {
-                padding: 12px 0; /* Daha fazla boşluk */
+                padding: 12px 0;
                 border-bottom: 1px solid #6c757d;
-                font-size: 1rem; /* Daha okunabilir */
+                font-size: 1rem;
                 color: #ced4da;
                 transition: all 0.3s ease;
                 display: flex;
@@ -221,7 +225,7 @@
                 background: none;
                 border: none;
                 color: #ced4da;
-                font-size: 0.9rem; /* Daha küçük ikonlar */
+                font-size: 0.9rem;
                 cursor: pointer;
                 transition: all 0.3s ease;
                 padding: 4px;
@@ -271,7 +275,7 @@
                 background: rgba(52, 58, 64, 0.89);
                 border-radius: 8px;
                 text-align: center;
-                width: 100%; /* Daha geniş alan */
+                width: 100%;
             }
             #single-verse-panel .navigation {
                 display: flex;
@@ -307,11 +311,11 @@
             #single-verse-panel .actions {
                 display: flex;
                 justify-content: center;
-                gap: 15px; /* Daha az boşluk */
+                gap: 15px;
             }
             #single-verse-panel .actions button {
-                padding: 5px; /* Daha küçük alan */
-                font-size: 0.9rem; /* Daha küçük ikonlar */
+                padding: 5px;
+                font-size: 0.9rem;
                 background: none;
                 border: none;
                 color: #ced4da;
@@ -357,23 +361,23 @@
                 box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
             }
             #theme-toggle {
-                position: fixed;
-                top: 15px;
-                right: 15px;
-                padding: 8px 20px;
+                width: 40px; /* Yuvarlak simge boyutu */
+                height: 40px;
                 border: none;
-                border-radius: 8px;
+                border-radius: 50%; /* Yuvarlak şekil */
                 background: #212529;
                 color: #ffffff;
-                font-size: 0.9rem;
-                font-weight: 500;
+                font-size: 1.2rem; /* Simge boyutu */
                 cursor: pointer;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
                 transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
             #theme-toggle:hover {
                 background: #343a40;
-                transform: translateY(-2px);
+                transform: scale(1.1); /* Hafif büyüme efekti */
                 box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
             }
             body.day-mode {
@@ -415,7 +419,7 @@
                 background: #5a6268;
             }
             body.day-mode #theme-toggle {
-                background: #6c757d;
+                background: rgb(108, 117, 125);
             }
             body.day-mode #theme-toggle:hover {
                 background: #5a6268;
@@ -477,7 +481,7 @@
                 color: #495057;
             }
             body.day-mode #verse-panel {
-                background: #f8f9fa; /* Daha açık bir renk */
+                background: #f8f9fa;
                 box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
             }
             @keyframes fadeOutSplash {
@@ -555,6 +559,9 @@
                 }
             }
             @media (max-width: 768px) {
+                header {
+                    padding: 10px;
+                }
                 header h1 {
                     font-size: 1.5rem;
                 }
@@ -616,10 +623,9 @@
                     font-size: 0.75rem;
                 }
                 #theme-toggle {
-                    top: 10px;
-                    right: 10px;
-                    padding: 6px 15px;
-                    font-size: 0.85rem;
+                    width: 35px;
+                    height: 35px;
+                    font-size: 1rem;
                 }
             }
             @media (max-width: 480px) {
@@ -658,6 +664,7 @@
         </div>
         <header>
             <h1>SADECE KURAN</h1>
+            <button id="theme-toggle">☾</button> <!-- Ay simgesi gece modu için -->
         </header>
         <div class="container">
             <div id="controls">
@@ -692,7 +699,6 @@
         <footer>
             <p>THE LENG</p>
         </footer>
-        <button id="theme-toggle">Gündüz Modu</button>
         <script>
             let quranData = [];
             const mehmetOkuyanId = 107;
@@ -819,7 +825,7 @@
 
                 document.querySelectorAll(".verse").forEach((verse, index) => {
                     verse.addEventListener("click", (e) => {
-                        e.stopPropagation(); // Dış tıklama olayını engelle
+                        e.stopPropagation();
                         currentSurahIndex = quranData.findIndex(s => s.sure === sureName);
                         currentVerseIndex = index;
                         displaySingleVerse(currentSurahIndex, currentVerseIndex);
@@ -919,7 +925,6 @@
                     surahsDiv.style.display = "block";
                 });
 
-                // Panelin dışına tıklayınca kapanması
                 document.addEventListener("click", (e) => {
                     const singlePanel = document.getElementById("single-verse-panel");
                     if (singlePanel.classList.contains("active") && !singlePanel.contains(e.target)) {
@@ -1034,7 +1039,7 @@
 
             function updateThemeButton() {
                 const themeToggle = document.getElementById("theme-toggle");
-                themeToggle.textContent = document.body.classList.contains("day-mode") ? "Gece Modu" : "Gündüz Modu";
+                themeToggle.textContent = document.body.classList.contains("day-mode") ? "☀" : "☾"; /* Güneş ve ay simgeleri */
             }
 
             document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
