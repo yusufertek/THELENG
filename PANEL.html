@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>YAZILAR</title>
-    <link rel="icon" type="image/png" href="/sitelogo.jpg">
+    <link rel="icon" type="image/png" href="/logo.PNG">
+    <link rel="apple-touch-icon" href="/sitelogo.jpg">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
@@ -17,6 +18,7 @@
             --font-weight: 700;
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
             --scroll: 0;
+            --blur-bg: rgba(0, 0, 0, 0.7);
         }
 
         .light-theme {
@@ -25,6 +27,7 @@
             --card-bg: #ffffff;
             --accent-color: #f56565;
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --blur-bg: rgba(50, 50, 50, 0.7);
         }
 
         .blue-theme {
@@ -34,13 +37,45 @@
             --accent-color: #63b3ed;
         }
 
+        .green-theme {
+            --bg-color: #1a3c34;
+            --text-color: #e6f0ea;
+            --card-bg: #2e5e4e;
+            --accent-color: #34c759;
+        }
+
+        .purple-theme {
+            --bg-color: #2e1a47;
+            --text-color: #e8d9ff;
+            --card-bg: #4b2e6b;
+            --accent-color: #b19cd9;
+        }
+
+        .orange-theme {
+            --bg-color: #3c2f2f;
+            --text-color: #fff4e6;
+            --card-bg: #5e4a4a;
+            --accent-color: #ff9f1c;
+        }
+
+        .red-theme {
+            --bg-color: #2b0f0f;
+            --text-color: #f4e6e6;
+            --card-bg: #4a1c1c;
+            --accent-color: #e63946;
+        }
+
         body.light-theme::before {
             background: radial-gradient(circle at top, rgba(255, 223, 0, 0.2), transparent 70%);
             animation: sunGlow 15s infinite ease-in-out;
         }
 
-        body.blue-theme::before {
-            background: linear-gradient(135deg, rgba(99, 179, 237, 0.3), transparent);
+        body.blue-theme::before,
+        body.green-theme::before,
+        body.purple-theme::before,
+        body.orange-theme::before,
+        body.red-theme::before {
+            background: linear-gradient(135deg, var(--accent-color) 0%, transparent 70%);
             animation: waveFlow 12s infinite ease-in-out;
         }
 
@@ -59,7 +94,7 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            transition: background-color 0.8s ease-in-out, color 0.8s ease-in-out;
+            transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
         }
 
         body::before {
@@ -93,13 +128,30 @@
             left: 0;
             width: 100%;
             background: var(--card-bg);
-            padding: 20px;
+            padding: 15px 30px;
             box-shadow: var(--shadow);
             z-index: 10;
             display: flex;
             justify-content: center;
             align-items: center;
             animation: descendGlow 1s ease-out;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .nav-logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-emblem {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-emblem:hover {
+            transform: scale(1.2);
         }
 
         .nav-logo {
@@ -108,14 +160,13 @@
             color: var(--accent-color);
             text-transform: uppercase;
             letter-spacing: 2px;
+            margin-left: 15px;
+            transition: transform 0.3s ease, color 0.3s ease;
         }
 
-        .logo-emblem {
-            width: 60px;
-            height: 60px;
-            margin-right: 15px;
-            animation: emblemSpin 20s infinite linear;
-            filter: drop-shadow(var(--shadow));
+        .nav-logo:hover {
+            transform: scale(1.05);
+            color: #d4a95e;
         }
 
         .settings-icon {
@@ -268,39 +319,46 @@
 
         .logout-menu {
             position: fixed;
-            top: 120px;
+            top: 130px;
             left: 25px;
             background: var(--card-bg);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             display: none;
-            width: 120px;
+            width: 180px;
             z-index: 15;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-origin: top left;
             transition: all 0.3s ease;
-            transform-origin: top;
         }
 
         .logout-menu.open {
             display: block;
-            animation: expandLogout 0.3s ease-out forwards;
+            animation: menuExpand 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
         }
 
         .logout-menu button {
             width: 100%;
-            padding: 8px;
-            background: var(--accent-color);
+            padding: 12px;
+            margin: 5px 0;
+            background: transparent;
             color: var(--text-color);
             border: none;
             border-radius: 8px;
             font-family: var(--font-family);
-            font-weight: var(--font-weight);
+            font-weight: 500;
+            font-size: 16px;
+            text-align: left;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
         }
 
         .logout-menu button:hover {
-            transform: scale(1.05);
+            background: var(--accent-color);
+            color: var(--bg-color);
+            transform: translateX(5px);
         }
 
         #password-screen {
@@ -428,6 +486,47 @@
             margin: 0 auto;
         }
 
+        .favorites-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .favorites-view .topic-card {
+            animation: cardFadeIn 0.8s ease-out forwards;
+            animation-delay: calc(var(--order) * 0.2s);
+            opacity: 0;
+            transform: translateY(50px) rotateX(-10deg);
+        }
+
+        .back-to-normal {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .back-to-normal button {
+            padding: 10px 20px;
+            background: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-family);
+            font-weight: var(--font-weight);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .back-to-normal button:hover {
+            transform: scale(1.05);
+        }
+
         .topic-card {
             background: var(--card-bg);
             padding: 30px;
@@ -435,31 +534,37 @@
             box-shadow: var(--shadow);
             text-align: center;
             cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.5s ease, filter 0.5s ease;
             animation: cardEmerge 1s ease-out forwards;
             position: relative;
             overflow: hidden;
         }
 
-        .topic-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .topic-card:hover::before {
-            opacity: 1;
-        }
-
         .topic-card:hover {
-            transform: translateY(-15px) scale(1.05);
+            transform: scale(1.1) translateY(-15px) rotate(2deg);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            filter: brightness(0.8);
+        }
+
+        .topic-card .preview-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            color: var(--text-color);
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 5;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .topic-card:hover .preview-text {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.05);
         }
 
         .topic-card img {
@@ -467,11 +572,12 @@
             height: 180px;
             object-fit: cover;
             border-radius: 15px;
-            transition: transform 0.4s ease;
+            transition: filter 0.5s ease, transform 0.5s ease;
         }
 
         .topic-card:hover img {
-            transform: scale(1.1) rotate(2deg);
+            filter: brightness(0.5);
+            transform: scale(1.1);
         }
 
         .topic-card h3 {
@@ -479,6 +585,12 @@
             margin-top: 15px;
             letter-spacing: 0.5px;
             font-weight: var(--font-weight);
+            transition: transform 0.5s ease, color 0.5s ease;
+        }
+
+        .topic-card:hover h3 {
+            transform: translateY(5px) scale(1.05);
+            color: var(--accent-color);
         }
 
         #content-panel {
@@ -489,7 +601,7 @@
             height: 100%;
             background: var(--card-bg);
             padding: 70px 30px;
-            transition: left 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: left 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
             z-index: 50;
             overflow-y: auto;
             box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
@@ -515,6 +627,11 @@
         #content-panel button:hover {
             transform: scale(1.1);
             box-shadow: var(--shadow);
+        }
+
+        #content-panel button.added {
+            background: #4CAF50;
+            cursor: default;
         }
 
         #content-panel h2 {
@@ -621,14 +738,20 @@
         }
 
         #panel-text {
+            background: var(--blur-bg);
+            backdrop-filter: blur(5px);
             line-height: 1.8;
             max-width: 1000px;
             margin: 30px auto;
+            padding: 20px;
+            border-radius: 10px;
             font-size: 18px;
             font-weight: 400;
             text-align: justify;
             animation: textUnfold 1.4s ease-out;
             white-space: pre-wrap;
+            color: var(--text-color);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
 
         #panel-text h3 {
@@ -640,6 +763,35 @@
 
         #panel-text p {
             margin-bottom: 15px;
+        }
+
+        /* Mobil Uyumluluk */
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 10px 20px;
+            }
+            .nav-logo {
+                font-size: 24px;
+            }
+            .logo-emblem {
+                width: 40px;
+                height: 40px;
+            }
+            .topics, .favorites-view {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            #content-panel {
+                padding: 50px 15px;
+            }
+            #panel-text {
+                font-size: 16px;
+            }
+            .settings-menu {
+                width: 200px;
+            }
+            .logout-menu {
+                width: 150px;
+            }
         }
 
         @keyframes bgPulse {
@@ -729,6 +881,11 @@
             100% { transform: translateY(0) scale(1) rotate(0); opacity: 1; }
         }
 
+        @keyframes cardFadeIn {
+            0% { opacity: 0; transform: translateY(50px) rotateX(-10deg); }
+            100% { opacity: 1; transform: translateY(0) rotateX(0deg); }
+        }
+
         @keyframes buttonSlide {
             0% { transform: translateX(-30px); opacity: 0; }
             100% { transform: translateX(0); opacity: 1; }
@@ -751,9 +908,10 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        @keyframes expandLogout {
-            0% { transform: scaleY(0); opacity: 0; }
-            100% { transform: scaleY(1); opacity: 1; }
+        @keyframes menuExpand {
+            0% { transform: scale(0.8) translateY(-20px); opacity: 0; }
+            60% { transform: scale(1.05) translateY(5px); opacity: 0.9; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
         }
     </style>
 </head>
@@ -764,12 +922,15 @@
     </audio>
 
     <div class="top-nav">
-        <img src="logo.PNG" class="logo-emblem" alt="ARŞİV Arması">
-        <div class="nav-logo">THE LENG</div>
+        <div class="nav-logo-container">
+            <img src="logo.PNG" class="logo-emblem" alt="ARŞİV Arması" onclick="window.location.href='https://theleng.site'">
+            <div class="nav-logo">THE LENG</div>
+        </div>
     </div>
 
     <div class="login-toggle" id="login-toggle" onclick="toggleLogin()">Giriş Yap</div>
     <div class="logout-menu" id="logout-menu">
+        <button onclick="showFavorites()">Favoriler</button>
         <button onclick="logout()">Çıkış Yap</button>
     </div>
 
@@ -778,7 +939,7 @@
 
     <div class="settings-icon" onclick="toggleSettings()">
         <svg viewBox="0 0 24 24">
-            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.43-.48-.43h-3.84c-.24 0-.43.19-.47.43l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.07-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.3-.06.62-.06.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.43.48.43h3.84c.24 0 .43-.19.47-.43l-.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.07.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.43-.48-.43h-3.84c-.24 0-.43.19-.47.43l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.07-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.3-.06.62-.06.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12-.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.43.48.43h3.84c.24 0 .43-.19.47-.43l-.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.07.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
         </svg>
     </div>
     <div class="settings-menu" id="settings-menu">
@@ -787,22 +948,28 @@
             <option value="dark">Gece Modu</option>
             <option value="light">Açık</option>
             <option value="blue">Mavi</option>
+            <option value="green">Yeşil</option>
+            <option value="purple">Mor</option>
+            <option value="orange">Turuncu</option>
+            <option value="red">Kırmızı</option>
         </select>
         <label for="font">Yazı Tipi:</label>
         <select id="font" onchange="changeFont()">
             <option value="Georgia">Georgia</option>
             <option value="Times New Roman">Times New Roman</option>
+            <option value="Arial">Arial</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Helvetica">Helvetica</option>
         </select>
         <label for="font-size">Yazı Boyutu:</label>
-        <select id="font-size" onchange="changeFontSize()">
-            <option value="14px">Küçük</option>
-            <option value="16px">Normal</option>
-            <option value="18px">Büyük</option>
-        </select>
+        <input type="range" id="font-size" min="10" max="24" step="1" value="16" onchange="changeFontSize()">
         <label>Müzik Kontrolü:</label>
         <button id="music-toggle" onclick="toggleMusic()">Müziği Durdur</button>
         <label for="volume">Ses Seviyesi:</label>
         <input type="range" id="volume" min="0" max="1" step="0.1" value="1" onchange="changeVolume()">
+        <label>Mod:</label>
+        <button onclick="toggleDarkLight()">Karanlık/Açık Mod</button>
     </div>
 
     <div id="password-screen" style="display: none;">
@@ -822,27 +989,37 @@
         <div class="topics" id="topics">
             <div class="topic-card" onclick="openTopic('tarih')">
                 <img src="cbh2.jpg" alt="Tarih Görseli">
+                <div class="preview-text">Tarih, insanlığın geçmişini anlamak için...</div>
                 <h3>Tarih</h3>
             </div>
             <div class="topic-card" onclick="openTopic('bilim')">
                 <img src="cbh3.jpg" alt="Bilim Görseli">
+                <div class="preview-text">Bilim, evreni anlama çabasının bir...</div>
                 <h3>Bilim</h3>
             </div>
             <div class="topic-card" onclick="openTopic('sanat')">
                 <img src="cbh.jpg" alt="Sanat Görseli">
+                <div class="preview-text">Sanat, insanlık tarihinin en eski...</div>
                 <h3>Sanat</h3>
             </div>
             <div class="topic-card" onclick="openTopic('türk-sanatı')">
                 <img src="turksanat2.jpg" alt="Türk Sanatı Görseli">
+                <div class="preview-text">Türk sanatı, zengin bir mirasa...</div>
                 <h3>Türk Sanatı</h3>
             </div>
+        </div>
+        <div class="favorites-view" id="favorites" style="display: none;"></div>
+        <div class="back-to-normal" id="back-to-normal" style="display: none;">
+            <button onclick="backToNormal()">Normale Dön</button>
         </div>
     </div>
 
     <div id="content-panel">
         <button onclick="closePanel()">Geri</button>
-        <button onclick="shareTopic(currentTopic)">Paylaş</button>
+        <button onclick="shareTopicTwitter(currentTopic)">Twitter'da Paylaş</button>
+        <button onclick="shareTopicWhatsApp(currentTopic)">WhatsApp'ta Paylaş</button>
         <button onclick="downloadPDF()">PDF İndir</button>
+        <button id="favorite-btn" onclick="addToFavorites(currentTopic)">Favorilere Ekle</button>
         <h2 id="panel-title"></h2>
         <div class="gallery" id="panel-gallery"></div>
         <div class="gallery-controls">
@@ -854,13 +1031,14 @@
     </div>
 
     <script>
-        let userName = "";
+        let userName = localStorage.getItem("userName") || "";
         let currentTopic = null;
         let currentImageIndex = 0;
+        let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
         const { jsPDF } = window.jspdf;
         const audio = document.getElementById("background-music");
         let isPlaying = true;
-        let isLoggedIn = false;
+        let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
         const topics = {
             tarih: { 
@@ -923,13 +1101,13 @@
                     <p>Osmanlı’da sanat, özellikle mimari ve süsleme sanatlarında zirveye ulaşmıştır. Osman Hamdi Bey gibi sanatçılar, modern Türk resminin temellerini atmıştır. "Kaplumbağa Terbiyecisi" gibi eserler bu dönemin simgelerindendir.</p>
                     <p>Günümüzde Türk sanatı, geleneksel motiflerle modern teknikleri birleştirerek dünya sahnesinde yer bulmaktadır.</p>
                 `,
-                images: ["turksanat2.jpg","turksanat4.jpg", "turksanat3.jpg"], // Kapak ve içerik fotoğrafları
+                images: ["turksanat2.jpg", "turksanat4.jpg", "turksanat3.jpg"],
                 timeline: [
                     { year: "13. Yüzyıl", event: "Selçuklu çini sanatının başlangıcı" },
                     { year: "1905", event: "Kaplumbağa Terbiyecisi’nin tamamlanması" },
                     { year: "1923", event: "Cumhuriyet ile modern sanatın yükselişi" }
                 ],
-                bg: "linear-gradient(135deg, #DAA520, #1e2529)" // Türk sanatına uygun bir renk tonu
+                bg: "linear-gradient(135deg, #DAA520, #1e2529)"
             }
         };
 
@@ -938,6 +1116,39 @@
             "Bilim Notu: Işık hızı yaklaşık 299,792 km/s’dir.",
             "Sanat Bilgisi: Mona Lisa, Leonardo da Vinci tarafından 1503-1506 yıllarında çizildi."
         ];
+
+        window.onload = function() {
+            const savedTheme = localStorage.getItem("theme");
+            const savedFont = localStorage.getItem("font");
+            const savedFontSize = localStorage.getItem("fontSize");
+
+            if (savedTheme && savedTheme !== "dark") {
+                document.body.classList.add(`${savedTheme}-theme`);
+                document.getElementById("theme").value = savedTheme;
+            }
+            if (savedFont) {
+                document.documentElement.style.setProperty("--font-family", `${savedFont}, serif`);
+                document.getElementById("font").value = savedFont;
+            }
+            if (savedFontSize) {
+                document.documentElement.style.setProperty("--font-size", `${savedFontSize}px`);
+                document.getElementById("font-size").value = savedFontSize;
+            }
+
+            if (isLoggedIn) {
+                document.getElementById("login-toggle").innerText = userName;
+                document.getElementById("login-toggle").classList.add("logged-in");
+                document.getElementById("main-content").classList.add("visible");
+                startDailyTips();
+            } else {
+                document.getElementById("password-screen").style.display = "flex";
+            }
+
+            audio.onerror = () => {
+                showNotification("Müzik dosyası yüklenemedi!");
+                document.getElementById("music-toggle").disabled = true;
+            };
+        };
 
         function toggleLogin() {
             const loginScreen = document.getElementById("password-screen");
@@ -956,6 +1167,8 @@
             if (name) {
                 userName = name;
                 isLoggedIn = true;
+                localStorage.setItem("userName", userName);
+                localStorage.setItem("isLoggedIn", "true");
                 document.getElementById("password-screen").style.display = "none";
                 document.getElementById("login-toggle").innerText = userName;
                 document.getElementById("login-toggle").classList.add("logged-in");
@@ -970,10 +1183,16 @@
         function logout() {
             userName = "";
             isLoggedIn = false;
+            favorites = [];
+            localStorage.clear();
             document.getElementById("login-toggle").innerText = "Giriş Yap";
             document.getElementById("login-toggle").classList.remove("logged-in");
             document.getElementById("logout-menu").classList.remove("open");
-            showNotification("Çıkış yapıldı!");
+            document.getElementById("topics").style.display = "block";
+            document.getElementById("favorites").style.display = "none";
+            document.getElementById("back-to-normal").style.display = "none";
+            showNotification("Çıkış yapıldı, sayfa sıfırlandı!");
+            setTimeout(() => location.reload(), 1000);
         }
 
         function toggleSettings() {
@@ -983,21 +1202,23 @@
         function changeTheme() {
             const theme = document.getElementById("theme").value;
             document.body.className = "";
-            if (theme === "light") document.body.classList.add("light-theme");
-            else if (theme === "blue") document.body.classList.add("blue-theme");
+            if (theme !== "dark") document.body.classList.add(`${theme}-theme`);
+            localStorage.setItem("theme", theme);
             showNotification(`${userName}, tema: ${theme} olarak değiştirildi`);
         }
 
         function changeFont() {
             const font = document.getElementById("font").value;
             document.documentElement.style.setProperty("--font-family", `${font}, serif`);
+            localStorage.setItem("font", font);
             showNotification(`${userName}, yazı tipi: ${font} olarak değiştirildi`);
         }
 
         function changeFontSize() {
             const size = document.getElementById("font-size").value;
-            document.documentElement.style.setProperty("--font-size", size);
-            showNotification(`${userName}, yazı boyutu: ${size} olarak değiştirildi`);
+            document.documentElement.style.setProperty("--font-size", `${size}px`);
+            localStorage.setItem("fontSize", size);
+            showNotification(`${userName}, yazı boyutu: ${size}px olarak değiştirildi`);
         }
 
         function toggleMusic() {
@@ -1006,7 +1227,7 @@
                 document.getElementById("music-toggle").innerText = "Müziği Çal";
                 showNotification("Müzik durduruldu.");
             } else {
-                audio.play();
+                audio.play().catch(() => showNotification("Müzik çalınamadı!"));
                 document.getElementById("music-toggle").innerText = "Müziği Durdur";
                 showNotification("Müzik çalıyor.");
             }
@@ -1019,12 +1240,23 @@
             showNotification(`Ses seviyesi: ${Math.round(volume * 100)}%`);
         }
 
+        function toggleDarkLight() {
+            const currentTheme = localStorage.getItem("theme") || "dark";
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            document.body.className = newTheme === "light" ? "light-theme" : "";
+            localStorage.setItem("theme", newTheme);
+            document.getElementById("theme").value = newTheme;
+            showNotification(`${userName}, ${newTheme === "dark" ? "Karanlık" : "Açık"} moda geçildi`);
+        }
+
         function searchTopics() {
             const query = document.getElementById("search").value.toLowerCase();
             const cards = document.querySelectorAll(".topic-card");
             cards.forEach(card => {
+                const key = card.getAttribute("onclick").match(/'([^']+)'/)[1];
                 const title = card.querySelector("h3").innerText.toLowerCase();
-                card.style.display = title.includes(query) ? "block" : "none";
+                const content = topics[key].text.toLowerCase();
+                card.style.display = (title.includes(query) || content.includes(query)) ? "block" : "none";
             });
         }
 
@@ -1038,6 +1270,16 @@
             updateGallery();
             updateTimeline();
             panel.classList.add("open");
+            const favoriteBtn = document.getElementById("favorite-btn");
+            if (favorites.includes(key)) {
+                favoriteBtn.innerText = "Eklendi";
+                favoriteBtn.classList.add("added");
+                favoriteBtn.setAttribute("onclick", `removeFromFavorites('${key}')`);
+            } else {
+                favoriteBtn.innerText = "Favorilere Ekle";
+                favoriteBtn.classList.remove("added");
+                favoriteBtn.setAttribute("onclick", `addToFavorites('${key}')`);
+            }
             showNotification(`${userName}, "${topics[key].title}" açıldı`);
         }
 
@@ -1072,11 +1314,18 @@
             `).join("");
         }
 
-        function shareTopic(key) {
+        function shareTopicTwitter(key) {
             const text = `${topics[key].title}: ${topics[key].text.replace(/<[^>]+>/g, '')}`;
             const url = window.location.href;
             window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text.substring(0, 280))}&url=${encodeURIComponent(url)}`, "_blank");
-            showNotification(`${topics[key].title} paylaşılıyor!`);
+            showNotification(`${topics[key].title} Twitter'da paylaşılıyor!`);
+        }
+
+        function shareTopicWhatsApp(key) {
+            const text = `${topics[key].title}: ${topics[key].text.replace(/<[^>]+>/g, '')}`;
+            const url = window.location.href;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text.substring(0, 280) + " " + url)}`, "_blank");
+            showNotification(`${topics[key].title} WhatsApp'ta paylaşılıyor!`);
         }
 
         function downloadPDF() {
@@ -1102,6 +1351,66 @@
             document.getElementById("content-panel").classList.remove("open");
             document.getElementById("content-panel").style.background = "var(--card-bg)";
             currentTopic = null;
+        }
+
+        function addToFavorites(key) {
+            const favoriteBtn = document.getElementById("favorite-btn");
+            if (!favorites.includes(key)) {
+                favorites.push(key);
+                localStorage.setItem("favorites", JSON.stringify(favorites));
+                favoriteBtn.innerText = "Eklendi";
+                favoriteBtn.classList.add("added");
+                favoriteBtn.setAttribute("onclick", `removeFromFavorites('${key}')`);
+                showNotification(`"${topics[key].title}" favorilere eklendi!`);
+            }
+        }
+
+        function removeFromFavorites(key) {
+            const favoriteBtn = document.getElementById("favorite-btn");
+            favorites = favorites.filter(fav => fav !== key);
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+            favoriteBtn.innerText = "Favorilere Ekle";
+            favoriteBtn.classList.remove("added");
+            favoriteBtn.setAttribute("onclick", `addToFavorites('${key}')`);
+            showNotification(`"${topics[key].title}" favorilerden çıkarıldı!`);
+        }
+
+        function showFavorites() {
+            const topicsDiv = document.getElementById("topics");
+            const favoritesDiv = document.getElementById("favorites");
+            const logoutMenu = document.getElementById("logout-menu");
+            const backToNormalDiv = document.getElementById("back-to-normal");
+
+            if (favorites.length === 0) {
+                showNotification("Henüz favori eklenmedi!");
+                return;
+            }
+
+            topicsDiv.style.display = "none";
+            favoritesDiv.style.display = "grid";
+            backToNormalDiv.style.display = "flex";
+            logoutMenu.classList.remove("open");
+
+            favoritesDiv.innerHTML = favorites.map((key, index) => `
+                <div class="topic-card" onclick="openTopic('${key}')" style="--order: ${index};">
+                    <img src="${topics[key].images[0]}" alt="${topics[key].title} Görseli">
+                    <div class="preview-text">${topics[key].text.replace(/<[^>]+>/g, '').substring(0, 50)}...</div>
+                    <h3>${topics[key].title}</h3>
+                </div>
+            `).join("");
+
+            showNotification("Favoriler gösteriliyor!");
+        }
+
+        function backToNormal() {
+            const topicsDiv = document.getElementById("topics");
+            const favoritesDiv = document.getElementById("favorites");
+            const backToNormalDiv = document.getElementById("back-to-normal");
+
+            topicsDiv.style.display = "grid";
+            favoritesDiv.style.display = "none";
+            backToNormalDiv.style.display = "none";
+            showNotification("Normale dönüldü!");
         }
 
         function showNotification(message) {
