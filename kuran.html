@@ -152,43 +152,46 @@
             }
             #verse-panel {
                 width: 100%;
-                background: #495057;
-                padding: 20px;
-                border-radius: 12px;
+                background: #343a40; /* Daha koyu ve modern bir renk */
+                padding: 25px; /* Daha ferah */
+                border-radius: 16px; /* Yumuşak köşeler */
                 display: none;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Daha derin gölge */
                 position: relative;
                 transition: all 0.3s ease;
+                backdrop-filter: blur(5px); /* Modern bulanıklık efekti */
             }
             #verse-panel.active {
                 display: block;
                 animation: slideInDown 0.4s ease-out;
             }
             #verse-panel h3 {
-                font-size: 1.4rem;
+                font-size: 1.6rem; /* Daha büyük başlık */
                 color: #ced4da;
-                margin-bottom: 15px;
-                font-weight: 300;
+                margin-bottom: 20px;
+                font-weight: 400;
+                text-align: center; /* Ortalanmış başlık */
+                letter-spacing: 0.5px;
             }
             #close-panel {
                 position: absolute;
-                top: 15px;
+                top: 12px;
                 right: 15px;
                 background: none;
                 border: none;
-                color: #ced4da;
-                font-size: 1.1rem;
+                color: rgba(206, 212, 218, 0);
+                font-size: 1.3rem; /* Daha büyük kapatma düğmesi */
                 cursor: pointer;
                 transition: all 0.3s ease;
             }
             #close-panel:hover {
-                color: #ffffff;
-                transform: scale(1.1);
+                color: rgba(255, 255, 255, 0);
+                transform: scale(1.15);
             }
             .verse {
-                padding: 10px 0;
+                padding: 12px 0; /* Daha fazla boşluk */
                 border-bottom: 1px solid #6c757d;
-                font-size: 0.9rem;
+                font-size: 1rem; /* Daha okunabilir */
                 color: #ced4da;
                 transition: all 0.3s ease;
                 display: flex;
@@ -198,39 +201,37 @@
                 cursor: pointer;
             }
             .verse:hover {
-                background: #6c757d;
-                padding-left: 5px;
+                background: #495057;
+                padding-left: 8px;
             }
             .verse:last-child {
                 border-bottom: none;
             }
             .verse-actions {
                 display: none;
-                gap: 10px;
-                -webkit-display: none;
+                gap: 8px;
                 transition: all 0.3s ease;
                 z-index: 1;
             }
             .verse:hover .verse-actions {
                 display: flex;
-                -webkit-display: flex;
             }
-            .favorite-btn,
-            .share-btn {
+            .verse .favorite-btn,
+            .verse .share-btn {
                 background: none;
                 border: none;
                 color: #ced4da;
-                font-size: 1.1rem;
+                font-size: 0.9rem; /* Daha küçük ikonlar */
                 cursor: pointer;
                 transition: all 0.3s ease;
-                padding: 5px;
+                padding: 4px;
             }
-            .favorite-btn:hover,
-            .share-btn:hover {
+            .verse .favorite-btn:hover,
+            .verse .share-btn:hover {
                 color: #ffffff;
-                transform: scale(1.2);
+                transform: scale(1.1);
             }
-            .favorite-btn.active {
+            .verse .favorite-btn.active {
                 color: #ffd700;
             }
             #single-verse-panel {
@@ -239,61 +240,113 @@
                 left: 50%;
                 transform: translate(-50%, -50%);
                 width: 90%;
-                max-width: 500px;
-                background: #495057;
-                padding: 15px;
-                border-radius: 12px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+                max-width: 420px;
+                background: rgba(73, 80, 87, 0.63);
+                padding: 25px;
+                border-radius: 16px;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
                 display: none;
                 z-index: 2000;
-                transition: all 0.3s ease;
+                transition: all 0.4s ease;
+                backdrop-filter: blur(5px);
             }
             #single-verse-panel.active {
                 display: block;
-                animation: fadeInSingleVerse 0.4s ease-out;
+                animation: fadeInSingleVerse 0.5s ease-out;
             }
             #single-verse-panel h3 {
-                font-size: 1.3rem;
+                font-size: 1.5rem;
                 color: #ced4da;
-                margin-bottom: 15px;
-                font-weight: 300;
+                margin-bottom: 20px;
+                font-weight: 400;
+                text-align: center;
+                letter-spacing: 0.5px;
             }
             #single-verse-panel .verse-content {
-                font-size: 1rem;
+                font-size: 1.1rem;
                 color: #ced4da;
-                margin-bottom: 15px;
-                line-height: 1.4;
+                margin-bottom: 25px;
+                line-height: 1.8;
+                padding: 15px;
+                background: rgba(108, 117, 125, 0.1);
+                border-radius: 8px;
+                text-align: center;
+                width: 100%; /* Daha geniş alan */
             }
             #single-verse-panel .navigation {
                 display: flex;
                 justify-content: space-between;
-                gap: 10px;
-                margin-bottom: 15px;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+            #single-verse-panel .navigation button {
+                width: 50px;
+                height: 50px;
+                padding: 0;
+                border: none;
+                border-radius: 50%;
+                background: #6c757d;
+                color: #ffffff;
+                font-size: 1.2rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            #single-verse-panel .navigation button:hover {
+                background: #adb5bd;
+                transform: scale(1.1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            }
+            #single-verse-panel .navigation button:disabled {
+                background: #343a40;
+                cursor: not-allowed;
+                opacity: 0.5;
             }
             #single-verse-panel .actions {
                 display: flex;
                 justify-content: center;
-                gap: 20px;
+                gap: 15px; /* Daha az boşluk */
             }
-            #single-verse-panel button {
-                padding: 8px 15px;
-                font-size: 0.9rem;
-                min-width: 80px;
-            }
-            #close-single-panel {
-                position: absolute;
-                top: 10px;
-                right: 10px;
+            #single-verse-panel .actions button {
+                padding: 5px; /* Daha küçük alan */
+                font-size: 0.9rem; /* Daha küçük ikonlar */
                 background: none;
                 border: none;
                 color: #ced4da;
-                font-size: 1.1rem;
-                cursor: pointer;
                 transition: all 0.3s ease;
             }
-            #close-single-panel:hover {
+            #single-verse-panel .actions button:hover {
                 color: #ffffff;
                 transform: scale(1.1);
+            }
+            #single-verse-panel .favorite-btn.active {
+                color: #ffd700;
+            }
+            #favorites {
+                width: 100%;
+                background: #495057;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                color: #ced4da;
+                display: none;
+            }
+            #favorites .verse {
+                color: #ffffff;
+            }
+            #favorites h2 {
+                font-size: 1.4rem;
+                margin-bottom: 15px;
+            }
+            #favorites-list .verse {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            #back-to-surahs {
+                margin-top: 10px;
             }
             footer {
                 background: #495057;
@@ -374,12 +427,10 @@
             body.day-mode .verse-content {
                 color: #495057;
             }
-            body.day-mode #close-panel,
-            body.day-mode #close-single-panel {
+            body.day-mode #close-panel {
                 color: #6c757d;
             }
-            body.day-mode #close-panel:hover,
-            body.day-mode #close-single-panel:hover {
+            body.day-mode #close-panel:hover {
                 color: #495057;
             }
             body.day-mode .verse {
@@ -388,40 +439,46 @@
             body.day-mode .verse:hover {
                 background: #f8f9fa;
             }
-            body.day-mode .favorite-btn,
-            body.day-mode .share-btn {
+            body.day-mode .verse .favorite-btn,
+            body.day-mode .verse .share-btn {
                 color: #ced4da;
             }
-            body.day-mode .favorite-btn:hover,
-            body.day-mode .share-btn:hover {
+            body.day-mode .verse .favorite-btn:hover,
+            body.day-mode .verse .share-btn:hover {
                 color: #ced4da;
             }
-            body.day-mode .favorite-btn.active {
+            body.day-mode .verse .favorite-btn.active {
                 color: #ffd700;
             }
-            #favorites {
-                width: 100%;
-                background: #495057;
-                padding: 20px;
-                border-radius: 12px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-                color: #ced4da;
-                display: none;
+            body.day-mode #single-verse-panel {
+                background: #ffffff;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             }
-            #favorites .verse {
-                color: #ffffff;
+            body.day-mode #single-verse-panel h3,
+            body.day-mode #single-verse-panel .verse-content {
+                color: #495057;
             }
-            #favorites h2 {
-                font-size: 1.4rem;
-                margin-bottom: 15px;
+            body.day-mode #single-verse-panel .verse-content {
+                background: rgba(206, 212, 218, 0.1);
             }
-            #favorites-list .verse {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
+            body.day-mode #single-verse-panel .navigation button {
+                background: #6c757d;
             }
-            #back-to-surahs {
-                margin-top: 10px;
+            body.day-mode #single-verse-panel .navigation button:hover {
+                background: #5a6268;
+            }
+            body.day-mode #single-verse-panel .navigation button:disabled {
+                background: #e9ecef;
+            }
+            body.day-mode #single-verse-panel .actions button {
+                color: #6c757d;
+            }
+            body.day-mode #single-verse-panel .actions button:hover {
+                color: #495057;
+            }
+            body.day-mode #verse-panel {
+                background: #f8f9fa; /* Daha açık bir renk */
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
             }
             @keyframes fadeOutSplash {
                 to {
@@ -497,7 +554,6 @@
                     background-position: 0% 50%;
                 }
             }
-            /* Mobil Uyumluluk */
             @media (max-width: 768px) {
                 header h1 {
                     font-size: 1.5rem;
@@ -522,42 +578,38 @@
                     font-size: 1rem;
                 }
                 #verse-panel {
-                    padding: 15px;
+                    padding: 20px;
                 }
                 #verse-panel h3 {
-                    font-size: 1.2rem;
+                    font-size: 1.4rem;
                 }
                 .verse {
-                    font-size: 0.85rem;
-                    padding: 8px 0;
+                    font-size: 0.9rem;
+                    padding: 10px 0;
                 }
                 #single-verse-panel {
                     width: 95%;
-                    padding: 12px;
+                    padding: 20px;
                 }
                 #single-verse-panel h3 {
-                    font-size: 1.1rem;
+                    font-size: 1.3rem;
                 }
                 #single-verse-panel .verse-content {
-                    font-size: 0.9rem;
-                }
-                #single-verse-panel .navigation {
-                    flex-direction: row;
-                    gap: 5px;
+                    font-size: 1rem;
+                    padding: 12px;
                 }
                 #single-verse-panel .navigation button {
-                    padding: 6px 10px; /* Mobil için küçültüldü */
-                    font-size: 0.8rem;
-                    min-width: 0; /* Minimum genişlik kaldırıldı */
-                    width: 48%; /* Yan yana sığması için */
+                    width: 45px;
+                    height: 45px;
+                    font-size: 1.1rem;
                 }
                 #single-verse-panel .actions {
-                    gap: 15px;
+                    gap: 10px;
                 }
-                .favorite-btn,
-                .share-btn {
-                    font-size: 1rem;
-                    padding: 8px;
+                .verse .favorite-btn,
+                .verse .share-btn {
+                    font-size: 0.85rem;
+                    padding: 3px;
                 }
                 footer {
                     padding: 8px;
@@ -582,15 +634,19 @@
                 }
                 #single-verse-panel {
                     width: 98%;
+                    padding: 15px;
                 }
-                #single-verse-panel .navigation {
-                    flex-direction: row; /* Yan yana kalır */
-                    gap: 5px;
+                #single-verse-panel h3 {
+                    font-size: 1.2rem;
+                }
+                #single-verse-panel .verse-content {
+                    font-size: 0.9rem;
+                    padding: 10px;
                 }
                 #single-verse-panel .navigation button {
-                    padding: 5px 8px; /* Daha da küçültüldü */
-                    font-size: 0.75rem;
-                    width: 48%; /* Yan yana sığar */
+                    width: 40px;
+                    height: 40px;
+                    font-size: 1rem;
                 }
             }
         </style>
@@ -617,11 +673,10 @@
             </div>
             <div id="single-verse-panel">
                 <h3 id="single-panel-title"></h3>
-                <button id="close-single-panel">✖</button>
                 <div id="single-verse-content" class="verse-content"></div>
                 <div class="navigation">
-                    <button id="prev-verse">◄ Önceki</button>
-                    <button id="next-verse">Sonraki ►</button>
+                    <button id="prev-verse">◄</button>
+                    <button id="next-verse">►</button>
                 </div>
                 <div class="actions">
                     <button id="single-favorite-btn" class="favorite-btn">★</button>
@@ -763,7 +818,8 @@
                 });
 
                 document.querySelectorAll(".verse").forEach((verse, index) => {
-                    verse.addEventListener("click", () => {
+                    verse.addEventListener("click", (e) => {
+                        e.stopPropagation(); // Dış tıklama olayını engelle
                         currentSurahIndex = quranData.findIndex(s => s.sure === sureName);
                         currentVerseIndex = index;
                         displaySingleVerse(currentSurahIndex, currentVerseIndex);
@@ -863,11 +919,16 @@
                     surahsDiv.style.display = "block";
                 });
 
-                document.getElementById("close-single-panel").addEventListener("click", () => {
-                    document.getElementById("single-verse-panel").classList.remove("active");
+                // Panelin dışına tıklayınca kapanması
+                document.addEventListener("click", (e) => {
+                    const singlePanel = document.getElementById("single-verse-panel");
+                    if (singlePanel.classList.contains("active") && !singlePanel.contains(e.target)) {
+                        singlePanel.classList.remove("active");
+                    }
                 });
 
-                document.getElementById("prev-verse").addEventListener("click", () => {
+                document.getElementById("prev-verse").addEventListener("click", (e) => {
+                    e.stopPropagation();
                     if (currentVerseIndex > 0) {
                         currentVerseIndex--;
                     } else if (currentSurahIndex > 0) {
@@ -877,7 +938,8 @@
                     displaySingleVerse(currentSurahIndex, currentVerseIndex);
                 });
 
-                document.getElementById("next-verse").addEventListener("click", () => {
+                document.getElementById("next-verse").addEventListener("click", (e) => {
+                    e.stopPropagation();
                     const sure = quranData[currentSurahIndex];
                     if (currentVerseIndex < sure.ayetler.length - 1) {
                         currentVerseIndex++;
@@ -888,12 +950,14 @@
                     displaySingleVerse(currentSurahIndex, currentVerseIndex);
                 });
 
-                document.getElementById("single-favorite-btn").addEventListener("click", () => {
+                document.getElementById("single-favorite-btn").addEventListener("click", (e) => {
+                    e.stopPropagation();
                     const btn = document.getElementById("single-favorite-btn");
                     toggleFavorite(btn.dataset.surah, btn.dataset.verse, btn);
                 });
 
-                document.getElementById("single-share-btn").addEventListener("click", () => {
+                document.getElementById("single-share-btn").addEventListener("click", (e) => {
+                    e.stopPropagation();
                     const btn = document.getElementById("single-share-btn");
                     shareVerse(btn.dataset.surah, btn.dataset.verse);
                 });
