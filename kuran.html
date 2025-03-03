@@ -25,6 +25,7 @@
                 transition: all 0.5s ease;
                 scrollbar-width: none; /* Firefox için kaydırma çubuğunu gizle */
                 -ms-overflow-style: none; /* IE ve Edge için kaydırma çubuğunu gizle */
+                touch-action: none; /* Dokunmatik yakınlaştırmayı engeller */
             }
             body::-webkit-scrollbar {
                 display: none; /* Chrome, Safari ve Opera için kaydırma çubuğunu gizle */
@@ -820,6 +821,27 @@
             <p>THE LENG</p>
         </footer>
         <script>
+            // Yakınlaştırmayı tamamen engellemek için JavaScript
+            document.addEventListener('touchmove', function (e) {
+                if (e.touches.length > 1) { // Çoklu dokunma (pinch-to-zoom) kontrolü
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchstart', function (e) {
+                if (e.touches.length > 1) { // Çoklu dokunma durumunda
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            document.addEventListener('gesturestart', function (e) {
+                e.preventDefault(); // iOS'ta gesture olaylarını engelle
+            });
+
+            document.addEventListener('dblclick', function (e) {
+                e.preventDefault(); // Çift tıklama ile büyütmeyi engelle
+            });
+
             let quranData = [];
             let jsonData = {};
             let selectedAuthor = "Mehmet Okuyan";
