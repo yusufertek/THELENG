@@ -94,6 +94,7 @@
                 margin-bottom: 20px;
                 box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
                 transition: all 0.3s ease;
+                position: relative;
             }
             #search {
                 flex: 1;
@@ -112,6 +113,57 @@
                 background: #343a40;
                 box-shadow: 0 0 8px rgba(173, 181, 189, 0.2);
                 animation: pulseSearch 1.5s infinite;
+            }
+            #author-select {
+                padding: 12px;
+                border: none;
+                border-radius: 10px;
+                background: #212529;
+                color: #ced4da;
+                font-size: 0.9rem;
+                width: 100%;
+                cursor: pointer;
+                appearance: none;
+                background-image: linear-gradient(45deg, #212529, #343a40);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s ease;
+                position: relative;
+                z-index: 1;
+            }
+            #author-select:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(173, 181, 189, 0.3);
+                background-image: linear-gradient(45deg, #343a40, #495057);
+            }
+            #author-select:focus {
+                outline: none;
+                box-shadow: 0 0 10px rgba(173, 181, 189, 0.5);
+                background-image: linear-gradient(45deg, #495057, #6c757d);
+            }
+            #author-select option {
+                background: #343a40;
+                color: #ced4da;
+                padding: 10px;
+                transition: all 0.3s ease;
+            }
+            #author-select option:hover {
+                background: #6c757d;
+            }
+            #loading-bar {
+                display: none;
+                width: 100%;
+                height: 6px;
+                background: #343a40;
+                border-radius: 3px;
+                overflow: hidden;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            }
+            #loading-bar .progress {
+                width: 0%;
+                height: 100%;
+                background: linear-gradient(90deg, #6c757d, #adb5bd);
+                transition: width 0.3s ease-in-out;
+                animation: loadingProgress 2s infinite;
             }
             button {
                 padding: 10px;
@@ -444,15 +496,32 @@
                     0 0 10px rgba(108, 117, 125, 0.5),
                     0 0 15px rgba(108, 117, 125, 0.3);
             }
-            body.day-mode #search {
+            body.day-mode #search,
+            body.day-mode #author-select {
                 background: #f8f9fa;
                 border-color: #ced4da;
                 color: #495057;
             }
-            body.day-mode #search:focus {
+            body.day-mode #search:focus,
+            body.day-mode #author-select:focus {
                 background: #ffffff;
                 border-color: #adb5bd;
                 box-shadow: 0 0 8px rgba(108, 117, 125, 0.2);
+            }
+            body.day-mode #author-select {
+                background-image: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            }
+            body.day-mode #author-select:hover {
+                background-image: linear-gradient(45deg, #e9ecef, #ced4da);
+            }
+            body.day-mode #author-select:focus {
+                background-image: linear-gradient(45deg, #ced4da, #adb5bd);
+            }
+            body.day-mode #loading-bar {
+                background: #e9ecef;
+            }
+            body.day-mode #loading-bar .progress {
+                background: linear-gradient(90deg, #6c757d, #5a6268);
             }
             body.day-mode button {
                 background: #6c757d;
@@ -616,6 +685,11 @@
                     background-position: 0% 50%;
                 }
             }
+            @keyframes loadingProgress {
+                0% { width: 0%; }
+                50% { width: 100%; }
+                100% { width: 0%; }
+            }
             @media (max-width: 768px) {
                 header {
                     padding: 10px;
@@ -631,6 +705,7 @@
                     padding: 10px;
                 }
                 #search,
+                #author-select,
                 button {
                     width: 100%;
                     font-size: 0.85rem;
@@ -728,6 +803,12 @@
         <div class="container">
             <div id="controls">
                 <input type="text" id="search" placeholder="Sure, ayet veya kelime ara..." />
+                <select id="author-select">
+                    <option value="">Meal Seçin</option>
+                </select>
+                <div id="loading-bar">
+                    <div class="progress"></div>
+                </div>
                 <button id="show-favorites">Favorileri Göster</button>
             </div>
             <div id="surahs"></div>
@@ -760,7 +841,7 @@
         </footer>
         <script>
             let quranData = [];
-            const mehmetOkuyanId = 107;
+            let selectedAuthorId = 107; // Varsayılan: Mehmet Okuyan
             const totalSurahs = 114;
             let currentSurahIndex = 0;
             let currentVerseIndex = 0;
@@ -777,21 +858,55 @@
                 }
             }
 
-            async function fetchQuranData() {
-                const cacheKey = `quranData_${mehmetOkuyanId}`;
+            function showLoading() {
+                const loadingBar = document.getElementById("loading-bar");
+                loadingBar.style.display = "block";
+            }
+
+            function hideLoading() {
+                const loadingBar = document.getElementById("loading-bar");
+                loadingBar.style.display = "none";
+            }
+
+            async function fetchAuthors() {
+                try {
+                    const response = await fetch("https://api.acikkuran.com/authors", {
+                        method: "GET",
+                        headers: { Accept: "application/json" }
+                    });
+                    const data = await response.json();
+                    const authors = data.data.filter(author => author.language === "tr");
+                    const select = document.getElementById("author-select");
+                    authors.forEach(author => {
+                        const option = document.createElement("option");
+                        option.value = author.id;
+                        option.textContent = author.name;
+                        if (author.id === selectedAuthorId) option.selected = true;
+                        select.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error("Yazarlar çekilirken hata:", error);
+                }
+            }
+
+            async function fetchQuranData(authorId) {
+                const cacheKey = `quranData_${authorId}`;
                 const cachedData = localStorage.getItem(cacheKey);
+
+                showLoading();
 
                 if (cachedData && checkStorageAvailability()) {
                     const { data } = JSON.parse(cachedData);
                     quranData = data;
                     displaySurahs(quranData);
+                    hideLoading();
                     return;
                 }
 
                 try {
                     quranData = [];
                     for (let i = 1; i <= totalSurahs; i++) {
-                        const response = await fetch(`https://api.acikkuran.com/surah/${i}?author=${mehmetOkuyanId}`, {
+                        const response = await fetch(`https://api.acikkuran.com/surah/${i}?author=${authorId}`, {
                             method: "GET",
                             headers: { Accept: "application/json" },
                             timeout: 8000
@@ -818,8 +933,10 @@
                         );
                     }
                 } catch (error) {
-                    console.error("Veri çekilirken hata:", error);
-                    alert("Veriler yüklenemedi, lütfen internet bağlantınızı kontrol edin.");
+                    console.error("MEAL VERİSİ YÜKLENDİ:", error);
+                    alert("...");
+                } finally {
+                    hideLoading();
                 }
             }
 
@@ -871,7 +988,7 @@
                             verseElement.className = "verse-result";
                             verseElement.innerHTML = `${sure.sure}: ${highlightText(ayet, searchTerm)}`;
                             verseElement.addEventListener("click", (e) => {
-                                e.stopPropagation(); // Dışarı tıklama olayını engelle
+                                e.stopPropagation();
                                 currentSurahIndex = surahIndex;
                                 currentVerseIndex = verseIndex;
                                 const singlePanel = document.getElementById("single-verse-panel");
@@ -1035,8 +1152,20 @@
             }
 
             document.addEventListener("DOMContentLoaded", () => {
-                fetchQuranData();
+                fetchAuthors();
+                fetchQuranData(selectedAuthorId);
                 loadTheme();
+
+                document.getElementById("author-select").addEventListener("change", (e) => {
+                    selectedAuthorId = e.target.value;
+                    if (selectedAuthorId) {
+                        fetchQuranData(selectedAuthorId);
+                        document.getElementById("surahs").style.display = "block";
+                        document.getElementById("verse-panel").classList.remove("active");
+                        document.getElementById("single-verse-panel").classList.remove("active");
+                        document.getElementById("favorites").style.display = "none";
+                    }
+                });
 
                 document.getElementById("close-panel").addEventListener("click", () => {
                     const panel = document.getElementById("verse-panel");
@@ -1052,7 +1181,6 @@
                     panel.style.display = "none";
                     surahsDiv.style.display = "block";
                     displaySurahs(quranData);
-                    document.getElementById("verse-panel").classList.remove("active");
                 });
 
                 document.getElementById("single-verse-panel").addEventListener("click", (e) => {
