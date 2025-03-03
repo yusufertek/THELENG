@@ -824,6 +824,128 @@
             let selectedAuthor = "Mehmet Okuyan";
             const totalSurahs = 114;
 
+            // Sure isimleri haritası (şapkasız harflerle)
+            const surahNames = {
+                1: "Fatiha",
+                2: "Bakara",
+                3: "Al-i Imran",
+                4: "Nisa",
+                5: "Maide",
+                6: "Enam",
+                7: "Araf",
+                8: "Enfal",
+                9: "Tevbe",
+                10: "Yunus",
+                11: "Hud",
+                12: "Yusuf",
+                13: "Rad",
+                14: "Ibrahim",
+                15: "Hicr",
+                16: "Nahl",
+                17: "Isra",
+                18: "Kehf",
+                19: "Meryem",
+                20: "Ta-Ha",
+                21: "Enbiya",
+                22: "Hac",
+                23: "Muminun",
+                24: "Nur",
+                25: "Furkan",
+                26: "Suara",
+                27: "Neml",
+                28: "Kasas",
+                29: "Ankebut",
+                30: "Rum",
+                31: "Lokman",
+                32: "Secde",
+                33: "Ahzab",
+                34: "Sebe",
+                35: "Fatir",
+                36: "Yasin",
+                37: "Saffat",
+                38: "Sad",
+                39: "Zumer",
+                40: "Mumin",
+                41: "Fussilet",
+                42: "Sura",
+                43: "Zuhruf",
+                44: "Duhan",
+                45: "Casiye",
+                46: "Ahkaf",
+                47: "Muhammed",
+                48: "Fetih",
+                49: "Hucurat",
+                50: "Kaf",
+                51: "Zariyat",
+                52: "Tur",
+                53: "Necm",
+                54: "Kamer",
+                55: "Rahman",
+                56: "Vakia",
+                57: "Hadid",
+                58: "Mucadele",
+                59: "Hasr",
+                60: "Mumtehine",
+                61: "Saf",
+                62: "Cuma",
+                63: "Munafikun",
+                64: "Tegabun",
+                65: "Talak",
+                66: "Tahrim",
+                67: "Mulk",
+                68: "Kalem",
+                69: "Hakka",
+                70: "Mearic",
+                71: "Nuh",
+                72: "Cin",
+                73: "Muzzemmil",
+                74: "Muddessir",
+                75: "Kiyame",
+                76: "Insan",
+                77: "Murselat",
+                78: "Nebe",
+                79: "Naziat",
+                80: "Abese",
+                81: "Tekvir",
+                82: "Infitar",
+                83: "Mutaffifin",
+                84: "Insikak",
+                85: "Buruc",
+                86: "Tarik",
+                87: "Ala",
+                88: "Gasiye",
+                89: "Fecr",
+                90: "Beled",
+                91: "Sems",
+                92: "Leyl",
+                93: "Duha",
+                94: "Insirah",
+                95: "Tin",
+                96: "Alak",
+                97: "Kadr",
+                98: "Beyyine",
+                99: "Zilzal",
+                100: "Adiyat",
+                101: "Karia",
+                102: "Tekasur",
+                103: "Asr",
+                104: "Humeze",
+                105: "Fil",
+                106: "Kureys",
+                107: "Maun",
+                108: "Kevser",
+                109: "Kafirun",
+                110: "Nasr",
+                111: "Tebbet",
+                112: "Ihlas",
+                113: "Felak",
+                114: "Nas"
+            };
+
+            function getSurahName(id) {
+                return surahNames[id] || `Sure ${id}`; // Eğer id yoksa varsayılan olarak numara döner
+            }
+
             function checkStorageAvailability() {
                 try {
                     const test = "test";
@@ -889,7 +1011,7 @@
                     jsonData = await response.json();
 
                     quranData = jsonData.surahs.map(surah => ({
-                        sure: surah.name,
+                        sure: getSurahName(surah.id), // Sure ismini haritadan alıyoruz
                         ayetler: surah.verses.map(verse => {
                             const translation = verse.translations.find(t => t.author === author);
                             return translation ? `${verse.verse_id}. ${translation.text}` : `${verse.verse_id}. Çeviri bulunamadı`;
@@ -930,7 +1052,7 @@
                     const surahDiv = document.createElement("div");
                     surahDiv.style.setProperty('--index', index);
                     surahDiv.className = "surah";
-                    surahDiv.innerHTML = `<h2>${sure.sure}</h2>`;
+                    surahDiv.innerHTML = `<h2>${sure.sure}</h2>`; // Haritadan alınan isim burada gösteriliyor
                     surahDiv.addEventListener("click", () => {
                         displayVerses(sure.sure, sure.ayetler);
                         surahsDiv.style.display = "none";
@@ -1042,7 +1164,7 @@
                 const title = document.getElementById("verse-detail-title");
                 const selectedTranslation = document.getElementById("selected-translation");
                 const otherTranslations = document.getElementById("other-translations");
-                const surahIndex = jsonData.surahs.findIndex(s => s.name === sureName);
+                const surahIndex = jsonData.surahs.findIndex(s => getSurahName(s.id) === sureName); // Haritadan eşleştiriyoruz
                 const verseData = jsonData.surahs[surahIndex].verses[verseIndex];
                 const allTranslations = verseData.translations;
 
@@ -1078,7 +1200,7 @@
                     newVerseIndex = 0;
                 }
 
-                const newSureName = jsonData.surahs[newSurahIndex].name;
+                const newSureName = getSurahName(jsonData.surahs[newSurahIndex].id); // Haritadan alıyoruz
                 const newVerse = quranData[newSurahIndex].ayetler[newVerseIndex];
                 displayVerseDetail(newSureName, newVerse, newVerseIndex);
             }
@@ -1154,6 +1276,25 @@
                     console.error("Başlangıçta hata:", error);
                     alert("Uygulama başlatılırken bir hata oluştu: " + error.message);
                 }
+
+                const prevVerseBtn = document.getElementById("prev-verse-btn");
+                const nextVerseBtn = document.getElementById("next-verse-btn");
+
+                let lastTap = 0;
+                const doubleTapDelay = 300;
+
+                function handleDoubleTap(event) {
+                    const currentTime = new Date().getTime();
+                    const tapGap = currentTime - lastTap;
+
+                    if (tapGap < doubleTapDelay && tapGap > 0) {
+                        event.preventDefault();
+                    }
+                    lastTap = currentTime;
+                }
+
+                prevVerseBtn.addEventListener("touchstart", handleDoubleTap);
+                nextVerseBtn.addEventListener("touchstart", handleDoubleTap);
 
                 document.getElementById("author-select").addEventListener("change", async (e) => {
                     selectedAuthor = e.target.value;
