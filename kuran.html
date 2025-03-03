@@ -841,7 +841,8 @@
         </footer>
         <script>
             let quranData = [];
-            let selectedAuthorId = 107; // Varsayılan: Mehmet Okuyan
+            let jsonData = {}; // JSON dosyasındaki ham veriyi tutmak için
+            let selectedAuthor = "Mehmet Okuyan"; // Varsayılan yazar
             const totalSurahs = 114;
             let currentSurahIndex = 0;
             let currentVerseIndex = 0;
@@ -868,29 +869,31 @@
                 loadingBar.style.display = "none";
             }
 
-            async function fetchAuthors() {
-                try {
-                    const response = await fetch("https://api.acikkuran.com/authors", {
-                        method: "GET",
-                        headers: { Accept: "application/json" }
+            // Yazarları JSON'dan yükleme (benzersiz yazar listesi oluştur)
+            function loadAuthors(data) {
+                const select = document.getElementById("author-select");
+                select.innerHTML = '<option value="">Meal Seçin</option>';
+                const authorsSet = new Set();
+                data.surahs.forEach(surah => {
+                    surah.verses.forEach(verse => {
+                        verse.translations.forEach(trans => {
+                            authorsSet.add(trans.author);
+                        });
                     });
-                    const data = await response.json();
-                    const authors = data.data.filter(author => author.language === "tr");
-                    const select = document.getElementById("author-select");
-                    authors.forEach(author => {
-                        const option = document.createElement("option");
-                        option.value = author.id;
-                        option.textContent = author.name;
-                        if (author.id === selectedAuthorId) option.selected = true;
-                        select.appendChild(option);
-                    });
-                } catch (error) {
-                    console.error("Yazarlar çekilirken hata:", error);
-                }
+                });
+                const authors = Array.from(authorsSet);
+                authors.forEach(author => {
+                    const option = document.createElement("option");
+                    option.value = author;
+                    option.textContent = author;
+                    if (author === selectedAuthor) option.selected = true;
+                    select.appendChild(option);
+                });
             }
 
-            async function fetchQuranData(authorId) {
-                const cacheKey = `quranData_${authorId}`;
+            // JSON'dan veri yükleme
+            async function loadQuranData(author) {
+                const cacheKey = `quranData_${author}`;
                 const cachedData = localStorage.getItem(cacheKey);
 
                 showLoading();
@@ -904,37 +907,41 @@
                 }
 
                 try {
-                    quranData = [];
-                    for (let i = 1; i <= totalSurahs; i++) {
-                        const response = await fetch(`https://api.acikkuran.com/surah/${i}?author=${authorId}`, {
-                            method: "GET",
-                            headers: { Accept: "application/json" },
-                            timeout: 8000
-                        });
-                        if (!response.ok) {
-                            console.warn(`Sure ${i} için hata: ${response.status}`);
-                            continue;
-                        }
-                        const data = await response.json();
-                        const ayetler = data.data.verses.map(
-                            (verse) => `${verse.verse_number}. ${verse.translation.text}`
-                        );
-                        quranData.push({ sure: data.data.name, ayetler: ayetler });
+                    const response = await fetch("kuran_mealleri.json"); // Dosya yolunu projene göre ayarla
+                    if (!response.ok) {
+                        throw new Error(`JSON dosyası yüklenemedi: ${response.status}`);
                     }
+                    jsonData = await response.json();
+
+                    // JSON yapısına göre quranData'yı oluştur
+                    quranData = jsonData.surahs.map(surah => ({
+                        sure: surah.name,
+                        ayetler: surah.verses.map(verse => {
+                            const translation = verse.translations.find(t => t.author === author);
+                            return translation ? `${verse.verse_id}. ${translation.text}` : `${verse.verse_id}. Çeviri bulunamadı`;
+                        })
+                    }));
+
                     displaySurahs(quranData);
 
+                    // localStorage'a yazarken hata çıksa bile kullanıcıya gösterilmeyecek
                     if (checkStorageAvailability()) {
-                        localStorage.setItem(
-                            cacheKey,
-                            JSON.stringify({
-                                data: quranData,
-                                timestamp: Date.now()
-                            })
-                        );
+                        try {
+                            localStorage.setItem(
+                                cacheKey,
+                                JSON.stringify({
+                                    data: quranData,
+                                    timestamp: Date.now()
+                                })
+                            );
+                        } catch (storageError) {
+                            console.warn("localStorage'a yazma sırasında hata oluştu (muhtemelen kota aşıldı):", storageError);
+                            // Hata burada yakalanıyor ve kullanıcıya alert gösterilmiyor
+                        }
                     }
                 } catch (error) {
-                    console.error("MEAL YÜKLENDİ:", error);
-                    alert("Meal yüklemesi sadece bir kere yapılır, siteye kadedilir ve bir daha girdiğinizde yüklemez.");
+                    console.error("JSON yüklenirken hata:", error);
+                    alert("Kuran mealleri yüklenirken bir hata oluştu: " + error.message);
                 } finally {
                     hideLoading();
                 }
@@ -1152,14 +1159,24 @@
             }
 
             document.addEventListener("DOMContentLoaded", async () => {
-                await fetchAuthors(); // Yazarları çek ve dropdown'a doldur
-                await fetchQuranData(selectedAuthorId); // Varsayılan yazarın verisini çek ve kaydet
-                loadTheme();
+                try {
+                    const response = await fetch("kuran_mealleri.json"); // Dosya yolunu projene göre ayarla
+                    if (!response.ok) {
+                        throw new Error(`JSON dosyası yüklenemedi: ${response.status}`);
+                    }
+                    jsonData = await response.json();
+                    loadAuthors(jsonData);
+                    await loadQuranData(selectedAuthor);
+                    loadTheme();
+                } catch (error) {
+                    console.error("Başlangıçta hata:", error);
+                    alert("Uygulama başlatılırken bir hata oluştu: " + error.message);
+                }
 
                 document.getElementById("author-select").addEventListener("change", async (e) => {
-                    selectedAuthorId = e.target.value;
-                    if (selectedAuthorId) {
-                        await fetchQuranData(selectedAuthorId);
+                    selectedAuthor = e.target.value;
+                    if (selectedAuthor) {
+                        await loadQuranData(selectedAuthor);
                         document.getElementById("surahs").style.display = "block";
                         document.getElementById("verse-panel").classList.remove("active");
                         document.getElementById("single-verse-panel").classList.remove("active");
