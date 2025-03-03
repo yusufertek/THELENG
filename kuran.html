@@ -943,7 +943,7 @@
             };
 
             function getSurahName(id) {
-                return surahNames[id] || `Sure ${id}`; // Eğer id yoksa varsayılan olarak numara döner
+                return surahNames[id] || `Sure ${id}`;
             }
 
             function checkStorageAvailability() {
@@ -1011,7 +1011,7 @@
                     jsonData = await response.json();
 
                     quranData = jsonData.surahs.map(surah => ({
-                        sure: getSurahName(surah.id), // Sure ismini haritadan alıyoruz
+                        sure: getSurahName(surah.id),
                         ayetler: surah.verses.map(verse => {
                             const translation = verse.translations.find(t => t.author === author);
                             return translation ? `${verse.verse_id}. ${translation.text}` : `${verse.verse_id}. Çeviri bulunamadı`;
@@ -1052,7 +1052,7 @@
                     const surahDiv = document.createElement("div");
                     surahDiv.style.setProperty('--index', index);
                     surahDiv.className = "surah";
-                    surahDiv.innerHTML = `<h2>${sure.sure}</h2>`; // Haritadan alınan isim burada gösteriliyor
+                    surahDiv.innerHTML = `<h2>${sure.sure}</h2>`;
                     surahDiv.addEventListener("click", () => {
                         displayVerses(sure.sure, sure.ayetler);
                         surahsDiv.style.display = "none";
@@ -1071,6 +1071,54 @@
                 const surahsDiv = document.getElementById("surahs");
                 surahsDiv.innerHTML = "";
 
+                // Sure numarası ve ayet numarası ile arama kontrolü (örn: "4 1") veya sure adı ile (örn: "Fatiha 1")
+                const numberMatch = searchTerm.match(/^(\d+)\s+(\d+)$/); // "4 1" gibi
+                const surahVerseMatch = searchTerm.match(/^([a-zA-ZçÇğĞıİöÖşŞüÜ\s-]+)\s+(\d+)$/i); // "Fatiha 1" gibi
+
+                if (numberMatch || surahVerseMatch) {
+                    let surahId, verseId;
+
+                    if (numberMatch) {
+                        // "4 1" gibi sayısal format
+                        surahId = parseInt(numberMatch[1]);
+                        verseId = parseInt(numberMatch[2]);
+                    } else if (surahVerseMatch) {
+                        // "Fatiha 1" gibi sure adı formatı
+                        const surahNameInput = surahVerseMatch[1].trim().toLowerCase();
+                        verseId = parseInt(surahVerseMatch[2]);
+                        surahId = Object.keys(surahNames).find(
+                            (key) => surahNames[key].toLowerCase() === surahNameInput
+                        );
+                    }
+
+                    if (surahId && verseId) {
+                        const surahIndex = surahId - 1; // Sure ID'leri 1'den başladığı için 0 tabanlı diziye çeviriyoruz
+                        if (surahIndex >= 0 && surahIndex < quranData.length) {
+                            const sure = quranData[surahIndex];
+                            const ayet = sure.ayetler[verseId - 1]; // Ayet ID'leri 1'den başladığı için
+                            if (ayet) {
+                                const verseElement = document.createElement("div");
+                                verseElement.className = "verse-result";
+                                verseElement.innerHTML = `${sure.sure}: ${ayet}`;
+                                verseElement.addEventListener("click", (e) => {
+                                    e.stopPropagation();
+                                    displayVerseDetail(sure.sure, ayet, verseId - 1);
+                                    document.getElementById("surahs").style.display = "none";
+                                });
+                                surahsDiv.appendChild(verseElement);
+                                return; // Doğrudan ayeti gösterip fonksiyondan çıkıyoruz
+                            } else {
+                                surahsDiv.innerHTML = "<p>Belirtilen ayet bulunamadı.</p>";
+                                return;
+                            }
+                        } else {
+                            surahsDiv.innerHTML = "<p>Belirtilen sure bulunamadı.</p>";
+                            return;
+                        }
+                    }
+                }
+
+                // Mevcut arama fonksiyonu (sure adı, ayet veya kelime arama)
                 quranData.forEach((sure, surahIndex) => {
                     if (sure.sure.toLowerCase().includes(searchTerm.toLowerCase())) {
                         const surahElement = document.createElement("div");
@@ -1164,7 +1212,7 @@
                 const title = document.getElementById("verse-detail-title");
                 const selectedTranslation = document.getElementById("selected-translation");
                 const otherTranslations = document.getElementById("other-translations");
-                const surahIndex = jsonData.surahs.findIndex(s => getSurahName(s.id) === sureName); // Haritadan eşleştiriyoruz
+                const surahIndex = jsonData.surahs.findIndex(s => getSurahName(s.id) === sureName);
                 const verseData = jsonData.surahs[surahIndex].verses[verseIndex];
                 const allTranslations = verseData.translations;
 
@@ -1200,7 +1248,7 @@
                     newVerseIndex = 0;
                 }
 
-                const newSureName = getSurahName(jsonData.surahs[newSurahIndex].id); // Haritadan alıyoruz
+                const newSureName = getSurahName(jsonData.surahs[newSurahIndex].id);
                 const newVerse = quranData[newSurahIndex].ayetler[newVerseIndex];
                 displayVerseDetail(newSureName, newVerse, newVerseIndex);
             }
