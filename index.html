@@ -25,15 +25,15 @@
 				width: 100%;
 				min-height: 100vh;
 				overflow-x: hidden;
-				overflow-y: auto; /* Aşağı kaydırmayı açtım */
-				-webkit-overflow-scrolling: touch; /* Mobil kaydırma yumuşaklığı */
+				overflow-y: auto;
+				-webkit-overflow-scrolling: touch;
 			}
 			.navbar {
 				position: fixed;
 				top: 0;
 				left: 0;
 				width: 100%;
-				height: 70px; /* Mobil için daha kompakt */
+				height: 70px;
 				background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9));
 				display: flex;
 				align-items: center;
@@ -107,8 +107,8 @@
 			.content {
 				position: relative;
 				width: 100%;
-				min-height: 150vh; /* Ekranı aşağıya büyüttüm */
-				padding-top: 80px; /* Navbar için boşluk */
+				min-height: 100vh;
+				padding-top: 80px;
 				overflow: hidden;
 			}
 			canvas {
@@ -119,40 +119,19 @@
 				height: 100%;
 				z-index: 0;
 			}
-			.logo-container {
+			.main-title {
 				position: absolute;
 				top: 50%;
 				left: 50%;
-				z-index: 1;
-				animation: floatAndRotate 15s infinite ease-in-out;
-				text-align: center;
-			}
-			.logo-container img {
-				width: 50px;
-				max-width: 90vw;
-				display: block;
-				margin: 0 auto;
-			}
-			.quote {
-				position: absolute;
-				color: transparent;
-				font-size: 14px;
-				transition: all 0.4s ease;
-				z-index: 1;
-			}
-			.quote:hover {
+				transform: translate(-50%, -50%);
 				color: white;
+				font-size: 60px;
 				font-weight: bold;
-				font-size: 18px;
-				text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-			}
-			.quote.active {
-				color: white;
-				font-size: 36px;
-				font-weight: bold;
-				animation:
-					pulseGlow 3s ease-in-out,
-					fadeInOut 3s ease-in-out;
+				text-transform: uppercase;
+				letter-spacing: 5px;
+				text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+				z-index: 2;
+				white-space: nowrap; /* Tek satırda kalmasını sağlar */
 			}
 			.menu {
 				position: fixed;
@@ -235,235 +214,210 @@
 				z-index: 1;
 				animation: twinkleGlow 5s infinite ease-in-out;
 			}
-			@keyframes floatAndRotate {
-				0% {
-					transform: translate(-50%, -50%) translate(0, 0) rotate(0deg);
-				}
-				25% {
-					transform: translate(-50%, -50%) translate(70px, -40px) rotate(90deg);
-				}
-				50% {
-					transform: translate(-50%, -50%) translate(-50px, 60px) rotate(180deg);
-				}
-				75% {
-					transform: translate(-50%, -50%) translate(30px, -70px) rotate(270deg);
-				}
-				100% {
-					transform: translate(-50%, -50%) translate(0, 0) rotate(360deg);
-				}
+			.projects {
+				position: relative;
+				width: 100%;
+				padding: 80px 40px;
+				background: rgba(0, 0, 0, 0.9);
+				z-index: 2;
+				text-align: center;
+				margin-top: 50px;
 			}
-			@keyframes pulseGlow {
-				0% {
-					transform: scale(1);
-					opacity: 1;
-					text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-				}
-				50% {
-					transform: scale(1.15);
-					opacity: 1;
-					text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-				}
-				100% {
-					transform: scale(1);
-					opacity: 0;
-					text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-				}
+			.projects-title {
+				color: white;
+				font-size: 36px;
+				font-weight: bold;
+				text-transform: uppercase;
+				letter-spacing: 4px;
+				margin-bottom: 50px;
+				background: linear-gradient(45deg, #fff, #aaa);
+				-webkit-background-clip: text;
+				background-clip: text;
+				-webkit-text-fill-color: transparent;
+				animation: titleShine 4s infinite;
 			}
-			@keyframes fadeInOut {
-				0% {
-					opacity: 0;
-				}
-				20% {
-					opacity: 1;
-				}
-				80% {
-					opacity: 1;
-				}
-				100% {
-					opacity: 0;
-				}
+			.projects-list {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 40px;
+			}
+			.project-item {
+				color: white;
+				text-decoration: none;
+				font-size: 28px;
+				padding: 20px 40px;
+				background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1));
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				border-radius: 15px;
+				transition: all 0.4s ease;
+				position: relative;
+				overflow: hidden;
+				cursor: pointer;
+				min-width: 350px;
+				max-width: 450px;
+				text-align: left;
+			}
+			.project-item::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: -100%;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+				transition: all 0.5s ease;
+			}
+			.project-item:hover::before {
+				left: 100%;
+			}
+			.project-item:hover {
+				color: #fff;
+				transform: translateY(-5px);
+				box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+				background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.15));
+			}
+			.project-desc {
+				font-size: 16px;
+				color: rgba(255, 255, 255, 0.8);
+				margin-top: 15px;
+				line-height: 1.5;
+			}
+			.project-submenu {
+				display: none;
+				position: absolute;
+				top: 100%;
+				left: 0;
+				width: 100%;
+				background: rgba(0, 0, 0, 0.95);
+				border-radius: 0 0 15px 15px;
+				padding: 15px 0;
+				z-index: 3;
+			}
+			.project-item:hover .project-submenu {
+				display: block;
+			}
+			.project-submenu a {
+				display: block;
+				color: white;
+				text-decoration: none;
+				font-size: 18px;
+				padding: 10px 20px;
+				transition: all 0.3s ease;
+			}
+			.project-submenu a:hover {
+				background: rgba(255, 255, 255, 0.1);
+				color: #fff;
+			}
+			.footer {
+				width: 100%;
+				padding: 40px 20px;
+				background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9));
+				text-align: center;
+				z-index: 2;
+			}
+			.footer-title {
+				color: white;
+				font-size: 24px;
+				font-weight: bold;
+				text-transform: uppercase;
+				letter-spacing: 2px;
+				margin-bottom: 20px;
+			}
+			.social-media {
+				display: flex;
+				justify-content: center;
+				gap: 20px;
+			}
+			.social-media a {
+				color: white;
+				text-decoration: none;
+				font-size: 18px;
+				padding: 10px;
+				transition: all 0.3s ease;
+			}
+			.social-media a:hover {
+				color: #fff;
+				transform: scale(1.2);
 			}
 			@keyframes slideInGlow {
-				from {
-					opacity: 0;
-					transform: translateX(60px);
-					box-shadow: 0 0 0 rgba(255, 255, 255, 0);
-				}
-				to {
-					opacity: 1;
-					transform: translateX(0);
-					box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-				}
+				from { opacity: 0; transform: translateX(60px); box-shadow: 0 0 0 rgba(255, 255, 255, 0); }
+				to { opacity: 1; transform: translateX(0); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
 			}
 			@keyframes twinkleGlow {
-				0% {
-					opacity: 0.4;
-					transform: scale(1);
-				}
-				50% {
-					opacity: 1;
-					transform: scale(1.5);
-				}
-				100% {
-					opacity: 0.4;
-					transform: scale(1);
-				}
+				0% { opacity: 0.4; transform: scale(1); }
+				50% { opacity: 1; transform: scale(1.5); }
+				100% { opacity: 0.4; transform: scale(1); }
 			}
 			@keyframes logoGlow {
-				0%,
-				100% {
-					transform: scale(1);
-					filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
-				}
-				50% {
-					transform: scale(1.1);
-					filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
-				}
+				0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)); }
+				50% { transform: scale(1.1); filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); }
 			}
 			@keyframes textCycle {
-				0%,
-				40% {
-					opacity: 1;
-					transform: translateY(0);
-				}
-				45% {
-					opacity: 0;
-					transform: translateY(-10px);
-				}
-				50%,
-				90% {
-					opacity: 0;
-					transform: translateY(10px);
-				}
-				95% {
-					opacity: 1;
-					transform: translateY(0);
-				}
-				100% {
-					opacity: 1;
-					transform: translateY(0);
-				}
+				0%, 40% { opacity: 1; transform: translateY(0); }
+				45% { opacity: 0; transform: translateY(-10px); }
+				50%, 90% { opacity: 0; transform: translateY(10px); }
+				95% { opacity: 1; transform: translateY(0); }
+				100% { opacity: 1; transform: translateY(0); }
 			}
 			@keyframes titleShine {
-				0% {
-					background-position: 0% 50%;
-				}
-				50% {
-					background-position: 100% 50%;
-				}
-				100% {
-					background-position: 0% 50%;
-				}
+				0% { background-position: 0% 50%; }
+				50% { background-position: 100% 50%; }
+				100% { background-position: 0% 50%; }
 			}
-			/* Mobil Uyumluluk */
+			@media (max-width: 1024px) {
+				.main-title { font-size: 48px; }
+				.projects { padding: 60px 20px; }
+				.projects-title { font-size: 32px; }
+				.project-item { min-width: 300px; font-size: 24px; padding: 15px 30px; }
+				.project-desc { font-size: 14px; }
+				.project-submenu a { font-size: 16px; }
+			}
 			@media (max-width: 768px) {
-				.navbar {
-					height: 60px;
-					padding: 0 10px;
-				}
-				.navbar-logo {
-					width: 40px;
-					top: 10px;
-				}
-				.navbar-title {
-					font-size: 18px;
-				}
-				.content {
-					padding-top: 70px;
-					min-height: 120vh;
-				}
-				.canvas {
-					height: 100%;
-				}
-				.logo-container img {
-					width: 40px;
-				}
-				.quote {
-					font-size: 12px;
-				}
-				.quote:hover {
-					font-size: 14px;
-				}
-				.quote.active {
-					font-size: 24px;
-				}
-				.menu-btn {
-					width: 30px;
-					height: 30px;
-				}
-				.menu-btn span {
-					width: 18px;
-					height: 2px;
-					margin: 2px 0;
-				}
-				.menu {
-					top: 60px;
-					height: calc(100vh - 60px);
-					max-width: 100%;
-					padding: 15px;
-				}
-				.menu .title {
-					font-size: 22px;
-					margin-bottom: 30px;
-				}
-				.menu a {
-					font-size: 18px;
-					padding: 10px 12px;
-				}
+				.navbar { height: 60px; padding: 0 10px; }
+				.navbar-logo { width: 40px; top: 10px; }
+				.navbar-title { font-size: 18px; }
+				.content { padding-top: 70px; min-height: 80vh; }
+				.main-title { font-size: 36px; letter-spacing: 3px; }
+				.menu-btn { width: 30px; height: 30px; }
+				.menu-btn span { width: 18px; height: 2px; margin: 2px 0; }
+				.menu { top: 60px; height: calc(100vh - 60px); max-width: 100%; padding: 15px; }
+				.menu .title { font-size: 22px; margin-bottom: 30px; }
+				.menu a { font-size: 18px; padding: 10px 12px; }
+				.projects { padding: 40px 15px; }
+				.projects-title { font-size: 28px; }
+				.project-item { min-width: 100%; max-width: 100%; font-size: 20px; padding: 15px 20px; }
+				.project-desc { font-size: 12px; }
+				.project-submenu a { font-size: 14px; padding: 8px 15px; }
+				.footer { padding: 30px 15px; }
+				.footer-title { font-size: 20px; }
+				.social-media a { font-size: 16px; padding: 8px; }
 			}
 			@media (max-width: 480px) {
-				.navbar {
-					height: 50px;
-					padding: 0 8px;
-				}
-				.navbar-logo {
-					width: 35px;
-					top: 8px;
-				}
-				.navbar-title {
-					font-size: 16px;
-				}
-				.content {
-					padding-top: 60px;
-					min-height: 100vh;
-				}
-				.canvas {
-					height: 100%;
-				}
-				.logo-container img {
-					width: 30px;
-				}
-				.quote {
-					font-size: 10px;
-				}
-				.quote:hover {
-					font-size: 12px;
-				}
-				.quote.active {
-					font-size: 20px;
-				}
-				.menu-btn {
-					width: 25px;
-					height: 25px;
-				}
-				.menu-btn span {
-					width: 15px;
-					height: 2px;
-					margin: 2px 0;
-				}
-				.menu {
-					top: 50px;
-					height: calc(100vh - 50px);
-					padding: 10px;
-				}
-				.menu .title {
-					font-size: 20px;
-					margin-bottom: 20px;
-				}
-				.menu a {
-					font-size: 16px;
-					padding: 8px 10px;
-				}
+				.navbar { height: 50px; padding: 0 8px; }
+				.navbar-logo { width: 35px; top: 8px; }
+				.navbar-title { font-size: 16px; }
+				.content { padding-top: 60px; min-height: 70vh; }
+				.main-title { font-size: 24px; letter-spacing: 2px; }
+				.menu-btn { width: 25px; height: 25px; }
+				.menu-btn span { width: 15px; height: 2px; margin: 2px 0; }
+				.menu { top: 50px; height: calc(100vh - 50px); padding: 10px; }
+				.menu .title { font-size: 20px; margin-bottom: 20px; }
+				.menu a { font-size: 16px; padding: 8px 10px; }
+				.projects { padding: 30px 10px; }
+				.projects-title { font-size: 24px; }
+				.project-item { font-size: 18px; padding: 12px 15px; }
+				.project-desc { font-size: 11px; }
+				.project-submenu a { font-size: 12px; padding: 6px 10px; }
+				.footer { padding: 20px 10px; }
+				.footer-title { font-size: 18px; }
+				.social-media a { font-size: 14px; padding: 6px; }
+			}
+			@media (max-width: 360px) {
+				.main-title { font-size: 20px; letter-spacing: 1px; }
+				.projects-title { font-size: 20px; }
+				.project-item { font-size: 16px; padding: 10px 12px; }
+				.project-desc { font-size: 10px; }
 			}
 		</style>
 	</head>
@@ -482,18 +436,59 @@
 		</div>
 		<div class="content">
 			<canvas id="waveCanvas"></canvas>
-			<div class="logo-container">
-				<img
-					src="logo2.PNG"
-					alt="THE LENG Logo"
-					onerror="this.src='https://via.placeholder.com/50'; this.alt='Logo Yüklenemedi';" />
-			</div>
+			<div class="main-title">SONSUZ MİRAS</div>
 		</div>
 		<div class="menu" id="menu">
 			<div class="title">THE LENG</div>
 			<a href="https://theleng.site/PANEL" style="--i: 1">PANEL</a>
 			<a href="https://theleng.site/kuran" style="--i: 1">SADECE KURAN</a>
 			<a href="https://theleng.site/logo" style="--i: 2">LOGOMUZ</a>
+		</div>
+		<div class="projects">
+			<h2 class="projects-title">Projeler</h2>
+			<div class="projects-list">
+				<div class="project-item">
+					Sadece Kuran
+					<div class="project-desc">
+						Kuran-ı Kerim’in sade ve anlaşılır bir şekilde sunulduğu bir platform. Bu proje, kutsal metinleri modern bir arayüzle okuyuculara sunarak herkesin kolayca erişmesini ve anlamasını amaçlar. İçerikte yorumlardan arındırılmış, yalnızca orijinal metne odaklanan bir deneyim sunuyoruz.
+					</div>
+					<div class="project-submenu">
+						<a href="https://theleng.site/kuran">Ana Sayfa</a>
+						<a href="https://theleng.site/kuran/oku">Oku</a>
+						<a href="https://theleng.site/kuran/hakkinda">Hakkında</a>
+					</div>
+				</div>
+				<div class="project-item">
+					Dergiler
+					<div class="project-desc">
+						Fikir ve sanatı bir araya getiren eşsiz dergi koleksiyonumuz. Her sayıda farklı temalarla derinlemesine yazılar, görsel sanat eserleri ve düşünce dünyasına katkıda bulunan içerikler yer alıyor. Okuyuculara ilham vermeyi ve yaratıcılığı teşvik etmeyi hedefliyoruz.
+					</div>
+					<div class="project-submenu">
+						<a href="https://theleng.site/PANEL">Son Sayı</a>
+						<a href="https://theleng.site/PANEL/arsiv">Arşiv</a>
+						<a href="https://theleng.site/PANEL/abone">Abone Ol</a>
+					</div>
+				</div>
+				<div class="project-item">
+					Yönetim
+					<div class="project-desc">
+						Topluluk projelerini organize eden yönetim panelimiz. Bu platform, ekiplerin bir araya gelerek projeleri planlamasına, takip etmesine ve tamamlamasına olanak tanır. Kullanıcı dostu arayüzü ile verimliliği artırmayı ve işbirliğini güçlendirmeyi amaçlıyoruz.
+					</div>
+					<div class="project-submenu">
+						<a href="https://theleng.site/APT">Giriş</a>
+						<a href="https://theleng.site/APT/proje">Projeler</a>
+						<a href="https://theleng.site/APT/iletisim">İletişim</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<h2 class="footer-title">SONSUZ MİRAS</h2>
+			<div class="social-media">
+				<a href="https://twitter.com/sonsuzmiras">Twitter</a>
+				<a href="https://instagram.com/sonsuzmiras">Instagram</a>
+				<a href="https://youtube.com/@sonsuzmiras">YouTube</a>
+			</div>
 		</div>
 		<script>
 			const canvas = document.getElementById("waveCanvas");
@@ -512,8 +507,7 @@
 				time += 0.02;
 				for (let i = 0; i < 5; i++) {
 					ctx.beginPath();
-					const hue = (time * 10 + i * 30) % 360;
-					ctx.strokeStyle = `hsla(${hue}, 70%, 80%, ${0.1 + i * 0.05})`;
+					ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 + i * 0.05})`;
 					ctx.lineWidth = 2;
 					for (let x = 0; x < canvas.width; x++) {
 						const y = canvas.height / 2 + Math.sin(x * 0.01 + time + i) * 100 * Math.sin(time * 0.5 + i);
@@ -525,63 +519,6 @@
 				requestAnimationFrame(drawWaves);
 			}
 			drawWaves();
-
-			const quotes = [
-				"“Evrenin sonsuzluğu, insanın aklını zorlar.” - Carl Sagan",
-				"“Cogito, ergo sum.” - René Descartes",
-				"“Bilgi güçtür.” - Francis Bacon",
-				"“Hayat, çözülmesi gereken bir problem değildir, yaşanması gereken bir gerçekliktir.” - Søren Kierkegaard",
-				"“Mutluluk, anlam ve amaç bulmaktır.” - Aristotle"
-			];
-
-			function addQuotes() {
-				for (let i = 0; i < 100; i++) {
-					const quoteText = quotes[Math.floor(Math.random() * quotes.length)];
-					const quote = document.createElement("div");
-					quote.className = "quote";
-					quote.textContent = quoteText;
-					quote.style.left = Math.random() * 100 + "vw";
-					quote.style.top = Math.random() * 85 + 15 + "vh";
-					quote.style.animation = `float${Math.floor(Math.random() * 3)} ${8 + Math.random() * 10}s infinite linear`;
-					document.querySelector(".content").appendChild(quote);
-				}
-			}
-			addQuotes();
-
-			const allQuotes = document.querySelectorAll(".quote");
-			function highlightQuote() {
-				allQuotes.forEach((q) => q.classList.remove("active"));
-				const randomQuote = allQuotes[Math.floor(Math.random() * allQuotes.length)];
-				randomQuote.classList.add("active");
-				setTimeout(() => randomQuote.classList.remove("active"), 3000);
-			}
-			setInterval(highlightQuote, 3000);
-
-			const styleSheet = document.createElement("style");
-			styleSheet.textContent = `
-                @keyframes float0 {
-                    0% { transform: translate(0, 0); }
-                    25% { transform: translate(30px, -20px); }
-                    50% { transform: translate(-20px, 30px); }
-                    75% { transform: translate(20px, 20px); }
-                    100% { transform: translate(0, 0); }
-                }
-                @keyframes float1 {
-                    0% { transform: translate(0, 0); }
-                    25% { transform: translate(-40px, 10px); }
-                    50% { transform: translate(30px, -40px); }
-                    75% { transform: translate(-10px, 50px); }
-                    100% { transform: translate(0, 0); }
-                }
-                @keyframes float2 {
-                    0% { transform: translate(0, 0); }
-                    25% { transform: translate(20px, 40px); }
-                    50% { transform: translate(-30px, -20px); }
-                    75% { transform: translate(40px, 10px); }
-                    100% { transform: translate(0, 0); }
-                }
-            `;
-			document.head.appendChild(styleSheet);
 
 			function toggleMenu() {
 				const menu = document.getElementById("menu");
