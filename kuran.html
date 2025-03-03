@@ -933,8 +933,8 @@
                         );
                     }
                 } catch (error) {
-                    console.error("MEAL VERİSİ YÜKLENDİ:", error);
-                    alert("...");
+                    console.error("MEAL YÜKLENDİ:", error);
+                    alert("Meal yüklemesi sadece bir kere yapılır, siteye kadedilir ve bir daha girdiğinizde yüklemez.");
                 } finally {
                     hideLoading();
                 }
@@ -1151,15 +1151,15 @@
                 }
             }
 
-            document.addEventListener("DOMContentLoaded", () => {
-                fetchAuthors();
-                fetchQuranData(selectedAuthorId);
+            document.addEventListener("DOMContentLoaded", async () => {
+                await fetchAuthors(); // Yazarları çek ve dropdown'a doldur
+                await fetchQuranData(selectedAuthorId); // Varsayılan yazarın verisini çek ve kaydet
                 loadTheme();
 
-                document.getElementById("author-select").addEventListener("change", (e) => {
+                document.getElementById("author-select").addEventListener("change", async (e) => {
                     selectedAuthorId = e.target.value;
                     if (selectedAuthorId) {
-                        fetchQuranData(selectedAuthorId);
+                        await fetchQuranData(selectedAuthorId);
                         document.getElementById("surahs").style.display = "block";
                         document.getElementById("verse-panel").classList.remove("active");
                         document.getElementById("single-verse-panel").classList.remove("active");
