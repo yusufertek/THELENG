@@ -86,7 +86,7 @@
             left: -300px;
             width: 300px;
             height: 100%;
-            background: #2b3035;
+            background: rgba(43, 48, 53, 0.5);
             padding: 20px;
             transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 20;
@@ -116,6 +116,7 @@
         }
         .sidebar ul li:nth-child(1) { transition-delay: 0.1s; }
         .sidebar ul li:nth-child(2) { transition-delay: 0.2s; }
+        .sidebar ul li:nth-child(3) { transition-delay: 0.3s; }
         .sidebar ul li a {
             color: #ced4da;
             text-decoration: none;
@@ -586,6 +587,98 @@
             padding: 2px 4px;
             border-radius: 3px;
         }
+        #settings-panel {
+            width: 100%;
+            max-width: 400px;
+            background: #495057;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            backdrop-filter: blur(5px);
+        }
+        body.day-mode #settings-panel {
+            background: #ffffff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        #settings-panel.show {
+            display: block;
+            animation: slideInDown 0.4s ease-out;
+        }
+        #settings-panel h2 {
+            font-size: 1.4rem;
+            color: #ced4da;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        body.day-mode #settings-panel h2 {
+            color: #212529;
+        }
+        .settings-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .settings-content label {
+            color: #ced4da;
+            font-size: 1rem;
+        }
+        body.day-mode .settings-content label {
+            color: #212529;
+        }
+        .settings-content input[type="range"] {
+            width: 100%;
+        }
+        .settings-content select {
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            background: #212529;
+            color: #ced4da;
+            font-size: 0.9rem;
+        }
+        body.day-mode .settings-content select {
+            background: #ffffff;
+            color: #212529;
+            border: 1px solid #ced4da;
+        }
+        #font-size-value {
+            color: #adb5bd;
+            margin-left: 10px;
+        }
+        body.day-mode #font-size-value {
+            color: #6c757d;
+        }
+        #close-settings {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: #495057;
+            border: none;
+            border-radius: 50%;
+            color: #ced4da;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        body.day-mode #close-settings {
+            background: #e9ecef;
+            color: #212529;
+        }
+        #close-settings:hover {
+            background: #6c757d;
+            transform: scale(1.1);
+        }
         @media (max-width: 768px) {
             #articles, #favorites-list {
                 grid-template-columns: 1fr;
@@ -639,6 +732,7 @@
         <ul>
             <li><a href="https://theleng.site">THE LENG</a></li>
             <li><a href="https://theleng.site/kuran">MEAL</a></li>
+            <li><a href="#" id="settings-link">⚙️ Ayarlar</a></li>
         </ul>
     </div>
     <div class="container">
@@ -670,6 +764,22 @@
                 <button class="whatsapp-btn" id="whatsapp-share">WhatsApp</button>
                 <button class="twitter-btn" id="twitter-share">Twitter</button>
                 <button class="facebook-btn" id="facebook-share">Facebook</button>
+            </div>
+        </div>
+        <div id="settings-panel">
+            <button id="close-settings">✖</button>
+            <h2>Ayarlar</h2>
+            <div class="settings-content">
+                <label for="font-size">Yazı Boyutu:</label>
+                <input type="range" id="font-size" min="12" max="36" value="16" step="1">
+                <span id="font-size-value">16px</span>
+                <label for="font-family">Font Ailesi:</label>
+                <select id="font-family">
+                    <option value="Roboto">Roboto</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                </select>
             </div>
         </div>
     </div>
@@ -808,6 +918,12 @@
             detail.classList.add("show");
             document.getElementById("articles").style.display = "none";
             document.getElementById("favorites-panel").classList.remove("show");
+
+            // Yazı boyutunu makale içeriğine uygula
+            const savedFontSize = localStorage.getItem("fontSize");
+            if (savedFontSize) {
+                document.getElementById("detail-content").style.fontSize = `${savedFontSize}px`;
+            }
         }
 
         function searchAndFilterArticles(searchTerm, category) {
@@ -877,6 +993,12 @@
             const articlesDiv = document.getElementById("articles");
             const closeArticle = document.getElementById("close-article");
             const showFavoritesBtn = document.getElementById("show-favorites");
+            const settingsLink = document.getElementById("settings-link");
+            const settingsPanel = document.getElementById("settings-panel");
+            const closeSettings = document.getElementById("close-settings");
+            const fontSizeInput = document.getElementById("font-size");
+            const fontSizeValue = document.getElementById("font-size-value");
+            const fontFamilySelect = document.getElementById("font-family");
 
             if (!showFavoritesBtn) {
                 console.error("Favoriler butonu bulunamadı!");
@@ -884,12 +1006,12 @@
             }
 
             menuIcon.addEventListener("click", (e) => {
-                e.stopPropagation(); // Olayın yayılmasını engelle
+                e.stopPropagation();
                 sidebar.classList.toggle("show");
             });
 
             closeMenu.addEventListener("click", (e) => {
-                e.stopPropagation(); // Olayın yayılmasını engelle
+                e.stopPropagation();
                 sidebar.classList.remove("show");
             });
 
@@ -948,6 +1070,47 @@
 
             document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
             if (localStorage.getItem("theme") === "day") document.body.classList.add("day-mode");
+
+            // Ayarlar Paneli Fonksiyonları
+            settingsLink.addEventListener("click", (e) => {
+                e.preventDefault();
+                settingsPanel.classList.add("show");
+                sidebar.classList.remove("show");
+            });
+
+            closeSettings.addEventListener("click", () => {
+                settingsPanel.classList.remove("show");
+            });
+
+            fontSizeInput.addEventListener("input", () => {
+                const size = fontSizeInput.value;
+                fontSizeValue.textContent = `${size}px`;
+                document.body.style.fontSize = `${size}px`;
+                document.querySelector("#article-detail .content").style.fontSize = `${size}px`;
+                localStorage.setItem("fontSize", size);
+            });
+
+            fontFamilySelect.addEventListener("change", () => {
+                const font = fontFamilySelect.value;
+                document.body.style.fontFamily = font;
+                document.querySelector("#article-detail .content").style.fontFamily = font;
+                localStorage.setItem("fontFamily", font);
+            });
+
+            // Kaydedilmiş ayarları yükle
+            const savedFontSize = localStorage.getItem("fontSize");
+            const savedFontFamily = localStorage.getItem("fontFamily");
+            if (savedFontSize) {
+                fontSizeInput.value = savedFontSize;
+                fontSizeValue.textContent = `${savedFontSize}px`;
+                document.body.style.fontSize = `${savedFontSize}px`;
+                document.querySelector("#article-detail .content").style.fontSize = `${savedFontSize}px`;
+            }
+            if (savedFontFamily) {
+                fontFamilySelect.value = savedFontFamily;
+                document.body.style.fontFamily = savedFontFamily;
+                document.querySelector("#article-detail .content").style.fontFamily = savedFontFamily;
+            }
         });
     </script>
 </body>
