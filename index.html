@@ -131,7 +131,7 @@
 				letter-spacing: 5px;
 				text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
 				z-index: 2;
-				white-space: nowrap; /* Tek satırda kalmasını sağlar */
+				white-space: nowrap;
 			}
 			.menu {
 				position: fixed;
@@ -243,6 +243,7 @@
 				gap: 40px;
 			}
 			.project-item {
+				display: block; /* Bağlantı gibi davranması için */
 				color: white;
 				text-decoration: none;
 				font-size: 28px;
@@ -253,7 +254,6 @@
 				transition: all 0.4s ease;
 				position: relative;
 				overflow: hidden;
-				cursor: pointer;
 				min-width: 350px;
 				max-width: 450px;
 				text-align: left;
@@ -282,32 +282,6 @@
 				color: rgba(255, 255, 255, 0.8);
 				margin-top: 15px;
 				line-height: 1.5;
-			}
-			.project-submenu {
-				display: none;
-				position: absolute;
-				top: 100%;
-				left: 0;
-				width: 100%;
-				background: rgba(0, 0, 0, 0.95);
-				border-radius: 0 0 15px 15px;
-				padding: 15px 0;
-				z-index: 3;
-			}
-			.project-item:hover .project-submenu {
-				display: block;
-			}
-			.project-submenu a {
-				display: block;
-				color: white;
-				text-decoration: none;
-				font-size: 18px;
-				padding: 10px 20px;
-				transition: all 0.3s ease;
-			}
-			.project-submenu a:hover {
-				background: rgba(255, 255, 255, 0.1);
-				color: #fff;
 			}
 			.footer {
 				width: 100%;
@@ -371,7 +345,6 @@
 				.projects-title { font-size: 32px; }
 				.project-item { min-width: 300px; font-size: 24px; padding: 15px 30px; }
 				.project-desc { font-size: 14px; }
-				.project-submenu a { font-size: 16px; }
 			}
 			@media (max-width: 768px) {
 				.navbar { height: 60px; padding: 0 10px; }
@@ -388,7 +361,6 @@
 				.projects-title { font-size: 28px; }
 				.project-item { min-width: 100%; max-width: 100%; font-size: 20px; padding: 15px 20px; }
 				.project-desc { font-size: 12px; }
-				.project-submenu a { font-size: 14px; padding: 8px 15px; }
 				.footer { padding: 30px 15px; }
 				.footer-title { font-size: 20px; }
 				.social-media a { font-size: 16px; padding: 8px; }
@@ -408,7 +380,6 @@
 				.projects-title { font-size: 24px; }
 				.project-item { font-size: 18px; padding: 12px 15px; }
 				.project-desc { font-size: 11px; }
-				.project-submenu a { font-size: 12px; padding: 6px 10px; }
 				.footer { padding: 20px 10px; }
 				.footer-title { font-size: 18px; }
 				.social-media a { font-size: 14px; padding: 6px; }
@@ -447,47 +418,32 @@
 		<div class="projects">
 			<h2 class="projects-title">Projeler</h2>
 			<div class="projects-list">
-				<div class="project-item">
+				<a href="https://theleng.site/kuran" class="project-item">
 					Sadece Kuran
 					<div class="project-desc">
 						Kuran-ı Kerim’in sade ve anlaşılır bir şekilde sunulduğu bir platform. Bu proje, kutsal metinleri modern bir arayüzle okuyuculara sunarak herkesin kolayca erişmesini ve anlamasını amaçlar. İçerikte yorumlardan arındırılmış, yalnızca orijinal metne odaklanan bir deneyim sunuyoruz.
 					</div>
-					<div class="project-submenu">
-						<a href="https://theleng.site/kuran">Ana Sayfa</a>
-						<a href="https://theleng.site/kuran/oku">Oku</a>
-						<a href="https://theleng.site/kuran/hakkinda">Hakkında</a>
-					</div>
-				</div>
-				<div class="project-item">
+				</a>
+				<a href="https://theleng.site/PANEL" class="project-item">
 					Dergiler
 					<div class="project-desc">
 						Fikir ve sanatı bir araya getiren eşsiz dergi koleksiyonumuz. Her sayıda farklı temalarla derinlemesine yazılar, görsel sanat eserleri ve düşünce dünyasına katkıda bulunan içerikler yer alıyor. Okuyuculara ilham vermeyi ve yaratıcılığı teşvik etmeyi hedefliyoruz.
 					</div>
-					<div class="project-submenu">
-						<a href="https://theleng.site/PANEL">Son Sayı</a>
-						<a href="https://theleng.site/PANEL/arsiv">Arşiv</a>
-						<a href="https://theleng.site/PANEL/abone">Abone Ol</a>
-					</div>
-				</div>
-				<div class="project-item">
+				</a>
+				<a href="https://theleng.site/APT" class="project-item">
 					Yönetim
 					<div class="project-desc">
 						Topluluk projelerini organize eden yönetim panelimiz. Bu platform, ekiplerin bir araya gelerek projeleri planlamasına, takip etmesine ve tamamlamasına olanak tanır. Kullanıcı dostu arayüzü ile verimliliği artırmayı ve işbirliğini güçlendirmeyi amaçlıyoruz.
 					</div>
-					<div class="project-submenu">
-						<a href="https://theleng.site/APT">Giriş</a>
-						<a href="https://theleng.site/APT/proje">Projeler</a>
-						<a href="https://theleng.site/APT/iletisim">İletişim</a>
-					</div>
-				</div>
+				</a>
 			</div>
 		</div>
 		<div class="footer">
 			<h2 class="footer-title">SONSUZ MİRAS</h2>
 			<div class="social-media">
-				<a href="https://twitter.com/sonsuzmiras">Twitter</a>
-				<a href="https://instagram.com/sonsuzmiras">Instagram</a>
-				<a href="https://youtube.com/@sonsuzmiras">YouTube</a>
+				<a href="https://twitter.com/TheLENGcompany">Twitter"X"</a>
+				<a href="https://instagram.com/theleng.co">Instagram</a>
+				<a href="https://youtube.com/@sonsuzmiras">YouTube</a>"X"
 			</div>
 		</div>
 		<script>
