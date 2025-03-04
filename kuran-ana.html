@@ -62,6 +62,105 @@
             color: #212529;
             text-shadow: none;
         }
+        .menu-icon {
+            font-size: 1.8rem;
+            color: #ced4da;
+            cursor: pointer;
+            padding: 10px;
+            transition: transform 0.3s ease, color 0.3s ease;
+            display: block;
+        }
+        .menu-icon:hover {
+            transform: rotate(90deg);
+            color: #ffffff;
+        }
+        body.day-mode .menu-icon {
+            color: #212529;
+        }
+        body.day-mode .menu-icon:hover {
+            color: #495057;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100%;
+            background: #2b3035;
+            padding: 20px;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 20;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        body.day-mode .sidebar {
+            background: #ffffff;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar.show {
+            left: 0;
+        }
+        .sidebar ul {
+            list-style: none;
+            margin-top: 60px;
+        }
+        .sidebar ul li {
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s ease;
+        }
+        .sidebar.show ul li {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .sidebar ul li:nth-child(1) { transition-delay: 0.1s; }
+        .sidebar ul li:nth-child(2) { transition-delay: 0.2s; }
+        .sidebar ul li a {
+            color: #ced4da;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            display: block;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        body.day-mode .sidebar ul li a {
+            color: #212529;
+        }
+        .sidebar ul li a:hover {
+            background: #495057;
+            color: #ffffff;
+            transform: translateX(5px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        body.day-mode .sidebar ul li a:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+        .close-menu {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.8rem;
+            color: #ced4da;
+            cursor: pointer;
+            padding: 10px;
+            transition: transform 0.3s ease, color 0.3s ease;
+            background: none;
+            border: none;
+        }
+        .close-menu:hover {
+            transform: rotate(90deg);
+            color: #ffffff;
+        }
+        body.day-mode .close-menu {
+            color: #212529;
+        }
+        body.day-mode .close-menu:hover {
+            color: #495057;
+        }
         .container {
             flex: 1;
             width: 100%;
@@ -496,6 +595,13 @@
             .article-preview p { font-size: 0.9rem; }
         }
         @media (max-width: 480px) {
+            .sidebar {
+                width: 200px;
+            }
+            .sidebar ul li a {
+                font-size: 1rem;
+                padding: 8px 10px;
+            }
             #controls { padding: 10px; }
             #search, #category-filter, #show-favorites { font-size: 0.85rem; }
             .article-preview { padding: 10px; }
@@ -524,9 +630,17 @@
 </head>
 <body>
     <header>
+        <div class="menu-icon">☰</div>
         <h1>SADECE KURAN</h1>
         <button id="theme-toggle">☾</button>
     </header>
+    <div class="sidebar">
+        <button class="close-menu">☰</button>
+        <ul>
+            <li><a href="https://theleng.site">THE LENG</a></li>
+            <li><a href="https://theleng.site/kuran">MEAL</a></li>
+        </ul>
+    </div>
     <div class="container">
         <div id="controls">
             <input type="text" id="search" placeholder="Makale ara..." />
@@ -689,7 +803,7 @@
 
             whatsappBtn.onclick = () => window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`, '_blank');
             twitterBtn.onclick = () => window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
-            facebookBtn.onclick = () => window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
+            facebookBtn.onclick = () => window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}"e=${text}`, '_blank');
 
             detail.classList.add("show");
             document.getElementById("articles").style.display = "none";
@@ -755,6 +869,9 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
+            const menuIcon = document.querySelector(".menu-icon");
+            const sidebar = document.querySelector(".sidebar");
+            const closeMenu = document.querySelector(".close-menu");
             const articleDetail = document.getElementById("article-detail");
             const favoritesPanel = document.getElementById("favorites-panel");
             const articlesDiv = document.getElementById("articles");
@@ -765,6 +882,22 @@
                 console.error("Favoriler butonu bulunamadı!");
                 return;
             }
+
+            menuIcon.addEventListener("click", (e) => {
+                e.stopPropagation(); // Olayın yayılmasını engelle
+                sidebar.classList.toggle("show");
+            });
+
+            closeMenu.addEventListener("click", (e) => {
+                e.stopPropagation(); // Olayın yayılmasını engelle
+                sidebar.classList.remove("show");
+            });
+
+            document.addEventListener("click", (e) => {
+                if (!sidebar.contains(e.target) && !menuIcon.contains(e.target)) {
+                    sidebar.classList.remove("show");
+                }
+            });
 
             closeArticle.addEventListener("click", () => {
                 articleDetail.classList.remove("show");
