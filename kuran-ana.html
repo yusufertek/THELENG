@@ -350,6 +350,7 @@
         .category-baris { background-color: #4CAF50; }
         .category-doga { background-color: #2196F3; }
         .category-adalet { background-color: #F44336; }
+        .category-kavram { background-color: #a600ff; }
         .category-belirsiz { background-color: #6c757d; }
         .article-actions {
             display: flex;
@@ -442,6 +443,9 @@
             border-radius: 8px;
             margin: 15px auto;
             display: block;
+        }
+        #article-detail .content p {
+            text-align: justify; /* Her paragrafın iki yana hizalı olmasını garantiler */
         }
         #close-article {
             position: absolute;
@@ -743,6 +747,7 @@
                     <option value="">Tüm Kategoriler</option>
                     <option value="baris">Barış</option>
                     <option value="doga">Doğa</option>
+                    <option value="kavram">KAVRAM</option>
                     <option value="adalet">Adalet</option>
                 </select>
                 <button id="show-favorites">Favoriler</button>
@@ -788,14 +793,22 @@
     </footer>
     <script>
         const articlesData = [
-            { 
-                title: "İslam’da Barış ve Hoşgörü", 
-                author: "Ahmet Yılmaz", 
-                date: "01 Mart 2025", 
-                preview: "Bu makalede, Kuran’ın barış ve hoşgörü mesajlarını inceleyeceğiz. İslam’ın evrensel değerleri ve insanlığa sunduğu barışçıl yaklaşım...", 
-                content: "<p>Kuran, insanlığa barış ve hoşgörüyü öğütleyen bir rehberdir. Örneğin, <strong>Bakara Suresi 256. ayet</strong>te “Dinde zorlama yoktur” denilerek bireysel özgürlüğün önemi vurgulanır.</p><img src='cbh2.jpg' alt='Makale Resmi'><p>Bu ayet, farklı inançlara sahip insanların bir arada yaşayabileceğini açıkça ifade eder. İslam’ın barışçıl mesajları, tarih boyunca birçok medeniyetin bir arada yaşamasına katkı sağlamıştır.</p>",
-                category: "baris", 
-                image: "cbh.jpg" 
+            {
+                "title": "KADER NEDİR?",
+                "author": "Muhammed Yusuf Ertek",
+                "date": "05 Mart 2025",
+                "preview": "Kader alınyazısı mı? Yoksa Allah'ın evrendeki düzeni mi? Bu makalede, Kuran’ın kader anlayışını derinlemesine inceleyeceğiz...",
+                "content": `
+                    <p>Kader, İslam’da en çok tartışılan ve yanlış anlaşılan kavramlardan biridir. Çoğu insan, kaderi doğmadan önce yazılmış, değiştirilemez bir alın yazısı olarak görür. Ancak Kuran’a baktığımızda, kaderin bu dar anlayıştan çok daha geniş ve derin bir anlam taşıdığını fark ederiz. Kader, Allah’ın evrendeki düzeni, yasaları ve her şeyi kapsayan bilgeliğidir; insanın ise bu düzen içinde özgür iradesiyle yer aldığı bir sistemdir.</p>
+                    <p>Örneğin, <strong>Kamer Suresi 49. ayet</strong>te şöyle buyrulur: “Biz her şeyi bir ölçüye göre yarattık.” Bu ayet, kaderin evrensel bir düzen olduğunu açıkça ortaya koyar. Gökyüzündeki yıldızların hareketinden, doğadaki döngülere kadar her şey bu ilahi ölçüyle işler. Kader, kaosun değil, uyumun ve dengenin bir göstergesidir.</p>
+                    <img src="kader2.jpg" alt="Evrenin Düzeni">
+                    <p>Kuran’da kaderle ilgili bir diğer önemli vurgu, insanın özgür iradesine dikkat çeker. <strong>İnsan Suresi 3</strong>’te şöyle denir: “Şüphesiz, biz ona (insana) yolu gösterdik. İster şükredici olsun, ister nankör.” Bu ayet, kaderin insanın seçimleriyle şekillendiğini ifade eder. Allah, insana akıl ve irade vermiş, ona doğruyu ve yanlışı seçme özgürlüğü tanımıştır. Dolayısıyla, kader, statik bir yazgı değil, dinamik bir süreçtir.</p>
+                    <p>Kaderin bir başka boyutu, insanın eylemlerinin sonuçlarıyla bağlantılı olmasıdır. <strong>Şura Suresi 30</strong>’da Allah şöyle buyurur: “Başınıza gelen herhangi bir musibet, kendi ellerinizle işledikleriniz yüzündendir. (Yine de) Allah çoğunu affeder.” Bu ayet, yaşadığımız olayların genellikle kendi tercihlerimizin bir yansıması olduğunu gösterir. Kader, Allah’ın her şeyi bilmesiyle insanın sorumluluğunu birleştiren bir denge sunar.</p>
+                    <p>Modern dünyada kader, genellikle “her şey önceden belirlenmiş” gibi fatalist bir yaklaşımla karıştırılır. Ancak Kuran, insanın çaba ve dua ile kaderini etkileyebileceğini öğretir. <strong>Necm Suresi 39</strong>’da “Şüphesiz insan için kendi çalışmasından başka bir şey yoktur” denilerek, insanın emeğinin ve iradesinin kaderdeki rolü vurgulanır. Dahası, hadislerde “Dua, kaderi değiştirir” ifadesiyle, insanın Allah’a yönelerek sonuçları dönüştürebileceği belirtilir.</p>
+                    <p>Sonuç olarak, Kuran’da kader, ne yalnızca bir alın yazısı ne de tamamen insanın kontrolünde bir olgudur. Kader, Allah’ın evreni yarattığı ölçü ve düzen ile insanın bu düzen içindeki özgür iradesinin birleşimidir. Zorluklar karşısında “kaderim buymuş” diyerek pasif kalmak yerine, Kuran’ın öğrettiği gibi çaba göstermek, dua etmek ve sorumluluk almak, kaderi anlamanın ve yaşamanın en doğru yoludur. Bu evrensel mesaj, insan hayatına hem anlam hem de yön katmaya devam etmektedir.</p>
+                `,
+                "category": "kavram",
+                "image": "kader.jpg"
             },
             { 
                 title: "Kuran’da Doğa ve Çevre Bilinci", 
@@ -806,6 +819,24 @@
                 category: "doga", 
                 image: "cbh2.jpg" 
             },
+            {
+                title: "Kuran’da Sabır ve Dayanıklılık",
+                author: "Ali Veli",
+                date: "07 Mart 2025",
+                preview: "Bu makalede, Kuran’ın sabır ve dayanıklılık konusundaki öğretilerini derinlemesine inceleyeceğiz. İnsan hayatındaki zorluklara karşı nasıl bir duruş sergilenmesi gerektiği üzerine...",
+                content: `
+                    <p>Kuran, insan hayatında karşılaşılan zorluklara karşı sabır ve dayanıklılık göstermenin önemini vurgulayan bir rehberdir. Sabır, yalnızca pasif bir bekleyiş değil, aynı zamanda aktif bir direniş ve umutla dolu bir duruştur. Kuran’da sabır, birçok ayette hem bireysel hem de toplumsal bağlamda ele alınır ve bu kavram, Müslümanlar için bir erdem olarak sunulur.</p>
+                    <p>Örneğin, <strong>Bakara Suresi 153. ayet</strong>te şöyle buyrulur: “Ey iman edenler! Sabır ve namazla yardım dileyin. Şüphesiz Allah sabredenlerle beraberdir.” Bu ayet, sabrın yalnızca bir içsel çaba olmadığını, aynı zamanda Allah’a yönelerek güç bulunabileceğini ifade eder. Sabır, zorluklar karşısında teslimiyet değil, aksine bir mücadele aracıdır.</p>
+                    <img src="https://via.placeholder.com/600x450" alt="Sabır Resmi">
+                    <p>Kuran’da sabırla ilgili bir diğer önemli örnek, <strong>Al-i İmran Suresi 200</strong>’de geçer: “Ey iman edenler! Sabredin, sabırda yarışın, birbirinize destek olun ve Allah’tan korkun ki kurtuluşa eresiniz.” Bu ayet, sabrın bireysel bir eylem olmanın ötesinde, topluluk içinde bir dayanışma unsuru olduğunu gösterir. İnsanlar, birbirlerine sabırla destek olduklarında, zorlukların üstesinden daha kolay gelebilirler.</p>
+                    <p>Sabır, aynı zamanda Hz. Eyyub’un hikayesiyle de örneklendirilir. Eyyub Peygamber, ağır hastalıklar ve kayıplarla sınanmasına rağmen Allah’a olan inancını ve sabrını hiç kaybetmemiştir. <strong>Sad Suresi 41-44</strong>’te onun bu sabrı ve sonunda Allah tarafından ödüllendirilmesi detaylı bir şekilde anlatılır. Bu hikaye, sabrın uzun vadede nasıl bir mükafat getirebileceğinin en güzel kanıtlarından biridir.</p>
+                    <p>Modern dünyada sabır, genellikle hızlı sonuç alma beklentisiyle çelişen bir kavram gibi görünebilir. Ancak Kuran, sabrın zamanla anlam kazandığını ve insanın ruhsal olgunluğunu artırdığını öğretir. Örneğin, <strong>Şura Suresi 43</strong>’te “Kim sabreder ve affederse, şüphesiz bu, işlerin en güzelidir” denilerek sabrın affedicilikle birleştiğinde ne kadar güçlü bir erdem olduğu vurgulanır.</p>
+                    <p>Sonuç olarak, Kuran’da sabır ve dayanıklılık, hayatın her alanında uygulanabilir bir ilke olarak sunulur. Zorluklarla karşılaşıldığında pes etmek yerine, bu zorlukları birer sınav olarak görüp sabırla hareket etmek, hem bireyin kendi iç huzurunu sağlar hem de toplumun dayanışmasını güçlendirir. Kuran’ın bu evrensel mesajı, günümüzde de geçerliliğini korumakta ve insanlara rehberlik etmektedir.</p>
+                `,
+                category: "kavram",
+                image: "cbh.jpg"
+            },
+            
             { 
                 title: "Kuran’da Adalet Kavramı", 
                 author: "Mehmet Demir", 
@@ -913,13 +944,12 @@
 
             whatsappBtn.onclick = () => window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`, '_blank');
             twitterBtn.onclick = () => window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
-            facebookBtn.onclick = () => window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}"e=${text}`, '_blank');
+            facebookBtn.onclick = () => window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
 
             detail.classList.add("show");
             document.getElementById("articles").style.display = "none";
             document.getElementById("favorites-panel").classList.remove("show");
 
-            // Yazı boyutunu makale içeriğine uygula
             const savedFontSize = localStorage.getItem("fontSize");
             if (savedFontSize) {
                 document.getElementById("detail-content").style.fontSize = `${savedFontSize}px`;
@@ -1071,7 +1101,6 @@
             document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
             if (localStorage.getItem("theme") === "day") document.body.classList.add("day-mode");
 
-            // Ayarlar Paneli Fonksiyonları
             settingsLink.addEventListener("click", (e) => {
                 e.preventDefault();
                 settingsPanel.classList.add("show");
@@ -1097,7 +1126,6 @@
                 localStorage.setItem("fontFamily", font);
             });
 
-            // Kaydedilmiş ayarları yükle
             const savedFontSize = localStorage.getItem("fontSize");
             const savedFontFamily = localStorage.getItem("fontFamily");
             if (savedFontSize) {
