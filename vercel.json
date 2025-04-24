@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "ana.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "css/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "js/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "api/*",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/ana.html"  // Ana sayfayı 'ana.html' olarak yönlendiriyoruz
+    },
+    {
+      "src": "/urunler",
+      "dest": "/urunler.html"
+    },
+    {
+      "src": "/css/(.*)",
+      "dest": "/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/js/$1"
+    }
+  ]
+}
