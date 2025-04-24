@@ -1,101 +1,690 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopier Ödeme Entegrasyonu</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .product {
-            margin: 20px 0;
-        }
-        .cart {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Terakki Yolu, adil ve şeffaf bir toplum için cesur adımlar atan bir siyasi harekettir.">
+  <meta name="keywords" content="Terakki Yolu, siyasi hareket, sosyal eşitlik, ekonomik refah, çevresel sorumluluk">
+  <meta property="og:title" content="Terakki Yolu - Siyasi Hareket">
+  <meta property="og:description" content="Değişimin bir parçası ol! Geleceği bizimle inşa et.">
+  <meta property="og:image" content="https://www.terakkiyolu.org/yolu.png">
+  <meta property="og:image:alt" content="Terakki Yolu Logosu">
+  <meta property="og:url" content="https://www.terakkiyolu.org">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data: https://*.tile.openstreetmap.org; connect-src 'self' https://api.terakkiyolu.org;">
+  <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
+  <title>Terakki Yolu - Siyasi Hareket</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+  <script src="https://unpkg.com/i18next@21.9.1/dist/umd/i18next.min.js" defer></script>
+  <style>
+    body { margin: 0; overflow-x: hidden; background: rgb(61, 0, 87); transition: background 2s, color 0.3s; }
+    .light-theme { background: #f3f4f6; color: #1f2937; }
+    .light-theme .card { background: rgba(255, 255, 255, 0.8); }
+    .light-theme nav { background: linear-gradient(to bottom, #f3f4f6, transparent); }
+    canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.3; }
+    .section { display: flex; align-items: center; justify-content: center; position: relative; }
+    .hero-text { font-size: 3rem; font-weight: 900; letter-spacing: -1px; color: white; }
+    .light-theme .hero-text { color: #1f2937; }
+    .card { transition: transform 0.3s ease, box-shadow 0.3s ease; background: rgba(255, 255, 255, 0.05); }
+    .card:hover { transform: scale(1.05); box-shadow: 0 15px 30px #ffb900; }
+    nav { background: linear-gradient(to bottom, rgb(61, 0, 87), transparent); }
+    button:focus, a:focus { outline: 3px solid #ffb900; outline-offset: 4px; border-radius: 4px; }
+    nav a:focus { outline: 3px solid #ffb900; outline-offset: 4px; }
+    .mobile-menu { transition: transform 0.3s ease; }
+    .logo-anim { filter: brightness(1); position: relative; }
+    .logo-anim-fallback { 
+      width: 12rem; 
+      height: 12rem; 
+      background: #ffb900; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      color: #fff; 
+      font-size: 1.5rem; 
+      font-weight: bold; 
+      text-align: center; 
+      border-radius: 50%; 
+    }
+    #map { height: 400px; border-radius: 8px; }
+    @media (max-width: 640px) {
+      .hero-text { font-size: 2rem; }
+      .logo-anim, .logo-anim-fallback { height: 8rem !important; width: 8rem !important; }
+      .section { padding: 1rem; }
+      #map { height: 300px; }
+    }
+    @media (min-width: 641px) {
+      .hero-text { font-size: 4rem; }
+      .logo-anim, .logo-anim-fallback { height: 12rem !important; width: auto !important; }
+    }
+  </style>
 </head>
-<body>
+<body class="text-white">
+  <!-- Theme Toggle -->
+  <button id="theme-toggle" class="fixed bottom-4 right-4 p-2 bg-yellow-500 rounded-full z-20" aria-label="Tema değiştir">
+    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16zm0-14a6 6 0 100 12 6 6 0 000-12z"></path></svg>
+  </button>
 
-<h1>Ürünler</h1>
+  <!-- Three.js Background Canvas -->
+  <canvas id="bg"></canvas>
 
-<div id="product-list"></div>
+  <!-- Navbar -->
+  <nav class="fixed top-0 w-full z-10" role="navigation" aria-label="Ana navigasyon">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="#home" class="text-3xl font-extrabold text-yellow-500" aria-label="Terakki Yolu Ana Sayfa">TERAKKİ YOLU</a>
+      <div class="flex items-center space-x-4">
+        <button id="mobile-menu-btn" class="md:hidden text-yellow-500" aria-label="Menüyü aç" aria-expanded="false">☰</button>
+      </div>
+    </div>
+    <ul id="mobile-menu" class="mobile-menu hidden md:hidden bg-gray-800 px-4 py-2 space-y-2 transform -translate-x-full">
+      <li><a href="#mission" class="block text-white hover:text-yellow-500" aria-label="Misyon bölümü">Misyon</a></li>
+      <li><a href="#agenda" class="block text-white hover:text-yellow-500" aria-label="Gündem bölümü">Gündem</a></li>
+      <li><a href="#news" class="block text-white hover:text-yellow-500" aria-label="Haberler bölümü">Haberler</a></li>
+      <li><a href="#events" class="block text-white hover:text-yellow-500" aria-label="Etkinlikler bölümü">Etkinlikler</a></li>
+      <li><a href="#supporters" class="block text-white hover:text-yellow-500" aria-label="Destekçiler bölümü">Destekçiler</a></li>
+      <li><a href="#vision" class="block text-white hover:text-yellow-500" aria-label="Vizyon bölümü">Vizyon</a></li>
+      <li><a href="#map" class="block text-white hover:text-yellow-500" aria-label="Harita bölümü">Harita</a></li>
+      <li><a href="#join" class="block text-white hover:text-yellow-500" aria-label="Katıl bölümü">Katıl</a></li>
+    </ul>
+  </nav>
 
-<div class="cart">
-    <h2>Sepetim</h2>
-    <ul id="cart"></ul>
-    <button onclick="checkout()">Ödemeye Geç</button>
-</div>
+  <!-- Hero Section -->
+  <section id="home" class="section h-screen min-h-screen flex items-center justify-center">
+    <div class="text-center px-4">
+      <img src="yolu.png" alt="Terakki Yolu'nun resmi logosu" class="mx-auto mb-6 h-48 w-auto logo-anim" loading="lazy" aria-label="Terakki Yolu Logosu" onerror="this.outerHTML='<div class=\'logo-anim logo-anim-fallback\'>Terakki Yolu</div>'">
+      <h1 class="hero-text" aria-label="Yeni Bir Gelecek">
+        <span>Y</span><span>e</span><span>n</span><span>i</span> <span>B</span><span>i</span><span>r</span> <span>G</span><span>e</span><span>l</span><span>e</span><span>c</span><span>e</span><span>k</span>
+      </h1>
+      <p class="mt-6 text-lg sm:text-xl max-w-3xl mx-auto opacity-80">Cesur adımlarla, şeffaf ve adil bir toplum için bir aradayız. Değişim seninle başlar!</p>
+      <a href="#join" class="mt-8 inline-block px-6 py-3 sm:px-8 sm:py-4 bg-yellow-500 text-gray-900 font-bold rounded-lg hover:bg-yellow-400 transition" role="button" aria-label="Harekete katıl">Şimdi Katıl</a>
+    </div>
+  </section>
 
-<script>
-    const products = [
-        { id: 1, name: "T-shirt", price: 199.90 },
-        { id: 2, name: "Kupa Bardak", price: 79.90 },
-        { id: 3, name: "Defter", price: 49.90 }
-    ];
+  <!-- Mission Section -->
+  <section id="mission" class="section min-h-screen py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-yellow-500">Misyonumuz</h2>
+      <p class="text-lg sm:text-xl max-w-4xl mx-auto opacity-80">Herkesin sesinin duyulduğu, eşitlik ve adaletin ön planda olduğu bir toplum inşa etmek için durmaksızın çalışıyoruz. Gelecek, bizimle şekillenecek.</p>
+    </div>
+  </section>
 
-    const cart = [];
+  <!-- Agenda Section -->
+  <section id="agenda" class="section min-h-screen py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-yellow-500">Gündemimiz</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <div class="card p-6 sm:p-8 rounded-xl">
+          <h3 class="text-xl sm:text-2xl font-bold mb-4">Sosyal Eşitlik</h3>
+          <p>Herkes için adil fırsatlar ve kapsayıcı politikalar geliştiriyoruz.</p>
+        </div>
+        <div class="card p-6 sm:p-8 rounded-xl">
+          <h3 class="text-xl sm:text-2xl font-bold mb-4">Ekonomik Refah</h3>
+          <p>Sürdürülebilir büyüme ve gelir adaleti için yenilikçi çözümler sunuyoruz.</p>
+        </div>
+        <div class="card p-6 sm:p-8 rounded-xl">
+          <h3 class="text-xl sm:text-2xl font-bold mb-4">Çevresel Sorumluluk</h3>
+          <p>Gezegenimizi korumak için çevre dostu politikalar üretiyoruz.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    // Ürünleri listele
-    function renderProducts() {
-        const list = document.getElementById('product-list');
-        list.innerHTML = '';
-        products.forEach(p => {
-            const div = document.createElement('div');
-            div.classList.add('product');
-            div.innerHTML = `
-                <h3>${p.name}</h3>
-                <p>Fiyat: ${p.price.toFixed(2)} TL</p>
-                <button onclick="addToCart(${p.id})">Sepete Ekle</button>
-            `;
-            list.appendChild(div);
+  <!-- News Section -->
+  <section id="news" class="section min-h-screen py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-yellow-500">Son Haberler</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div class="card p-6 sm:p-8 rounded-xl">
+          <h3 class="text-xl sm:text-2xl font-bold mb-4">Yeni Eğitim Politikası Önerisi</h3>
+          <p class="opacity-80">Terakki Yolu, her çocuğun eşit eğitim almasını sağlayacak yeni bir politika önerisi sundu.</p>
+          <a href="/news/education-policy" class="mt-4 inline-block text-yellow-500 hover:underline" aria-label="Eğitim politikası haberini oku">Devamını Oku</a>
+        </div>
+        <div class="card p-6 sm:p-8 rounded-xl">
+          <h3 class="text-xl sm:text-2xl font-bold mb-4">Çevre Kampanyası Başladı</h3>
+          <p class="opacity-80">Gezegenimizi korumak için yeni bir çevre kampanyası başlatıyoruz.</p>
+          <a href="/news/environment-campaign" class="mt-4 inline-block text-yellow-500 hover:underline" aria-label="Çevre kampanyası haberini oku">Devamını Oku</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Events Section -->
+  <section id="events" class="section min-h-screen py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-yellow-500">Etkinlik Takvimi</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div class="card p-6 sm:p-8 rounded-xl">
+          <h3 class="text-xl sm:text-2xl font-bold mb-4">Açık Forum: Geleceği Tartış</h3>
+          <p class="opacity-80">Tarih: 15 Mayıs 2025<br>Yer: İstanbul<br>Katılım ücretsiz!</p>
+          <a href="#join" class="mt-4 inline-block text-yellow-500 hover:underline" aria-label="Açık foruma katıl">Katıl</a>
+        </div>
+        <div class="card p-6 sm:p-8 rounded-xl">
+          <h3 class="text-xl sm:text-2xl font-bold mb-4">Gençlik Buluşması</h3>
+          <p class="opacity-80">Tarih: 22 Mayıs 2025<br>Yer: Ankara<br>Gençlerle geleceği inşa ediyoruz.</p>
+          <a href="#join" class="mt-4 inline-block text-yellow-500 hover:underline" aria-label="Gençlik buluşmasına katıl">Katıl</a>
+        </div>
+      </div>
+      <div class="card p-6 sm:p-8 rounded-xl mt-8 mx-auto max-w-md">
+        <h3 class="text-xl sm:text-2xl font-bold mb-4">Açık Forum'a Kalan Süre</h3>
+        <p id="countdown" class="text-lg opacity-80"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section id="stats" class="section py-16">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-12 text-yellow-500">Birlikte Güçlüyüz</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+        <div class="card p-6 sm:p-8 rounded-xl">
+          <p class="text-4xl font-bold text-yellow-500">10,000+</p>
+          <p class="mt-2 opacity-80">Destekçi</p>
+        </div>
+        <div class="card p-6 sm:p-8 rounded-xl">
+          <p class="text-4xl font-bold text-yellow-500">50+</p>
+          <p class="mt-2 opacity-80">Etkinlik</p>
+        </div>
+        <div class="card p-6 sm:p-8 rounded-xl">
+          <p class="text-4xl font-bold text-yellow-500">20+</p>
+          <p class="mt-2 opacity-80">Şehir</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supporters Section -->
+  <section id="supporters" class="section min-h-screen py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-yellow-500">Destekçilerimiz</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+        <div class="card p-6 sm:p-8 rounded-xl cursor-pointer">
+          <p class="italic">"Terakki Yolu, eşitlik için gerçek bir umut!"</p>
+          <p class="mt-4 font-bold">Ayşe K., Öğretmen</p>
+        </div>
+        <div class="card p-6 sm:p-8 rounded-xl cursor-pointer">
+          <p class="italic">"Bu hareket, gençlerin sesini duyuruyor."</p>
+          <p class="mt-4 font-bold">Mehmet T., Öğrenci</p>
+        </div>
+        <div class="card p-6 sm:p-8 rounded-xl cursor-pointer">
+          <p class="italic">"Gezegenimiz için harekete geçmeliyiz!"</p>
+          <p class="mt-4 font-bold">Zeynep Y., Çevreci</p>
+        </div>
+      </div>
+      <div id="supporter-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-lg">
+          <h3 id="modal-name" class="text-xl font-bold"></h3>
+          <p id="modal-quote" class="mt-4 italic"></p>
+          <button id="modal-close" class="mt-6 px-4 py-2 bg-yellow-500 rounded-lg" aria-label="Modalı kapat">Kapat</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vision Timeline Section -->
+  <section id="vision" class="section min-h-screen py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-yellow-500">Vizyonumuz: Geleceğe Yolculuk</h2>
+      <div class="relative">
+        <div class="absolute left-1/2 transform -translate-x-1/2 w-1 bg-yellow-500 h-full"></div>
+        <div class="space-y-12">
+          <div class="card p-6 sm:p-8 rounded-xl relative ml-12 sm:ml-0 sm:w-1/2 sm:odd:ml-auto sm:odd:pl-12">
+            <div class="absolute w-4 h-4 bg-yellow-500 rounded-full -left-8 top-1/2 transform -translate-y-1/2"></div>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4">2025: Toplumsal Eşitlik</h3>
+            <p>Eğitim ve sağlıkta eşitlik için yeni politikalar.</p>
+            <button class="mt-4 text-yellow-500 hover:underline" onclick="openTimelineModal('2025', 'Eğitim ve sağlıkta eşitlik için kapsamlı reformlar.')">Detaylar</button>
+          </div>
+          <div class="card p-6 sm:p-8 rounded-xl relative ml-12 sm:ml-0 sm:w-1/2 sm:even:mr-auto sm:even:pr-12">
+            <div class="absolute w-4 h-4 bg-yellow-500 rounded-full -left-8 top-1/2 transform -translate-y-1/2"></div>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4">2030: Yeşil Ekonomi</h3>
+            <p>Sürdürülebilir enerji ve çevre dostu iş modelleri.</p>
+            <button class="mt-4 text-yellow-500 hover:underline" onclick="openTimelineModal('2030', 'Sürdürülebilir enerji kaynaklarına geçiş ve çevre dostu iş modelleri.')">Detaylar</button>
+          </div>
+          <div class="card p-6 sm:p-8 rounded-xl relative ml-12 sm:ml-0 sm:w-1/2 sm:odd:ml-auto sm:odd:pl-12">
+            <div class="absolute w-4 h-4 bg-yellow-500 rounded-full -left-8 top-1/2 transform -translate-y-1/2"></div>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4">2035: Küresel İşbirliği</h3>
+            <p>Uluslararası adalet ve barış için liderlik.</p>
+            <button class="mt-4 text-yellow-500 hover:underline" onclick="openTimelineModal('2035', 'Küresel barış ve adalet için uluslararası iş birliği.')">Detaylar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Map Section -->
+  <section id="map" class="section min-h-screen py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-yellow-500">Etkinliklerimiz Nerede?</h2>
+      <div class="card p-6 sm:p-8 rounded-xl">
+        <div id="map" aria-label="Türkiye'deki etkinliklerin haritası"></div>
+        <button id="find-location" class="mt-4 px-4 py-2 bg-yellow-500 text-gray-900 rounded-lg hover:bg-yellow-400" aria-label="Konumumu bul">Konumumu Bul</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Join Section with Form -->
+  <section id="join" class="section min-h-screen py-16">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-12 text-yellow-500">Harekete Katıl</h2>
+      <p class="text-lg sm:text-xl max-w-3xl mx-auto opacity-80">Değişimin bir parçası olmaya hazır mısın? Sesini duyur, geleceği bizimle inşa et!</p>
+      <div class="mt-8 max-w-lg mx-auto">
+        <form id="join-form" class="space-y-4">
+          <input type="text" name="name" placeholder="Ad Soyad" required class="w-full p-4 bg-transparent border border-yellow-500 rounded-lg text-white" aria-label="Ad Soyad">
+          <input type="email" name="email" placeholder="E-posta" required class="w-full p-4 bg-transparent border border-yellow-500 rounded-lg text-white" aria-label="E-posta">
+          <button type="submit" class="w-full px-6 sm:px-8 py-3 sm:py-4 bg-yellow-500 text-gray-900 font-bold rounded-lg hover:bg-yellow-400 transition" aria-label="Formu gönder">Gönder</button>
+        </form>
+        <div id="loading" class="hidden mt-4 text-yellow-500">Yükleniyor...</div>
+      </div>
+      <a href="/donate" class="mt-8 inline-block px-6 sm:px-8 py-3 sm:py-4 bg-green-500 text-gray-900 font-bold rounded-lg hover:bg-green-400 transition" role="button" aria-label="Bağış yap">Bağış Yap</a>
+    </div>
+  </section>
+
+  <!-- Feedback Section -->
+  <section id="feedback" class="section py-16">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-12 text-yellow-500">Görüşleriniz Önemli</h2>
+      <form id="feedback-form" class="space-y-4 max-w-lg mx-auto">
+        <textarea name="feedback" placeholder="Düşüncelerinizi paylaşın" required class="w-full p-4 bg-transparent border border-yellow-500 rounded-lg text-white" aria-label="Geri bildirim"></textarea>
+        <button type="submit" class="w-full px-6 py-3 bg-yellow-500 text-gray-900 font-bold rounded-lg hover:bg-yellow-400" aria-label="Geri bildirim gönder">Gönder</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-transparent py-8">
+    <div class="container mx-auto px-4 text-center">
+      <p class="opacity-80">© 2025 Terakki Yolu. Tüm hakları saklıdır.</p>
+      <div class="mt-4 flex justify-center space-x-6">
+        <a href="https://twitter.com/terakkiyolu" target="_blank" aria-label="Twitter"><svg class="w-6 h-6 text-yellow-500 hover:text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path></svg></a>
+        <a href="https://instagram.com/terakkiyolu" target="_blank" aria-label="Instagram"><svg class="w-6 h-6 text-yellow-500 hover:text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.332.014 7.052.072 2.98.227.228 2.981.073 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.225 4.072 2.979 6.824 7.052 6.979 1.28.058 1.689.072 4.948.072s3.668-.014 4.948-.072c4.072-.225 6.824-2.979 6.979-7.052.058-1.28.072-1.689.072-4.948 0-3.259-.014-3.668-.072-4.948-.225-4.072-2.979-6.824-7.052-6.979C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"></path></svg></a>
+        <a href="mailto:info@terakkiyolu.org" aria-label="E-posta"><svg class="w-6 h-6 text-yellow-500 hover:text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M0 3v18h24V3H0zm21.518 2L12 12.713 2.482 5h19.036zM2 19V7.287L12 15 22 7.287V19H2z"></path></svg></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Terakki Yolu",
+      "url": "https://www.terakkiyolu.org",
+      "logo": "https://www.terakkiyolu.org/yolu.png",
+      "description": "Terakki Yolu, adil ve şeffaf bir toplum için cesur adımlar atan bir siyasi harekettir."
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "Açık Forum: Geleceği Tartış",
+      "startDate": "2025-05-15",
+      "location": {
+        "@type": "Place",
+        "name": "İstanbul",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "İstanbul",
+          "addressCountry": "TR"
+        }
+      },
+      "url": "https://www.terakkiyolu.org/#join"
+    }
+  ]
+  </script>
+
+  <script>
+    // PWA Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.error('Service Worker Error:', err));
+    }
+
+    // Three.js Wave Background with Particles
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('#bg'), alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.position.setZ(30);
+
+    const geometry = new THREE.PlaneGeometry(50, 50, 15, 15);
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xd4a017,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.3
+    });
+    const wave = new THREE.Mesh(geometry, material);
+    scene.add(wave);
+
+    const particleCount = 100;
+    const particlesGeometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount * 3; i++) {
+      positions[i] = (Math.random() - 0.5) * 20;
+    }
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const particlesMaterial = new THREE.PointsMaterial({ color: 0xffb900, size: 0.2 });
+    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particles);
+
+    let time = 0;
+    let lastFrame = 0;
+    function animate(currentTime) {
+      const delta = currentTime - lastFrame;
+      if (delta > 1000 / 30) {
+        lastFrame = currentTime;
+        time += 0.05;
+        const wavePositions = wave.geometry.attributes.position;
+        for (let i = 0; i < wavePositions.count; i++) {
+          const x = wavePositions.getX(i);
+          const y = wavePositions.getY(i);
+          wavePositions.setZ(i, Math.sin(x * 0.1 + time) * Math.cos(y * 0.1 + time) * 3);
+        }
+        wavePositions.needsUpdate = true;
+        wave.rotation.z += 0.002;
+
+        const particlePositions = particles.geometry.attributes.position;
+        for (let i = 0; i < particlePositions.count; i++) {
+          const x = particlePositions.getX(i);
+          const y = particlePositions.getY(i);
+          particlePositions.setXYZ(i, x + Math.sin(time + i) * 0.01, y + Math.cos(time + i) * 0.01, particlePositions.getZ(i));
+        }
+        particlePositions.needsUpdate = true;
+        particles.rotation.y += 0.001;
+
+        renderer.render(scene, camera);
+      }
+      requestAnimationFrame(animate);
+    }
+    animate(0);
+
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Logo Sparkling Animation
+    gsap.from(".logo-anim", {
+      opacity: 0,
+      scale: 0.3,
+      duration: 2.5,
+      ease: "power3.out",
+      onStart: () => {
+        gsap.to(".logo-anim", {
+          keyframes: [
+            { filter: "brightness(2) drop-shadow(0 0 15px #ffb900)", duration: 0.4 },
+            { filter: "brightness(1.2) drop-shadow(0 0 5px #ffb900)", duration: 0.4 },
+            { filter: "brightness(1.8) drop-shadow(0 0 10px #ffb900)", duration: 0.4 },
+            { filter: "brightness(1) drop-shadow(0 0 0px #ffb900)", duration: 0.4 }
+          ],
+          repeat: 2,
+          yoyo: true,
+          delay: 0.2
         });
-    }
+      }
+    });
 
-    // Sepete ürün ekle
-    function addToCart(id) {
-        const product = products.find(p => p.id === id);
-        cart.push(product);
-        renderCart();
-    }
-
-    // Sepeti render et
-    function renderCart() {
-        const cartList = document.getElementById('cart');
-        cartList.innerHTML = '';
-        cart.forEach((item, index) => {
-            const li = document.createElement('li');
-            li.textContent = `${item.name} - ${item.price.toFixed(2)} TL`;
-            cartList.appendChild(li);
+    // Hero Text Animation
+    gsap.from(".hero-text span", {
+      opacity: 0,
+      y: 50,
+      duration: 0.8,
+      stagger: 0.08,
+      ease: "power2.out",
+      delay: 0.5,
+      onComplete: () => {
+        gsap.to(".hero-text", {
+          keyframes: [
+            { color: "#ffb900", duration: 0.5 },
+            { color: "#ffffff", duration: 0.5 }
+          ],
+          repeat: 1,
+          yoyo: true,
+          delay: 0.5
         });
+      }
+    });
+
+    // Card Animations
+    gsap.utils.toArray(".card").forEach((card, i) => {
+      gsap.from(card, {
+        scrollTrigger: {
+          trigger: card,
+          start: "top 85%",
+          toggleActions: "play none none reverse"
+        },
+        opacity: 0,
+        x: i % 2 === 0 ? -100 : 100,
+        duration: 1,
+        delay: i * 0.3
+      });
+    });
+
+    // Button Animations
+    gsap.utils.toArray("button, a[role='button']").forEach(button => {
+      gsap.from(button, {
+        scrollTrigger: {
+          trigger: button,
+          start: "top 90%",
+        },
+        opacity: 0,
+        y: 50,
+        duration: 1,
+        ease: "back.out(1.7)"
+      });
+    });
+
+    // Smooth Scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e	{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Terakki Yolu",
+  "url": "https://www.terakkiyolu.org",
+  "logo": "https://www.terakkiyolu.org/yolu.png",
+  "description": "Terakki Yolu, adil ve şeffaf bir toplum için cesur adımlar atan bir siyasi harekettir."
+}
+
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "Açık Forum: Geleceği Tartış",
+  "startDate": "2025-05-15",
+  "location": {
+    "@type": "Place",
+    "name": "İstanbul",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "İstanbul",
+      "addressCountry": "TR"
+    }
+  },
+  "url": "https://www.terakkiyolu.org/#join"
+} e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Mobile Menu Toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    menuBtn.addEventListener('click', () => {
+      const menu = document.getElementById('mobile-menu');
+      const isExpanded = menuBtn.getAttribute('aria-expanded') === 'true';
+      menuBtn.setAttribute('aria-expanded', !isExpanded);
+      menu.classList.toggle('hidden');
+      menu.classList.toggle('transform-none');
+      menu.classList.toggle('-translate-x-full');
+    });
+
+    // Form Submission
+    document.getElementById('join-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = this.name.value.trim();
+      const email = this.email.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const loading = document.getElementById('loading');
+      if (!name || !emailRegex.test(email)) {
+        alert('Lütfen geçerli bir ad ve e-posta adresi girin.');
+        return;
+      }
+      loading.classList.remove('hidden');
+      setTimeout(() => {
+        loading.classList.add('hidden');
+        alert('Form gönderildi! Teşekkür ederiz.');
+        this.reset();
+      }, 1000);
+    });
+
+    // Feedback Form
+    document.getElementById('feedback-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Geri bildiriminiz için teşekkürler!');
+      e.target.reset();
+    });
+
+    // Theme Toggle
+    const toggle = document.getElementById('theme-toggle');
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+    });
+    if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme');
+
+    // Interactive Map
+    const map = L.map('map').setView([41.0082, 28.9784], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    L.marker([41.0082, 28.9784]).addTo(map).bindPopup('Açık Forum: İstanbul').openPopup();
+    L.marker([39.9334, 32.8597]).addTo(map).bindPopup('Gençlik Buluşması: Ankara');
+    document.getElementById('find-location').addEventListener('click', () => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          map.setView([latitude, longitude], 10);
+          L.marker([latitude, longitude]).addTo(map).bindPopup('Buradasınız!').openPopup();
+        },
+        () => alert('Konum erişimi reddedildi.')
+      );
+    });
+
+    // Countdown Timer
+    function updateCountdown() {
+      const eventDate = new Date('2025-05-15T00:00:00');
+      const now = new Date();
+      const diff = eventDate - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      document.getElementById('countdown').textContent = `${days} gün, ${hours} saat, ${minutes} dakika`;
+    }
+    setInterval(updateCountdown, 60000);
+    updateCountdown();
+
+    // Supporter Modal
+    gsap.utils.toArray('#supporters .card').forEach(card => {
+      card.addEventListener('click', () => {
+        const name = card.querySelector('p:last-child').textContent;
+        const quote = card.querySelector('p:first-child').textContent;
+        document.getElementById('modal-name').textContent = name;
+        document.getElementById('modal-quote').textContent = quote;
+        document.getElementById('supporter-modal').classList.remove('hidden');
+        gsap.from('#supporter-modal > div', { opacity: 0, scale: 0.8, duration: 0.5, ease: 'back.out' });
+      });
+    });
+    document.getElementById('modal-close').addEventListener('click', () => {
+      gsap.to('#supporter-modal > div', {
+        opacity: 0,
+        scale: 0.8,
+        duration: 0.5,
+        ease: 'back.in',
+        onComplete: () => document.getElementById('supporter-modal').classList.add('hidden')
+      });
+    });
+
+    // Timeline Modal
+    function openTimelineModal(year, details) {
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+      modal.innerHTML = `
+        <div class="bg-gray-800 p-6 rounded-lg max-w-lg">
+          <h3 class="text-xl font-bold">${year}</h3>
+          <p class="mt-4">${details}</p>
+          <button class="mt-6 px-4 py-2 bg-yellow-500 rounded-lg" onclick="this.parentElement.parentElement.remove()" aria-label="Modalı kapat">Kapat</button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      gsap.from(modal.querySelector('div'), { opacity: 0, scale: 0.8, duration: 0.5, ease: 'back.out' });
     }
 
-    // Ödemeye geç
-    async function checkout() {
-        const total = cart.reduce((sum, item) => sum + item.price, 0);
-        const productNames = cart.map(p => p.name).join(',');
+    // i18next Language Support
+    i18next.init({
+      lng: 'tr',
+      resources: {
+        tr: {
+          translation: {
+            hero: 'Yeni Bir Gelecek',
+            join: 'Harekete Katıl',
+            mission: 'Misyonumuz',
+            agenda: 'Gündemimiz',
+            news: 'Son Haberler',
+            events: 'Etkinlik Takvimi',
+            supporters: 'Destekçilerimiz',
+            vision: 'Vizyonumuz: Geleceğe Yolculuk',
+            map: 'Etkinliklerimiz Nerede?',
+            feedback: 'Görüşleriniz Önemli',
+            stats: 'Birlikte Güçlüyüz'
+          }
+        },
+        en: {
+          translation: {
+            hero: 'A New Future',
+            join: 'Join the Movement',
+            mission: 'Our Mission',
+            agenda: 'Our Agenda',
+            news: 'Latest News',
+            events: 'Event Calendar',
+            supporters: 'Our Supporters',
+            vision: 'Our Vision: Journey to the Future',
+            map: 'Where Are Our Events?',
+            feedback: 'Your Feedback Matters',
+            stats: 'Stronger Together'
+          }
+        }
+      }
+    }, () => {
+      updateTranslations();
+    });
 
-        // API'yi çağır
-        const response = await fetch('/api/shopier', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                product_names: productNames,
-                total_amount: total.toFixed(2),
-            }),
-        });
-
-        const formHTML = await response.text();
-        document.body.innerHTML = formHTML;
+    function updateTranslations() {
+      document.querySelector('.hero-text').textContent = i18next.t('hero');
+      document.querySelector('#join h2').textContent = i18next.t('join');
+      document.querySelector('#mission h2').textContent = i18next.t('mission');
+      document.querySelector('#agenda h2').textContent = i18next.t('agenda');
+      document.querySelector('#news h2').textContent = i18next.t('news');
+      document.querySelector('#events h2').textContent = i18next.t('events');
+      document.querySelector('#supporters h2').textContent = i18next.t('supporters');
+      document.querySelector('#vision h2').textContent = i18next.t('vision');
+      document.querySelector('#map h2').textContent = i18next.t('map');
+      document.querySelector('#feedback h2').textContent = i18next.t('feedback');
+      document.querySelector('#stats h2').textContent = i18next.t('stats');
     }
 
-    renderProducts();
-</script>
+    document.getElementById('language').addEventListener('change', (e) => {
+      i18next.changeLanguage(e.target.value, () => {
+        updateTranslations();
+      });
+    });
 
+    // Responsive Resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
 </body>
 </html>
