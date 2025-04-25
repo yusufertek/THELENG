@@ -19,7 +19,7 @@
         }
 
         body {
-            background: #000000;
+            background: rgb(0, 0, 0);
             color: #fff;
             overflow-x: hidden;
         }
@@ -29,7 +29,7 @@
             top: 0;
             width: 100%;
             padding: 20px 40px;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.39), transparent);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
@@ -39,7 +39,7 @@
         .navbar .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #fff;
+            color: rgb(247, 247, 247);
         }
 
         .hamburger {
@@ -52,7 +52,7 @@
         .hamburger span {
             width: 25px;
             height: 3px;
-            background: #fff;
+            background: #ccc;
             margin: 2px 0;
             transition: all 0.3s ease;
         }
@@ -75,7 +75,7 @@
             right: -100%;
             width: 250px;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(88, 92, 100, 0.67);
             backdrop-filter: blur(5px);
             display: flex;
             flex-direction: column;
@@ -115,7 +115,7 @@
         .video-container {
             position: absolute;
             top: 10%;
-            width: 50%; /* Video boyutunu buradan ayarlayabilirsiniz */
+            width: 100%; /* Video boyutunu buradan ayarlayabilirsiniz */
             max-width: 397px;
             z-index: 10;
             left: 50%;
@@ -123,7 +123,7 @@
         }
 
         .video-container video {
-            width: 100%;
+            width: 98%;
             height: auto;
             display: block;
         }
@@ -307,7 +307,7 @@
     <section class="hero">
         <div class="video-container">
             <video autoplay muted loop playsinline>
-                <source src="vid1.MP4" type="video/mp4">
+                <source src="vid2.MP4" type="video/mp4">
                 Tarayıcınız video oynatmayı desteklemiyor.
             </video>
         </div>
