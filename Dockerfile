@@ -1,12 +1,9 @@
-# PHP'nin hazır bir imajını kullan
+# PHP'nin hazır bir imajını kullanıyoruz
 FROM php:8.2-cli
 
-# Gerekirse dosyaları kopyala
+# Çalışma dizini oluştur ve proje dosyalarını kopyala
+WORKDIR /var/www/html
 COPY . /var/www/html
 
-# Çalışma dizinini ayarla
-WORKDIR /var/www/html
-
-# 0.0.0.0:10000'de php sunucusunu başlat
+# PHP dahili sunucusunu başlat
 CMD ["php", "-S", "0.0.0.0:10000"]
- 
