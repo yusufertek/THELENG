@@ -9,3 +9,4 @@ WORKDIR /var/www/html
 
 # 0.0.0.0:10000'de php sunucusunu başlat
 CMD ["php", "-S", "0.0.0.0:10000"]
+ 
