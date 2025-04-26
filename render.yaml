@@ -2,6 +2,5 @@ services:
   - type: web
     name: php-web-app
     buildCommand: "docker build -t my-php-app ."
-    startCommand: "docker run -p 10000:10000 my-php-app"
     plan: free
     env: docker
