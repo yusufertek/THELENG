@@ -1,522 +1,1284 @@
-<!doctype html>
-<html lang="tr">
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YAZILAR</title>
-    <link rel="icon" type="image/png" href="/logo.PNG">
-    <link rel="apple-touch-icon" href="/sitelogo.jpg">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/logo.PNG"/>
+    <link rel="apple-touch-icon" href="/logo.PNG">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>THE LENG - Bilgi ve Kültür Arşivi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f1419;
-            --text-color: #e8ecef;
-            --card-bg: #1e2529;
-            --accent-color: #ad8a3d;
-            --font-family: 'Georgia', serif;
-            --font-size: 16px;
-            --font-weight: 700;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            --blur-bg: rgba(0, 0, 0, 0.7);
+            --font-size-multiplier: 1;
         }
 
-        .light-theme { --bg-color: #f4f6f9; --text-color: #2d3748; --card-bg: #ffffff; --accent-color: #f56565; --shadow: 0 10px 30px rgba(0, 0, 0, 0.15); --blur-bg: rgba(50, 50, 50, 0.7); }
-        .blue-theme { --bg-color: #1a365d; --text-color: #e6f1fa; --card-bg: #2b5285; --accent-color: #63b3ed; }
-        .green-theme { --bg-color: #1a3c34; --text-color: #e6f0ea; --card-bg: #2e5e4e; --accent-color: #34c759; }
-        .purple-theme { --bg-color: #2e1a47; --text-color: #e8d9ff; --card-bg: #4b2e6b; --accent-color: #b19cd9; }
-        .orange-theme { --bg-color: #3c2f2f; --text-color: #fff4e6; --card-bg: #5e4a4a; --accent-color: #ff9f1c; }
-        .red-theme { --bg-color: #2b0f0f; --text-color: #f4e6e6; --card-bg: #4a1c1c; --accent-color: #e63946; }
+        :root[data-theme="dark"] {
+            --bg-primary: #000000;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --text-muted: #888888;
+            --border-color: #333333;
+            --accent-light: #ffffff;
+            --accent-dark: #000000;
+            --shadow-light: rgba(255, 255, 255, 0.1);
+            --shadow-dark: rgba(0, 0, 0, 0.5);
+            --gradient-primary: linear-gradient(135deg, #ffffff, #cccccc);
+            --gradient-secondary: linear-gradient(135deg, #333333, #111111);
+            --wire-color: #666666;
+            --primary-color: #ad8a3d;
+            --secondary-color: #cccccc;
+            --accent-color: #888888;
+            --header-height: 60px;
+            --navbar-bg: #111111;
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root[data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --accent-light: #1e293b;
+            --accent-dark: #ffffff;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-dark: rgba(0, 0, 0, 0.1);
+            --gradient-primary: linear-gradient(135deg, #1e293b, #475569);
+            --gradient-secondary: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            --wire-color: #94a3b8;
+            --primary-color: #ad8a3d;
+            --secondary-color: #475569;
+            --accent-color: #64748b;
+            --header-height: 60px;
+            --navbar-bg: #f8fafc;
+        }
+
+        :root[data-theme="sepia"] {
+            --bg-primary: #f7f3e9;
+            --bg-secondary: #f0e6d2;
+            --bg-tertiary: #e8dcc0;
+            --text-primary: #5d4e37;
+            --text-secondary: #8b7355;
+            --text-muted: #a0916f;
+            --border-color: #d4c4a8;
+            --accent-light: #5d4e37;
+            --accent-dark: #f7f3e9;
+            --shadow-light: rgba(93, 78, 55, 0.1);
+            --shadow-dark: rgba(93, 78, 55, 0.15);
+            --gradient-primary: linear-gradient(135deg, #5d4e37, #8b7355);
+            --gradient-secondary: linear-gradient(135deg, #e8dcc0, #d4c4a8);
+            --wire-color: #a0916f;
+            --primary-color: #ad8a3d;
+            --secondary-color: #8b7355;
+            --accent-color: #a0916f;
+            --header-height: 60px;
+            --navbar-bg: #f0e6d2;
+        }
+
+        :root[data-theme="blue"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: #475569;
+            --accent-light: #f1f5f9;
+            --accent-dark: #0f172a;
+            --shadow-light: rgba(241, 245, 249, 0.1);
+            --shadow-dark: rgba(0, 0, 0, 0.5);
+            --gradient-primary: linear-gradient(135deg, #d5d5d5, #ffffff);
+            --gradient-secondary: linear-gradient(135deg, #334155, #1e293b);
+            --wire-color: #64748b;
+            --primary-color: #ad8a3d;
+            --secondary-color: #cbd5e1;
+            --accent-color: #94a3b8;
+            --header-height: 60px;
+            --navbar-bg: #1e293b;
+        }
+
+        /* Remove default blue highlight on touch */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* Allow text selection for specific elements */
+        p, h1, h2, h3, h4, h5, h6, span, div.article-content, div.article-text {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        /* Ripple effect container */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Ripple animation */
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            font-family: var(--font-family);
-            font-size: var(--font-size);
-            font-weight: var(--font-weight);
-            background: var(--bg-color);
-            color: var(--text-color);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
             min-height: 100vh;
-            overflow-x: hidden;
             position: relative;
-            transition: all 0.5s ease;
+            overflow-x: hidden;
+            font-size: calc(16px * var(--font-size-multiplier));
+            line-height: 1.6;
+            transition: all 0.3s ease;
         }
 
-        body::before {
-            content: '';
+        .icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            stroke: var(--wire-color);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .icon:hover {
+            stroke: var(--text-primary);
+            transform: scale(1.1);
+        }
+
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+        }
+
+        .header {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, var(--accent-color) 0%, transparent 70%);
-            opacity: 0.15;
-            animation: bgPulse 10s infinite ease-in-out;
-            z-index: -1;
+            right: 0;
+            background: var(--navbar-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            z-index: 1000;
+            height: var(--header-height);
+            animation: slideDown 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .top-nav {
-            position: fixed;
-            top: 0;
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            height: 100%;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-btn, .theme-btn, .settings-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .search-btn:hover, .theme-btn:hover, .settings-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-color: var(--wire-color);
+            transform: scale(1.05);
+        }
+
+        .main {
+            margin-top: var(--header-height);
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .content {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out 0.8s both;
+        }
+
+        .home-hero {
+            text-align: center;
+            padding: 3rem 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .home-hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+        }
+
+        .home-hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s both;
+        }
+
+        .search-input {
             width: 100%;
-            background: var(--card-bg);
-            padding: 1rem;
-            box-shadow: var(--shadow);
-            z-index: 10;
+            padding: 1rem 3rem 1rem 1rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: calc(1rem * var(--font-size-multiplier));
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px var(--shadow-dark);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(173, 138, 61, 0.1), 0 8px 32px var(--shadow-dark);
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.6s both;
+        }
+
+        .article-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: inherit;
+            transform: translateY(0);
+            opacity: 0;
+            animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            box-shadow: 0 4px 20px var(--shadow-dark);
+        }
+
+        .article-card:nth-child(1) { animation-delay: 0.1s; }
+        .article-card:nth-child(2) { animation-delay: 0.2s; }
+        .article-card:nth-child(3) { animation-delay: 0.3s; }
+        .article-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .article-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 40px var(--shadow-dark);
+            border-color: var(--primary-color);
+        }
+
+        .article-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .article-card:hover .article-image {
+            transform: scale(1.05);
+        }
+
+        .article-info {
+            padding: 1.5rem;
+        }
+
+        .article-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--primary-color);
+            transition: color 0.3s ease;
+        }
+
+        .article-preview {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .article-detail {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+            transform: translateY(-1px);
+        }
+
+        .article-header {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px var(--shadow-dark);
+        }
+
+        .article-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .article-header-image {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin: 1rem auto;
+            box-shadow: 0 8px 32px var(--shadow-dark);
+        }
+
+        .article-actions {
             display: flex;
             justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .action-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            display: flex;
             align-items: center;
-            animation: slideIn 0.8s ease-out;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-size: 0.9rem;
         }
 
-        .nav-logo-container { display: flex; align-items: center; }
-        .logo-emblem { width: 50px; height: 50px; cursor: pointer; transition: transform 0.3s ease; }
-        .logo-emblem:hover { transform: scale(1.1); }
-        .nav-logo { font-size: 2rem; color: var(--accent-color); text-transform: uppercase; margin-left: 1rem; transition: all 0.3s ease; }
-        .nav-logo:hover { color: #d4a95e; }
+        .action-btn:hover {
+            background: var(--primary-color);
+            color: var(--bg-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px var(--shadow-dark);
+        }
 
-        .settings-icon { position: fixed; bottom: 1.5rem; right: 1.5rem; width: 50px; height: 50px; background: var(--accent-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow); transition: transform 0.4s ease; z-index: 20; }
-        .settings-icon:hover { transform: scale(1.2) rotate(90deg); }
-        .settings-icon svg { fill: var(--text-color); width: 24px; height: 24px; }
+        .article-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+            box-shadow: 0 4px 20px var(--shadow-dark);
+        }
 
-        .settings-menu { position: fixed; bottom: 5rem; right: 1.5rem; background: var(--card-bg); padding: 1.5rem; border-radius: 10px; box-shadow: var(--shadow); display: none; width: 220px; animation: fadeIn 0.5s ease-out; z-index: 20; }
-        .settings-menu.open { display: block; }
-        .settings-menu label { display: block; margin: 0.5rem 0; font-size: 0.9rem; }
-        .settings-menu select, .settings-menu button { width: 100%; padding: 0.6rem; margin: 0.3rem 0; background: var(--text-color); color: var(--bg-color); border: none; border-radius: 5px; font-family: var(--font-family); transition: transform 0.3s ease; }
-        .settings-menu select:hover, .settings-menu button:hover { transform: scale(1.05); }
-        .settings-menu input[type="range"] { width: 100%; }
+        .article-content h2 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            font-weight: 600;
+        }
 
-        .clock { position: fixed; top: 4rem; right: 1.5rem; padding: 0.5rem 1rem; background: var(--card-bg); border-radius: 20px; box-shadow: var(--shadow); font-size: 1rem; z-index: 10; }
-        .notification { position: fixed; top: 6rem; right: 1.5rem; padding: 1rem; background: var(--card-bg); border-radius: 10px; box-shadow: var(--shadow); max-width: 280px; animation: popIn 0.5s ease-out; z-index: 10; }
+        .article-content h3 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            margin: 1.5rem 0 0.75rem;
+            font-weight: 600;
+        }
 
-        #main-content { padding: 5rem 1rem; opacity: 0; animation: fadeInUp 1s ease-out forwards; }
-        h1 { text-align: center; font-size: 2.5rem; margin-bottom: 2rem; color: var(--accent-color); }
+        .article-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
 
-        .search-bar { max-width: 500px; margin: 0 auto 2rem; }
-        .search-bar input { width: 100%; padding: 0.8rem 1rem; border: none; border-radius: 25px; background: var(--card-bg); color: var(--text-color); font-size: 1rem; box-shadow: var(--shadow); transition: all 0.3s ease; }
-        .search-bar input:focus { transform: scale(1.02); outline: none; }
+        .article-content img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border-radius: 12px;
+            margin: 1.5rem auto;
+            display: block;
+            box-shadow: 0 4px 20px var(--shadow-dark);
+        }
 
-        .topics { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
+        .timeline {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
 
-        .topic-card { background: var(--card-bg); padding: 1.5rem; border-radius: 15px; box-shadow: var(--shadow); text-align: center; cursor: pointer; transition: all 0.5s ease; animation: cardPop 0.8s ease-out forwards; position: relative; overflow: hidden; }
-        .topic-card:hover { transform: scale(1.05) translateY(-10px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); }
+        .timeline h3 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
 
-        .image-container { position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 10px; }
-        .topic-card img { width: 100%; height: 100%; object-fit: cover; transition: all 0.5s ease; }
-        .topic-card:hover img { filter: brightness(0.7); transform: scale(1.1); }
-        .topic-card .preview-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; color: var(--text-color); font-size: 1rem; opacity: 0; transition: all 0.3s ease; z-index: 5; }
-        .topic-card:hover .preview-text { opacity: 1; }
-        .topic-card h3 { font-size: 1.5rem; margin-top: 1rem; transition: all 0.3s ease; }
-        .topic-card:hover h3 { color: var(--accent-color); }
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
 
-        #content-panel { position: fixed; top: 0; left: 100%; width: 100%; height: 100%; background: var(--card-bg); padding: 4rem 1rem; transition: left 0.8s ease; z-index: 50; overflow-y: auto; }
-        #content-panel.open { left: 0; }
-        #content-panel button { padding: 0.8rem 1.5rem; background: var(--accent-color); color: var(--text-color); border: none; border-radius: 8px; cursor: pointer; margin: 0.5rem; transition: all 0.3s ease; }
-        #content-panel button:hover { transform: scale(1.1); }
-        #content-panel h2 { font-size: 2rem; margin-bottom: 1rem; color: var(--accent-color); }
-        #content-panel .meta { font-size: 0.9rem; color: var(--text-color); margin-bottom: 1.5rem; opacity: 0.8; }
+        .timeline-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px var(--shadow-dark);
+        }
 
-        .gallery { display: flex; justify-content: center; gap: 1rem; margin: 1.5rem auto; max-width: 900px; }
-        .gallery img { max-width: 80%; max-height: 400px; height: auto; border-radius: 10px; box-shadow: var(--shadow); transition: all 0.3s ease; }
-        .gallery img:hover { transform: scale(1.05); }
-        .gallery-controls { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
-        .gallery-controls button { padding: 0.6rem 1rem; }
+        .timeline-year {
+            font-weight: bold;
+            color: var(--primary-color);
+            min-width: 120px;
+            font-size: 1.1rem;
+        }
 
-        #panel-text { line-height: 1.6; max-width: 900px; margin: 2rem auto; padding: 1rem; border-radius: 8px; font-size: 1.1rem; text-align: justify; }
-        #panel-text h3 { font-size: 1.5rem; margin: 1rem 0; color: var(--accent-color); }
-        #panel-text p { margin-bottom: 1rem; }
-        #panel-text img { max-width: 100%; height: auto; margin: 1rem auto; display: block; border-radius: 8px; box-shadow: var(--shadow); }
+        .timeline-event {
+            color: var(--text-primary);
+        }
 
+        .settings-page {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .settings-header {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .settings-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .settings-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .theme-option {
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-option.active {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: var(--bg-primary);
+            transform: scale(1.05);
+        }
+
+        .theme-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow-dark);
+        }
+
+        .theme-preview {
+            width: 100%;
+            height: 40px;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .theme-preview.dark { background: linear-gradient(135deg, #000000, #333333); }
+        .theme-preview.light { background: linear-gradient(135deg, #ffffff, #f1f5f9); }
+        .theme-preview.sepia { background: linear-gradient(135deg, #f7f3e9, #e8dcc0); }
+        .theme-preview.blue { background: linear-gradient(135deg, #0f172a, #3b82f6); }
+
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .topics { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); padding: 0; }
-            .nav-logo { font-size: 1.5rem; }
-            .logo-emblem { width: 40px; height: 40px; }
-            #main-content { padding: 4rem 0; width: 100%; }
-            #content-panel { padding: 3rem 0; width: 100%; }
-            .topic-card { padding: 1rem; }
-            .topic-card h3 { font-size: 1.2rem; }
-            .settings-menu { width: 180px; }
-            .gallery img { max-width: 90%; max-height: 300px; }
-            #panel-text img { max-width: 90%; }
+            .header {
+                padding: 0.5rem;
+                height: 50px;
+            }
+
+            .header-content {
+                gap: 0.5rem;
+            }
+
+            .logo {
+                font-size: 1rem;
+            }
+
+            .search-btn, .theme-btn, .settings-btn {
+                padding: 0.4rem;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .home-hero {
+                padding: 2rem 0;
+            }
+
+            .home-hero h1 {
+                font-size: 2rem;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .article-header {
+                padding: 1.5rem;
+            }
+
+            .article-header h1 {
+                font-size: 2rem;
+            }
+
+            .article-content {
+                padding: 1.5rem;
+                font-size: 1rem;
+            }
+
+            .theme-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
-        @media (max-width: 480px) {
-            .topics { grid-template-columns: 1fr; padding: 0; }
-            .settings-icon { width: 40px; height: 40px; }
-            .settings-menu { bottom: 4rem; right: 1rem; width: 160px; }
-            .clock, .notification { font-size: 0.9rem; padding: 0.5rem; }
-            #main-content { padding: 3rem 0; }
-            #content-panel { padding: 2rem 0; }
-            .gallery img { max-width: 100%; max-height: 250px; }
-            #panel-text img { max-width: 100%; }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        @keyframes bgPulse { 0%, 100% { opacity: 0.15; } 50% { opacity: 0.25; } }
-        @keyframes slideIn { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes cardPop { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes popIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
-<body>
-    <audio id="background-music" autoplay loop>
-        <source src="uzunince.mp3" type="audio/mpeg">
-        Tarayıcınız ses dosyasını desteklemiyor.
-    </audio>
-
-    <div class="top-nav">
-        <div class="nav-logo-container">
-            <img src="logo.PNG" class="logo-emblem" alt="ARŞİV Arması" onclick="window.location.href='https://theleng.site'">
-            <div class="nav-logo">THE LENG</div>
-        </div>
-    </div>
-
-    <div class="clock" id="clock"></div>
-    <div id="notification" class="notification" style="display: none;"></div>
-
-    <div class="settings-icon" onclick="toggleSettings()">
-        <svg viewBox="0 0 24 24">
-            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.43-.48-.43h-3.84c-.24 0-.43.19-.47.43l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.07-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.3-.06.62-.06.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12-.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.43.48.43h3.84c.24 0 .43-.19.47-.43l-.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.07.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
-        </svg>
-    </div>
-    <div class="settings-menu" id="settings-menu">
-        <label for="theme">Tema:</label>
-        <select id="theme" onchange="changeTheme()">
-            <option value="dark">Gece Modu</option>
-            <option value="light">Açık</option>
-            <option value="blue">Mavi</option>
-            <option value="green">Yeşil</option>
-            <option value="purple">Mor</option>
-            <option value="orange">Turuncu</option>
-            <option value="red">Kırmızı</option>
-        </select>
-        <label for="font">Yazı Tipi:</label>
-        <select id="font" onchange="changeFont()">
-            <option value="Georgia">Georgia</option>
-            <option value="Times New Roman">Times New Roman</option>
-            <option value="Arial">Arial</option>
-            <option value="Verdana">Verdana</option>
-            <option value="Courier New">Courier New</option>
-            <option value="Helvetica">Helvetica</option>
-        </select>
-        <label for="font-size">Yazı Boyutu:</label>
-        <input type="range" id="font-size" min="10" max="24" step="1" value="16" onchange="changeFontSize()">
-        <label>Müzik Kontrolü:</label>
-        <button id="music-toggle" onclick="toggleMusic()">Müziği Durdur</button>
-        <label for="volume">Ses Seviyesi:</label>
-        <input type="range" id="volume" min="0" max="1" step="0.1" value="1" onchange="changeVolume()">
-        <label>Mod:</label>
-        <button onclick="toggleDarkLight()">Karanlık/Açık Mod</button>
-    </div>
-
-    <div id="main-content">
-        <h1></h1>
-        <div class="search-bar">
-            <input type="text" id="search" placeholder="Konuları ara..." onkeyup="searchTopics()">
-        </div>
-        <div class="topics" id="topics">
-            <div class="topic-card" onclick="openTopic('kader-nedir')">
-                <div class="image-container">
-                    <img src="kader2.jpg" alt="Kader Görseli">
-                </div>
-                <div class="preview-text">Kader alınyazısı mı? Yoksa Allah'ın evrendeki düzeni mi?...</div>
-                <h3>KADER NEDİR?</h3>
-            </div>
-            <div class="topic-card" onclick="openTopic('kandiller-nedir')">
-                <div class="image-container">
-                    <img src="kandiller2.jpg" alt="Kandiller Görseli">
-                </div>
-                <div class="preview-text">Kandiller İslam’da gerçekten kutsal geceler mi?...</div>
-                <h3>KANDİLLER NEDİR?</h3>
-            </div>
-            <div class="topic-card" onclick="openTopic('recm-cezasi-nedir')">
-                <div class="image-container">
-                    <img src="recm1.jpg" alt="Recm Görseli">
-                </div>
-                <div class="preview-text">Recm cezası İslam’da gerçekten var mı?...</div>
-                <h3>RECM CEZASI NEDİR?</h3>
-            </div>
-            <div class="topic-card" onclick="openTopic('sefaat-nedir')">
-                <div class="image-container">
-                    <img src="sefaat1.jpg" alt="Şefaat Görseli">
-                </div>
-                <div class="preview-text">Şefaat İslam’da gerçekten peygamberler tarafından mı yapılır?...</div>
-                <h3>ŞEFAAT NEDİR?</h3>
+<body data-theme="dark">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo ripple" onclick="showHome()">THE LENG</a>
+            <div class="header-actions">
+                <button class="search-btn ripple" onclick="toggleSearch()">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+                <button class="settings-btn ripple" onclick="showSettings()">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6"></path>
+                        <path d="m15.5 3.5-3 3-3-3"></path>
+                        <path d="m15.5 20.5-3-3-3 3"></path>
+                        <path d="M1 12h6m6 0h6"></path>
+                        <path d="m3.5 15.5 3-3 3 3"></path>
+                        <path d="m20.5 15.5-3-3-3 3"></path>
+                    </svg>
+                </button>
+                <button class="theme-btn ripple" onclick="toggleTheme()">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
             </div>
         </div>
-    </div>
+    </header>
 
-    <div id="content-panel">
-        <button onclick="closePanel()">Geri</button>
-        <button onclick="shareTopicTwitter(currentTopic)">Twitter'da Paylaş</button>
-        <button onclick="shareTopicWhatsApp(currentTopic)">WhatsApp'ta Paylaş</button>
-        <button onclick="downloadPDF()">PDF İndir</button>
-        <h2 id="panel-title"></h2>
-        <div class="meta" id="panel-meta"></div>
-        <div class="gallery" id="panel-gallery"></div>
-        <div class="gallery-controls">
-            <button onclick="prevImage()">Önceki</button>
-            <button onclick="nextImage()">Sonraki</button>
+    <!-- Main Content -->
+    <main class="main">
+        <div class="content" id="content">
+            <!-- Content will be populated by JavaScript -->
         </div>
-        <div id="panel-text"></div>
-    </div>
+    </main>
 
     <script>
-        let currentTopic = null;
-        let currentImageIndex = 0;
-        const { jsPDF } = window.jspdf;
-        const audio = document.getElementById("background-music");
-        let isPlaying = true;
-
-        const topics = {
-            'kader-nedir': {
-                title: "KADER NEDİR?",
-                author: "Muhammed Yusuf Ertek",
-                date: "05 Mart 2025",
-                text: `
-                    <p>Kader, İslam’da en çok tartışılan ve yanlış anlaşılan kavramlardan biridir. Geleneksel anlayışta, çoğu insan kaderi doğmadan önce yazılmış, değiştirilemez bir alın yazısı olarak görür ve bu görüş, insanın hayatını pasif bir kabullenişle yaşamasına neden olabilir. Ancak Kuran’a baktığımızda, kaderin bu dar ve fatalist anlayıştan çok daha geniş ve derin bir anlam taşıdığını fark ederiz. Kader, Allah’ın evrendeki düzeni, yasaları ve her şeyi kapsayan bilgeliğidir; insanın ise bu düzen içinde özgür iradesiyle yer aldığı dinamik bir sistemdir. Bu makalede, Kuran ayetleriyle kaderin alın yazısı olmadığını, Allah’ın ilahi düzeni olduğunu delillendireceğiz.</p>
-                    <p>Kuran, kaderi evrensel bir düzen olarak tanımlar. <strong>Kamer Suresi 49</strong>’da şöyle buyrulur: “Biz her şeyi bir ölçüye göre yarattık.” Bu ayet, evrenin her detayının Allah tarafından ölçülü ve dengeli bir şekilde yaratıldığını gösterir. Benzer şekilde, <strong>Furkan Suresi 2</strong>’de “O, her şeyi yarattı ve takdir etti” denilerek, Allah’ın yaratışındaki düzen ve ölçüye vurgu yapılır. <strong>Yasin Suresi 38</strong>’de ise “Güneş de kendi yörüngesinde akıp gitmektedir. Bu, mutlak kudret sahibi ve her şeyi bilen Allah’ın takdiridir” buyrulur. Bu ayetler, gök cisimlerinin bile Allah’ın belirlediği bir düzen içinde hareket ettiğini ve kaderin kaosun değil, uyumun bir göstergesi olduğunu ortaya koyar.</p>
-                    <img src="kader3.png" alt="Evrenin Düzeni">
-                    <p>Kaderin bir diğer önemli boyutu, insanın özgür iradesine işaret eder. <strong>İnsan Suresi 3</strong>’te “Şüphesiz, biz ona (insana) yolu gösterdik. İster şükredici olsun, ister nankör” denir. Bu ayet, Allah’ın insana yol gösterdiğini, ancak şükretmeyi ya da nankörlük etmeyi seçme özgürlüğünü insana bıraktığını ifade eder. <strong>Bakara Suresi 286</strong>’da “Allah, kimseyi kapasitesinin ötesinde bir yükümlülüğe tabi tutmaz. Onun kazanacağı, kendi çabalarıdır” buyrularak, insanın kendi eylemlerinden sorumlu olduğu vurgulanır. Ayrıca, <strong>Nahl Suresi 93</strong>’te “Eğer Allah dileseydi, sizi tek bir ümmet yapardı; fakat O, dilediğini saptırır, dilediğini hidayete erdirir. Yaptıklarınızdan sorulacaksınız” denilerek, insanın seçimlerinin kaderdeki rolü açıkça belirtilir.</p>
-                    <p>Kader, insanın eylemlerinin sonuçlarıyla doğrudan bağlantılıdır. <strong>Şura Suresi 30</strong>’da “Başınıza gelen herhangi bir musibet, kendi ellerinizle işledikleriniz yüzündendir. (Yine de) Allah çoğunu affeder” buyrulur. Bu ayet, yaşadığımız olayların genellikle kendi tercihlerimizin bir yansıması olduğunu gösterir. <strong>İsra Suresi 15</strong>’te ise “Biz bir toplumu, bir elçi göndermeden cezalandırmayız” denilerek, insanların uyarılmadan sorumlu tutulmayacağı ve dolayısıyla seçim yapma şansına sahip olduğu ifade edilir. Bu ayetler, kaderin statik bir alın yazısı değil, insanın özgür iradesiyle şekillenen dinamik bir süreç olduğunu kanıtlar.</p>
-                    <p>Kuran, insanın çaba, dua ve tövbe ile kaderini etkileyebileceğini öğretir. <strong>Bakara Suresi 186</strong>’da “Kullarım bana dua ettiklerinde, onların duasını kabul ederim” denerek, duaların Allah tarafından yanıtlandığı ve bu yanıtın kaderi değiştirebileceği belirtilir. <strong>Zümer Suresi 53</strong>’te “Ey kendi aleyhlerine aşırı giden kullarım! Allah’ın rahmetinden ümit kesmeyin. Allah bütün günahları affeder” buyrularak, tövbenin kaderi olumlu yönde dönüştürebileceği vurgulanır. <strong>Necm Suresi 39</strong>’da ise “Şüphesiz insan için kendi çalışmasından başka bir şey yoktur” denilerek, insanın emeğinin ve iradesinin kaderdeki rolü net bir şekilde ortaya konur. <strong>Ahzab Suresi 70-71</strong>’de “Allah’tan korkun ve doğru konuşun. Allah sizin amellerinizi düzeltir ve günahlarınızdan bazılarını bağışlar” buyrulur; bu da iyi amellerin kaderi iyileştirebileceğini gösterir.</p>
-                    <p>Modern dünyada kader, genellikle “her şey önceden belirlenmiş” gibi fatalist bir yaklaşımla karıştırılır. Ancak Kuran, bu yanlış anlamayı düzeltir. <strong>Kasas Suresi 68</strong>’de “Allah dilediği şeyi yaratır ve dilediği şeyi takdir eder” denir, ancak bu, Allah’ın üstün iradesine vurgu yapar ve insanın özgür iradesini iptal etmez. <strong>Bakara Suresi 256</strong>’da “Dinde zorlama yoktur. Doğru yol, sapık yoldan ayrılmıştır” buyrularak, insanın inanma veya inanmama konusunda özgür olduğu ifade edilir. <strong>Nahl Suresi 91</strong>’de “Allah ile yaptığınız antlaşmayı yerine getirin” denilerek, insanın seçim yapma sorumluluğu hatırlatılır. Bu ayetler, Allah’ın her şeyi bilmesiyle insanın özgür iradesinin bir arada var olabileceğini gösterir; kader, alın yazısı gibi sabit bir senaryo değildir.</p>
-                    <p>Sonuç olarak, Kuran’da kader, ne yalnızca bir alın yazısı ne de tamamen insanın kontrolünde bir olgudur. Kader, Allah’ın evreni yarattığı ölçü ve düzen ile insanın bu düzen içindeki özgür iradesinin birleşimidir. <strong>Furkan Suresi 2</strong>’den <strong>İnsan Suresi 3</strong>’e kadar pek çok ayet, kaderin Allah’ın ilahi düzeni olduğunu ve insanın bu düzen içinde sorumlu bir aktör olduğunu kanıtlar. Zorluklar karşısında “kaderim buymuş” diyerek pasif kalmak yerine, Kuran’ın öğrettiği gibi çaba göstermek, dua etmek ve sorumluluk almak, kaderi anlamanın ve yaşamanın en doğru yoludur. Bu evrensel mesaj, insan hayatına hem anlam hem de yön katmaya devam etmektedir.</p>
-                `,
-                images: ["kader2.jpg", "kader3.png"],
-                bg: "linear-gradient(135deg, #4B0082, #1e2529)"
-            },
-            'kandiller-nedir': {
-                title: "KANDİLLER NEDİR?",
-                author: "Muhammed Yusuf Ertek",
-                date: "05 Mart 2025",
-                text: `
-                    <p>Kandiller, İslam dünyasında özellikle Türk kültüründe önemli kabul edilen beş geceyi (Mevlid, Regaib, Mirac, Berat ve Kadir geceleri) kapsayan bir kavramdır. Bu geceler, özel ibadetler, dualar ve camilerin aydınlatılmasıyla kutlanır. Ancak, Kuran’a baktığımızda, bu gecelerin İslam’da özel bir yerinin olmadığını ve sonradan eklendiğini görüyoruz. Bu makalede, kandillerin Kuran’daki temellerini ve tarihsel kökenlerini inceleyerek, bunların İslam’daki yerinin olmadığını ayetlerle delillendireceğiz.</p>
-                    <p>Kuran’da yalnızca Kadir Gecesi özel bir gece olarak belirtilir. <strong>Kadir Suresi 1-5</strong>’te şöyle buyrulur: “Şüphesiz, Biz onu Kadir Gecesi’nde indirdik. Sen Kadir Gecesi’nin ne olduğunu bilir misin? Kadir Gecesi bin aydan hayırlıdır. Melekler ve Ruh, Rablerinin izniyle, her emir için o gece inerler. O gece tan yeri ağarıncaya kadar selâmdır.” Bu ayetler, Kadir Gecesi’nin Kuran’ın indirildiği gece olduğunu ve bin aydan daha hayırlı olduğunu açıkça ortaya koyar. Ancak, bu gecenin kesin tarihi Kuran’da belirtilmez; geleneksel olarak Ramazan’ın 27. gecesi kabul edilse de, bu bilgi hadislere dayanır.</p>
-                    <img src="kandiller1.png" alt="Kandillerin Kültürel Kutlaması">
-                    <p>Diğer kandil gecelerine baktığımızda ise Kuran’da herhangi bir iz göremeyiz. Örneğin, <strong>Mevlid Kandili</strong>, Hz. Muhammed’in doğumunu kutlamak için düzenlenir, ancak Kuran’da bu konuda ne bir ayet ne de kutlama emri vardır. Aynı şekilde, <strong>Regaib Kandili</strong> ve <strong>Berat Kandili</strong> için de Kuran’da hiçbir atıf bulunmaz. <strong>Mirac Kandili</strong> için ise <strong>İsra Suresi 1</strong>’de şöyle denir: “O, kulunu bir gece, Mescid-i Haram’dan, çevresini mübarek kıldığımız Mescid-i Aksa’ya götüren Allah’ı tenzih ederiz.” Bu ayet, Mirac olayını anlatır, fakat bu gecenin kutlanması gerektiğine dair bir emir vermez.</p>
-                    <p>Kuran, İslam’ın tamamlanmış bir din olduğunu açıkça ifade eder. <strong>Maide Suresi 3</strong>’te Allah şöyle buyurur: “Bugün size dininizi tamamladım, size nimetimi tamamladım ve size İslam’ı din olarak beğendim.” Bu ayet, İslam’ın Kuran ile tamamlandığını ve ek kutlamalara ya da özel gecelere ihtiyaç olmadığını gösterir. Ayrıca, <strong>A’raf Suresi 203</strong>’te “De ki: ‘Ben, Rabbimden bana vahyolunana uymaktan başka bir güce sahip değilim’” denilerek, Peygamber’in bile yalnızca Kuran’a uymakla yükümlü olduğu vurgulanır. Bu, kandiller gibi sonradan eklenen uygulamaların İslam’ın özünde yer almadığını destekler.</p>
-                    <p>Tarihsel olarak, kandillerin kökeni Hz. Muhammed’in yaşadığı dönemden çok sonrasına dayanır. Örneğin, Mevlid Kandili 13. yüzyılda Erbil Atabegi Muzafferüddin Kökböri tarafından başlatılmış, Osmanlı’da ise yaygınlaşmıştır. Regaib, Mirac ve Berat kandilleri de 10. yüzyıldan itibaren bazı bölgelerde kutlanmaya başlanmış, ancak bu uygulamalar Kuran’da değil, kültürel geleneklerde kök salmıştır. “Kandil” kelimesi bile, Osmanlı’da camilerin kandillerle aydınlatılmasından gelir ve dini bir terimden çok kültürel bir anlam taşır.</p>
-                    <p>Sonuç olarak, Kuran’da Kadir Gecesi dışında kandillerin bir temeli yoktur. Bu geceler, İslam’ın ilk dönemlerinde değil, yüzyıllar sonra ortaya çıkmış ve kültürel geleneklerle şekillenmiştir. <strong>Nahl Suresi 116</strong>’da “Kendi dillerinizle, ‘Bu helal, bu haram’ diyerek Allah’a yalan uydurmayın” denilerek, dinde olmayan şeyleri eklemenin sakıncalı olduğu uyarısı yapılır. Kandiller, ne Kuran’da ne de İslam’ın temelinde yer alır; bu nedenle, bunların İslam’da kutsal geceler olarak değil, sonradan eklenmiş gelenekler olarak görülmesi gerekir.</p>
-                `,
-                images: ["kandiller2.jpg", "kandiller1.png"],
-                bg: "linear-gradient(135deg, #DAA520, #1e2529)"
-            },
-            'recm-cezasi-nedir': {
-                title: "RECM CEZASI NEDİR?",
-                author: "Muhammed Yusuf Ertek",
-                date: "04 Mart 2025",
-                text: `
-                    <p>Recm cezası, yani taşlayarak öldürme, İslam dünyasında özellikle geleneksel anlayışta zina suçuna karşı uygulandığı iddia edilen bir cezadır. Bu ceza, genellikle evli kişilerin zina yapması durumunda devreye girer ve hadis kaynaklarına dayandırılır. Ancak, Kuran’a baktığımızda, recm cezasının İslam’da herhangi bir temeli olmadığını ve sonradan eklenmiş bir gelenek olduğunu görüyoruz. Bu makalede, recm cezasının Kuran’daki yerini ayetlerle inceleyerek, bunun İslam’ın özünde olmadığını delillendireceğiz.</p>
-                    <p>Kuran’da zina suçunun cezası açıkça belirtilmiştir. <strong>Nur Suresi 2-5</strong>’te şöyle buyrulur: “Zina eden kadın ile zina eden erkekten her birine yüz sopa vurun. Allah’a ve ahiret gününe inanıyorsanız, onlara karşı merhamete kapılmayın; inananlar arasında bir topluluk da bu cezanın uygulanmasına şahit olsun.” Bu ayetler, zina eden herkese -evli ya da bekar ayrımı olmaksızın- 100 sopa cezası verilmesini emreder. Recm cezasına dair ise Kuran’da tek bir atıf bile bulunmaz.</p>
-                    <img src="recm.jpg" alt="Recm Cezasının Tarihsel Tartışması">
-                    <p>Geleneksel İslamcılar, recm cezasını hadislere dayandırır. Örneğin, bazı hadislerde Hz. Muhammed’in evli bir kadının zina itirafı sonrası recm cezası verdiği iddia edilir. Ancak Kuran, İslam’ın tamamlanmış bir din olduğunu açıkça ifade eder. <strong>Maide Suresi 3</strong>’te Allah şöyle buyurur: “Bugün size dininizi tamamladım, size nimetimi tamamladım ve size İslam’ı din olarak beğendim.” Bu ayet, Kuran’ın İslam’ı eksiksiz sunduğunu ve recm gibi ek cezaların dine sonradan eklendiğini gösterir. Ayrıca, <strong>A’raf Suresi 203</strong>’te “De ki: ‘Ben, Rabbimden bana vahyolunana uymaktan başka bir güce sahip değilim’” denilerek, Peygamber’in bile yalnızca Kuran’a uymakla yükümlü olduğu vurgulanır.</p>
-                    <p>Kuran’da zina ile ilgili diğer bir hüküm, <strong>Nisa Suresi 15-16</strong>’da yer alır: “Kadınlarınızdan zina edenlere karşı dört şahit getirin; şahitlik ederlerse, onları evlere kapatın, ta ki ölüm onları alır ya da Allah bir yol gösterir. İki erkek zina ederse, onlara eziyet edin; tevbe ederlerse vazgeçin.” Ancak bu ayetler, Nur Suresi’nde belirtilen 100 sopa cezası ile neshedilmiştir (geçersiz kılınmıştır). Dolayısıyla, Kuran’daki nihai hüküm 100 sopadır ve recm cezasına yer yoktur.</p>
-                    <p>Tarihsel olarak, recm cezasının kökeni İslam’dan önceki Arap geleneklerine veya Yahudi hukukuna dayanır. Tevrat’ta (Deuteronomy 22:22) zina için recm cezası öngörülmüş, bu uygulama hadisler yoluyla İslam’a sızmıştır. Bazı hadisler, Kuran’da bir zamanlar recm ayeti olduğunu ancak bunun kaldırıldığını iddia etse de, bu iddia Kuran’ın değişmezliği ilkesine aykırıdır. <strong>Hicr Suresi 9</strong>’da “Şüphesiz o zikri (Kuran’ı) biz indirdik ve onu koruyacak olan da bizleriz” denilerek Kuran’ın korunmuşluğu vurgulanır.</p>
-                    <p>Sonuç olarak, Kuran’da recm cezasına dair bir temel yoktur. Zina için öngörülen tek ceza 100 sopadır ve recm, hadislerle sonradan eklenmiş bir uygulamadır. <strong>Nahl Suresi 116</strong>’da “Kendi dillerinizle, ‘Bu helal, bu haram’ diyerek Allah’a yalan uydurmayın” denilerek, dinde olmayan şeyleri eklemenin sakıncalı olduğu uyarısı yapılır. Recm cezası, ne Kuran’da ne de İslam’ın temelinde yer alır; bu nedenle, bunun İslam’da bir ceza olarak değil, kültürel bir gelenek olarak görülmesi gerekir.</p>
-                `,
-                images: ["recm1.jpg", "recm.jpg"],
-                bg: "linear-gradient(135deg, #800080, #1e2529)"
-            },
-            'sefaat-nedir': {
-                title: "ŞEFAAT NEDİR?",
-                author: "Muhammed Yusuf Ertek",
-                date: "04 Mart 2025",
-                text: `
-                    <p>Şefaat, İslam’da kıyamet günü birinin başka biri adına Allah’a yalvararak onun bağışlanmasını veya durumunun iyileştirilmesini istemesi olarak tanımlanır. Geleneksel İslam anlayışında, yalnızca Hz. Muhammed ve diğer peygamberler değil, aynı zamanda şeyhler, alimler ve kutsal addedilen kişiler de inananlar adına Şefaat edebileceği inancı yaygındır. Bu kişiler, cehennemden kurtarıcı ya da cennete geçişi kolaylaştırıcı birer aracı olarak görülür. Ancak, Kuran’a baktığımızda, Şefaat’in yalnızca Allah’a ait olduğunu, kimsenin -ne peygamberlerin ne de şeyh ve alimlerin- cehennemden kurtaramayacağını ve ancak cenneti hak edenlerin durumunun Allah’ın izniyle iyileşebileceğini görüyoruz. Bu makalede, Şefaat kavramını Kuran ayetleriyle inceleyerek, özellikle şeyh ve alimlerin Şefaat yetkisinin İslam’da olmadığını detaylı bir şekilde delillendireceğiz.</p>
-                    <p>Kuran’da Şefaat’in genel olarak mümkün olmadığı açıkça belirtilir. <strong>Bakara Suresi 48</strong>’de şöyle buyrulur: “Ve korkun o günden ki, bir kimse kendi nefsine yeterli olmaz, ondan hiçbir fidye kabul edilmeyecek, hiçbir Şefaat onun lehine kabul edilmeyecek ve onlar yardıma kavuşamazlar.” Bu ayet, kıyamet günü herkesin kendi amelleriyle yargılanacağını ve Şefaat’in -kimden gelirse gelsin- kimseyi kurtaramayacağını vurgular. Benzer şekilde, <strong>Bakara Suresi 254</strong>’te “O gün ticaret yok, dostluk yok, Şefaat yok” denilerek, Şefaat’in geçersizliği tekrarlanır. Bu ayetler, Şefaat’in şeyhler ya da alimler gibi kişilerce yapılabileceğine dair herhangi bir kapı bırakmaz.</p>
-                    <img src="sefaat2.png" alt="Şefaat İnancının Kültürel Kökenleri">
-                    <p>Bununla birlikte, Kuran’da Şefaat’in Allah’ın izniyle sınırlı bir şekilde gerçekleşebileceğine dair ayetler de bulunur. <strong>Necm Suresi 26</strong>’da şöyle denir: “Göklerde nice melekler var ki, onların Şefaatı hiçbir fayda vermez; ancak Allah dilediğine ve razı olduktan sonra izin verdiği zaman.” Ayrıca, <strong>Zümer Suresi 44</strong>’te “Şefaat, hepsi Allah’ındır. Göklerin ve yerin hükümdarlığı O’nundur” buyrularak, Şefaat yetkisinin yalnızca Allah’a ait olduğu açıkça ifade edilir. Bu ayetler, Şefaat’in peygamberler dâhil herhangi bir insan tarafından değil, yalnızca Allah’ın izniyle ve O’nun belirlediği çerçevede gerçekleşebileceğini gösterir. Şeyh ve alimlerin Şefaat yetkisi ise bu ayetlerde tamamen dışlanır, çünkü Kuran’da böyle bir yetki insanlara değil, sadece Allah’a atfedilir.</p>
-                    <p>Geleneksel İslamcılar, Şefaat’in Hz. Muhammed tarafından yapılacağını hadislere dayandırırken, bu yetkiyi zamanla şeyh ve alimlere de genişletmiştir. Özellikle tarikat ve cemaat yapılarında, şeyhlerin veya önde gelen alimlerin müritlerini cennete götüreceği, günahlarını affettireceği ya da cehennemden kurtaracağı inancı kökleşmiştir. Ancak Kuran, bu tür bir inancın İslam’ın özüne aykırı olduğunu net bir şekilde ortaya koyar. <strong>Yunus Suresi 18</strong>’de “Allah’ı bırakıp, kendilerine ne zarar ne de fayda verebilecek şeylere tapıyorlar ve ‘Bunlar Allah katında bizim Şefaatçilerimizdir’ diyorlar. De ki: ‘Allah’a, göklerde ve yerde bilmediği bir şeyi mi haber veriyorsunuz?’” denilerek, Allah dışında Şefaatçi kabul etmenin şirk olduğu vurgulanır. Şeyh ve alimlerin Şefaat yetkisine sahip olduğu iddiası, bu ayete göre açıkça bir sapmadır.</p>
-                    <p>Kuran, İslam’ın tamamlanmış bir din olduğunu bildirir ve ek aracılara ihtiyaç olmadığını ifade eder. <strong>Maide Suresi 3</strong>’te “Bugün size dininizi tamamladım, size nimetimi tamamladım ve size İslam’ı din olarak beğendim” denilerek, Kuran’ın yeterli olduğu vurgulanır. Ayrıca, <strong>A’raf Suresi 53</strong>’te “Şefaat edenler var mı ki bizim için Şefaat etsinler?” diye soranların çaresizliği anlatılır ve bu, Şefaat’in kurtarıcı bir güç olmadığına işaret eder. Eğer şeyh ve alimlerin Şefaat yetkisi olsaydı, Kuran’da bu açıkça belirtilirdi; oysa Kuran, böyle bir yetkiyi yalnızca Allah’a verir ve insanlara herhangi bir aracı rol tanımaz.</p>
-                    <p>Şeyh ve alimlerin Şefaat edeceğine dair inanç, İslam’ın ilk dönemlerinde değil, sonraki yüzyıllarda tasavvufun etkisiyle ortaya çıkmıştır. Örneğin, tarikat liderlerinin “keramet” sahibi olduğu ve müritlerini kurtarabileceği fikri, hadislerin yorumlanması ve kültürel geleneklerin dini anlayışla harmanlanmasıyla şekillenmiştir. Ancak Kuran, her bireyin kendi amelleriyle yargılanacağını net bir şekilde ortaya koyar. <strong>Zümer Suresi 7</strong>’de “Eğer küfrederlerse, şüphesiz Allah onlara muhtaç değildir. Kulları için O, şükredenleri sever” denilerek, kurtuluşun Şefaat’e değil, amellere bağlı olduğu belirtilir. Şefaat, kimseyi cehennemden kurtarmaz; olsa olsa cenneti hak edenlerin durumunu Allah’ın izniyle iyileştirebilir. Bu da şeyh ve alimlerin Şefaat iddiasını geçersiz kılar.</p>
-                    <p>Tarihsel olarak, Şefaat inancının genişletilmesi İslam’dan önceki dinlerden ve kültürel geleneklerden etkilenmiştir. Örneğin, Hıristiyanlıkta İsa’nın inananlar için Şefaat etmesi ya da pagan toplumlarda kutsal kişilerin aracı kabul edilmesi, benzer bir inanç yapısını yansıtır. İslam’a bu anlayış, hadisler ve tasavvufi yorumlarla sızmıştır. Özellikle şeyh ve alimlerin Şefaat edeceğine dair inanç, dinin monoteistik özünü zedeler ve Allah ile kul arasına aracı koyma eğilimini güçlendirir. <strong>Şura Suresi 46</strong>’da “Onların Allah’tan başka kendilerine yardım edecek dostları yoktur. Allah kimi saptırırsa, artık onun için bir yol yoktur” denilerek, Allah dışında kimsenin kurtarıcı olamayacağı vurgulanır. Bu ayet, şeyh ve alimlerin Şefaat yetkisi iddiasını açıkça reddeder.</p>
-                    <p>Ek olarak, <strong>Ankebut Suresi 12</strong>’de “Kâfirler, iman edenlere dediler ki: ‘Bizim yolumuza uyun, sizin günahlarınızı biz taşıyalım.’ Oysa onlar, onların günahlarından hiçbir şey taşıyamazlar” denilerek, kimsenin bir başkasının günahını üstlenemeyeceği belirtilir. Eğer şeyh ve alimler Şefaat ederek müritlerini kurtarabilseydi, bu ayet böyle bir yetkiyi tanırdı; ancak Kuran, böyle bir yetkiyi yalnızca Allah’a verir. <strong>Nahl Suresi 116</strong>’da ise “Kendi dillerinizle, ‘Bu helal, bu haram’ diyerek Allah’a yalan uydurmayın” denilerek, dinde olmayan şeyleri eklemenin sakıncalı olduğu uyarısı yapılır. Şeyh ve alimlerin Şefaat yetkisi, bu bağlamda Kuran’a aykırı bir uydurmadır.</p>
-                    <p>Sonuç olarak, Kuran’da Şefaat yalnızca Allah’a aittir ve ne peygamberler, ne şeyhler, ne de alimler kimseyi cehennemden kurtaramaz. Cenneti hak edenlerin durumu Allah’ın izniyle iyileşebilir, ancak bu, amellerin yerine geçmez ve insanlara böyle bir yetki verilmez. Geleneksel Şefaat inancı, özellikle şeyh ve alimlerin Şefaat edeceğine dair iddia, hadisler ve tasavvufi geleneklerle sonradan eklenmiş bir sapmadır ve İslam’ın özünde yer almaz. Kuran, inananları Şefaat umuduna değil, kendi amellerine ve Allah’la doğrudan bağa yöneltir. Şeyh ve alimlerin Şefaat yetkisi, Kuran’ın monoteistik ruhuna aykırı bir inançtır ve İslam’da hiçbir dayanağı yoktur.</p>
-                `,
-                images: ["sefaat1.jpg", "sefaat2.png"],
-                bg: "linear-gradient(135deg, #4682B4, #1a365d)"
-            }
-        };
-
-        const dailyTips = [
-            "Kader, Allah’ın evrendeki düzenidir.",
-            "Kuran’da yalnızca Kadir Gecesi özel bir gece olarak belirtilir.",
-            "Recm cezası, Kuran’da değil hadislerde yer alır."
-        ];
-
-        window.onload = function() {
-            const savedTheme = localStorage.getItem("theme");
-            const savedFont = localStorage.getItem("font");
-            const savedFontSize = localStorage.getItem("fontSize");
-
-            if (savedTheme && savedTheme !== "dark") {
-                document.body.classList.add(`${savedTheme}-theme`);
-                document.getElementById("theme").value = savedTheme;
-            }
-            if (savedFont) {
-                document.documentElement.style.setProperty("--font-family", `${savedFont}, serif`);
-                document.getElementById("font").value = savedFont;
-            }
-            if (savedFontSize) {
-                document.documentElement.style.setProperty("--font-size", `${savedFontSize}px`);
-                document.getElementById("font-size").value = savedFontSize;
+        class ArticleApp {
+            constructor() {
+                this.currentTheme = localStorage.getItem('theme') || 'dark';
+                this.currentHash = '';
+                this.articles = {
+                    'tarih': {
+                        title: 'Tarih',
+                        image: 'cbh2.jpg',
+                        preview: 'İnsanlığın geçmişini anlamak için temel bir disiplin. Medeniyetlerin doğuşu, gelişimi ve çöküşü hakkında bilgi verir.',
+                        content: `
+                            <h2>Tarihin Önemi</h2>
+                            <p>Tarih, insanlığın geçmişini anlamak için temel bir disiplindir. Medeniyetlerin doğuşu, gelişimi ve çöküşü hakkında bilgi verir. İnsanlar, tarih sayesinde hatalardan ders çıkarır ve geleceği daha bilinçli bir şekilde şekillendirir. Örneğin, antik çağlardan beri yazının icadı, toplumların bilgi birikimini artırmış ve kültürel gelişimi hızlandırmıştır.</p>
+                            
+                            <h3>Önemli Dönemler</h3>
+                            <p>Antik Çağ, insanlık tarihindeki en önemli dönemlerden biridir. Bu dönemde Mısır'da piramitler inşa edilmiş, Yunanistan'da demokrasinin temelleri atılmıştır. Orta Çağ ise karanlık bir dönem olarak bilinse de, aslında bilim ve sanatın yavaş yavaş filizlendiği bir zaman dilimidir. Rönesans ile birlikte Avrupa'da büyük bir dönüşüm yaşanmış, modern bilim ve sanatın temelleri atılmıştır.</p>
+                            
+                            <p>Yakın tarih ise sanayi devrimi, dünya savaşları ve teknolojik ilerlemelerle doludur. 20. yüzyıl, insanlığın hem en büyük başarılarını hem de en büyük felaketlerini gördüğü bir dönemdir. Bugün, tarih bize geçmişi anlamanın yanı sıra geleceği inşa etmek için bir rehber sunar.</p>
+                        `,
+                        timeline: [
+                            { year: 'MÖ 3000', event: 'Yazının icadı' },
+                            { year: '1453', event: 'İstanbul\'un fethi' },
+                            { year: '1789', event: 'Fransız Devrimi' },
+                            { year: '1914-1918', event: 'Birinci Dünya Savaşı' }
+                        ]
+                    },
+                    'bilim': {
+                        title: 'Bilim',
+                        image: 'cbh3.jpg',
+                        preview: 'Evreni anlama çabasının bir ürünü. Newton\'un kanunlarından Einstein\'ın teorilerine kadar bilimin gelişimi.',
+                        content: `
+                            <h2>Bilimin Kökenleri</h2>
+                            <p>Bilim, insanın evreni anlama çabasının bir ürünüdür. Antik Yunan'dan beri filozoflar doğayı anlamaya çalışmış, gözlemler yapmış ve teoriler geliştirmiştir. Aristoteles'in doğa üzerine yazıları, Kopernik'in Güneş merkezli evren modeli gibi çalışmalar bilimin temel taşlarını oluşturur.</p>
+                            
+                            <h3>Modern Bilim</h3>
+                            <p>17. yüzyılda başlayan Bilim Devrimi, Newton'un yerçekimi kanunları ve Galileo'nun teleskopu gibi yeniliklerle şekillenmiştir. 20. yüzyılda ise Einstein'ın Görelilik Teorisi ve kuantum mekaniği, bilim dünyasında devrim yaratmıştır. Günümüzde yapay zeka, genetik mühendisliği ve uzay araştırmaları bilimin sınırlarını zorlamaktadır.</p>
+                            
+                            <p>Bilim, sadece teorik bir alan değil, aynı zamanda pratik bir disiplindir. Teknolojik ilerlemeler, tıp alanındaki buluşlar ve çevre çözümleri hep bilimin ürünleridir. İnsanlık, bilim sayesinde Ay'a ayak basmış, hastalıkları tedavi etmiş ve iletişimde devrim yaratmıştır.</p>
+                        `,
+                        timeline: [
+                            { year: '1543', event: 'Kopernik\'in Güneş merkezli teori' },
+                            { year: '1687', event: 'Newton\'un Principia\'sı' },
+                            { year: '1905', event: 'Einstein\'ın Görelilik Teorisi' },
+                            { year: '1969', event: 'Ay\'a ilk iniş' }
+                        ]
+                    },
+                    'sanat': {
+                        title: 'Sanat',
+                        image: 'cbh.jpg',
+                        preview: 'İnsanlık tarihinin en eski ifadelerinden biri. Mağara resimlerinden modern sanata kadar uzanan yolculuk.',
+                        content: `
+                            <h2>Sanatın Tarihi</h2>
+                            <p>Sanat, insanlık tarihinin en eski ifadelerinden biridir. Mağara duvarlarındaki resimler, antik heykeller ve tiyatro oyunları, insanın duygularını ve düşüncelerini dışa vurma çabasını gösterir. Antik Yunan'da sanat, güzellik ve uyum arayışıyla şekillenirken, Orta Çağ'da dini temalar ön plandaydı.</p>
+                            
+                            <h3>Rönesans ve Sonrası</h3>
+                            <p>Rönesans, sanatın altın çağıdır. Leonardo da Vinci, Michelangelo ve Rafael gibi ustalar, insan figürlerini ve doğayı kusursuzca resmetmiştir. Barok dönemde dramatik ışık ve gölge oyunları, Romantizm'de ise duygusal derinlik ön plana çıkmıştır.</p>
+                            
+                            <p>Modern sanat ise kuralları yıkan bir yaklaşım getirmiştir. Picasso'nun kübizmi, Dali'nin sürrealizmi ve Warhol'un pop sanatı, sanatın sınırlarını genişletmiştir. Bugün sanat, dijital platformlarda ve sokaklarda bile kendini ifade etmeye devam ediyor.</p>
+                        `,
+                        timeline: [
+                            { year: '1503', event: 'Mona Lisa\'nın çizimi' },
+                            { year: '1605', event: 'Don Quixote\'un yayımlanması' },
+                            { year: '1889', event: 'Van Gogh\'un Yıldızlı Gece tablosu' },
+                            { year: '1907', event: 'Picasso\'nun Les Demoiselles d\'Avignon\'u' }
+                        ]
+                    },
+                    'turk-sanati': {
+                        title: 'Türk Sanatı',
+                        image: 'turksanat2.jpg',
+                        preview: 'Göçebe kültürlerden Osmanlı İmparatorluğu\'na uzanan zengin miras. Minyatürler, hat sanatı ve çini işçiliği.',
+                        content: `
+                            <h2>Türk Sanatının Kökenleri</h2>
+                            <p>Türk sanatı, göçebe kültürlerden Osmanlı İmparatorluğu'na uzanan zengin bir mirasa sahiptir. Minyatürler, hat sanatı ve çini işçiliği gibi alanlarda benzersiz eserler ortaya çıkmıştır. Selçuklu döneminden itibaren İslam sanatının etkisiyle şekillenen Türk sanatı, kendine özgü bir kimlik geliştirmiştir.</p>
+                            
+                            <h3>Osmanlı Dönemi</h3>
+                            <p>Osmanlı'da sanat, özellikle mimari ve süsleme sanatlarında zirveye ulaşmıştır. Sinan'ın eserleri, çini ve kaligrafinin mükemmel örnekleri bu dönemin ürünleridir. 19. yüzyılda Batı etkisiyle Osman Hamdi Bey gibi sanatçılar, modern Türk resminin temellerini atmıştır. "Kaplumbağa Terbiyecisi" gibi eserler bu dönemin simgelerindendir.</p>
+                            
+                            <p>Günümüzde Türk sanatı, geleneksel motiflerle modern teknikleri birleştirerek dünya sahnesinde yer bulmaktadır. Çağdaş Türk sanatçıları, hem yerel değerleri koruyarak hem de evrensel dili kullanarak eserler üretmektedir.</p>
+                        `,
+                        timeline: [
+                            { year: '13. Yüzyıl', event: 'Selçuklu çini sanatının başlangıcı' },
+                            { year: '1550', event: 'Mimar Sinan\'ın Süleymaniye Camii' },
+                            { year: '1905', event: 'Kaplumbağa Terbiyecisi\'nin tamamlanması' },
+                            { year: '1923', event: 'Cumhuriyet ile modern sanatın yükselişi' }
+                        ]
+                    }
+                };
+                this.init();
             }
 
-            audio.onerror = () => {
-                showNotification("Müzik dosyası yüklenemedi!");
-                document.getElementById("music-toggle").disabled = true;
-            };
-            startDailyTips();
-        };
+            init() {
+                this.setTheme(this.currentTheme);
+                this.setupEventListeners();
+                this.handleRoute();
+                this.addRippleListeners();
+            }
 
-        function toggleSettings() {
-            document.getElementById("settings-menu").classList.toggle("open");
+            setupEventListeners() {
+                window.addEventListener('hashchange', () => {
+                    this.handleRoute();
+                });
+
+                // Add ripple effect listeners
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest('.ripple')) {
+                        this.createRipple(e);
+                    }
+                });
+            }
+
+            addRippleListeners() {
+                setTimeout(() => {
+                    const rippleElements = document.querySelectorAll('.ripple');
+                    rippleElements.forEach(element => {
+                        if (!element.hasAttribute('data-ripple-added')) {
+                            element.setAttribute('data-ripple-added', 'true');
+                        }
+                    });
+                }, 100);
+            }
+
+            createRipple(event) {
+                const button = event.currentTarget.closest('.ripple');
+                if (!button || button.disabled) return;
+
+                const circle = document.createElement("span");
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+
+                const rect = button.getBoundingClientRect();
+                const x = event.clientX - rect.left - radius;
+                const y = event.clientY - rect.top - radius;
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${x}px`;
+                circle.style.top = `${y}px`;
+                circle.classList.add("ripple-effect");
+
+                const ripple = button.getElementsByClassName("ripple-effect")[0];
+                if (ripple) {
+                    ripple.remove();
+                }
+
+                button.appendChild(circle);
+
+                setTimeout(() => {
+                    if (circle.parentNode) {
+                        circle.remove();
+                    }
+                }, 600);
+            }
+
+            handleRoute() {
+                const hash = window.location.hash.slice(1);
+                this.currentHash = hash;
+
+                if (!hash) {
+                    this.renderHome();
+                } else if (hash === 'ayarlar') {
+                    this.renderSettings();
+                } else if (this.articles[hash]) {
+                    this.renderArticle(hash);
+                } else {
+                    this.renderHome();
+                }
+
+                // Re-add ripple listeners after content change
+                this.addRippleListeners();
+            }
+
+            renderHome() {
+                const content = document.getElementById('content');
+                content.innerHTML = `
+                    <div class="home-hero">
+                        <h1>THE LENG</h1>
+                        <p>Bilgi ve Kültür Arşivi - Tarih, Bilim, Sanat ve daha fazlası</p>
+                    </div>
+
+                    <div class="search-container">
+                        <input type="text" class="search-input" placeholder="Makalelerde ara..." onkeyup="searchArticles(this.value)">
+                        <svg class="icon search-icon" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </div>
+
+                    <div class="articles-grid" id="articlesGrid">
+                        ${Object.keys(this.articles).map(key => {
+                            const article = this.articles[key];
+                            return `
+                                <a href="#${key}" class="article-card ripple">
+                                    <img src="${article.image}" alt="${article.title}" class="article-image">
+                                    <div class="article-info">
+                                        <h3 class="article-title">${article.title}</h3>
+                                        <p class="article-preview">${article.preview}</p>
+                                        <div class="article-meta">
+                                            <span>📖 Makale</span>
+                                            <span>⏱️ 5 dk okuma</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+
+            renderArticle(key) {
+                const article = this.articles[key];
+                if (!article) return;
+
+                const content = document.getElementById('content');
+                content.innerHTML = `
+                    <div class="article-detail">
+                        <div class="breadcrumb">
+                            <a href="#" class="ripple">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                                </svg>
+                                Ana Sayfa
+                            </a>
+                            <span>›</span>
+                            <span>${article.title}</span>
+                        </div>
+
+                        <div class="article-header">
+                            <h1>${article.title}</h1>
+                            <img src="${article.image}" alt="${article.title}" class="article-header-image">
+                            
+                            <div class="article-actions">
+                                <button class="action-btn ripple" onclick="shareArticle('${key}')">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                                        <polyline points="16,6 12,2 8,6"></polyline>
+                                        <line x1="12" y1="2" x2="12" y2="15"></line>
+                                    </svg>
+                                    Paylaş
+                                </button>
+                                <button class="action-btn ripple" onclick="printArticle()">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <polyline points="6,9 6,2 18,2 18,9"></polyline>
+                                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                                        <polyline points="6,14 6,22 18,22 18,14"></polyline>
+                                    </svg>
+                                    Yazdır
+                                </button>
+                                <button class="action-btn ripple" onclick="downloadPDF('${key}')">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7,10 12,15 17,10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                    PDF İndir
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="article-content">
+                            ${article.content}
+                        </div>
+
+                        ${article.timeline ? `
+                            <div class="timeline">
+                                <h3>Zaman Çizelgesi</h3>
+                                ${article.timeline.map(item => `
+                                    <div class="timeline-item">
+                                        <div class="timeline-year">${item.year}</div>
+                                        <div class="timeline-event">${item.event}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            renderSettings() {
+                const content = document.getElementById('content');
+                content.innerHTML = `
+                    <div class="settings-page">
+                        <div class="breadcrumb">
+                            <a href="#" class="ripple">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                                </svg>
+                                Ana Sayfa
+                            </a>
+                            <span>›</span>
+                            <span>Ayarlar</span>
+                        </div>
+
+                        <div class="settings-header">
+                            <h1 class="settings-title">Ayarlar</h1>
+                            <p>Uygulamanızı kişiselleştirin ve deneyiminizi iyileştirin</p>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M12 1v6m0 6v6"></path>
+                                    <path d="m15.5 3.5-3 3-3-3"></path>
+                                    <path d="m15.5 20.5-3-3-3 3"></path>
+                                    <path d="M1 12h6m6 0h6"></path>
+                                    <path d="m3.5 15.5 3-3 3 3"></path>
+                                    <path d="m20.5 15.5-3-3-3 3"></path>
+                                </svg>
+                                Tema Seçimi
+                            </h3>
+                            <div class="theme-grid">
+                                <div class="theme-option ripple ${this.currentTheme === 'dark' ? 'active' : ''}" onclick="app.setTheme('dark')">
+                                    <div class="theme-preview dark"></div>
+                                    🌙 Karanlık
+                                </div>
+                                <div class="theme-option ripple ${this.currentTheme === 'light' ? 'active' : ''}" onclick="app.setTheme('light')">
+                                    <div class="theme-preview light"></div>
+                                    ☀️ Aydınlık
+                                </div>
+                                <div class="theme-option ripple ${this.currentTheme === 'sepia' ? 'active' : ''}" onclick="app.setTheme('sepia')">
+                                    <div class="theme-preview sepia"></div>
+                                    📜 Sepya
+                                </div>
+                                <div class="theme-option ripple ${this.currentTheme === 'blue' ? 'active' : ''}" onclick="app.setTheme('blue')">
+                                    <div class="theme-preview blue"></div>
+                                    🔵 Mavi
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            setTheme(theme) {
+                this.currentTheme = theme;
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                
+                // Update theme button icon
+                this.updateThemeIcon(theme);
+                
+                // Update active theme option if on settings page
+                if (this.currentHash === 'ayarlar') {
+                    document.querySelectorAll('.theme-option').forEach(option => {
+                        option.classList.remove('active');
+                    });
+                    const activeOption = document.querySelector(`[onclick="app.setTheme('${theme}')"]`);
+                    if (activeOption) {
+                        activeOption.classList.add('active');
+                    }
+                }
+            }
+
+            updateThemeIcon(theme) {
+                const themeBtn = document.querySelector('.theme-btn .icon');
+                if (themeBtn) {
+                    if (theme === 'dark') {
+                        themeBtn.innerHTML = `
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        `;
+                    } else if (theme === 'light') {
+                        themeBtn.innerHTML = `
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        `;
+                    } else {
+                        themeBtn.innerHTML = `
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <path d="M12 2v2"></path>
+                            <path d="M12 20v2"></path>
+                            <path d="m4.93 4.93 1.41 1.41"></path>
+                            <path d="m17.66 17.66 1.41 1.41"></path>
+                            <path d="M2 12h2"></path>
+                            <path d="M20 12h2"></path>
+                            <path d="m6.34 17.66-1.41 1.41"></path>
+                            <path d="m19.07 4.93-1.41 1.41"></path>
+                        `;
+                    }
+                }
+            }
+
+            toggleTheme() {
+                const themes = ['dark', 'light', 'sepia', 'blue'];
+                const currentIndex = themes.indexOf(this.currentTheme);
+                const nextIndex = (currentIndex + 1) % themes.length;
+                this.setTheme(themes[nextIndex]);
+            }
         }
 
-        function changeTheme() {
-            const theme = document.getElementById("theme").value;
-            document.body.className = theme === "dark" ? "" : `${theme}-theme`;
-            localStorage.setItem("theme", theme);
-            showNotification(`Tema: ${theme} olarak değiştirildi`);
+        // Global functions
+        function showHome() {
+            window.location.hash = '';
         }
 
-        function changeFont() {
-            const font = document.getElementById("font").value;
-            document.documentElement.style.setProperty("--font-family", `${font}, serif`);
-            localStorage.setItem("font", font);
-            showNotification(`Yazı tipi: ${font} olarak değiştirildi`);
+        function showSettings() {
+            window.location.hash = 'ayarlar';
         }
 
-        function changeFontSize() {
-            const size = document.getElementById("font-size").value;
-            document.documentElement.style.setProperty("--font-size", `${size}px`);
-            localStorage.setItem("fontSize", size);
-            showNotification(`Yazı boyutu: ${size}px olarak değiştirildi`);
-        }
-
-        function toggleMusic() {
-            if (isPlaying) {
-                audio.pause();
-                document.getElementById("music-toggle").innerText = "Müziği Çal";
-                showNotification("Müzik durduruldu.");
+        function toggleSearch() {
+            const searchInput = document.querySelector('.search-input');
+            if (searchInput) {
+                searchInput.focus();
             } else {
-                audio.play().catch(() => showNotification("Müzik çalınamadı!"));
-                document.getElementById("music-toggle").innerText = "Müziği Durdur";
-                showNotification("Müzik çalıyor.");
+                showHome();
+                setTimeout(() => {
+                    const input = document.querySelector('.search-input');
+                    if (input) input.focus();
+                }, 100);
             }
-            isPlaying = !isPlaying;
         }
 
-        function changeVolume() {
-            const volume = document.getElementById("volume").value;
-            audio.volume = volume;
-            showNotification(`Ses seviyesi: ${Math.round(volume * 100)}%`);
+        function toggleTheme() {
+            app.toggleTheme();
         }
 
-        function toggleDarkLight() {
-            const newTheme = document.body.classList.contains("light-theme") ? "dark" : "light";
-            document.body.className = newTheme === "light" ? "light-theme" : "";
-            localStorage.setItem("theme", newTheme);
-            document.getElementById("theme").value = newTheme;
-            showNotification(`${newTheme === "dark" ? "Karanlık" : "Açık"} moda geçildi`);
-        }
-
-        function searchTopics() {
-            const query = document.getElementById("search").value.toLowerCase();
-            document.querySelectorAll(".topic-card").forEach(card => {
-                const key = card.getAttribute("onclick").match(/'([^']+)'/)[1];
-                const title = card.querySelector("h3").innerText.toLowerCase();
-                const content = topics[key].text.toLowerCase();
-                card.style.display = (title.includes(query) || content.includes(query)) ? "block" : "none";
+        function searchArticles(query) {
+            const cards = document.querySelectorAll('.article-card');
+            const searchQuery = query.toLowerCase();
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.article-title').textContent.toLowerCase();
+                const preview = card.querySelector('.article-preview').textContent.toLowerCase();
+                const isVisible = title.includes(searchQuery) || preview.includes(searchQuery);
+                card.style.display = isVisible ? 'block' : 'none';
             });
         }
 
-        function openTopic(key) {
-            currentTopic = key;
-            currentImageIndex = 0;
-            const panel = document.getElementById("content-panel");
-            document.getElementById("panel-title").innerText = topics[key].title;
-            document.getElementById("panel-meta").innerText = `Yazar: ${topics[key].author} | Tarih: ${topics[key].date}`;
-            document.getElementById("panel-text").innerHTML = topics[key].text;
-            panel.style.background = topics[key].bg;
-            updateGallery();
-            panel.classList.add("open");
-            showNotification(`"${topics[key].title}" açıldı`);
-        }
-
-        function updateGallery() {
-            document.getElementById("panel-gallery").innerHTML = `<img src="${topics[currentTopic].images[currentImageIndex]}" alt="${topics[currentTopic].title} Görseli">`;
-        }
-
-        function nextImage() {
-            if (currentImageIndex < topics[currentTopic].images.length - 1) {
-                currentImageIndex++;
-                updateGallery();
+        function shareArticle(key) {
+            const article = app.articles[key];
+            const url = `${window.location.origin}${window.location.pathname}#${key}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: article.title,
+                    text: article.preview,
+                    url: url
+                });
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    showNotification('Makale linki kopyalandı!');
+                });
             }
         }
 
-        function prevImage() {
-            if (currentImageIndex > 0) {
-                currentImageIndex--;
-                updateGallery();
-            }
+        function printArticle() {
+            window.print();
         }
 
-        function shareTopicTwitter(key) {
-            const text = `${topics[key].title}: ${topics[key].text.replace(/<[^>]+>/g, '').substring(0, 280)}`;
-            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`, "_blank");
-            showNotification(`${topics[key].title} Twitter'da paylaşılıyor!`);
-        }
-
-        function shareTopicWhatsApp(key) {
-            const text = `${topics[key].title}: ${topics[key].text.replace(/<[^>]+>/g, '').substring(0, 280)}`;
-            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + window.location.href)}`, "_blank");
-            showNotification(`${topics[key].title} WhatsApp'ta paylaşılıyor!`);
-        }
-
-        function downloadPDF() {
-            const doc = new jsPDF();
-            const title = topics[currentTopic].title;
-            const meta = `Yazar: ${topics[currentTopic].author} | Tarih: ${topics[currentTopic].date}`;
-            const text = topics[currentTopic].text.replace(/<[^>]+>/g, '');
-            doc.setFont("Georgia");
-            doc.setFontSize(20);
-            doc.text(title, 10, 20);
-            doc.setFontSize(10);
-            doc.text(meta, 10, 30);
-            doc.setFontSize(12);
-            doc.text(doc.splitTextToSize(text, 180), 10, 40);
-            doc.save(`${title}.pdf`);
-            showNotification(`${title} PDF olarak indirildi!`);
-        }
-
-        function closePanel() {
-            document.getElementById("content-panel").classList.remove("open");
-            document.getElementById("content-panel").style.background = "var(--card-bg)";
-            currentTopic = null;
+        function downloadPDF(key) {
+            showNotification('PDF indirme özelliği yakında eklenecek!');
         }
 
         function showNotification(message) {
-            const notif = document.getElementById("notification");
-            notif.innerText = message;
-            notif.style.display = "block";
-            setTimeout(() => notif.style.display = "none", 3000);
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: var(--bg-secondary);
+                color: var(--text-primary);
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                border: 1px solid var(--border-color);
+                z-index: 1000;
+                animation: slideInRight 0.3s ease;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 8px 32px var(--shadow-dark);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
         }
 
-        function updateClock() {
-            const now = new Date();
-            document.getElementById("clock").innerText = now.toLocaleTimeString("tr-TR", { hour12: false });
-        }
-
-        function startDailyTips() {
-            const showTip = () => showNotification(dailyTips[Math.floor(Math.random() * dailyTips.length)]);
-            showTip();
-            setInterval(showTip, 24 * 60 * 60 * 1000);
-        }
-
-        setInterval(updateClock, 1000);
-        updateClock();
+        // Initialize app
+        const app = new ArticleApp();
     </script>
 </body>
 </html>
