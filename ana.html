@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terakki Yolu</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>THE LENG - Premium Web Tasarım Hizmetleri</title>
+    <meta name="description" content="THE LENG ile profesyonel web sitesi tasarımı. E-ticaret, kurumsal, kişisel ve marka web siteleri için premium çözümler.">
+    <link rel="icon" type="image/png" href="/favicon.png">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
         }
 
         html {
@@ -19,387 +18,773 @@
         }
 
         body {
-            background: rgb(0, 0, 0);
-            color: #fff;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
             overflow-x: hidden;
         }
 
+        /* Navigation */
         .navbar {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
-            padding: 20px 40px;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.39), transparent);
-            z-index: 1000;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-        }
-
-        .navbar .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: rgb(247, 247, 247);
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            z-index: 1100;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: #ccc;
-            margin: 2px 0;
+            justify-content: space-between;
+            padding: 0 5%;
+            z-index: 1000;
             transition: all 0.3s ease;
         }
 
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: logoGlow 3s ease-in-out infinite;
         }
 
         .nav-menu {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 250px;
-            height: 100%;
-            background: rgba(88, 92, 100, 0.67);
-            backdrop-filter: blur(5px);
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: right 0.3s ease;
-            z-index: 1000;
-        }
-
-        .nav-menu.active {
-            right: 0;
+            list-style: none;
+            gap: 30px;
         }
 
         .nav-menu a {
             color: #fff;
             text-decoration: none;
-            font-size: 1.5rem;
-            margin: 15px 0;
-            transition: color 0.3s ease;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
-        .nav-menu a:hover {
-            color: #ccc;
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transition: width 0.3s ease;
         }
 
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
         .hero {
             height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
-            flex-direction: column;
-            justify-content: flex-end; /* İlkeleri alta hizala */
             align-items: center;
-            text-align: center;
-            padding: 0 20px 50px; /* Alttan boşluk */
-            position: relative;
-        }
-
-        .video-container {
-            position: absolute;
-            top: 10%;
-            width: 100%; /* Video boyutunu buradan ayarlayabilirsiniz */
-            max-width: 397px;
-            z-index: 10;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .video-container video {
-            width: 98%;
-            height: auto;
-            display: block;
-        }
-
-        .principles {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .principle {
-            font-size: 3rem;
-            font-weight: 700;
-            opacity: 0;
-            transform: translateY(50px);
-            position: absolute;
-            animation: fadeInOut 6s ease infinite;
-        }
-
-        .principle:nth-child(1) { animation-delay: 0s; }
-        .principle:nth-child(2) { animation-delay: 2s; }
-        .principle:nth-child(3) { animation-delay: 4s; }
-
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(50px); }
-            16% { opacity: 1; transform: translateY(0); }
-            33% { opacity: 1; transform: translateY(0); }
-            50% { opacity: 0; transform: translateY(-50px); }
-            100% { opacity: 0; transform: translateY(-50px); }
-        }
-
-        .scroll-down {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-        }
-
-        .scroll-down a {
-            display: flex;
             justify-content: center;
-            align-items: center;
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff08" points="0,1000 1000,0 1000,1000"/></svg>');
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: #fff;
             text-decoration: none;
-            transition: background 0.3s ease;
-            animation: bounce 2s infinite;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease 0.4s both;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        .scroll-down a:hover {
-            background: rgba(255, 255, 255, 0.4);
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
         }
 
-        .scroll-down svg {
-            width: 24px;
-            height: 24px;
-            fill: #fff;
+        /* Section Styles */
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 5%;
+            position: relative;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-
-        /* Siyasi Bölümler Stili - Yeni Tasarım */
-        .political-sections {
-            padding: 80px 20px;
-            background: #fff;
-            color: #1a1a1a;
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
             text-align: center;
         }
 
-        .political-sections h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+        .section h2 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: #333;
             position: relative;
-            display: inline-block;
         }
 
-        .political-sections h2::after {
+        .section h2::after {
             content: '';
             position: absolute;
             bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: #333;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-radius: 2px;
         }
 
-        .sections-description {
+        .section p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 50px;
             max-width: 800px;
-            margin: 0 auto 60px;
-            font-size: 1.1rem;
-            color: #555;
-            line-height: 1.6;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Yeni Buton Stili */
-        .political-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
+        /* Real Estate Section */
+        .real-estate {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: #fff;
+        }
+
+        .real-estate h2,
+        .real-estate p {
+            color: #fff;
+        }
+
+        /* Brand Section */
+        .brand {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #fff;
+        }
+
+        .brand h2,
+        .brand p {
+            color: #fff;
+        }
+
+        /* Personal Website Section */
+        .personal {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: #fff;
+        }
+
+        .personal h2,
+        .personal p {
+            color: #fff;
+        }
+
+        /* E-commerce Section */
+        .ecommerce {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: #fff;
+        }
+
+        .ecommerce h2,
+        .ecommerce p {
+            color: #fff;
+        }
+
+        /* Corporate Section */
+        .corporate {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+
+        .contact h2,
+        .contact p {
+            color: #fff;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            margin-top: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: #000;
+            color: #fff;
+            text-align: center;
+            padding: 40px 5%;
+        }
+
+        .footer-content {
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        .political-button {
-            background: #1a1a1a;
-            color: #fff;
-            padding: 25px 40px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-align: center;
-            min-width: 280px;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .political-button:hover {
-            background: #333;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .political-button i {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-
-        .social {
-            padding: 40px 20px;
-            text-align: center;
-            background: #1a1a1a;
-        }
-
-        .social h3 {
-            font-size: 1.8rem;
+        .footer h3 {
+            font-size: 2rem;
             margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
         }
 
         .social-links a {
             color: #fff;
-            margin: 0 15px;
             font-size: 1.5rem;
-            text-decoration: none;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .social-links a:hover {
-            color: #ccc;
+            color: #4ecdc4;
+            transform: translateY(-3px);
         }
 
-        @media (max-width: 768px) {
-            .navbar .logo {
-                font-size: 1.5rem;
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-            .hamburger {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-btn {
                 display: flex;
             }
-            .principle {
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .section h2 {
                 font-size: 2rem;
             }
-            .video-container {
-                width: 70%; /* Mobil için video boyutunu büyüt */
-                max-width: 300px;
+
+            .section p {
+                font-size: 1rem;
             }
-            .political-sections h2 {
+
+            .section {
+                padding: 80px 5%;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .feature-card {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .hero h1 {
                 font-size: 2rem;
             }
-            .scroll-down a {
-                width: 40px;
-                height: 40px;
+
+            .hero p {
+                font-size: 1rem;
             }
-            .scroll-down svg {
-                width: 20px;
-                height: 20px;
+
+            .section h2 {
+                font-size: 1.8rem;
             }
-            .political-buttons {
-                flex-direction: column;
-                align-items: center;
+
+            .cta-button {
+                padding: 12px 30px;
+                font-size: 1rem;
             }
-            .political-button {
-                width: 100%;
-                max-width: 280px;
-            }
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            z-index: 1001;
+        }
+
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            width: 0%;
+            transition: width 0.1s ease;
         }
     </style>
 </head>
 <body>
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <!-- Navigation -->
     <nav class="navbar">
-        <div class="logo">TERAKKİ YOLU</div>
-        <div class="hamburger">
+        <div class="logo">THE LENG</div>
+        <ul class="nav-menu">
+            <li><a href="#home">Ana Sayfa</a></li>
+            <li><a href="#services">Hizmetler</a></li>
+            <li><a href="#portfolio">Portföy</a></li>
+            <li><a href="#contact">İletişim</a></li>
+        </ul>
+        <div class="mobile-menu-btn">
             <span></span>
             <span></span>
             <span></span>
-        </div>
-        <div class="nav-menu">
-            <a href="#">Hakkımızda</a>
-            <a href="#">İlkeler</a>
-            <a href="#political-sections">İLKLERİMİZ</a>
-            <a href="#political-sections">KADROMUZ</a>
-            <a href="#political-sections">YOL HARİTAMIZ</a>
-            <a href="#">İletişim</a>
         </div>
     </nav>
-    <section class="hero">
-        <div class="video-container">
-            <video autoplay muted loop playsinline>
-                <source src="CCC.MP4" type="video/mp4">
-                Tarayıcınız video oynatmayı desteklemiyor.
-            </video>
-        </div>
-        <div class="scroll-down">
-            <a href="#political-sections" aria-label="Aşağı kaydır">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 4l-8 8h16l-8-8zm0 16l8-8H4l8 8z"/>
-                </svg>
-            </a>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Premium Web Tasarım</h1>
+            <p>İşinizi dijital dünyada öne çıkaracak profesyonel web siteleri tasarlıyoruz</p>
+            <a href="#contact" class="cta-button">Hemen Başlayın</a>
         </div>
     </section>
-    <section class="political-sections" id="political-sections">
-        <h2>Siyasi Vizyonumuz</h2>
-        <p class="sections-description">
-            Toplumsal ilerleme, adalet ve sürdürülebilir kalkınma için çalışıyoruz. 
-            Terakki Yolu olarak, ülkemizin geleceğini şekillendirmek için ilkelerimiz, 
-            güçlü kadromuz ve net bir yol haritamız var.
-        </p>
-        <div class="political-buttons">
-            <a href="ilkelerimiz.html" class="political-button">
-                <i class="fas fa-landmark"></i>
-                İLKLERİMİZ
-            </a>
-            
-            <a href="kadromuz.html" class="political-button">
-                <i class="fas fa-users"></i>
-                KADROMUZ
-            </a>
-            
-            <a href="yol-haritamiz.html" class="political-button">
-                <i class="fas fa-road"></i>
-                YOL HARİTAMIZ
-            </a>
+
+    <!-- Real Estate Section -->
+    <section id="real-estate" class="section real-estate">
+        <div class="section-content">
+            <h2>🏠 Emlak Web Siteleri</h2>
+            <p>Emlak portföyünüzü en iyi şekilde sergileyin. Modern tasarım, gelişmiş filtreleme ve mobil uyumlu arayüzlerle müşterilerinize ulaşın.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🔍</span>
+                    <h3>Gelişmiş Arama</h3>
+                    <p>Müşterileriniz istedikleri emlağı kolayca bulabilir</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📱</span>
+                    <h3>Mobil Uyumlu</h3>
+                    <p>Her cihazda mükemmel görünüm</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📊</span>
+                    <h3>Analiz Paneli</h3>
+                    <p>Detaylı istatistikler ve raporlar</p>
+                </div>
+            </div>
         </div>
     </section>
-    <footer class="social">
-        <h3>Bizi Takip Edin</h3>
-        <div class="social-links">
-            <a href="#" target="_blank" aria-label="Twitter hesabımıza git"><i class="fab fa-twitter"></i></a>
-            <a href="#" target="_blank" aria-label="Instagram hesabımıza git"><i class="fab fa-instagram"></i></a>
-            <a href="#" target="_blank" aria-label="Facebook hesabımıza git"><i class="fab fa-facebook"></i></a>
+
+    <!-- Brand Section -->
+    <section id="brand" class="section brand">
+        <div class="section-content">
+            <h2>🚀 Marka Web Siteleri</h2>
+            <p>Markanızın hikayesini dijital dünyada anlatın. Güçlü görsel kimlik ve etkileyici tasarımlarla fark yaratın.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🎨</span>
+                    <h3>Özel Tasarım</h3>
+                    <p>Markanıza özel benzersiz tasarımlar</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3>Hızlı Yükleme</h3>
+                    <p>Optimize edilmiş performans</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔒</span>
+                    <h3>Güvenli Altyapı</h3>
+                    <p>SSL sertifikası ve güvenlik önlemleri</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Personal Website Section -->
+    <section id="personal" class="section personal">
+        <div class="section-content">
+            <h2>👤 Kişisel Web Siteleri</h2>
+            <p>Kendinizi dijital dünyada en iyi şekilde tanıtın. Portföy, blog veya kişisel marka siteniz için profesyonel çözümler.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">📝</span>
+                    <h3>Blog Sistemi</h3>
+                    <p>Kolay içerik yönetimi</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🖼️</span>
+                    <h3>Portföy Galerisi</h3>
+                    <p>Çalışmalarınızı sergilemek için</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📧</span>
+                    <h3>İletişim Formu</h3>
+                    <p>Ziyaretçilerinizle kolay iletişim</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- E-commerce Section -->
+    <section id="ecommerce" class="section ecommerce">
+        <div class="section-content">
+            <h2>🛒 E-Ticaret Siteleri</h2>
+            <p>Online satış yapın ve işinizi büyütün. Güvenli ödeme sistemleri, stok yönetimi ve kullanıcı dostu arayüzlerle.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">💳</span>
+                    <h3>Güvenli Ödeme</h3>
+                    <p>Tüm ödeme yöntemleri desteklenir</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📦</span>
+                    <h3>Stok Yönetimi</h3>
+                    <p>Otomatik stok takibi</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📈</span>
+                    <h3>Satış Raporları</h3>
+                    <p>Detaylı satış analizleri</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Corporate Section -->
+    <section id="corporate" class="section corporate">
+        <div class="section-content">
+            <h2>🏢 Kurumsal Web Siteleri</h2>
+            <p>Şirketinizin profesyonel imajını yansıtan kurumsal web siteleri. Güvenilirlik ve kalite bir arada.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">👥</span>
+                    <h3>Ekip Tanıtımı</h3>
+                    <p>Profesyonel ekip sayfaları</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📄</span>
+                    <h3>Hizmet Sayfaları</h3>
+                    <p>Detaylı hizmet tanıtımları</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📞</span>
+                    <h3>İletişim Modülleri</h3>
+                    <p>Çoklu iletişim kanalları</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact">
+        <div class="section-content">
+            <h2>📞 İletişime Geçin</h2>
+            <p>Hayalinizdeki web sitesi için bugün bizimle iletişime geçin. Ücretsiz danışmanlık ve teklif alın.</p>
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Adınız Soyadınız</label>
+                    <input type="text" id="name" name="name" placeholder="Adınızı girin" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-posta Adresiniz</label>
+                    <input type="email" id="email" name="email" placeholder="E-posta adresinizi girin" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Telefon Numaranız</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Telefon numaranızı girin">
+                </div>
+                <div class="form-group">
+                    <label for="service">Hangi Hizmeti İstiyorsunuz?</label>
+                    <select id="service" name="service" style="width: 100%; padding: 15px; border: none; border-radius: 10px; background: rgba(255,255,255,0.1); color: #fff; font-size: 1rem; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+                        <option value="">Hizmet seçin</option>
+                        <option value="emlak">Emlak Web Sitesi</option>
+                        <option value="marka">Marka Web Sitesi</option>
+                        <option value="kisisel">Kişisel Web Sitesi</option>
+                        <option value="eticaret">E-Ticaret Sitesi</option>
+                        <option value="kurumsal">Kurumsal Web Sitesi</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Mesajınız</label>
+                    <textarea id="message" name="message" rows="5" placeholder="Projeniz hakkında detayları paylaşın"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Teklif Al</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3>THE LENG</h3>
+            <p>Premium web tasarım hizmetleri ile dijital dünyadaki yerinizi alın.</p>
+            <div class="social-links">
+                <a href="#" title="Instagram">📷</a>
+                <a href="#" title="Twitter">🐦</a>
+                <a href="#" title="LinkedIn">💼</a>
+                <a href="#" title="WhatsApp">💬</a>
+            </div>
+            <p>&copy; 2024 THE LENG. Tüm hakları saklıdır.</p>
         </div>
     </footer>
-    <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navMenu = document.querySelector('.nav-menu');
 
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
+    <script>
+        // Scroll Progress Indicator
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / scrollHeight) * 100;
+            document.getElementById('scrollProgress').style.width = scrollPercent + '%';
         });
 
-        document.querySelectorAll('.nav-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
+        });
+
+        // Form submission
+        document.querySelector('.contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Mesajınız alındı! En kısa sürede size dönüş yapacağız.');
+            this.reset();
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(50px)';
+            section.style.transition = 'all 0.8s ease';
+            observer.observe(section);
+        });
+
+        // Mobile menu functionality (if needed)
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navMenu = document.querySelector('.nav-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(0, 0, 0, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(0, 0, 0, 0.95)';
+            }
         });
     </script>
 </body>
