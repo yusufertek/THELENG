@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE LENG - Premium Web Tasarım Hizmetleri</title>
-    <meta name="description" content="THE LENG ile profesyonel web sitesi tasarımı. E-ticaret, kurumsal, kişisel ve marka web siteleri için premium çözümler.">
+    <title>THE LENG - Premium Web Tasarım Showcase</title>
+    <meta name="description" content="THE LENG ile profesyonel web sitesi örnekleri. Emlak, marka ve kişisel web siteleri.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <style>
         * {
@@ -19,9 +19,10 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
+            background: #000;
+            color: #fff;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
         /* Navigation */
@@ -30,372 +31,523 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 80px;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(10px);
+            height: 70px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9));
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 5%;
+            padding: 0 20px;
             z-index: 1000;
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
         }
 
-        .logo {
-            font-size: 28px;
+        .navbar-logo {
+            font-size: 24px;
             font-weight: bold;
-            color: #fff;
+            color: white;
             text-transform: uppercase;
             letter-spacing: 3px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: logoGlow 3s ease-in-out infinite;
+            animation: logoGlow 2s infinite ease-in-out;
         }
 
-        .nav-menu {
+        .nav-links {
             display: flex;
-            list-style: none;
             gap: 30px;
+            list-style: none;
         }
 
-        .nav-menu a {
-            color: #fff;
+        .nav-links a {
+            color: white;
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
             position: relative;
         }
 
-        .nav-menu a::after {
+        .nav-links a::after {
             content: '';
             position: absolute;
             bottom: -5px;
             left: 0;
             width: 0;
             height: 2px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: rgba(255, 255, 255, 0.8);
             transition: width 0.3s ease;
         }
 
-        .nav-menu a:hover::after {
+        .nav-links a:hover::after {
             width: 100%;
         }
 
-        .mobile-menu-btn {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 4px;
+        /* Section Base */
+        .section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .mobile-menu-btn span {
-            width: 25px;
-            height: 3px;
-            background: #fff;
-            transition: all 0.3s ease;
+        .section-content {
+            width: 100%;
+            max-width: 1400px;
+            padding: 0 40px;
+            z-index: 2;
         }
 
         /* Hero Section */
         .hero {
-            height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
             text-align: center;
-            position: relative;
-            overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff08" points="0,1000 1000,0 1000,1000"/></svg>');
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .hero-content {
-            z-index: 2;
-            max-width: 800px;
-            padding: 0 20px;
-        }
-
-        .hero h1 {
+        .hero-title {
             font-size: 4rem;
             font-weight: bold;
-            color: #fff;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
             animation: fadeInUp 1s ease;
         }
 
-        .hero p {
+        .hero-subtitle {
             font-size: 1.5rem;
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 40px;
-            animation: fadeInUp 1s ease 0.2s both;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 50px;
+            animation: fadeInUp 1s ease 0.3s both;
         }
 
-        .cta-button {
+        .hero-cta {
             display: inline-block;
             padding: 15px 40px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            color: #fff;
-            text-decoration: none;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 50px;
+            color: white;
+            text-decoration: none;
             font-weight: bold;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            animation: fadeInUp 1s ease 0.4s both;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.4s ease;
+            animation: fadeInUp 1s ease 0.6s both;
         }
 
-        .cta-button:hover {
+        .hero-cta:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-        }
-
-        /* Section Styles */
-        .section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 100px 5%;
-            position: relative;
-        }
-
-        .section-content {
-            max-width: 1200px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .section h2 {
-            font-size: 3rem;
-            margin-bottom: 30px;
-            color: #333;
-            position: relative;
-        }
-
-        .section h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border-radius: 2px;
-        }
-
-        .section p {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 50px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.25));
         }
 
         /* Real Estate Section */
         .real-estate {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: #fff;
+            background: linear-gradient(135deg, #000 0%, #0a0a0a 100%);
         }
 
-        .real-estate h2,
-        .real-estate p {
-            color: #fff;
-        }
-
-        /* Brand Section */
-        .brand {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: #fff;
-        }
-
-        .brand h2,
-        .brand p {
-            color: #fff;
-        }
-
-        /* Personal Website Section */
-        .personal {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            color: #fff;
-        }
-
-        .personal h2,
-        .personal p {
-            color: #fff;
-        }
-
-        /* E-commerce Section */
-        .ecommerce {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            color: #fff;
-        }
-
-        .ecommerce h2,
-        .ecommerce p {
-            color: #fff;
-        }
-
-        /* Corporate Section */
-        .corporate {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            color: #333;
-        }
-
-        /* Features Grid */
-        .features-grid {
+        .estate-demo {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            margin-top: 60px;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            height: 80%;
         }
 
-        .feature-card {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 40px 30px;
-            border-radius: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-
-        .feature-card p {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
-        /* Contact Section */
-        .contact {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-        }
-
-        .contact h2,
-        .contact p {
-            color: #fff;
-        }
-
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-            margin-top: 40px;
-        }
-
-        .form-group {
-            margin-bottom: 30px;
+        .estate-info {
             text-align: left;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            font-size: 1rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255,255,255,0.7);
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-
-        /* Footer */
-        .footer {
-            background: #000;
-            color: #fff;
-            text-align: center;
-            padding: 40px 5%;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer h3 {
-            font-size: 2rem;
+        .estate-info h2 {
+            font-size: 3rem;
             margin-bottom: 20px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(45deg, #fff, #aaa);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 30px 0;
+        .estate-info p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
         }
 
-        .social-links a {
-            color: #fff;
+        .estate-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .feature-tag {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .estate-mockup {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            height: 500px;
+            overflow: hidden;
+        }
+
+        .mockup-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mockup-logo {
             font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .mockup-nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .mockup-nav span {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .mockup-nav span:hover {
+            color: white;
+        }
+
+        .property-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            height: 350px;
+            overflow-y: auto;
+        }
+
+        .property-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
             transition: all 0.3s ease;
         }
 
-        .social-links a:hover {
-            color: #4ecdc4;
-            transform: translateY(-3px);
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .property-image {
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(45deg, #333, #555);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .property-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .property-price {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.8rem;
+        }
+
+        /* Brand Section */
+        .brand {
+            background: linear-gradient(135deg, #0a0a0a 0%, #000 100%);
+        }
+
+        .brand-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            height: 80%;
+        }
+
+        .brand-mockup {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            height: 500px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand-hero {
+            margin-bottom: 40px;
+        }
+
+        .brand-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #333, #666);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .brand-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .brand-tagline {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+
+        .brand-products {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(45deg, #222, #444);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-name {
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Personal Section */
+        .personal {
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+        }
+
+        .personal-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            height: 80%;
+        }
+
+        .personal-info {
+            text-align: left;
+        }
+
+        .personal-mockup {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            height: 500px;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, #333, #666);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .profile-title {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            height: 250px;
+        }
+
+        .portfolio-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .portfolio-image {
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(45deg, #222, #444);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .portfolio-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #fff, #aaa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .contact p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 50px;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .submit-btn {
+            padding: 15px 40px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.25));
+        }
+
+        /* Stars Animation */
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            z-index: 1;
+            animation: twinkleGlow 5s infinite ease-in-out;
+        }
+
+        /* Wave Canvas */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.3;
         }
 
         /* Animations */
@@ -410,263 +562,333 @@
             }
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        @keyframes logoGlow {
+            0%, 100% { 
+                transform: scale(1); 
+                filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)); 
+            }
+            50% { 
+                transform: scale(1.05); 
+                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); 
+            }
         }
 
-        @keyframes logoGlow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
+        @keyframes twinkleGlow {
+            0% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+            100% { opacity: 0.4; transform: scale(1); }
         }
 
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            .estate-demo,
+            .brand-demo,
+            .personal-demo {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .estate-info,
+            .personal-info {
+                text-align: center;
+            }
+
+            .estate-mockup,
+            .brand-mockup,
+            .personal-mockup {
+                height: 400px;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .estate-info h2,
+            .contact h2 {
+                font-size: 2.5rem;
+            }
+        }
+
         @media (max-width: 768px) {
-            .nav-menu {
+            .navbar {
+                padding: 0 15px;
+            }
+
+            .nav-links {
                 display: none;
             }
 
-            .mobile-menu-btn {
-                display: flex;
+            .section-content {
+                padding: 0 20px;
             }
 
-            .hero h1 {
+            .hero-title {
                 font-size: 2.5rem;
+                letter-spacing: 3px;
             }
 
-            .hero p {
+            .hero-subtitle {
                 font-size: 1.2rem;
             }
 
-            .section h2 {
+            .estate-info h2,
+            .contact h2 {
                 font-size: 2rem;
             }
 
-            .section p {
-                font-size: 1rem;
-            }
-
-            .section {
-                padding: 80px 5%;
-            }
-
-            .features-grid {
+            .property-grid {
                 grid-template-columns: 1fr;
-                gap: 30px;
+                height: 300px;
             }
 
-            .feature-card {
-                padding: 30px 20px;
+            .brand-products {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+                height: 200px;
+            }
+
+            .estate-mockup,
+            .brand-mockup,
+            .personal-mockup {
+                height: 350px;
+                padding: 20px;
+            }
+
+            .contact-form {
+                padding: 0 10px;
             }
         }
 
         @media (max-width: 480px) {
-            .navbar {
-                padding: 0 20px;
-            }
-
-            .logo {
-                font-size: 20px;
-            }
-
-            .hero h1 {
+            .hero-title {
                 font-size: 2rem;
+                letter-spacing: 2px;
             }
 
-            .hero p {
+            .hero-subtitle {
                 font-size: 1rem;
             }
 
-            .section h2 {
+            .estate-info h2,
+            .contact h2 {
                 font-size: 1.8rem;
             }
 
-            .cta-button {
-                padding: 12px 30px;
-                font-size: 1rem;
+            .estate-mockup,
+            .brand-mockup,
+            .personal-mockup {
+                height: 300px;
+                padding: 15px;
             }
-        }
 
-        /* Scroll Indicator */
-        .scroll-indicator {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-            z-index: 1001;
-        }
+            .brand-products {
+                grid-template-columns: 1fr;
+            }
 
-        .scroll-progress {
-            height: 100%;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            width: 0%;
-            transition: width 0.1s ease;
+            .feature-tag {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Scroll Indicator -->
-    <div class="scroll-indicator">
-        <div class="scroll-progress" id="scrollProgress"></div>
-    </div>
-
     <!-- Navigation -->
     <nav class="navbar">
-        <div class="logo">THE LENG</div>
-        <ul class="nav-menu">
+        <div class="navbar-logo">THE LENG</div>
+        <ul class="nav-links">
             <li><a href="#home">Ana Sayfa</a></li>
-            <li><a href="#services">Hizmetler</a></li>
-            <li><a href="#portfolio">Portföy</a></li>
-            <li><a href="#contact">İletişim</a></li>
+            <li><a href="#emlak">Emlak</a></li>
+            <li><a href="#marka">Marka</a></li>
+            <li><a href="#kisisel">Kişisel</a></li>
+            <li><a href="#iletisim">İletişim</a></li>
         </ul>
-        <div class="mobile-menu-btn">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Premium Web Tasarım</h1>
-            <p>İşinizi dijital dünyada öne çıkaracak profesyonel web siteleri tasarlıyoruz</p>
-            <a href="#contact" class="cta-button">Hemen Başlayın</a>
+    <section id="home" class="section hero">
+        <canvas id="waveCanvas"></canvas>
+        <div class="section-content">
+            <h1 class="hero-title">Premium Web Tasarım</h1>
+            <p class="hero-subtitle">Profesyonel web sitesi örneklerimizi keşfedin</p>
+            <a href="#emlak" class="hero-cta">Örnekleri İncele</a>
         </div>
     </section>
 
     <!-- Real Estate Section -->
-    <section id="real-estate" class="section real-estate">
+    <section id="emlak" class="section real-estate">
+        <canvas id="waveCanvas2"></canvas>
         <div class="section-content">
-            <h2>🏠 Emlak Web Siteleri</h2>
-            <p>Emlak portföyünüzü en iyi şekilde sergileyin. Modern tasarım, gelişmiş filtreleme ve mobil uyumlu arayüzlerle müşterilerinize ulaşın.</p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <span class="feature-icon">🔍</span>
-                    <h3>Gelişmiş Arama</h3>
-                    <p>Müşterileriniz istedikleri emlağı kolayca bulabilir</p>
+            <div class="estate-demo">
+                <div class="estate-info">
+                    <h2>🏠 Emlak Web Sitesi</h2>
+                    <p>Modern emlak portföyü için tasarladığımız profesyonel web sitesi örneği. Gelişmiş filtreleme, detaylı ilan sayfaları ve mobil uyumlu tasarım.</p>
+                    <div class="estate-features">
+                        <span class="feature-tag">Gelişmiş Arama</span>
+                        <span class="feature-tag">Mobil Uyumlu</span>
+                        <span class="feature-tag">SEO Optimized</span>
+                        <span class="feature-tag">Hızlı Yükleme</span>
+                        <span class="feature-tag">Admin Panel</span>
+                        <span class="feature-tag">İstatistikler</span>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <span class="feature-icon">📱</span>
-                    <h3>Mobil Uyumlu</h3>
-                    <p>Her cihazda mükemmel görünüm</p>
-                </div>
-                <div class="feature-card">
-                    <span class="feature-icon">📊</span>
-                    <h3>Analiz Paneli</h3>
-                    <p>Detaylı istatistikler ve raporlar</p>
+                <div class="estate-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-logo">🏡 PremiumEmlak</div>
+                        <div class="mockup-nav">
+                            <span>Ana Sayfa</span>
+                            <span>İlanlar</span>
+                            <span>Hakkımızda</span>
+                            <span>İletişim</span>
+                        </div>
+                    </div>
+                    <div class="property-grid">
+                        <div class="property-card">
+                            <div class="property-image">🏠</div>
+                            <div class="property-title">Lüks Villa - Beşiktaş</div>
+                            <div class="property-price">₺8.500.000</div>
+                        </div>
+                        <div class="property-card">
+                            <div class="property-image">🏢</div>
+                            <div class="property-title">Modern Daire - Kadıköy</div>
+                            <div class="property-price">₺2.750.000</div>
+                        </div>
+                        <div class="property-card">
+                            <div class="property-image">🏘️</div>
+                            <div class="property-title">Bahçeli Ev - Sarıyer</div>
+                            <div class="property-price">₺5.200.000</div>
+                        </div>
+                        <div class="property-card">
+                            <div class="property-image">🏬</div>
+                            <div class="property-title">Ofis - Maslak</div>
+                            <div class="property-price">₺1.850.000</div>
+                        </div>
+                        <div class="property-card">
+                            <div class="property-image">🏠</div>
+                            <div class="property-title">Deniz Manzaralı - Büyükada</div>
+                            <div class="property-price">₺6.400.000</div>
+                        </div>
+                        <div class="property-card">
+                            <div class="property-image">🏢</div>
+                            <div class="property-title">Penthouse - Nişantaşı</div>
+                            <div class="property-price">₺12.500.000</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Brand Section -->
-    <section id="brand" class="section brand">
+    <section id="marka" class="section brand">
+        <canvas id="waveCanvas3"></canvas>
         <div class="section-content">
-            <h2>🚀 Marka Web Siteleri</h2>
-            <p>Markanızın hikayesini dijital dünyada anlatın. Güçlü görsel kimlik ve etkileyici tasarımlarla fark yaratın.</p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <span class="feature-icon">🎨</span>
-                    <h3>Özel Tasarım</h3>
-                    <p>Markanıza özel benzersiz tasarımlar</p>
+            <div class="brand-demo">
+                <div class="brand-mockup">
+                    <div class="brand-hero">
+                        <div class="brand-logo">✨</div>
+                        <div class="brand-title">LUXE BRAND</div>
+                        <div class="brand-tagline">Premium Yaşam Tarzı Ürünleri</div>
+                    </div>
+                    <div class="brand-products">
+                        <div class="product-card">
+                            <div class="product-image">👜</div>
+                            <div class="product-name">Lüks Çanta</div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">⌚</div>
+                            <div class="product-name">Premium Saat</div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">👔</div>
+                            <div class="product-name">Özel Takım</div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">👠</div>
+                            <div class="product-name">Tasarım Ayakkabı</div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">💍</div>
+                            <div class="product-name">Mücevher</div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">🕶️</div>
+                            <div class="product-name">Güneş Gözlüğü</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <span class="feature-icon">⚡</span>
-                    <h3>Hızlı Yükleme</h3>
-                    <p>Optimize edilmiş performans</p>
-                </div>
-                <div class="feature-card">
-                    <span class="feature-icon">🔒</span>
-                    <h3>Güvenli Altyapı</h3>
-                    <p>SSL sertifikası ve güvenlik önlemleri</p>
+                <div class="estate-info">
+                    <h2>🚀 Marka Web Sitesi</h2>
+                    <p>Lüks marka için tasarladığımız şık ve etkileyici web sitesi. Ürün katalogu, marka hikayesi ve e-ticaret entegrasyonu ile tam bir dijital deneyim.</p>
+                    <div class="estate-features">
+                        <span class="feature-tag">Marka Kimliği</span>
+                        <span class="feature-tag">Ürün Katalogu</span>
+                        <span class="feature-tag">E-ticaret</span>
+                        <span class="feature-tag">Sosyal Medya</span>
+                        <span class="feature-tag">Blog Sistemi</span>
+                        <span class="feature-tag">Newsletter</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Personal Website Section -->
-    <section id="personal" class="section personal">
+    <!-- Personal Section -->
+    <section id="kisisel" class="section personal">
+        <canvas id="waveCanvas4"></canvas>
         <div class="section-content">
-            <h2>👤 Kişisel Web Siteleri</h2>
-            <p>Kendinizi dijital dünyada en iyi şekilde tanıtın. Portföy, blog veya kişisel marka siteniz için profesyonel çözümler.</p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <span class="feature-icon">📝</span>
-                    <h3>Blog Sistemi</h3>
-                    <p>Kolay içerik yönetimi</p>
+            <div class="personal-demo">
+                <div class="personal-info">
+                    <h2>👤 Kişisel Web Sitesi</h2>
+                    <p>Profesyonel portföy ve kişisel marka için tasarladığımız modern web sitesi. CV, projeler, blog ve iletişim modülleri ile kişisel tanıtım platformu.</p>
+                    <div class="estate-features">
+                        <span class="feature-tag">Portföy Galerisi</span>
+                        <span class="feature-tag">CV İndirme</span>
+                        <span class="feature-tag">Blog Yazıları</span>
+                        <span class="feature-tag">İletişim Formu</span>
+                        <span class="feature-tag">Sosyal Medya</span>
+                        <span class="feature-tag">Responsive</span>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <span class="feature-icon">🖼️</span>
-                    <h3>Portföy Galerisi</h3>
-                    <p>Çalışmalarınızı sergilemek için</p>
-                </div>
-                <div class="feature-card">
-                    <span class="feature-icon">📧</span>
-                    <h3>İletişim Formu</h3>
-                    <p>Ziyaretçilerinizle kolay iletişim</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- E-commerce Section -->
-    <section id="ecommerce" class="section ecommerce">
-        <div class="section-content">
-            <h2>🛒 E-Ticaret Siteleri</h2>
-            <p>Online satış yapın ve işinizi büyütün. Güvenli ödeme sistemleri, stok yönetimi ve kullanıcı dostu arayüzlerle.</p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <span class="feature-icon">💳</span>
-                    <h3>Güvenli Ödeme</h3>
-                    <p>Tüm ödeme yöntemleri desteklenir</p>
-                </div>
-                <div class="feature-card">
-                    <span class="feature-icon">📦</span>
-                    <h3>Stok Yönetimi</h3>
-                    <p>Otomatik stok takibi</p>
-                </div>
-                <div class="feature-card">
-                    <span class="feature-icon">📈</span>
-                    <h3>Satış Raporları</h3>
-                    <p>Detaylı satış analizleri</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Corporate Section -->
-    <section id="corporate" class="section corporate">
-        <div class="section-content">
-            <h2>🏢 Kurumsal Web Siteleri</h2>
-            <p>Şirketinizin profesyonel imajını yansıtan kurumsal web siteleri. Güvenilirlik ve kalite bir arada.</p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <span class="feature-icon">👥</span>
-                    <h3>Ekip Tanıtımı</h3>
-                    <p>Profesyonel ekip sayfaları</p>
-                </div>
-                <div class="feature-card">
-                    <span class="feature-icon">📄</span>
-                    <h3>Hizmet Sayfaları</h3>
-                    <p>Detaylı hizmet tanıtımları</p>
-                </div>
-                <div class="feature-card">
-                    <span class="feature-icon">📞</span>
-                    <h3>İletişim Modülleri</h3>
-                    <p>Çoklu iletişim kanalları</p>
+                <div class="personal-mockup">
+                    <div class="profile-header">
+                        <div class="profile-avatar">👨‍💻</div>
+                        <div class="profile-name">Ahmet Yılmaz</div>
+                        <div class="profile-title">Full Stack Developer</div>
+                    </div>
+                    <div class="portfolio-grid">
+                        <div class="portfolio-item">
+                            <div class="portfolio-image">🌐</div>
+                            <div class="portfolio-name">E-ticaret Projesi</div>
+                        </div>
+                        <div class="portfolio-item">
+                            <div class="portfolio-image">📱</div>
+                            <div class="portfolio-name">Mobil Uygulama</div>
+                        </div>
+                        <div class="portfolio-item">
+                            <div class="portfolio-image">🎨</div>
+                            <div class="portfolio-name">UI/UX Tasarım</div>
+                        </div>
+                        <div class="portfolio-item">
+                            <div class="portfolio-image">⚡</div>
+                            <div class="portfolio-name">API Geliştirme</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="section contact">
+    <section id="iletisim" class="section contact">
+        <canvas id="waveCanvas5"></canvas>
         <div class="section-content">
             <h2>📞 İletişime Geçin</h2>
-            <p>Hayalinizdeki web sitesi için bugün bizimle iletişime geçin. Ücretsiz danışmanlık ve teklif alın.</p>
+            <p>Hayalinizdeki web sitesi için bugün bizimle iletişime geçin</p>
             <form class="contact-form">
                 <div class="form-group">
                     <label for="name">Adınız Soyadınız</label>
@@ -677,12 +899,8 @@
                     <input type="email" id="email" name="email" placeholder="E-posta adresinizi girin" required>
                 </div>
                 <div class="form-group">
-                    <label for="phone">Telefon Numaranız</label>
-                    <input type="tel" id="phone" name="phone" placeholder="Telefon numaranızı girin">
-                </div>
-                <div class="form-group">
                     <label for="service">Hangi Hizmeti İstiyorsunuz?</label>
-                    <select id="service" name="service" style="width: 100%; padding: 15px; border: none; border-radius: 10px; background: rgba(255,255,255,0.1); color: #fff; font-size: 1rem; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+                    <select id="service" name="service" required>
                         <option value="">Hizmet seçin</option>
                         <option value="emlak">Emlak Web Sitesi</option>
                         <option value="marka">Marka Web Sitesi</option>
@@ -693,38 +911,75 @@
                 </div>
                 <div class="form-group">
                     <label for="message">Mesajınız</label>
-                    <textarea id="message" name="message" rows="5" placeholder="Projeniz hakkında detayları paylaşın"></textarea>
+                    <textarea id="message" name="message" rows="5" placeholder="Projeniz hakkında detayları paylaşın" required></textarea>
                 </div>
                 <button type="submit" class="submit-btn">Teklif Al</button>
             </form>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <h3>THE LENG</h3>
-            <p>Premium web tasarım hizmetleri ile dijital dünyadaki yerinizi alın.</p>
-            <div class="social-links">
-                <a href="#" title="Instagram">📷</a>
-                <a href="#" title="Twitter">🐦</a>
-                <a href="#" title="LinkedIn">💼</a>
-                <a href="#" title="WhatsApp">💬</a>
-            </div>
-            <p>&copy; 2024 THE LENG. Tüm hakları saklıdır.</p>
-        </div>
-    </footer>
-
     <script>
-        // Scroll Progress Indicator
-        window.addEventListener('scroll', () => {
-            const scrollTop = document.documentElement.scrollTop;
-            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrollPercent = (scrollTop / scrollHeight) * 100;
-            document.getElementById('scrollProgress').style.width = scrollPercent + '%';
-        });
+        // Wave Animation for multiple canvases
+        function createWaveAnimation(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext("2d");
+            let time = 0;
 
-        // Smooth scrolling for navigation links
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            
+            window.addEventListener("resize", resizeCanvas);
+            resizeCanvas();
+
+            function drawWaves() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                time += 0.01;
+                
+                for (let i = 0; i < 3; i++) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${0.05 + i * 0.02})`;
+                    ctx.lineWidth = 1;
+                    
+                    for (let x = 0; x < canvas.width; x++) {
+                        const y = canvas.height / 2 + Math.sin(x * 0.01 + time + i) * 50 * Math.sin(time * 0.3 + i);
+                        if (x === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+                }
+                requestAnimationFrame(drawWaves);
+            }
+            drawWaves();
+        }
+
+        // Initialize wave animations
+        createWaveAnimation('waveCanvas');
+        createWaveAnimation('waveCanvas2');
+        createWaveAnimation('waveCanvas3');
+        createWaveAnimation('waveCanvas4');
+        createWaveAnimation('waveCanvas5');
+
+        // Create stars
+        function createStars() {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                for (let i = 0; i < 30; i++) {
+                    const star = document.createElement("div");
+                    star.className = "star";
+                    star.style.left = Math.random() * 100 + "vw";
+                    star.style.top = Math.random() * 100 + "vh";
+                    star.style.animationDelay = Math.random() * 5 + "s";
+                    section.appendChild(star);
+                }
+            });
+        }
+        createStars();
+
+        // Smooth scrolling with enhanced easing
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -745,10 +1000,10 @@
             this.reset();
         });
 
-        // Intersection Observer for animations
+        // Enhanced scroll animations
         const observerOptions = {
             threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            rootMargin: '0px 0px -100px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -760,30 +1015,21 @@
             });
         }, observerOptions);
 
-        // Observe all sections
+        // Observe sections for animations
         document.querySelectorAll('.section').forEach(section => {
             section.style.opacity = '0';
-            section.style.transform = 'translateY(50px)';
-            section.style.transition = 'all 0.8s ease';
+            section.style.transform = 'translateY(100px)';
+            section.style.transition = 'all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
             observer.observe(section);
         });
 
-        // Mobile menu functionality (if needed)
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navMenu = document.querySelector('.nav-menu');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            mobileMenuBtn.classList.toggle('active');
-        });
-
-        // Navbar background on scroll
+        // Navbar scroll effect
         window.addEventListener('scroll', () => {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 100) {
-                navbar.style.background = 'rgba(0, 0, 0, 0.98)';
+                navbar.style.background = 'linear-gradient(135deg, rgba(0, 0, 0, 0.98), rgba(20, 20, 20, 0.95))';
             } else {
-                navbar.style.background = 'rgba(0, 0, 0, 0.95)';
+                navbar.style.background = 'linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9))';
             }
         });
     </script>
