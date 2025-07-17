@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Uzay arka planı - performans dostu */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #000 0%, #1a1a2e 50%, #16213e 100%);
+      z-index: -2;
+    }
+
+    /* Yıldızlar efekti */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 160px 30px, #ddd, transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: sparkle 20s linear infinite;
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    @keyframes sparkle {
+      from { transform: translateX(0); }
+      to { transform: translateX(-200px); }
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 20px 0;
+    }
+
+    .header h1 {
+      font-size: clamp(24px, 5vw, 36px);
+      font-weight: 700;
+      background: linear-gradient(45deg, #fff, #a8edea, #fed6e3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      text-shadow: 0 0 30px rgba(255,255,255,0.3);
+    }
+
+    .header p {
+      color: #ccc;
+      font-size: 16px;
+      opacity: 0.8;
+    }
+
+    .form-group {
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #fff;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Düzeltilmiş file input */
+    .file-input-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .file-input {
+      width: 100%;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: 2px dashed rgba(255,255,255,0.3);
+      border-radius: 15px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      display: block;
+    }
+
+    .file-input:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+      border-color: rgba(255,255,255,0.6);
+    }
+
+    .file-input::-webkit-file-upload-button {
+      display: none;
+    }
+
+    .file-input::before {
+      content: '📸 Görsel Seçin - Dokunun';
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Alternatif görsel yükleme butonu */
+    .upload-button {
+      width: 100%;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: 2px dashed rgba(255,255,255,0.3);
+      border-radius: 15px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .upload-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+      border-color: rgba(255,255,255,0.6);
+    }
+
+    /* Drag & Drop alanı */
+    .drop-zone {
+      width: 100%;
+      min-height: 120px;
+      border: 3px dashed rgba(255,255,255,0.3);
+      border-radius: 15px;
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.dragover {
+      border-color: #667eea;
+      background: rgba(102, 126, 234, 0.1);
+      transform: scale(1.02);
+    }
+
+    .drop-zone-text {
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .text-input {
+      width: 100%;
+      padding: 20px;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 15px;
+      color: #fff;
+      font-size: 16px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 120px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .text-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+      background: rgba(255,255,255,0.15);
+    }
+
+    .text-input::placeholder {
+      color: rgba(255,255,255,0.6);
+    }
+
+    .action-button {
+      width: 100%;
+      padding: 18px 30px;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .action-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(240, 147, 251, 0.4);
+    }
+
+    .action-button:active {
+      transform: translateY(-1px);
+    }
+
+    .action-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .action-button:hover::before {
+      left: 100%;
+    }
+
+    .canvas-container {
+      text-align: center;
+      margin: 30px 0;
+      position: relative;
+    }
+
+    #canvas {
+      max-width: 100%;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 
+        0 20px 40px rgba(0,0,0,0.3),
+        0 0 0 1px rgba(255,255,255,0.1);
+      background: #000;
+      transition: all 0.3s ease;
+    }
+
+    #canvas:hover {
+      transform: scale(1.02);
+      box-shadow: 
+        0 25px 50px rgba(0,0,0,0.4),
+        0 0 0 1px rgba(255,255,255,0.2);
+    }
+
+    .download-button {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      position: relative;
+    }
+
+    .download-button::before {
+      content: '⬇️';
+      margin-right: 10px;
+      font-size: 18px;
+    }
+
+    .status-message {
+      text-align: center;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 20px 0;
+      font-weight: 600;
+      display: none;
+    }
+
+    .status-success {
+      background: rgba(76, 175, 80, 0.2);
+      border: 1px solid rgba(76, 175, 80, 0.5);
+      color: #4caf50;
+    }
+
+    .status-error {
+      background: rgba(244, 67, 54, 0.2);
+      border: 1px solid rgba(244, 67, 54, 0.5);
+      color: #f44336;
+    }
+
+    .hidden-input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Mobil optimizasyonu */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .header h1 {
+        font-size: 28px;
+      }
+      
+      .action-button {
+        padding: 16px 25px;
+        font-size: 16px;
+      }
+      
+      .text-input {
+        padding: 15px;
+        font-size: 16px;
+      }
+      
+      .upload-button {
+        padding: 18px;
+        font-size: 15px;
+      }
+    }
+
+    /* Loading animasyonu */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Glow efekti */
+    .glow {
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 20px rgba(102, 126, 234, 0.4); }
+      to { box-shadow: 0 0 30px rgba(102, 126, 234, 0.8); }
+    }
+
+    .image-preview {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 10px;
+      margin: 10px 0;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    /* Metin ayarları */
+    .text-settings {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .text-setting-item {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .text-setting-label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 5px;
+      color: #ccc;
+    }
+
+    .text-setting-input {
+      width: 100%;
+      padding: 8px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      color: white;
+    }
+
+    .text-color-options {
+      display: flex;
+      gap: 5px;
+      margin-top: 5px;
+    }
+
+    .color-option {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.2s;
+    }
+
+    .color-option:hover {
+      transform: scale(1.1);
+    }
+
+    .color-option.active {
+      border-color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🚀 Uzay Gönderi Oluşturucu</h1>
+      <p>Görsellerinizi profesyonel gönderilere dönüştürün</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">📷 Görsel Seçin</label>
+      
+      <!-- Gizli file input -->
+      <input type="file" id="imageInput" class="hidden-input" accept="image/*">
+      
+      <!-- Görünür upload butonu -->
+      <button class="upload-button" onclick="document.getElementById('imageInput').click()">
+        📸 Cihazdan Görsel Seç
+      </button>
+      
+      <!-- Drag & Drop alanı -->
+      <div class="drop-zone" id="dropZone">
+        <div style="font-size: 48px;">📁</div>
+        <div><strong>Görseli buraya sürükleyin</strong></div>
+        <div class="drop-zone-text">veya yukarıdaki butona dokunun</div>
+      </div>
+      
+      <div id="imagePreview"></div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">✍️ Haber Metni</label>
+      <textarea 
+        id="textInput" 
+        class="text-input" 
+        placeholder="Haber metnini buraya yazın..."
+        rows="4"
+      ></textarea>
+
+      <!-- Metin ayarları -->
+      <div class="text-settings">
+        <div class="text-setting-item">
+          <label class="text-setting-label">Metin Rengi</label>
+          <div class="text-color-options">
+            <div class="color-option active" style="background-color: white;" data-color="white"></div>
+            <div class="color-option" style="background-color: yellow;" data-color="yellow"></div>
+            <div class="color-option" style="background-color: #ff6b6b;" data-color="#ff6b6b"></div>
+            <div class="color-option" style="background-color: #4ecdc4;" data-color="#4ecdc4"></div>
+          </div>
+        </div>
+        <div class="text-setting-item">
+          <label class="text-setting-label">Yazı Boyutu</label>
+          <input type="range" id="fontSizeInput" class="text-setting-input" min="40" max="90" value="65">
+        </div>
+      </div>
+    </div>
+
+    <button class="action-button" onclick="generate()">
+      ✨ Gönderiyi Oluştur
+    </button>
+
+    <div id="statusMessage" class="status-message"></div>
+
+    <div class="canvas-container">
+      <canvas id="canvas" width="1080" height="1440"></canvas>
+    </div>
+
+    <button class="action-button download-button" onclick="download()">
+      Görseli İndir
+    </button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    let userImage = null;
+    
+    // Aynı klasörde bulunan sabit filigran dosyası
+    const filigran = new Image();
+    filigran.src = "filigran3.png";
+
+    // Metin ayarları
+    let textColor = "white";
+    let fontSize = 65;
+
+    // Renk seçenekleri
+    document.querySelectorAll('.color-option').forEach(option => {
+      option.addEventListener('click', function() {
+        document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        textColor = this.getAttribute('data-color');
+        if (userImage) generate();
+      });
+    });
+
+    // Font boyutu
+    document.getElementById('fontSizeInput').addEventListener('input', function() {
+      fontSize = parseInt(this.value);
+      if (userImage) generate();
+    });
+
+    // Status mesajı gösterme
+    function showStatus(message, type = 'success') {
+      const statusEl = document.getElementById('statusMessage');
+      statusEl.textContent = message;
+      statusEl.className = `status-message status-${type}`;
+      statusEl.style.display = 'block';
+      
+      setTimeout(() => {
+        statusEl.style.display = 'none';
+      }, 3000);
+    }
+
+    // Görsel işleme fonksiyonu
+    function processImage(file) {
+      console.log('Görsel işleniyor:', file.name);
+      
+      if (!file.type.startsWith('image/')) {
+        showStatus('Lütfen geçerli bir görsel dosyası seçin.', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          console.log('Görsel yüklendi:', img.width, 'x', img.height);
+          userImage = cropToAspect(img, 3 / 4);
+          
+          // Önizleme göster
+          const preview = document.getElementById('imagePreview');
+          preview.innerHTML = `<img src="${event.target.result}" class="image-preview" alt="Önizleme">`;
+          
+          showStatus('Görsel başarıyla yüklendi!');
+          
+          // Otomatik gönderi oluştur
+          if (document.getElementById("textInput").value.trim()) {
+            generate();
+          }
+        };
+        img.onerror = function() {
+          showStatus('Görsel yüklenirken hata oluştu.', 'error');
+        };
+        img.src = event.target.result;
+      };
+      reader.onerror = function() {
+        showStatus('Dosya okuma hatası.', 'error');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // File input event listener
+    document.getElementById("imageInput").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        processImage(file);
+      }
+    });
+
+    // Drag & Drop işlevselliği
+    const dropZone = document.getElementById('dropZone');
+
+    dropZone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        processImage(files[0]);
+      }
+    });
+
+    // Drop zone'a tıklama
+    dropZone.addEventListener('click', function() {
+      document.getElementById('imageInput').click();
+    });
+
+    // Görsel kırpma fonksiyonu
+    function cropToAspect(img, aspect) {
+      const inputAspect = img.width / img.height;
+      let sx, sy, sw, sh;
+      if (inputAspect > aspect) {
+        sh = img.height;
+        sw = sh * aspect;
+        sx = (img.width - sw) / 2;
+        sy = 0;
+      } else {
+        sw = img.width;
+        sh = sw / aspect;
+        sx = 0;
+        sy = (img.height - sh) / 2;
+      }
+      const cropCanvas = document.createElement('canvas');
+      cropCanvas.width = sw;
+      cropCanvas.height = sh;
+      const cropCtx = cropCanvas.getContext('2d');
+      cropCtx.drawImage(img, sx, sy, sw, sh, 0, 0, sw, sh);
+      const resultImg = new Image();
+      resultImg.src = cropCanvas.toDataURL();
+      return resultImg;
+    }
+
+    // Gönderi oluşturma - ÖNEMLİ DEĞİŞİKLİK: Çizim sırası değiştirildi
+    function generate() {
+      if (!userImage) {
+        showStatus('Lütfen önce görsel yükleyin.', 'error');
+        return;
+      }
+      
+      const text = document.getElementById("textInput").value;
+      if (!text.trim()) {
+        showStatus('Lütfen haber metnini girin.', 'error');
+        return;
+      }
+
+      console.log('Gönderi oluşturuluyor...');
+
+      // Sabit ayarlar
+      const bottomPadding = 200;
+      const lineSpacing = 1;
+      const leftPadding = 100;
+      const rightLimit = 1000;
+      const maxWidth = rightLimit - leftPadding;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // 1. Kullanıcı görselini çiz
+      ctx.drawImage(userImage, 0, 0, canvas.width, canvas.height);
+
+      // 2. Filigran ekle (artık metinden ÖNCE)
+      if (filigran.complete) {
+        ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
+      } else {
+        filigran.onload = () => {
+          ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
+          // Filigran yüklendikten sonra metni çiz
+          drawText();
+        };
+      }
+      
+      // 3. Metni çiz (artık filigranın ÜSTÜNE)
+      drawText();
+      
+      showStatus('Gönderi başarıyla oluşturuldu!');
+      
+      // Metin çizme fonksiyonu
+      function drawText() {
+        // Metni sarmalayarak satır satır yaz
+        const wrappedLines = wrapText(text, maxWidth);
+        let y = canvas.height - bottomPadding;
+        ctx.fillStyle = textColor; // Seçilen renk
+        ctx.textBaseline = "bottom";
+        ctx.textAlign = "left";
+        ctx.font = `bold ${fontSize}px Helvetica, Arial, sans-serif`;
+        
+        // Metin için gölge efekti ekle (okunabilirliği artırmak için)
+        ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+        
+        for (let i = wrappedLines.length - 1; i >= 0; i--) {
+          ctx.fillText(wrappedLines[i], leftPadding, y);
+          y -= (fontSize + lineSpacing);
+        }
+        
+        // Gölge efektini sıfırla
+        ctx.shadowColor = "transparent";
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+      }
+    }
+
+    // Metin sarmalama
+    function wrapText(text, maxWidth) {
+      const words = text.split(/\s+/);
+      const lines = [];
+      let line = "";
+      ctx.font = `bold ${fontSize}px Helvetica, Arial, sans-serif`;
+      
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line + words[i] + " ";
+        const width = ctx.measureText(testLine).width;
+        if (width > maxWidth && line !== "") {
+          lines.push(line.trim());
+          line = words[i] + " ";
+        } else {
+          line = testLine;
+        }
+      }
+      if (line) {
+        lines.push(line.trim());
+      }
+      return lines;
+    }
+
+    // İndirme
+    function download() {
+      if (!userImage) {
+        showStatus('Önce bir görsel yükleyip gönderi oluşturun.', 'error');
+        return;
+      }
+      
+      const link = document.createElement("a");
+      link.download = "uzay-gonderi.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      
+      showStatus('Görsel başarıyla indirildi!');
+    }
+
+    // Otomatik güncelleme
+    document.getElementById("textInput").addEventListener("input", function() {
+      if (userImage && this.value.trim()) {
+        setTimeout(generate, 500);
+      }
+    });
+
+    // Debug için
+    console.log('Sayfa yüklendi, görsel yükleme hazır!');
+  </script>
+</body>
+</html>
