@@ -155,7 +155,7 @@
       transition: all 0.3s ease;
     }
 
-    /* Bottom Panel - Improved drag functionality */
+    /* Bottom Panel - Fixed height and positioning */
     .bottom-panel {
       position: fixed;
       bottom: 0;
@@ -167,7 +167,9 @@
       transform: translateY(calc(100% - 80px));
       transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       z-index: 900;
-      height: 400px; /* Increased height for better content */
+      height: calc(100vh - 120px); /* Dynamic height based on viewport */
+      max-height: 600px; /* Maximum height limit */
+      min-height: 400px; /* Minimum height */
       overflow: hidden;
       touch-action: none;
       will-change: transform;
@@ -191,6 +193,7 @@
       cursor: grab;
       transition: all 0.3s ease;
       position: relative;
+      flex-shrink: 0; /* Prevent shrinking */
     }
 
     .panel-handle:active {
@@ -225,6 +228,7 @@
     .panel-header {
       padding: 0 20px 15px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0; /* Prevent shrinking */
     }
 
     .panel-title {
@@ -269,25 +273,31 @@
       transform: scale(0.98);
     }
 
-    /* Panel Content */
+    /* Panel Content - Fixed to use remaining space */
     .panel-content {
-      height: 300px; /* Increased content height */
+      flex: 1; /* Take remaining space */
       overflow-y: auto;
       padding: 20px;
+      padding-bottom: 30px; /* Extra bottom padding for safety */
       -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
     }
 
     .tab-content {
       display: none;
+      flex: 1;
     }
 
     .tab-content.active {
-      display: block;
+      display: flex;
+      flex-direction: column;
     }
 
     /* Form Elements */
     .form-group {
       margin-bottom: 20px;
+      flex-shrink: 0; /* Prevent shrinking */
     }
 
     .form-label {
@@ -506,6 +516,7 @@
       letter-spacing: 0.5px;
       margin-top: 15px;
       touch-action: manipulation;
+      flex-shrink: 0; /* Prevent shrinking */
     }
 
     .generate-button:active {
@@ -725,7 +736,7 @@
       
       .panel-content {
         padding: 15px;
-        height: 280px;
+        padding-bottom: 25px;
       }
       
       .color-option {
@@ -734,7 +745,9 @@
       }
       
       .bottom-panel {
-        height: 370px;
+        height: calc(100vh - 100px);
+        max-height: 500px;
+        min-height: 350px;
       }
 
       .share-modal-content {
@@ -744,6 +757,20 @@
 
       .share-actions {
         flex-direction: column;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 360px) {
+      .bottom-panel {
+        height: calc(100vh - 80px);
+        max-height: 450px;
+        min-height: 320px;
+      }
+      
+      .panel-content {
+        padding: 12px;
+        padding-bottom: 20px;
       }
     }
 
@@ -791,6 +818,12 @@
     .background-overlay.show {
       opacity: 1;
       visibility: visible;
+    }
+
+    /* Ensure panel structure uses flexbox properly */
+    .bottom-panel {
+      display: flex;
+      flex-direction: column;
     }
   </style>
 </head>
@@ -1018,7 +1051,7 @@
       // Calculate new position
       let newTransform = startTransform + deltaY;
       
-      // Constrain movement between collapsed (80px) and fully expanded (400px)
+      // Constrain movement between collapsed (80px) and fully expanded
       const minTransform = 80;
       const maxTransform = bottomPanel.offsetHeight;
       newTransform = Math.max(minTransform, Math.min(newTransform, maxTransform));
@@ -1442,7 +1475,7 @@
     }, false);
 
     // Initialize
-    console.log('İSTİKAMET direct share app loaded successfully!');
+    console.log('İSTİKAMET fixed panel app loaded successfully!');
   </script>
 </body>
 </html>
