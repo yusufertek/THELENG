@@ -641,18 +641,14 @@
       overflow-y: auto;
     }
 
-    .social-buttons {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      margin-bottom: 25px;
+    .share-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
     }
 
-    .social-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+    .share-action-button {
+      flex: 1;
       padding: 15px;
       border: none;
       border-radius: 12px;
@@ -660,36 +656,24 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
-      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .share-action-button.primary {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
       color: white;
     }
 
-    .social-button:active {
+    .share-action-button.secondary {
+      background: linear-gradient(135deg, #444, #666);
+      color: white;
+    }
+
+    .share-action-button:active {
       transform: scale(0.95);
-    }
-
-    .social-button.instagram {
-      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
-    }
-
-    .social-button.twitter {
-      background: linear-gradient(135deg, #1da1f2, #0d8bd9);
-    }
-
-    .social-button.tiktok {
-      background: linear-gradient(135deg, #ff0050, #000);
-    }
-
-    .social-button.facebook {
-      background: linear-gradient(135deg, #1877f2, #42a5f5);
-    }
-
-    .social-button.whatsapp {
-      background: linear-gradient(135deg, #25d366, #128c7e);
-    }
-
-    .social-button.telegram {
-      background: linear-gradient(135deg, #0088cc, #005577);
     }
 
     .modal-actions {
@@ -758,8 +742,8 @@
         width: 95%;
       }
 
-      .social-buttons {
-        grid-template-columns: 1fr;
+      .share-actions {
+        flex-direction: column;
       }
     }
 
@@ -946,39 +930,24 @@
     <div class="share-modal" id="shareModal">
       <div class="share-modal-content">
         <div class="share-modal-header">
-          <div class="share-modal-title">📤 Sosyal Medyada Paylaş</div>
-          <div class="share-modal-subtitle">Gönderinizi sosyal medya platformlarında paylaşın</div>
+          <div class="share-modal-title">📤 Paylaş</div>
+          <div class="share-modal-subtitle">Gönderinizi paylaşın veya indirin</div>
         </div>
 
         <div class="share-description" id="shareDescription">
           Paylaşım açıklaması burada görünecek...
         </div>
 
-        <div class="social-buttons">
-          <button class="social-button instagram" onclick="shareToInstagram()">
-            📷 Instagram
+        <div class="share-actions">
+          <button class="share-action-button primary" onclick="shareImage()">
+            📱 Direkt Paylaş
           </button>
-          <button class="social-button twitter" onclick="shareToTwitter()">
-            🐦 X (Twitter)
-          </button>
-          <button class="social-button tiktok" onclick="shareToTikTok()">
-            🎵 TikTok
-          </button>
-          <button class="social-button facebook" onclick="shareToFacebook()">
-            📘 Facebook
-          </button>
-          <button class="social-button whatsapp" onclick="shareToWhatsApp()">
-            💬 WhatsApp
-          </button>
-          <button class="social-button telegram" onclick="shareToTelegram()">
-            ✈️ Telegram
+          <button class="share-action-button secondary" onclick="downloadImage()">
+            💾 İndir
           </button>
         </div>
 
         <div class="modal-actions">
-          <button class="modal-button primary" onclick="downloadImage()">
-            💾 İndir
-          </button>
           <button class="modal-button secondary" onclick="closeShareModal()">
             ❌ Kapat
           </button>
@@ -1301,8 +1270,6 @@
       // 3. Draw text
       drawText();
       
-      // Removed the success notification as requested
-      
       function drawText() {
         const wrappedLines = wrapText(text, maxWidth);
         let y = canvas.height - bottomPadding;
@@ -1386,60 +1353,68 @@
       closeShareModal();
     }
 
-    // Social Media Share Functions
-    function shareToInstagram() {
-      // Instagram doesn't support direct web sharing, so we'll copy the text and show instructions
-      const text = document.getElementById("textInput").value.trim();
-      if (text) {
-        navigator.clipboard.writeText(text).then(() => {
-          showStatus('Metin kopyalandı! Instagram uygulamasını açın ve görseli paylaşın.');
-        });
+    // Native Share API Function
+    async function shareImage() {
+      try {
+        // Check if Web Share API is supported
+        if (!navigator.share) {
+          showStatus('Bu tarayıcı direkt paylaşımı desteklemiyor. Görseli indirin.', 'error');
+          downloadImage();
+          return;
+        }
+
+        // Convert canvas to blob
+        const canvas = document.getElementById('canvas');
+        
+        canvas.toBlob(async (blob) => {
+          if (!blob) {
+            showStatus('Görsel oluşturulamadı.', 'error');
+            return;
+          }
+
+          const text = document.getElementById("textInput").value.trim();
+          const shareText = text ? text + '\n\n#İSTİKAMET' : 'İSTİKAMET - Haber\n\n#İSTİKAMET';
+          
+          // Create file from blob
+          const file = new File([blob], 'istikamet-gonderi.png', { 
+            type: 'image/png',
+            lastModified: Date.now()
+          });
+
+          const shareData = {
+            title: 'İSTİKAMET - Haber',
+            text: shareText,
+            files: [file]
+          };
+
+          // Check if files can be shared
+          if (navigator.canShare && !navigator.canShare(shareData)) {
+            showStatus('Bu cihaz dosya paylaşımını desteklemiyor.', 'error');
+            downloadImage();
+            return;
+          }
+
+          try {
+            await navigator.share(shareData);
+            showStatus('Görsel başarıyla paylaşıldı!');
+            closeShareModal();
+          } catch (error) {
+            if (error.name === 'AbortError') {
+              // User cancelled the share
+              showStatus('Paylaşım iptal edildi.');
+            } else {
+              console.error('Share failed:', error);
+              showStatus('Paylaşım başarısız. Görseli indirin.', 'error');
+              downloadImage();
+            }
+          }
+        }, 'image/png', 0.9);
+
+      } catch (error) {
+        console.error('Share error:', error);
+        showStatus('Paylaşım hatası. Görseli indirin.', 'error');
+        downloadImage();
       }
-      // Download the image for manual sharing
-      downloadImage();
-    }
-
-    function shareToTwitter() {
-      const text = document.getElementById("textInput").value.trim();
-      const shareText = text ? encodeURIComponent(text + ' #İSTİKAMET') : encodeURIComponent('İSTİKAMET #haber');
-      const url = `https://twitter.com/intent/tweet?text=${shareText}`;
-      window.open(url, '_blank');
-      downloadImage();
-    }
-
-    function shareToTikTok() {
-      // TikTok doesn't support direct web sharing, copy text and show instructions
-      const text = document.getElementById("textInput").value.trim();
-      if (text) {
-        navigator.clipboard.writeText(text).then(() => {
-          showStatus('Metin kopyalandı! TikTok uygulamasını açın ve görseli paylaşın.');
-        });
-      }
-      downloadImage();
-    }
-
-    function shareToFacebook() {
-      const text = document.getElementById("textInput").value.trim();
-      const shareText = text ? encodeURIComponent(text) : encodeURIComponent('İSTİKAMET - Haber');
-      const url = `https://www.facebook.com/sharer/sharer.php?quote=${shareText}`;
-      window.open(url, '_blank');
-      downloadImage();
-    }
-
-    function shareToWhatsApp() {
-      const text = document.getElementById("textInput").value.trim();
-      const shareText = text ? encodeURIComponent(text + '\n\n#İSTİKAMET') : encodeURIComponent('İSTİKAMET - Haber\n\n#İSTİKAMET');
-      const url = `https://wa.me/?text=${shareText}`;
-      window.open(url, '_blank');
-      downloadImage();
-    }
-
-    function shareToTelegram() {
-      const text = document.getElementById("textInput").value.trim();
-      const shareText = text ? encodeURIComponent(text + '\n\n#İSTİKAMET') : encodeURIComponent('İSTİKAMET - Haber\n\n#İSTİKAMET');
-      const url = `https://t.me/share/url?text=${shareText}`;
-      window.open(url, '_blank');
-      downloadImage();
     }
 
     // Close modal when clicking outside
@@ -1467,7 +1442,7 @@
     }, false);
 
     // Initialize
-    console.log('İSTİKAMET social share app loaded successfully!');
+    console.log('İSTİKAMET direct share app loaded successfully!');
   </script>
 </body>
 </html>
