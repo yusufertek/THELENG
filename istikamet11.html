@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>İSTİKAMET</title>
+  <title>İSTİKAMET - Şeffaf Arka Plan</title>
   <style>
     * {
       margin: 0;
@@ -151,7 +151,7 @@
       box-shadow: 
         0 20px 40px rgba(0,0,0,0.6),
         0 0 0 1px rgba(255,255,255,0.1);
-      background: #000;
+      background: transparent;
       transition: all 0.3s ease;
     }
 
@@ -171,13 +171,8 @@
       background-size: 20px 20px;
       background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
       border-radius: 15px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
       z-index: -1;
-    }
-
-    .canvas-container.transparent::before {
-      opacity: 0.1;
+      opacity: 0.3;
     }
 
     /* Bottom Panel */
@@ -265,29 +260,28 @@
       margin-bottom: 15px;
     }
 
-    /* Tab Navigation - Updated for 3 tabs */
+    /* Tab Navigation */
     .tab-navigation {
       display: flex;
       background: rgba(255, 255, 255, 0.05);
       border-radius: 12px;
       padding: 4px;
-      gap: 2px;
+      gap: 4px;
     }
 
     .tab-button {
       flex: 1;
-      padding: 10px 8px;
+      padding: 12px;
       background: transparent;
       border: none;
       border-radius: 8px;
       color: rgba(255, 255, 255, 0.6);
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
-      text-align: center;
+      letter-spacing: 0.5px;
     }
 
     .tab-button.active {
@@ -335,6 +329,43 @@
       font-size: 13px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+    }
+
+    /* Background Options */
+    .background-options {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .background-option {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .background-option.active {
+      border-color: #4CAF50;
+      background: rgba(76, 175, 80, 0.2);
+      color: #4CAF50;
+    }
+
+    .background-option:active {
+      transform: scale(0.95);
     }
 
     /* Image Section Styling */
@@ -568,58 +599,6 @@
     .generate-button:active {
       transform: scale(0.98);
       background: linear-gradient(135deg, #555 0%, #777 100%);
-    }
-
-    /* Transparent Mode Toggle */
-    .transparent-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .toggle-label {
-      font-size: 14px;
-      font-weight: 600;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .toggle-switch {
-      position: relative;
-      width: 50px;
-      height: 26px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 13px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .toggle-switch.active {
-      background: linear-gradient(135deg, #4CAF50, #45a049);
-    }
-
-    .toggle-switch::after {
-      content: '';
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 22px;
-      height: 22px;
-      background: white;
-      border-radius: 50%;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-
-    .toggle-switch.active::after {
-      transform: translateX(24px);
     }
 
     /* Status Message */
@@ -862,9 +841,9 @@
         max-height: 60px;
       }
 
-      .tab-button {
-        font-size: 11px;
-        padding: 8px 6px;
+      .background-options {
+        flex-direction: column;
+        gap: 8px;
       }
     }
 
@@ -880,30 +859,6 @@
         padding: 12px;
         padding-bottom: 20px;
       }
-
-      .tab-button {
-        font-size: 10px;
-        padding: 6px 4px;
-      }
-    }
-
-    /* Background overlay when panel is open */
-    .background-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.3);
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      z-index: 50;
-    }
-
-    .background-overlay.show {
-      opacity: 1;
-      visibility: visible;
     }
 
     /* Custom scrollbar */
@@ -932,6 +887,25 @@
     .share-description::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.5);
     }
+
+    /* Background overlay when panel is open */
+    .background-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 50;
+    }
+
+    .background-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
   </style>
 </head>
 <body>
@@ -941,7 +915,7 @@
 
     <!-- Navbar -->
     <div class="navbar">
-      <div class="navbar-title">İSTİKAMET</div>
+      <div class="navbar-title">İSTİKAMET - Şeffaf</div>
       <button class="save-button" id="saveButton" onclick="openShareModal()" disabled>
         <span>📤</span>
         <span>Paylaş</span>
@@ -950,7 +924,7 @@
 
     <!-- Preview Area -->
     <div class="preview-area" id="previewArea">
-      <div class="canvas-container" id="canvasContainer">
+      <div class="canvas-container">
         <canvas id="canvas" width="1080" height="1440"></canvas>
       </div>
     </div>
@@ -962,21 +936,48 @@
       <div class="panel-header">
         <div class="panel-title">Düzenleme Paneli</div>
         <div class="tab-navigation">
-          <button class="tab-button active" data-tab="image">
+          <button class="tab-button active" data-tab="settings">
+            ⚙️ AYARLAR
+          </button>
+          <button class="tab-button" data-tab="image">
             📷 GÖRSEL
           </button>
           <button class="tab-button" data-tab="text">
             ✍️ METİN
           </button>
-          <button class="tab-button" data-tab="transparent">
-            🎨 ŞEFFAF
-          </button>
         </div>
       </div>
 
       <div class="panel-content">
+        <!-- Settings Tab -->
+        <div class="tab-content active" id="settingsTab">
+          <div class="form-group">
+            <label class="form-label">🎨 Arka Plan Seçeneği</label>
+            <div class="background-options">
+              <div class="background-option active" data-bg="transparent">
+                🔍 Şeffaf Arka Plan
+              </div>
+              <div class="background-option" data-bg="black">
+                ⚫ Siyah Arka Plan
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">💧 Filigran Göster</label>
+            <div class="background-options">
+              <div class="background-option active" data-watermark="true">
+                ✅ Filigran Var
+              </div>
+              <div class="background-option" data-watermark="false">
+                ❌ Filigran Yok
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Image Tab -->
-        <div class="tab-content active" id="imageTab">
+        <div class="tab-content" id="imageTab">
           <!-- First Image Section -->
           <div class="image-section">
             <div class="image-section-title">🖼️ Birinci Görsel</div>
@@ -1103,6 +1104,7 @@
               <div class="color-option" style="background-color: #ccc;" data-color="#ccc"></div>
               <div class="color-option" style="background-color: #888;" data-color="#888"></div>
               <div class="color-option" style="background-color: #444;" data-color="#444"></div>
+              <div class="color-option" style="background-color: #000;" data-color="#000"></div>
             </div>
           </div>
 
@@ -1120,79 +1122,6 @@
             ✨ Gönderiyi Oluştur
           </button>
         </div>
-
-        <!-- NEW: Transparent Tab -->
-        <div class="tab-content" id="transparentTab">
-          <div class="form-group">
-            <div class="transparent-toggle" onclick="toggleTransparentMode()">
-              <div class="toggle-label">
-                <span>🎨</span>
-                <span>Şeffaf Arka Plan</span>
-              </div>
-              <div class="toggle-switch" id="transparentToggle"></div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">✍️ Metin İçeriği</label>
-            <textarea 
-              id="transparentTextInput" 
-              class="text-input" 
-              placeholder="Şeffaf arka plan için metin yazın..."
-              rows="4"
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">🎨 Metin Rengi</label>
-            <div class="color-options">
-              <div class="color-option active" style="background-color: white;" data-color="white" data-target="transparent"></div>
-              <div class="color-option" style="background-color: #000;" data-color="#000" data-target="transparent"></div>
-              <div class="color-option" style="background-color: #ff0000;" data-color="#ff0000" data-target="transparent"></div>
-              <div class="color-option" style="background-color: #0066cc;" data-color="#0066cc" data-target="transparent"></div>
-              <div class="color-option" style="background-color: #00cc00;" data-color="#00cc00" data-target="transparent"></div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">📏 Yazı Boyutu</label>
-            <div class="slider-container">
-              <span class="slider-value">Küçük</span>
-              <input type="range" id="transparentFontSizeInput" class="position-slider" min="40" max="120" value="70">
-              <span class="slider-value">Büyük</span>
-            </div>
-            <div class="slider-value" id="transparentFontSizeValue">70px</div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">📍 Metin Konumu</label>
-            <div class="position-controls">
-              <div class="control-group">
-                <label class="control-label">↔️ Yatay Konum</label>
-                <div class="slider-container">
-                  <span class="slider-value">Sol</span>
-                  <input type="range" id="transparentTextX" class="position-slider" min="-400" max="400" value="0">
-                  <span class="slider-value">Sağ</span>
-                </div>
-                <div class="slider-value" id="transparentTextXValue">0</div>
-              </div>
-
-              <div class="control-group">
-                <label class="control-label">↕️ Dikey Konum</label>
-                <div class="slider-container">
-                  <span class="slider-value">Üst</span>
-                  <input type="range" id="transparentTextY" class="position-slider" min="-600" max="600" value="0">
-                  <span class="slider-value">Alt</span>
-                </div>
-                <div class="slider-value" id="transparentTextYValue">0</div>
-              </div>
-            </div>
-          </div>
-
-          <button class="generate-button" onclick="generateTransparent()">
-            ✨ Şeffaf Gönderi Oluştur
-          </button>
-        </div>
       </div>
     </div>
 
@@ -1201,7 +1130,7 @@
       <div class="share-modal-content">
         <div class="share-modal-header">
           <div class="share-modal-title">📤 Paylaş</div>
-          <div class="share-modal-subtitle">Gönderinizi paylaşın veya indirin</div>
+          <div class="share-modal-subtitle">Şeffaf PNG gönderinizi paylaşın veya indirin</div>
         </div>
 
         <div class="share-description" id="shareDescription">
@@ -1213,7 +1142,7 @@
             📱 Direkt Paylaş
           </button>
           <button class="share-action-button secondary" onclick="downloadImage()">
-            💾 İndir
+            💾 PNG İndir
           </button>
         </div>
 
@@ -1233,6 +1162,10 @@
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
     
+    // Settings
+    let isTransparentBackground = true;
+    let showWatermark = true;
+    
     // Dual image support
     let userImage1 = null;
     let userImage2 = null;
@@ -1241,18 +1174,23 @@
     
     // Watermark image
     const filigran = new Image();
-    filigran.src = "filigran3.png";
+    filigran.crossOrigin = "anonymous";
+    filigran.src = "data:image/svg+xml;base64," + btoa(`
+      <svg width="1080" height="1440" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="watermark" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+            <text x="100" y="100" text-anchor="middle" dominant-baseline="middle" 
+                  font-family="Arial, sans-serif" font-size="24" font-weight="bold" 
+                  fill="rgba(255,255,255,0.1)" transform="rotate(-45 100 100)">İSTİKAMET</text>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#watermark)"/>
+      </svg>
+    `);
 
     // Text settings
     let textColor = "white";
     let fontSize = 65;
-
-    // NEW: Transparent mode settings
-    let isTransparentMode = false;
-    let transparentTextColor = "white";
-    let transparentFontSize = 70;
-    let transparentTextX = 0;
-    let transparentTextY = 0;
 
     // Panel functionality
     const bottomPanel = document.getElementById('bottomPanel');
@@ -1272,7 +1210,7 @@
       backgroundOverlay.classList.toggle('show', isPanelExpanded);
     }
 
-    // Improved touch events for smooth dragging
+    // Touch events for panel dragging
     panelHandle.addEventListener('touchstart', (e) => {
       startY = e.touches[0].clientY;
       isDragging = true;
@@ -1282,7 +1220,6 @@
       startTransform = windowHeight - rect.top;
       
       bottomPanel.classList.add('dragging');
-      
     }, { passive: true });
 
     panelHandle.addEventListener('touchmove', (e) => {
@@ -1304,7 +1241,6 @@
       const progress = (newTransform - minTransform) / (maxTransform - minTransform);
       backgroundOverlay.style.opacity = progress * 0.3;
       backgroundOverlay.style.visibility = progress > 0 ? 'visible' : 'hidden';
-      
     }, { passive: false });
 
     panelHandle.addEventListener('touchend', (e) => {
@@ -1366,24 +1302,33 @@
       });
     });
 
-    // Color options - Updated to handle both regular and transparent modes
+    // Background options
+    document.querySelectorAll('[data-bg]').forEach(option => {
+      option.addEventListener('click', function() {
+        document.querySelectorAll('[data-bg]').forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        isTransparentBackground = this.getAttribute('data-bg') === 'transparent';
+        if (userImage1 || userImage2) generate();
+      });
+    });
+
+    // Watermark options
+    document.querySelectorAll('[data-watermark]').forEach(option => {
+      option.addEventListener('click', function() {
+        document.querySelectorAll('[data-watermark]').forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        showWatermark = this.getAttribute('data-watermark') === 'true';
+        if (userImage1 || userImage2) generate();
+      });
+    });
+
+    // Color options
     document.querySelectorAll('.color-option').forEach(option => {
       option.addEventListener('click', function() {
-        const target = this.getAttribute('data-target');
-        
-        if (target === 'transparent') {
-          // Handle transparent mode color selection
-          document.querySelectorAll('.color-option[data-target="transparent"]').forEach(opt => opt.classList.remove('active'));
-          this.classList.add('active');
-          transparentTextColor = this.getAttribute('data-color');
-          if (isTransparentMode) generateTransparent();
-        } else {
-          // Handle regular mode color selection
-          document.querySelectorAll('.color-option:not([data-target])').forEach(opt => opt.classList.remove('active'));
-          this.classList.add('active');
-          textColor = this.getAttribute('data-color');
-          if (userImage1 || userImage2) generate();
-        }
+        document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        textColor = this.getAttribute('data-color');
+        if (userImage1 || userImage2) generate();
       });
     });
 
@@ -1393,49 +1338,6 @@
       document.getElementById('fontSizeValue').textContent = fontSize + 'px';
       if (userImage1 || userImage2) generate();
     });
-
-    // NEW: Transparent mode controls
-    document.getElementById('transparentFontSizeInput').addEventListener('input', function() {
-      transparentFontSize = parseInt(this.value);
-      document.getElementById('transparentFontSizeValue').textContent = transparentFontSize + 'px';
-      if (isTransparentMode) generateTransparent();
-    });
-
-    document.getElementById('transparentTextX').addEventListener('input', function() {
-      transparentTextX = parseInt(this.value);
-      document.getElementById('transparentTextXValue').textContent = transparentTextX;
-      if (isTransparentMode) generateTransparent();
-    });
-
-    document.getElementById('transparentTextY').addEventListener('input', function() {
-      transparentTextY = parseInt(this.value);
-      document.getElementById('transparentTextYValue').textContent = transparentTextY;
-      if (isTransparentMode) generateTransparent();
-    });
-
-    // NEW: Toggle transparent mode
-    function toggleTransparentMode() {
-      isTransparentMode = !isTransparentMode;
-      const toggle = document.getElementById('transparentToggle');
-      const canvasContainer = document.getElementById('canvasContainer');
-      
-      toggle.classList.toggle('active', isTransparentMode);
-      canvasContainer.classList.toggle('transparent', isTransparentMode);
-      
-      if (isTransparentMode) {
-        document.getElementById('saveButton').disabled = false;
-        const text = document.getElementById('transparentTextInput').value.trim();
-        if (text) generateTransparent();
-      } else {
-        // Reset to normal mode
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (userImage1 || userImage2) {
-          generate();
-        } else {
-          document.getElementById('saveButton').disabled = true;
-        }
-      }
-    }
 
     // Position controls for both images
     function setupPositionControls(imageNum) {
@@ -1476,6 +1378,7 @@
     setupPositionControls(1);
     setupPositionControls(2);
 
+    // Reset position function
     function resetImagePosition(imageNum) {
       if (imageNum === 1) {
         image1X = 0;
@@ -1506,6 +1409,7 @@
       if (userImage1 || userImage2) generate();
     }
 
+    // Status message
     function showStatus(message, type = 'success') {
       const statusEl = document.getElementById('statusMessage');
       statusEl.textContent = message;
@@ -1516,6 +1420,7 @@
       }, 3000);
     }
 
+    // Image processing function
     function processImage(file, imageNum) {
       console.log(`Processing image ${imageNum}:`, file.name);
       
@@ -1527,6 +1432,7 @@
       const reader = new FileReader();
       reader.onload = function(event) {
         const img = new Image();
+        img.crossOrigin = "anonymous";
         img.onload = function() {
           console.log(`Image ${imageNum} loaded:`, img.width, 'x', img.height);
           
@@ -1559,6 +1465,7 @@
       reader.readAsDataURL(file);
     }
 
+    // File input events
     document.getElementById("imageInput1").addEventListener("change", function(e) {
       const file = e.target.files[0];
       if (file) {
@@ -1573,63 +1480,7 @@
       }
     });
 
-    // NEW: Generate transparent post function
-    function generateTransparent() {
-      const text = document.getElementById("transparentTextInput").value;
-      if (!text.trim()) {
-        showStatus('Lütfen metin girin.', 'error');
-        return;
-      }
-
-      console.log('Generating transparent post...');
-
-      // Clear canvas with transparent background
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Set text properties
-      ctx.fillStyle = transparentTextColor;
-      ctx.textBaseline = "middle";
-      ctx.textAlign = "center";
-      ctx.font = `bold ${transparentFontSize}px Helvetica, Arial, sans-serif`;
-      
-      // Add shadow effect for better readability
-      ctx.shadowColor = transparentTextColor === 'white' ? "rgba(0, 0, 0, 0.8)" : "rgba(255, 255, 255, 0.8)";
-      ctx.shadowBlur = 8;
-      ctx.shadowOffsetX = 2;
-      ctx.shadowOffsetY = 2;
-      
-      // Calculate text position
-      const centerX = canvas.width / 2 + transparentTextX;
-      const centerY = canvas.height / 2 + transparentTextY;
-      
-      // Wrap and draw text
-      const maxWidth = canvas.width - 200; // Leave some margin
-      const wrappedLines = wrapText(text, maxWidth);
-      const lineHeight = transparentFontSize + 10;
-      const totalHeight = wrappedLines.length * lineHeight;
-      let startY = centerY - (totalHeight / 2);
-      
-      for (let i = 0; i < wrappedLines.length; i++) {
-        ctx.fillText(wrappedLines[i], centerX, startY + (i * lineHeight));
-      }
-      
-      // Add watermark if available
-      if (filigran.complete) {
-        ctx.globalAlpha = 0.3; // Make watermark more subtle for transparent mode
-        ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
-        ctx.globalAlpha = 1.0;
-      }
-      
-      // Reset shadow
-      ctx.shadowColor = "transparent";
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
-      
-      showStatus('Şeffaf gönderi oluşturuldu!');
-    }
-
-    // Regular generate function (unchanged)
+    // Generate post function with transparent background support
     function generate() {
       if (!userImage1 && !userImage2) {
         showStatus('Lütfen en az bir görsel yükleyin.', 'error');
@@ -1642,7 +1493,7 @@
         return;
       }
 
-      console.log('Generating post with dual images...');
+      console.log('Generating post with transparent background:', isTransparentBackground);
 
       const bottomPadding = 200;
       const lineSpacing = 1;
@@ -1650,8 +1501,15 @@
       const rightLimit = 1000;
       const maxWidth = rightLimit - leftPadding;
 
+      // Clear canvas with transparent or black background
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
+      if (!isTransparentBackground) {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      
+      // Draw first image if exists
       if (userImage1) {
         const sizeFactor1 = image1Size / 100;
         const scaledWidth1 = userImage1.width * sizeFactor1;
@@ -1666,6 +1524,7 @@
         ctx.drawImage(userImage1, finalX1, finalY1, scaledWidth1, scaledHeight1);
       }
 
+      // Draw second image if exists
       if (userImage2) {
         const sizeFactor2 = image2Size / 100;
         const scaledWidth2 = userImage2.width * sizeFactor2;
@@ -1680,11 +1539,16 @@
         ctx.drawImage(userImage2, finalX2, finalY2, scaledWidth2, scaledHeight2);
       }
 
-      if (filigran.complete) {
+      // Add watermark if enabled
+      if (showWatermark && filigran.complete) {
+        ctx.globalAlpha = 0.3;
         ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
-      } else {
+        ctx.globalAlpha = 1.0;
+      } else if (showWatermark) {
         filigran.onload = () => {
+          ctx.globalAlpha = 0.3;
           ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
+          ctx.globalAlpha = 1.0;
           drawText();
         };
       }
@@ -1699,7 +1563,8 @@
         ctx.textAlign = "left";
         ctx.font = `bold ${fontSize}px Helvetica, Arial, sans-serif`;
         
-        ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+        // Add shadow effect for better readability
+        ctx.shadowColor = isTransparentBackground ? "rgba(0, 0, 0, 0.8)" : "rgba(0, 0, 0, 0.7)";
         ctx.shadowBlur = 10;
         ctx.shadowOffsetX = 2;
         ctx.shadowOffsetY = 2;
@@ -1709,6 +1574,7 @@
           y -= (fontSize + lineSpacing);
         }
         
+        // Reset shadow
         ctx.shadowColor = "transparent";
         ctx.shadowBlur = 0;
         ctx.shadowOffsetX = 0;
@@ -1716,11 +1582,12 @@
       }
     }
 
+    // Text wrapping
     function wrapText(text, maxWidth) {
       const words = text.split(/\s+/);
       const lines = [];
       let line = "";
-      ctx.font = `bold ${isTransparentMode ? transparentFontSize : fontSize}px Helvetica, Arial, sans-serif`;
+      ctx.font = `bold ${fontSize}px Helvetica, Arial, sans-serif`;
       
       for (let i = 0; i < words.length; i++) {
         const testLine = line + words[i] + " ";
@@ -1740,24 +1607,18 @@
 
     // Share Modal Functions
     function openShareModal() {
-      if (!userImage1 && !userImage2 && !isTransparentMode) {
-        showStatus('Önce en az bir görsel yükleyip gönderi oluşturun veya şeffaf mod kullanın.', 'error');
+      if (!userImage1 && !userImage2) {
+        showStatus('Önce en az bir görsel yükleyip gönderi oluşturun.', 'error');
         return;
       }
       
-      let text = '';
-      if (isTransparentMode) {
-        text = document.getElementById("transparentTextInput").value.trim();
-      } else {
-        text = document.getElementById("textInput").value.trim();
-      }
-      
+      const text = document.getElementById("textInput").value.trim();
       const shareDescription = document.getElementById('shareDescription');
       
       if (text) {
         shareDescription.textContent = text;
       } else {
-        shareDescription.textContent = 'İSTİKAMET - Sosyal medya gönderisi';
+        shareDescription.textContent = 'İSTİKAMET - Şeffaf PNG sosyal medya gönderisi';
       }
       
       document.getElementById('shareModal').classList.add('show');
@@ -1769,11 +1630,11 @@
 
     function downloadImage() {
       const link = document.createElement("a");
-      link.download = isTransparentMode ? "istikamet-seffaf-gonderi.png" : "istikamet-gonderi.png";
+      link.download = "istikamet-seffaf-gonderi.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
       
-      showStatus('Görsel başarıyla indirildi!');
+      showStatus('Şeffaf PNG başarıyla indirildi!');
       closeShareModal();
     }
 
@@ -1781,36 +1642,27 @@
     async function shareImage() {
       try {
         if (!navigator.share) {
-          showStatus('Bu tarayıcı direkt paylaşımı desteklemiyor. Görseli indirin.', 'error');
+          showStatus('Bu tarayıcı direkt paylaşımı desteklemiyor. PNG\'yi indirin.', 'error');
           downloadImage();
           return;
         }
 
-        const canvas = document.getElementById('canvas');
-        
         canvas.toBlob(async (blob) => {
           if (!blob) {
             showStatus('Görsel oluşturulamadı.', 'error');
             return;
           }
 
-          let text = '';
-          if (isTransparentMode) {
-            text = document.getElementById("transparentTextInput").value.trim();
-          } else {
-            text = document.getElementById("textInput").value.trim();
-          }
+          const text = document.getElementById("textInput").value.trim();
+          const shareText = text ? text + '\n\n#İSTİKAMET' : 'İSTİKAMET - Şeffaf PNG Haber\n\n#İSTİKAMET';
           
-          const shareText = text ? text + '\n\n#İSTİKAMET' : 'İSTİKAMET - Haber\n\n#İSTİKAMET';
-          
-          const fileName = isTransparentMode ? 'istikamet-seffaf-gonderi.png' : 'istikamet-gonderi.png';
-          const file = new File([blob], fileName, { 
+          const file = new File([blob], 'istikamet-seffaf-gonderi.png', { 
             type: 'image/png',
             lastModified: Date.now()
           });
 
           const shareData = {
-            title: 'İSTİKAMET - Haber',
+            title: 'İSTİKAMET - Şeffaf PNG Haber',
             text: shareText,
             files: [file]
           };
@@ -1823,22 +1675,22 @@
 
           try {
             await navigator.share(shareData);
-            showStatus('Görsel başarıyla paylaşıldı!');
+            showStatus('Şeffaf PNG başarıyla paylaşıldı!');
             closeShareModal();
           } catch (error) {
             if (error.name === 'AbortError') {
               showStatus('Paylaşım iptal edildi.');
             } else {
               console.error('Share failed:', error);
-              showStatus('Paylaşım başarısız. Görseli indirin.', 'error');
+              showStatus('Paylaşım başarısız. PNG\'yi indirin.', 'error');
               downloadImage();
             }
           }
-        }, 'image/png', 0.9);
+        }, 'image/png', 1.0);
 
       } catch (error) {
         console.error('Share error:', error);
-        showStatus('Paylaşım hatası. Görseli indirin.', 'error');
+        showStatus('Paylaşım hatası. PNG\'yi indirin.', 'error');
         downloadImage();
       }
     }
@@ -1850,16 +1702,10 @@
       }
     });
 
-    // Auto-update for both modes
+    // Auto-update
     document.getElementById("textInput").addEventListener("input", function() {
       if ((userImage1 || userImage2) && this.value.trim()) {
         setTimeout(generate, 500);
-      }
-    });
-
-    document.getElementById("transparentTextInput").addEventListener("input", function() {
-      if (isTransparentMode && this.value.trim()) {
-        setTimeout(generateTransparent, 500);
       }
     });
 
@@ -1873,8 +1719,7 @@
       lastTouchEnd = now;
     }, false);
 
-    // Initialize
-    console.log('İSTİKAMET enhanced app with transparent mode loaded successfully!');
+    console.log('İSTİKAMET transparent background app loaded successfully!');
   </script>
 </body>
 </html>
