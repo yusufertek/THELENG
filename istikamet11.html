@@ -1722,7 +1722,7 @@
       }
     }
 
-    // Video generation function with progress tracking
+    // FIXED: Video generation function with proper full video processing
     async function generateVideo() {
       if (!userVideo) {
         showStatus('Lütfen önce video yükleyin.', 'error');
@@ -1767,7 +1767,7 @@
           cropY = (userVideo.videoHeight - cropHeight) / 2;
         }
 
-        // Setup MediaRecorder
+        // Setup MediaRecorder for full video duration
         const stream = videoCanvas.captureStream(30); // 30 FPS
         const mediaRecorder = new MediaRecorder(stream, {
           mimeType: 'video/webm;codecs=vp9'
@@ -1775,8 +1775,12 @@
         
         const chunks = [];
         let startTime = Date.now();
-        let totalFrames = Math.floor(userVideo.duration * 30); // 30 FPS
+        let currentTime = 0;
+        const frameRate = 30;
+        const frameDuration = 1 / frameRate;
+        const totalDuration = userVideo.duration;
         let processedFrames = 0;
+        let totalFrames = Math.floor(totalDuration * frameRate);
 
         mediaRecorder.ondataavailable = (event) => {
           if (event.data.size > 0) {
@@ -1795,92 +1799,108 @@
           // Hide progress panel
           document.getElementById('progressPanel').classList.remove('show');
           
-          showStatus('Video başarıyla oluşturuldu!');
-          console.log('Video processing completed');
+          showStatus('Video başarıyla oluşturuldu! İndiriliyor...');
+          
+          // Auto download
+          const link = document.createElement("a");
+          link.download = "istikamet-video.webm";
+          link.href = URL.createObjectURL(processedVideoBlob);
+          link.click();
+          
+          console.log('Video processing completed and downloaded');
         };
 
         // Start recording
         mediaRecorder.start();
         
-        // Process video frame by frame
-        userVideo.currentTime = 0;
-        
+        // Process video frame by frame for entire duration
         const processFrame = () => {
-          if (userVideo.currentTime >= userVideo.duration) {
+          if (currentTime >= totalDuration) {
             mediaRecorder.stop();
             return;
           }
 
-          // Clear canvas
-          videoCtx.clearRect(0, 0, videoCanvas.width, videoCanvas.height);
+          // Set video to current time
+          userVideo.currentTime = currentTime;
           
-          // Draw cropped video frame
-          videoCtx.drawImage(
-            userVideo,
-            cropX, cropY, cropWidth, cropHeight,
-            0, 0, videoCanvas.width, videoCanvas.height
-          );
-          
-          // Add watermark
-          if (filigran.complete) {
-            videoCtx.drawImage(filigran, 0, 0, videoCanvas.width, videoCanvas.height);
-          }
-          
-          // Add text overlay
-          const bottomPadding = 200;
-          const lineSpacing = 1;
-          const leftPadding = 100;
-          const rightLimit = 1000;
-          const maxWidth = rightLimit - leftPadding;
-          
-          const wrappedLines = wrapText(text, maxWidth);
-          let y = videoCanvas.height - bottomPadding;
-          videoCtx.fillStyle = textColor;
-          videoCtx.textBaseline = "bottom";
-          videoCtx.textAlign = "left";
-          videoCtx.font = `bold ${fontSize}px Helvetica, Arial, sans-serif`;
-          
-          videoCtx.shadowColor = "rgba(0, 0, 0, 0.7)";
-          videoCtx.shadowBlur = 10;
-          videoCtx.shadowOffsetX = 2;
-          videoCtx.shadowOffsetY = 2;
-          
-          for (let i = wrappedLines.length - 1; i >= 0; i--) {
-            videoCtx.fillText(wrappedLines[i], leftPadding, y);
-            y -= (fontSize + lineSpacing);
-          }
-          
-          videoCtx.shadowColor = "transparent";
-          videoCtx.shadowBlur = 0;
-          videoCtx.shadowOffsetX = 0;
-          videoCtx.shadowOffsetY = 0;
+          // Wait for video to seek to the correct time
+          const onSeeked = () => {
+            // Clear canvas
+            videoCtx.clearRect(0, 0, videoCanvas.width, videoCanvas.height);
+            
+            // Draw cropped video frame
+            videoCtx.drawImage(
+              userVideo,
+              cropX, cropY, cropWidth, cropHeight,
+              0, 0, videoCanvas.width, videoCanvas.height
+            );
+            
+            // Add watermark
+            if (filigran.complete) {
+              videoCtx.drawImage(filigran, 0, 0, videoCanvas.width, videoCanvas.height);
+            }
+            
+            // Add text overlay
+            const bottomPadding = 200;
+            const lineSpacing = 1;
+            const leftPadding = 100;
+            const rightLimit = 1000;
+            const maxWidth = rightLimit - leftPadding;
+            
+            const wrappedLines = wrapText(text, maxWidth);
+            let y = videoCanvas.height - bottomPadding;
+            videoCtx.fillStyle = textColor;
+            videoCtx.textBaseline = "bottom";
+            videoCtx.textAlign = "left";
+            videoCtx.font = `bold ${fontSize}px Helvetica, Arial, sans-serif`;
+            
+            videoCtx.shadowColor = "rgba(0, 0, 0, 0.7)";
+            videoCtx.shadowBlur = 10;
+            videoCtx.shadowOffsetX = 2;
+            videoCtx.shadowOffsetY = 2;
+            
+            for (let i = wrappedLines.length - 1; i >= 0; i--) {
+              videoCtx.fillText(wrappedLines[i], leftPadding, y);
+              y -= (fontSize + lineSpacing);
+            }
+            
+            videoCtx.shadowColor = "transparent";
+            videoCtx.shadowBlur = 0;
+            videoCtx.shadowOffsetX = 0;
+            videoCtx.shadowOffsetY = 0;
 
-          // Update progress
-          processedFrames++;
-          const progress = Math.min((processedFrames / totalFrames) * 100, 100);
-          const elapsed = (Date.now() - startTime) / 1000;
-          const estimatedTotal = (elapsed / progress) * 100;
-          const remaining = Math.max(0, estimatedTotal - elapsed);
-          
-          document.getElementById('progressBar').style.width = progress + '%';
-          document.getElementById('progressText').textContent = `%${Math.round(progress)} Tamamlandı`;
-          document.getElementById('progressDetails').textContent = `${processedFrames}/${totalFrames} kare işlendi`;
-          
-          const minutes = Math.floor(remaining / 60);
-          const seconds = Math.round(remaining % 60);
-          document.getElementById('progressTime').textContent = 
-            `Kalan süre: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            // Update progress
+            processedFrames++;
+            const progress = Math.min((currentTime / totalDuration) * 100, 100);
+            const elapsed = (Date.now() - startTime) / 1000;
+            const estimatedTotal = totalDuration > 0 ? (elapsed / currentTime) * totalDuration : 0;
+            const remaining = Math.max(0, estimatedTotal - elapsed);
+            
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `%${Math.round(progress)} Tamamlandı`;
+            document.getElementById('progressDetails').textContent = `${Math.round(currentTime)}s / ${Math.round(totalDuration)}s işlendi`;
+            
+            const minutes = Math.floor(remaining / 60);
+            const seconds = Math.round(remaining % 60);
+            document.getElementById('progressTime').textContent = 
+              `Kalan süre: ${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-          // Move to next frame
-          userVideo.currentTime += 1/30; // 30 FPS
-          
-          // Continue processing
-          setTimeout(processFrame, 33); // ~30 FPS
+            // Move to next frame
+            currentTime += frameDuration;
+            
+            // Remove event listener
+            userVideo.removeEventListener('seeked', onSeeked);
+            
+            // Continue processing after a short delay
+            setTimeout(processFrame, 33); // ~30 FPS timing
+          };
+
+          // Add event listener for when seeking is complete
+          userVideo.addEventListener('seeked', onSeeked, { once: true });
         };
 
-        // Wait for video to be ready and start processing
-        userVideo.addEventListener('seeked', processFrame, { once: true });
-        userVideo.currentTime = 0;
+        // Start processing
+        processFrame();
 
       } catch (error) {
         console.error('Video processing error:', error);
@@ -2059,3 +2079,4 @@
   </script>
 </body>
 </html>
+
