@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>İSTİKAMET - Video Üretici</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #000;
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.04) 0%, transparent 40%),
+        linear-gradient(135deg, #000 0%, #1a1a1a 50%, #2a2a2a 100%);
+      z-index: -2;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(1px 1px at 20px 30px, #eee, transparent),
+        radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent);
+      background-repeat: repeat;
+      background-size: 150px 80px;
+      animation: sparkle 15s linear infinite;
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    @keyframes sparkle {
+      from { transform: translateX(0); }
+      to { transform: translateX(-150px); }
+    }
+
+    /* App Layout */
+    .app-container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 1000;
+    }
+
+    .navbar-title {
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(45deg, #fff, #ccc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .save-button {
+      background: linear-gradient(135deg, #333, #555);
+      border: none;
+      border-radius: 20px;
+      color: white;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .save-button:active {
+      transform: scale(0.95);
+      background: linear-gradient(135deg, #444, #666);
+    }
+
+    .save-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Preview Area - 9:16 aspect ratio */
+    .preview-area {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px; /* 9:16 ratio width */
+      height: 356px; /* 9:16 ratio height */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #canvas, #videoCanvas {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 15px;
+      box-shadow: 
+        0 20px 40px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(255,255,255,0.1);
+      background: #000;
+      transition: all 0.3s ease;
+    }
+
+    #videoPreview {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 15px;
+      box-shadow: 
+        0 20px 40px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(255,255,255,0.1);
+      background: #000;
+      object-fit: contain;
+    }
+
+    /* Bottom Panel */
+    .bottom-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(20, 20, 20, 0.98);
+      backdrop-filter: blur(20px);
+      border-radius: 20px 20px 0 0;
+      transform: translateY(calc(100% - 80px));
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: 900;
+      height: calc(100vh - 120px);
+      max-height: 600px;
+      min-height: 400px;
+      overflow: hidden;
+      touch-action: none;
+      will-change: transform;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bottom-panel.expanded {
+      transform: translateY(0);
+    }
+
+    .bottom-panel.dragging {
+      transition: none;
+    }
+
+    /* Panel Handle */
+    .panel-handle {
+      width: 50px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 3px;
+      margin: 15px auto 10px;
+      cursor: grab;
+      transition: all 0.3s ease;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .panel-handle:active {
+      cursor: grabbing;
+      background: rgba(255, 255, 255, 0.7);
+      transform: scaleY(1.5);
+    }
+
+    /* Panel Header */
+    .panel-header {
+      padding: 0 20px 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .panel-title {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 15px;
+    }
+
+    /* Tab Navigation */
+    .tab-navigation {
+      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .tab-button {
+      flex: 1;
+      padding: 12px;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tab-button.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+    }
+
+    /* Panel Content */
+    .panel-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      padding-bottom: 30px;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tab-content {
+      display: none;
+      flex: 1;
+    }
+
+    .tab-content.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #fff;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Upload Button */
+    .upload-button {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #333 0%, #555 100%);
+      border: 2px dashed rgba(255,255,255,0.3);
+      border-radius: 12px;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      touch-action: manipulation;
+    }
+
+    .upload-button:active {
+      transform: scale(0.98);
+      background: linear-gradient(135deg, #444 0%, #666 100%);
+    }
+
+    /* Video Preview */
+    .video-preview-container {
+      text-align: center;
+      margin: 12px 0;
+    }
+
+    .video-preview {
+      max-width: 150px;
+      max-height: 100px;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    /* Text Input */
+    .text-input {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 15px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .text-input:focus {
+      outline: none;
+      border-color: #fff;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+      background: rgba(255,255,255,0.15);
+    }
+
+    .text-input::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* Color Options */
+    .color-options {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      justify-content: center;
+    }
+
+    .color-option {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.3s ease;
+      touch-action: manipulation;
+      position: relative;
+    }
+
+    .color-option:active {
+      transform: scale(0.9);
+    }
+
+    .color-option.active {
+      border-color: white;
+      box-shadow: 0 0 12px rgba(255,255,255,0.5);
+    }
+
+    .color-option.active::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #000;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    /* Generate Button */
+    .generate-button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #444 0%, #666 100%);
+      border: none;
+      border-radius: 22px;
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 15px;
+      touch-action: manipulation;
+      flex-shrink: 0;
+    }
+
+    .generate-button:active {
+      transform: scale(0.98);
+      background: linear-gradient(135deg, #555 0%, #777 100%);
+    }
+
+    /* Status Message */
+    .status-message {
+      position: fixed;
+      top: 80px;
+      left: 20px;
+      right: 20px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      text-align: center;
+      transform: translateY(-100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1100;
+    }
+
+    .status-message.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .status-success {
+      background: rgba(34, 197, 94, 0.9);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #fff;
+    }
+
+    .status-error {
+      background: rgba(239, 68, 68, 0.9);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fff;
+    }
+
+    /* Hidden Input */
+    .hidden-input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Share Modal */
+    .share-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .share-modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .share-modal-content {
+      background: rgba(20, 20, 20, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 400px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .share-modal.show .share-modal-content {
+      transform: scale(1);
+    }
+
+    .share-modal-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .share-modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .share-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-direction: column;
+    }
+
+    .share-action-button {
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .share-action-button.primary {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+    }
+
+    .share-action-button.secondary {
+      background: linear-gradient(135deg, #444, #666);
+      color: white;
+    }
+
+    .share-action-button:active {
+      transform: scale(0.95);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .modal-button.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-button:active {
+      transform: scale(0.95);
+    }
+
+    /* Background overlay */
+    .background-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 50;
+    }
+
+    .background-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .preview-area {
+        width: 180px;
+        height: 320px;
+      }
+      
+      .share-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Background overlay -->
+    <div class="background-overlay" id="backgroundOverlay"></div>
+
+    <!-- Navbar -->
+    <div class="navbar">
+      <div class="navbar-title">İSTİKAMET - Video Üretici</div>
+      <button class="save-button" id="saveButton" onclick="openShareModal()" disabled>
+        <span>📤</span>
+        <span>Kaydet</span>
+      </button>
+    </div>
+
+    <!-- Preview Area - 9:16 aspect ratio -->
+    <div class="preview-area" id="previewArea">
+      <div class="canvas-container">
+        <!-- Canvas for cover image -->
+        <canvas id="canvas" width="1080" height="1920" style="display: none;"></canvas>
+        <!-- Canvas for video -->
+        <canvas id="videoCanvas" width="1080" height="1920" style="display: none;"></canvas>
+        <!-- Video preview -->
+        <video id="videoPreview" controls muted style="display: none;"></video>
+      </div>
+    </div>
+
+    <!-- Bottom Panel -->
+    <div class="bottom-panel" id="bottomPanel">
+      <div class="panel-handle" id="panelHandle"></div>
+      
+      <div class="panel-header">
+        <div class="panel-title">Video Düzenleme Paneli</div>
+        <div class="tab-navigation">
+          <button class="tab-button active" data-tab="video">
+            🎥 VİDEO
+          </button>
+          <button class="tab-button" data-tab="text">
+            ✍️ METİN
+          </button>
+        </div>
+      </div>
+
+      <div class="panel-content">
+        <!-- Video Tab -->
+        <div class="tab-content active" id="videoTab">
+          <div class="form-group">
+            <label class="form-label">🎥 Video Yükle</label>
+            
+            <input type="file" id="videoInput" class="hidden-input" accept="video/*">
+            
+            <button class="upload-button" onclick="document.getElementById('videoInput').click()">
+              🎬 Cihazdan Video Seç
+            </button>
+            
+            <div class="video-preview-container" id="videoPreviewContainer"></div>
+          </div>
+        </div>
+
+        <!-- Text Tab -->
+        <div class="tab-content" id="textTab">
+          <div class="form-group">
+            <label class="form-label">✍️ Haber Metni</label>
+            <textarea 
+              id="textInput" 
+              class="text-input" 
+              placeholder="Haber metnini buraya yazın..."
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">🎨 Metin Rengi</label>
+            <div class="color-options">
+              <div class="color-option active" style="background-color: white;" data-color="white"></div>
+              <div class="color-option" style="background-color: #ccc;" data-color="#ccc"></div>
+              <div class="color-option" style="background-color: #888;" data-color="#888"></div>
+              <div class="color-option" style="background-color: #444;" data-color="#444"></div>
+            </div>
+          </div>
+
+          <button class="generate-button" onclick="generateVideo()">
+            ✨ Video ve Kapak Oluştur
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="share-modal" id="shareModal">
+      <div class="share-modal-content">
+        <div class="share-modal-header">
+          <div class="share-modal-title">📤 İndir</div>
+        </div>
+
+        <div class="share-actions">
+          <button class="share-action-button primary" onclick="downloadVideo()">
+            🎥 Videoyu İndir
+          </button>
+          <button class="share-action-button secondary" onclick="downloadCover()">
+            📷 Kapak Görselini İndir
+          </button>
+        </div>
+
+        <div class="modal-actions">
+          <button class="modal-button secondary" onclick="closeShareModal()">
+            ❌ Kapat
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Message -->
+    <div id="statusMessage" class="status-message"></div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const videoCanvas = document.getElementById("videoCanvas");
+    const videoCtx = videoCanvas.getContext("2d");
+    const videoPreview = document.getElementById("videoPreview");
+    
+    let userVideo = null;
+    let processedVideoBlob = null;
+    let coverImageBlob = null;
+    
+    // Watermark images
+    const filigran3 = new Image(); // For cover image
+    filigran3.src = "filigran3.png";
+    
+    const filigran4 = new Image(); // For video
+    filigran4.src = "filigran4.png";
+
+    // Text settings
+    let textColor = "white";
+    let fontSize = 65;
+
+    // Panel functionality
+    const bottomPanel = document.getElementById('bottomPanel');
+    const panelHandle = document.getElementById('panelHandle');
+    const backgroundOverlay = document.getElementById('backgroundOverlay');
+    let isPanelExpanded = false;
+
+    // Enhanced drag functionality
+    let startY = 0;
+    let currentY = 0;
+    let isDragging = false;
+    let startTransform = 0;
+
+    function togglePanel() {
+      isPanelExpanded = !isPanelExpanded;
+      bottomPanel.classList.toggle('expanded', isPanelExpanded);
+      backgroundOverlay.classList.toggle('show', isPanelExpanded);
+    }
+
+    // Touch events for panel dragging
+    panelHandle.addEventListener('touchstart', (e) => {
+      startY = e.touches[0].clientY;
+      isDragging = true;
+      
+      const rect = bottomPanel.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      startTransform = windowHeight - rect.top;
+      
+      bottomPanel.classList.add('dragging');
+    }, { passive: true });
+
+    panelHandle.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      
+      e.preventDefault();
+      currentY = e.touches[0].clientY;
+      const deltaY = startY - currentY;
+      
+      let newTransform = startTransform + deltaY;
+      
+      const minTransform = 80;
+      const maxTransform = bottomPanel.offsetHeight;
+      newTransform = Math.max(minTransform, Math.min(newTransform, maxTransform));
+      
+      const translateY = bottomPanel.offsetHeight - newTransform;
+      bottomPanel.style.transform = `translateY(${translateY}px)`;
+      
+      const progress = (newTransform - minTransform) / (maxTransform - minTransform);
+      backgroundOverlay.style.opacity = progress * 0.3;
+      backgroundOverlay.style.visibility = progress > 0 ? 'visible' : 'hidden';
+    }, { passive: false });
+
+    panelHandle.addEventListener('touchend', (e) => {
+      if (!isDragging) return;
+      
+      isDragging = false;
+      bottomPanel.classList.remove('dragging');
+      
+      const deltaY = startY - currentY;
+      const threshold = 100;
+      
+      if (Math.abs(deltaY) > threshold) {
+        if (deltaY > 0 && !isPanelExpanded) {
+          togglePanel();
+        } else if (deltaY < 0 && isPanelExpanded) {
+          togglePanel();
+        } else {
+          resetPanelPosition();
+        }
+      } else {
+        resetPanelPosition();
+      }
+    }, { passive: true });
+
+    function resetPanelPosition() {
+      bottomPanel.style.transform = '';
+      if (isPanelExpanded) {
+        backgroundOverlay.classList.add('show');
+      } else {
+        backgroundOverlay.classList.remove('show');
+      }
+    }
+
+    panelHandle.addEventListener('click', (e) => {
+      if (!isDragging) {
+        togglePanel();
+      }
+    });
+
+    backgroundOverlay.addEventListener('click', () => {
+      if (isPanelExpanded) {
+        togglePanel();
+      }
+    });
+
+    // Tab functionality
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const tabName = button.getAttribute('data-tab');
+        
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        tabContents.forEach(content => content.classList.remove('active'));
+        document.getElementById(tabName + 'Tab').classList.add('active');
+      });
+    });
+
+    // Color options
+    document.querySelectorAll('.color-option').forEach(option => {
+      option.addEventListener('click', function() {
+        document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        textColor = this.getAttribute('data-color');
+      });
+    });
+
+    // Status message
+    function showStatus(message, type = 'success') {
+      const statusEl = document.getElementById('statusMessage');
+      statusEl.textContent = message;
+      statusEl.className = `status-message status-${type} show`;
+      
+      setTimeout(() => {
+        statusEl.classList.remove('show');
+      }, 3000);
+    }
+
+    // Video processing
+    function processVideo(file) {
+      console.log('Processing video:', file.name);
+      
+      if (!file.type.startsWith('video/')) {
+        showStatus('Lütfen geçerli bir video dosyası seçin.', 'error');
+        return;
+      }
+
+      const url = URL.createObjectURL(file);
+      const video = document.createElement('video');
+      
+      video.onloadedmetadata = function() {
+        console.log('Video loaded:', video.videoWidth, 'x', video.videoHeight, 'duration:', video.duration);
+        userVideo = video;
+        
+        // Show preview
+        videoPreview.src = url;
+        videoPreview.style.display = 'block';
+        canvas.style.display = 'none';
+        videoCanvas.style.display = 'none';
+        
+        const preview = document.getElementById('videoPreviewContainer');
+        preview.innerHTML = `<video class="video-preview" src="${url}" muted></video>`;
+        
+        // Enable save button
+        document.getElementById('saveButton').disabled = false;
+        
+        showStatus('Video başarıyla yüklendi!');
+      };
+      
+      video.onerror = function() {
+        showStatus('Video yüklenirken hata oluştu.', 'error');
+      };
+      
+      video.src = url;
+    }
+
+    // File input event
+    document.getElementById("videoInput").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        processVideo(file);
+      }
+    });
+
+    // Generate cover image from first frame
+    function generateCoverImage(video, text) {
+      return new Promise((resolve) => {
+        // Set video to first frame
+        video.currentTime = 0;
+        
+        video.onseeked = function() {
+          // Clear canvas
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          
+          // Calculate video dimensions to fit 9:16 with letterboxing
+          const canvasAspect = canvas.width / canvas.height; // 9:16 = 0.5625
+          const videoAspect = video.videoWidth / video.videoHeight;
+          
+          let drawWidth, drawHeight, drawX, drawY;
+          
+          if (videoAspect > canvasAspect) {
+            // Video is wider, fit by height
+            drawHeight = canvas.height;
+            drawWidth = drawHeight * videoAspect;
+            drawX = (canvas.width - drawWidth) / 2;
+            drawY = 0;
+          } else {
+            // Video is taller, fit by width
+            drawWidth = canvas.width;
+            drawHeight = drawWidth / videoAspect;
+            drawX = 0;
+            drawY = (canvas.height - drawHeight) / 2;
+          }
+          
+          // Draw video frame
+          ctx.drawImage(video, drawX, drawY, drawWidth, drawHeight);
+          
+          // Add watermark (filigran3.png)
+          if (filigran3.complete) {
+            ctx.drawImage(filigran3, 0, 0, canvas.width, canvas.height);
+          }
+          
+          // Draw text in center
+          if (text.trim()) {
+            const maxWidth = canvas.width - 200;
+            const wrappedLines = wrapText(text, maxWidth);
+            
+            ctx.fillStyle = textColor;
+            ctx.textBaseline = "middle";
+            ctx.textAlign = "center";
+            ctx.font = `bold ${fontSize}px Helvetica, Arial, sans-serif`;
+            
+            // Add shadow effect
+            ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+            ctx.shadowBlur = 10;
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+            
+            const totalHeight = wrappedLines.length * (fontSize + 10);
+            let startY = (canvas.height - totalHeight) / 2;
+            
+            wrappedLines.forEach((line, index) => {
+              const y = startY + (index * (fontSize + 10));
+              ctx.fillText(line, canvas.width / 2, y);
+            });
+            
+            // Reset shadow
+            ctx.shadowColor = "transparent";
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+          }
+          
+          // Convert to blob
+          canvas.toBlob((blob) => {
+            coverImageBlob = blob;
+            resolve(blob);
+          }, 'image/png');
+        };
+      });
+    }
+
+    // Process video with watermark and text
+    async function processVideoWithWatermark(video, text) {
+      return new Promise((resolve) => {
+        const stream = videoCanvas.captureStream(30); // 30 FPS
+        const mediaRecorder = new MediaRecorder(stream, {
+          mimeType: 'video/webm;codecs=vp9'
+        });
+        
+        const chunks = [];
+        
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            chunks.push(event.data);
+          }
+        };
+        
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(chunks, { type: 'video/webm' });
+          processedVideoBlob = blob;
+          resolve(blob);
+        };
+        
+        mediaRecorder.start();
+        
+        // Process video frame by frame
+        let currentTime = 0;
+        const duration = video.duration;
+        const fps = 30;
+        const frameInterval = 1 / fps;
+        
+        function processFrame() {
+          if (currentTime >= duration) {
+            mediaRecorder.stop();
+            return;
+          }
+          
+          video.currentTime = currentTime;
+          
+          video.onseeked = function() {
+            // Clear canvas
+            videoCtx.clearRect(0, 0, videoCanvas.width, videoCanvas.height);
+            
+            // Calculate video dimensions to fit 9:16 with letterboxing
+            const canvasAspect = videoCanvas.width / videoCanvas.height;
+            const videoAspect = video.videoWidth / video.videoHeight;
+            
+            let drawWidth, drawHeight, drawX, drawY;
+            
+            if (videoAspect > canvasAspect) {
+              drawHeight = videoCanvas.height;
+              drawWidth = drawHeight * videoAspect;
+              drawX = (videoCanvas.width - drawWidth) / 2;
+              drawY = 0;
+            } else {
+              drawWidth = videoCanvas.width;
+              drawHeight = drawWidth / videoAspect;
+              drawX = 0;
+              drawY = (videoCanvas.height - drawHeight) / 2;
+            }
+            
+            // Draw video frame
+            videoCtx.drawImage(video, drawX, drawY, drawWidth, drawHeight);
+            
+            // Add watermark (filigran4.png)
+            if (filigran4.complete) {
+              videoCtx.drawImage(filigran4, 0, 0, videoCanvas.width, videoCanvas.height);
+            }
+            
+            // Draw text (normal position, not centered)
+            if (text.trim()) {
+              const bottomPadding = 200;
+              const leftPadding = 100;
+              const rightLimit = videoCanvas.width - 100;
+              const maxWidth = rightLimit - leftPadding;
+              
+              const wrappedLines = wrapText(text, maxWidth);
+              let y = videoCanvas.height - bottomPadding;
+              
+              videoCtx.fillStyle = textColor;
+              videoCtx.textBaseline = "bottom";
+              videoCtx.textAlign = "left";
+              videoCtx.font = `bold ${fontSize}px Helvetica, Arial, sans-serif`;
+              
+              // Add shadow effect
+              videoCtx.shadowColor = "rgba(0, 0, 0, 0.7)";
+              videoCtx.shadowBlur = 10;
+              videoCtx.shadowOffsetX = 2;
+              videoCtx.shadowOffsetY = 2;
+              
+              for (let i = wrappedLines.length - 1; i >= 0; i--) {
+                videoCtx.fillText(wrappedLines[i], leftPadding, y);
+                y -= (fontSize + 10);
+              }
+              
+              // Reset shadow
+              videoCtx.shadowColor = "transparent";
+              videoCtx.shadowBlur = 0;
+              videoCtx.shadowOffsetX = 0;
+              videoCtx.shadowOffsetY = 0;
+            }
+            
+            currentTime += frameInterval;
+            setTimeout(processFrame, 1000 / fps);
+          };
+        }
+        
+        processFrame();
+      });
+    }
+
+    // Text wrapping function
+    function wrapText(text, maxWidth) {
+      const words = text.split(/\s+/);
+      const lines = [];
+      let line = "";
+      
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line + words[i] + " ";
+        const width = ctx.measureText ? ctx.measureText(testLine).width : videoCtx.measureText(testLine).width;
+        if (width > maxWidth && line !== "") {
+          lines.push(line.trim());
+          line = words[i] + " ";
+        } else {
+          line = testLine;
+        }
+      }
+      if (line) {
+        lines.push(line.trim());
+      }
+      return lines;
+    }
+
+    // Generate video and cover
+    async function generateVideo() {
+      if (!userVideo) {
+        showStatus('Lütfen önce video yükleyin.', 'error');
+        return;
+      }
+      
+      const text = document.getElementById("textInput").value;
+      if (!text.trim()) {
+        showStatus('Lütfen haber metnini girin.', 'error');
+        return;
+      }
+
+      showStatus('Video işleniyor, lütfen bekleyin...', 'success');
+
+      try {
+        // Generate cover image
+        await generateCoverImage(userVideo, text);
+        
+        // Process video
+        await processVideoWithWatermark(userVideo, text);
+        
+        // Show processed video
+        const videoUrl = URL.createObjectURL(processedVideoBlob);
+        videoPreview.src = videoUrl;
+        videoPreview.style.display = 'block';
+        
+        showStatus('Video ve kapak başarıyla oluşturuldu!');
+        
+      } catch (error) {
+        console.error('Video processing error:', error);
+        showStatus('Video işlenirken hata oluştu.', 'error');
+      }
+    }
+
+    // Share Modal Functions
+    function openShareModal() {
+      if (!processedVideoBlob && !coverImageBlob) {
+        showStatus('Önce video ve kapak oluşturun.', 'error');
+        return;
+      }
+      
+      document.getElementById('shareModal').classList.add('show');
+    }
+
+    function closeShareModal() {
+      document.getElementById('shareModal').classList.remove('show');
+    }
+
+    function downloadVideo() {
+      if (!processedVideoBlob) {
+        showStatus('Video henüz hazır değil.', 'error');
+        return;
+      }
+      
+      const link = document.createElement("a");
+      link.download = "istikamet-video.webm";
+      link.href = URL.createObjectURL(processedVideoBlob);
+      link.click();
+      
+      showStatus('Video başarıyla indirildi!');
+      closeShareModal();
+    }
+
+    function downloadCover() {
+      if (!coverImageBlob) {
+        showStatus('Kapak görseli henüz hazır değil.', 'error');
+        return;
+      }
+      
+      const link = document.createElement("a");
+      link.download = "istikamet-kapak.png";
+      link.href = URL.createObjectURL(coverImageBlob);
+      link.click();
+      
+      showStatus('Kapak görseli başarıyla indirildi!');
+      closeShareModal();
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('shareModal').addEventListener('click', (e) => {
+      if (e.target.id === 'shareModal') {
+        closeShareModal();
+      }
+    });
+
+    // Prevent zoom on double tap
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+      const now = (new Date()).getTime();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+
+    // Initialize
+    console.log('İSTİKAMET Video Generator loaded successfully!');
+  </script>
+</body>
+</html>
