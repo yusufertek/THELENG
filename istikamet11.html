@@ -120,14 +120,14 @@
       cursor: not-allowed;
     }
 
-    /* Preview Area - Smaller and positioned at top */
+    /* Preview Area */
     .preview-area {
       position: fixed;
-      top: 80px; /* Below navbar with some spacing */
+      top: 80px;
       left: 50%;
       transform: translateX(-50%);
-      width: 280px; /* Fixed smaller width */
-      height: 360px; /* Fixed smaller height */
+      width: 280px;
+      height: 360px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -144,7 +144,7 @@
       justify-content: center;
     }
 
-    #canvas {
+    #canvas, #videoPreview {
       max-width: 100%;
       max-height: 100%;
       border-radius: 15px;
@@ -155,7 +155,11 @@
       transition: all 0.3s ease;
     }
 
-    /* Bottom Panel - Fixed height and positioning */
+    #videoPreview {
+      display: none;
+    }
+
+    /* Bottom Panel */
     .bottom-panel {
       position: fixed;
       bottom: 0;
@@ -167,9 +171,9 @@
       transform: translateY(calc(100% - 80px));
       transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       z-index: 900;
-      height: calc(100vh - 120px); /* Dynamic height based on viewport */
-      max-height: 600px; /* Maximum height limit */
-      min-height: 400px; /* Minimum height */
+      height: calc(100vh - 120px);
+      max-height: 600px;
+      min-height: 400px;
       overflow: hidden;
       touch-action: none;
       will-change: transform;
@@ -180,10 +184,10 @@
     }
 
     .bottom-panel.dragging {
-      transition: none; /* Disable transition during drag */
+      transition: none;
     }
 
-    /* Panel Handle - Enhanced for better dragging */
+    /* Panel Handle */
     .panel-handle {
       width: 50px;
       height: 5px;
@@ -193,7 +197,7 @@
       cursor: grab;
       transition: all 0.3s ease;
       position: relative;
-      flex-shrink: 0; /* Prevent shrinking */
+      flex-shrink: 0;
     }
 
     .panel-handle:active {
@@ -209,7 +213,6 @@
       left: -30px;
       right: -30px;
       bottom: -20px;
-      /* Larger invisible touch area */
     }
 
     .panel-handle::after {
@@ -228,7 +231,7 @@
     .panel-header {
       padding: 0 20px 15px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      flex-shrink: 0; /* Prevent shrinking */
+      flex-shrink: 0;
     }
 
     .panel-title {
@@ -239,7 +242,7 @@
       margin-bottom: 15px;
     }
 
-    /* Tab Navigation */
+    /* Tab Navigation - Updated for 3 tabs */
     .tab-navigation {
       display: flex;
       background: rgba(255, 255, 255, 0.05);
@@ -250,12 +253,12 @@
 
     .tab-button {
       flex: 1;
-      padding: 12px;
+      padding: 12px 8px;
       background: transparent;
       border: none;
       border-radius: 8px;
       color: rgba(255, 255, 255, 0.6);
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -273,12 +276,12 @@
       transform: scale(0.98);
     }
 
-    /* Panel Content - Fixed to use remaining space */
+    /* Panel Content */
     .panel-content {
-      flex: 1; /* Take remaining space */
+      flex: 1;
       overflow-y: auto;
       padding: 20px;
-      padding-bottom: 30px; /* Extra bottom padding for safety */
+      padding-bottom: 30px;
       -webkit-overflow-scrolling: touch;
       display: flex;
       flex-direction: column;
@@ -297,7 +300,7 @@
     /* Form Elements */
     .form-group {
       margin-bottom: 20px;
-      flex-shrink: 0; /* Prevent shrinking */
+      flex-shrink: 0;
     }
 
     .form-label {
@@ -306,6 +309,25 @@
       font-weight: 600;
       color: #fff;
       font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Image Section Styling */
+    .image-section {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .image-section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 15px;
+      text-align: center;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -336,6 +358,21 @@
       background: linear-gradient(135deg, #444 0%, #666 100%);
     }
 
+    .upload-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Video Upload Button */
+    .video-upload-button {
+      background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 100%);
+      border: 2px dashed rgba(139, 92, 246, 0.5);
+    }
+
+    .video-upload-button:active {
+      background: linear-gradient(135deg, #7C3AED 0%, #9333EA 100%);
+    }
+
     /* Image Preview */
     .image-preview-container {
       text-align: center;
@@ -343,10 +380,23 @@
     }
 
     .image-preview {
-      max-width: 100px;
-      max-height: 100px;
+      max-width: 80px;
+      max-height: 80px;
       border-radius: 8px;
       border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    /* Video Preview */
+    .video-preview-container {
+      text-align: center;
+      margin: 12px 0;
+    }
+
+    .video-preview {
+      max-width: 120px;
+      max-height: 80px;
+      border-radius: 8px;
+      border: 2px solid rgba(139, 92, 246, 0.5);
     }
 
     /* Position Controls */
@@ -516,12 +566,125 @@
       letter-spacing: 0.5px;
       margin-top: 15px;
       touch-action: manipulation;
-      flex-shrink: 0; /* Prevent shrinking */
+      flex-shrink: 0;
     }
 
     .generate-button:active {
       transform: scale(0.98);
       background: linear-gradient(135deg, #555 0%, #777 100%);
+    }
+
+    .generate-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Video Generate Button */
+    .video-generate-button {
+      background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 100%);
+    }
+
+    .video-generate-button:active {
+      background: linear-gradient(135deg, #7C3AED 0%, #9333EA 100%);
+    }
+
+    /* Progress Panel */
+    .progress-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .progress-panel.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .progress-content {
+      background: rgba(20, 20, 20, 0.95);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    .progress-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .progress-subtitle {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 30px;
+    }
+
+    .progress-bar-container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      height: 20px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #8B5CF6, #A855F7);
+      border-radius: 10px;
+      width: 0%;
+      transition: width 0.3s ease;
+      position: relative;
+    }
+
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .progress-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .progress-details {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 20px;
+    }
+
+    .progress-time {
+      font-size: 16px;
+      color: #8B5CF6;
+      font-weight: 600;
     }
 
     /* Status Message */
@@ -758,6 +921,20 @@
       .share-actions {
         flex-direction: column;
       }
+
+      .image-preview {
+        max-width: 60px;
+        max-height: 60px;
+      }
+
+      .tab-button {
+        font-size: 11px;
+        padding: 10px 6px;
+      }
+
+      .progress-content {
+        padding: 30px 20px;
+      }
     }
 
     /* Very small screens */
@@ -841,10 +1018,11 @@
       </button>
     </div>
 
-    <!-- Preview Area - Now smaller and at top -->
+    <!-- Preview Area -->
     <div class="preview-area" id="previewArea">
       <div class="canvas-container">
         <canvas id="canvas" width="1080" height="1440"></canvas>
+        <video id="videoPreview" width="1080" height="1440" controls muted></video>
       </div>
     </div>
 
@@ -858,6 +1036,9 @@
           <button class="tab-button active" data-tab="image">
             📷 GÖRSEL
           </button>
+          <button class="tab-button" data-tab="video">
+            🎬 VİDEO
+          </button>
           <button class="tab-button" data-tab="text">
             ✍️ METİN
           </button>
@@ -867,55 +1048,133 @@
       <div class="panel-content">
         <!-- Image Tab -->
         <div class="tab-content active" id="imageTab">
-          <div class="form-group">
-            <label class="form-label">📷 Görsel Yükle</label>
+          <!-- First Image Section -->
+          <div class="image-section">
+            <div class="image-section-title">🖼️ Birinci Görsel</div>
             
-            <input type="file" id="imageInput" class="hidden-input" accept="image/*">
+            <input type="file" id="imageInput1" class="hidden-input" accept="image/*">
             
-            <button class="upload-button" onclick="document.getElementById('imageInput').click()">
-              📸 Cihazdan Görsel Seç
+            <button class="upload-button" onclick="document.getElementById('imageInput1').click()">
+              📸 Birinci Görseli Seç
             </button>
             
-            <div class="image-preview-container" id="imagePreview"></div>
+            <div class="image-preview-container" id="imagePreview1"></div>
+
+            <div class="form-group" id="positionControls1" style="display: none;">
+              <label class="form-label">🎯 Birinci Görsel Konumu</label>
+              
+              <div class="position-controls">
+                <div class="control-group">
+                  <label class="control-label">↔️ Yatay Konum</label>
+                  <div class="slider-container">
+                    <span class="slider-value">Sol</span>
+                    <input type="range" id="xPositionSlider1" class="position-slider" min="-540" max="540" value="0">
+                    <span class="slider-value">Sağ</span>
+                  </div>
+                  <div class="slider-value" id="xValue1">0</div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">↕️ Dikey Konum</label>
+                  <div class="slider-container">
+                    <span class="slider-value">Üst</span>
+                    <input type="range" id="yPositionSlider1" class="position-slider" min="-720" max="720" value="0">
+                    <span class="slider-value">Alt</span>
+                  </div>
+                  <div class="slider-value" id="yValue1">0</div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">🔍 Görsel Boyutu</label>
+                  <div class="slider-container">
+                    <span class="slider-value">Küçük</span>
+                    <input type="range" id="sizeSlider1" class="position-slider" min="25" max="500" value="300">
+                    <span class="slider-value">Büyük</span>
+                  </div>
+                  <div class="slider-value" id="sizeValue1">%300</div>
+                </div>
+              </div>
+
+              <button class="reset-button" onclick="resetImagePosition(1)">
+                🔄 Birinci Görseli Sıfırla
+              </button>
+            </div>
           </div>
 
-          <div class="form-group" id="positionControls" style="display: none;">
-            <label class="form-label">🎯 Görsel Konumu</label>
+          <!-- Second Image Section -->
+          <div class="image-section">
+            <div class="image-section-title">🖼️ İkinci Görsel</div>
             
-            <div class="position-controls">
-              <div class="control-group">
-                <label class="control-label">↔️ Yatay Konum</label>
-                <div class="slider-container">
-                  <span class="slider-value">Sol</span>
-                  <input type="range" id="xPositionSlider" class="position-slider" min="-540" max="540" value="0">
-                  <span class="slider-value">Sağ</span>
+            <input type="file" id="imageInput2" class="hidden-input" accept="image/*">
+            
+            <button class="upload-button" onclick="document.getElementById('imageInput2').click()">
+              📸 İkinci Görseli Seç
+            </button>
+            
+            <div class="image-preview-container" id="imagePreview2"></div>
+
+            <div class="form-group" id="positionControls2" style="display: none;">
+              <label class="form-label">🎯 İkinci Görsel Konumu</label>
+              
+              <div class="position-controls">
+                <div class="control-group">
+                  <label class="control-label">↔️ Yatay Konum</label>
+                  <div class="slider-container">
+                    <span class="slider-value">Sol</span>
+                    <input type="range" id="xPositionSlider2" class="position-slider" min="-540" max="540" value="0">
+                    <span class="slider-value">Sağ</span>
+                  </div>
+                  <div class="slider-value" id="xValue2">0</div>
                 </div>
-                <div class="slider-value" id="xValue">0</div>
+
+                <div class="control-group">
+                  <label class="control-label">↕️ Dikey Konum</label>
+                  <div class="slider-container">
+                    <span class="slider-value">Üst</span>
+                    <input type="range" id="yPositionSlider2" class="position-slider" min="-720" max="720" value="0">
+                    <span class="slider-value">Alt</span>
+                  </div>
+                  <div class="slider-value" id="yValue2">0</div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">🔍 Görsel Boyutu</label>
+                  <div class="slider-container">
+                    <span class="slider-value">Küçük</span>
+                    <input type="range" id="sizeSlider2" class="position-slider" min="25" max="500" value="300">
+                    <span class="slider-value">Büyük</span>
+                  </div>
+                  <div class="slider-value" id="sizeValue2">%300</div>
+                </div>
               </div>
 
-              <div class="control-group">
-                <label class="control-label">↕️ Dikey Konum</label>
-                <div class="slider-container">
-                  <span class="slider-value">Üst</span>
-                  <input type="range" id="yPositionSlider" class="position-slider" min="-720" max="720" value="0">
-                  <span class="slider-value">Alt</span>
-                </div>
-                <div class="slider-value" id="yValue">0</div>
-              </div>
+              <button class="reset-button" onclick="resetImagePosition(2)">
+                🔄 İkinci Görseli Sıfırla
+              </button>
+            </div>
+          </div>
+        </div>
 
-              <div class="control-group">
-                <label class="control-label">🔍 Görsel Boyutu</label>
-                <div class="slider-container">
-                  <span class="slider-value">Küçük</span>
-                  <input type="range" id="sizeSlider" class="position-slider" min="25" max="500" value="300">
-                  <span class="slider-value">Büyük</span>
-                </div>
-                <div class="slider-value" id="sizeValue">%300</div>
-              </div>
+        <!-- Video Tab -->
+        <div class="tab-content" id="videoTab">
+          <div class="image-section">
+            <div class="image-section-title">🎬 Video Yükle</div>
+            
+            <input type="file" id="videoInput" class="hidden-input" accept="video/*">
+            
+            <button class="upload-button video-upload-button" onclick="document.getElementById('videoInput').click()">
+              🎬 Video Dosyası Seç
+            </button>
+            
+            <div class="video-preview-container" id="videoPreviewContainer"></div>
+
+            <div class="form-group" id="videoInfo" style="display: none;">
+              <label class="form-label">📊 Video Bilgileri</label>
+              <div id="videoDetails" style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; font-size: 12px; color: rgba(255,255,255,0.8);"></div>
             </div>
 
-            <button class="reset-button" onclick="resetImagePosition()">
-              🔄 Varsayılan Konuma Sıfırla
+            <button class="generate-button video-generate-button" id="videoGenerateButton" onclick="generateVideo()" disabled>
+              ✨ Video Gönderiyi Oluştur
             </button>
           </div>
         </div>
@@ -953,9 +1212,25 @@
           </div>
 
           <button class="generate-button" onclick="generate()">
-            ✨ Gönderiyi Oluştur
+            ✨ Görsel Gönderiyi Oluştur
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- Progress Panel -->
+    <div class="progress-panel" id="progressPanel">
+      <div class="progress-content">
+        <div class="progress-title">🎬 Video İşleniyor</div>
+        <div class="progress-subtitle">Lütfen bekleyin, videonuz hazırlanıyor...</div>
+        
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="progress-text" id="progressText">%0 Tamamlandı</div>
+        <div class="progress-details" id="progressDetails">Video işleme başlatılıyor...</div>
+        <div class="progress-time" id="progressTime">Tahmini süre: Hesaplanıyor...</div>
       </div>
     </div>
 
@@ -972,10 +1247,10 @@
         </div>
 
         <div class="share-actions">
-          <button class="share-action-button primary" onclick="shareImage()">
+          <button class="share-action-button primary" onclick="shareContent()">
             📱 Direkt Paylaş
           </button>
-          <button class="share-action-button secondary" onclick="downloadImage()">
+          <button class="share-action-button secondary" onclick="downloadContent()">
             💾 İndir
           </button>
         </div>
@@ -995,10 +1270,18 @@
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
-    let userImage = null;
-    let imageX = 0;
-    let imageY = 0;
-    let imageSize = 300;
+    const videoPreview = document.getElementById("videoPreview");
+    
+    // Dual image support
+    let userImage1 = null;
+    let userImage2 = null;
+    let image1X = 0, image1Y = 0, image1Size = 300;
+    let image2X = 0, image2Y = 0, image2Size = 300;
+    
+    // Video support
+    let userVideo = null;
+    let processedVideoBlob = null;
+    let isVideoMode = false;
     
     // Watermark image
     const filigran = new Image();
@@ -1031,12 +1314,10 @@
       startY = e.touches[0].clientY;
       isDragging = true;
       
-      // Get current transform value
       const rect = bottomPanel.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       startTransform = windowHeight - rect.top;
       
-      // Add dragging class to disable transitions
       bottomPanel.classList.add('dragging');
       
     }, { passive: true });
@@ -1048,19 +1329,15 @@
       currentY = e.touches[0].clientY;
       const deltaY = startY - currentY;
       
-      // Calculate new position
       let newTransform = startTransform + deltaY;
       
-      // Constrain movement between collapsed (80px) and fully expanded
       const minTransform = 80;
       const maxTransform = bottomPanel.offsetHeight;
       newTransform = Math.max(minTransform, Math.min(newTransform, maxTransform));
       
-      // Apply transform
       const translateY = bottomPanel.offsetHeight - newTransform;
       bottomPanel.style.transform = `translateY(${translateY}px)`;
       
-      // Update background overlay opacity based on panel position
       const progress = (newTransform - minTransform) / (maxTransform - minTransform);
       backgroundOverlay.style.opacity = progress * 0.3;
       backgroundOverlay.style.visibility = progress > 0 ? 'visible' : 'hidden';
@@ -1071,27 +1348,20 @@
       if (!isDragging) return;
       
       isDragging = false;
-      
-      // Remove dragging class to re-enable transitions
       bottomPanel.classList.remove('dragging');
       
       const deltaY = startY - currentY;
-      const threshold = 100; // Minimum drag distance to trigger toggle
+      const threshold = 100;
       
-      // Determine final state based on drag distance and direction
       if (Math.abs(deltaY) > threshold) {
         if (deltaY > 0 && !isPanelExpanded) {
-          // Dragged up significantly, expand panel
           togglePanel();
         } else if (deltaY < 0 && isPanelExpanded) {
-          // Dragged down significantly, collapse panel
           togglePanel();
         } else {
-          // Reset to current state
           resetPanelPosition();
         }
       } else {
-        // Small movement, reset to current state
         resetPanelPosition();
       }
     }, { passive: true });
@@ -1105,14 +1375,12 @@
       }
     }
 
-    // Click to toggle (backup)
     panelHandle.addEventListener('click', (e) => {
       if (!isDragging) {
         togglePanel();
       }
     });
 
-    // Close panel when clicking background overlay
     backgroundOverlay.addEventListener('click', () => {
       if (isPanelExpanded) {
         togglePanel();
@@ -1127,13 +1395,22 @@
       button.addEventListener('click', () => {
         const tabName = button.getAttribute('data-tab');
         
-        // Update active tab button
         tabButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
         
-        // Update active tab content
         tabContents.forEach(content => content.classList.remove('active'));
         document.getElementById(tabName + 'Tab').classList.add('active');
+
+        // Switch preview mode
+        if (tabName === 'video') {
+          isVideoMode = true;
+          canvas.style.display = 'none';
+          videoPreview.style.display = 'block';
+        } else {
+          isVideoMode = false;
+          canvas.style.display = 'block';
+          videoPreview.style.display = 'none';
+        }
       });
     });
 
@@ -1143,7 +1420,7 @@
         document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
         this.classList.add('active');
         textColor = this.getAttribute('data-color');
-        if (userImage) generate();
+        if (userImage1 || userImage2) generate();
       });
     });
 
@@ -1151,43 +1428,76 @@
     document.getElementById('fontSizeInput').addEventListener('input', function() {
       fontSize = parseInt(this.value);
       document.getElementById('fontSizeValue').textContent = fontSize + 'px';
-      if (userImage) generate();
+      if (userImage1 || userImage2) generate();
     });
 
-    // Position controls
-    document.getElementById('xPositionSlider').addEventListener('input', function() {
-      imageX = parseInt(this.value);
-      document.getElementById('xValue').textContent = imageX;
-      if (userImage) generate();
-    });
+    // Position controls for both images
+    function setupPositionControls(imageNum) {
+      document.getElementById(`xPositionSlider${imageNum}`).addEventListener('input', function() {
+        if (imageNum === 1) {
+          image1X = parseInt(this.value);
+          document.getElementById('xValue1').textContent = image1X;
+        } else {
+          image2X = parseInt(this.value);
+          document.getElementById('xValue2').textContent = image2X;
+        }
+        if (userImage1 || userImage2) generate();
+      });
 
-    document.getElementById('yPositionSlider').addEventListener('input', function() {
-      imageY = parseInt(this.value);
-      document.getElementById('yValue').textContent = imageY;
-      if (userImage) generate();
-    });
+      document.getElementById(`yPositionSlider${imageNum}`).addEventListener('input', function() {
+        if (imageNum === 1) {
+          image1Y = parseInt(this.value);
+          document.getElementById('yValue1').textContent = image1Y;
+        } else {
+          image2Y = parseInt(this.value);
+          document.getElementById('yValue2').textContent = image2Y;
+        }
+        if (userImage1 || userImage2) generate();
+      });
 
-    document.getElementById('sizeSlider').addEventListener('input', function() {
-      imageSize = parseInt(this.value);
-      document.getElementById('sizeValue').textContent = '%' + imageSize;
-      if (userImage) generate();
-    });
+      document.getElementById(`sizeSlider${imageNum}`).addEventListener('input', function() {
+        if (imageNum === 1) {
+          image1Size = parseInt(this.value);
+          document.getElementById('sizeValue1').textContent = '%' + image1Size;
+        } else {
+          image2Size = parseInt(this.value);
+          document.getElementById('sizeValue2').textContent = '%' + image2Size;
+        }
+        if (userImage1 || userImage2) generate();
+      });
+    }
 
-    // Reset position
-    function resetImagePosition() {
-      imageX = 0;
-      imageY = 0;
-      imageSize = 300;
+    setupPositionControls(1);
+    setupPositionControls(2);
+
+    function resetImagePosition(imageNum) {
+      if (imageNum === 1) {
+        image1X = 0;
+        image1Y = 0;
+        image1Size = 300;
+        
+        document.getElementById('xPositionSlider1').value = 0;
+        document.getElementById('yPositionSlider1').value = 0;
+        document.getElementById('sizeSlider1').value = 300;
+        
+        document.getElementById('xValue1').textContent = '0';
+        document.getElementById('yValue1').textContent = '0';
+        document.getElementById('sizeValue1').textContent = '%300';
+      } else {
+        image2X = 0;
+        image2Y = 0;
+        image2Size = 300;
+        
+        document.getElementById('xPositionSlider2').value = 0;
+        document.getElementById('yPositionSlider2').value = 0;
+        document.getElementById('sizeSlider2').value = 300;
+        
+        document.getElementById('xValue2').textContent = '0';
+        document.getElementById('yValue2').textContent = '0';
+        document.getElementById('sizeValue2').textContent = '%300';
+      }
       
-      document.getElementById('xPositionSlider').value = 0;
-      document.getElementById('yPositionSlider').value = 0;
-      document.getElementById('sizeSlider').value = 300;
-      
-      document.getElementById('xValue').textContent = '0';
-      document.getElementById('yValue').textContent = '0';
-      document.getElementById('sizeValue').textContent = '%300';
-      
-      if (userImage) generate();
+      if (userImage1 || userImage2) generate();
     }
 
     // Status message
@@ -1201,9 +1511,9 @@
       }, 3000);
     }
 
-    // Image processing
-    function processImage(file) {
-      console.log('Processing image:', file.name);
+    // Image processing function
+    function processImage(file, imageNum) {
+      console.log(`Processing image ${imageNum}:`, file.name);
       
       if (!file.type.startsWith('image/')) {
         showStatus('Lütfen geçerli bir görsel dosyası seçin.', 'error');
@@ -1214,22 +1524,23 @@
       reader.onload = function(event) {
         const img = new Image();
         img.onload = function() {
-          console.log('Image loaded:', img.width, 'x', img.height);
-          userImage = img;
+          console.log(`Image ${imageNum} loaded:`, img.width, 'x', img.height);
           
-          // Show preview
-          const preview = document.getElementById('imagePreview');
-          preview.innerHTML = `<img src="${event.target.result}" class="image-preview" alt="Önizleme">`;
+          if (imageNum === 1) {
+            userImage1 = img;
+          } else {
+            userImage2 = img;
+          }
           
-          // Show position controls
-          document.getElementById('positionControls').style.display = 'block';
+          const preview = document.getElementById(`imagePreview${imageNum}`);
+          preview.innerHTML = `<img src="${event.target.result}" class="image-preview" alt="Önizleme ${imageNum}">`;
           
-          // Enable save button
+          document.getElementById(`positionControls${imageNum}`).style.display = 'block';
+          
           document.getElementById('saveButton').disabled = false;
           
-          showStatus('Görsel başarıyla yüklendi!');
+          showStatus(`${imageNum}. görsel başarıyla yüklendi!`);
           
-          // Auto-generate if text exists
           if (document.getElementById("textInput").value.trim()) {
             generate();
           }
@@ -1245,18 +1556,86 @@
       reader.readAsDataURL(file);
     }
 
-    // File input event
-    document.getElementById("imageInput").addEventListener("change", function(e) {
+    // Video processing function
+    function processVideo(file) {
+      console.log('Processing video:', file.name);
+      
+      if (!file.type.startsWith('video/')) {
+        showStatus('Lütfen geçerli bir video dosyası seçin.', 'error');
+        return;
+      }
+
+      const video = document.createElement('video');
+      video.src = URL.createObjectURL(file);
+      video.crossOrigin = 'anonymous';
+      
+      video.addEventListener('loadedmetadata', () => {
+        userVideo = video;
+        
+        // Show video preview
+        const preview = document.getElementById('videoPreviewContainer');
+        const previewVideo = document.createElement('video');
+        previewVideo.src = video.src;
+        previewVideo.className = 'video-preview';
+        previewVideo.controls = true;
+        previewVideo.muted = true;
+        preview.innerHTML = '';
+        preview.appendChild(previewVideo);
+        
+        // Show video info
+        const videoInfo = document.getElementById('videoInfo');
+        const videoDetails = document.getElementById('videoDetails');
+        const duration = Math.round(video.duration);
+        const minutes = Math.floor(duration / 60);
+        const seconds = duration % 60;
+        
+        videoDetails.innerHTML = `
+          <div><strong>Boyut:</strong> ${video.videoWidth} x ${video.videoHeight}</div>
+          <div><strong>Süre:</strong> ${minutes}:${seconds.toString().padStart(2, '0')}</div>
+          <div><strong>Dosya Boyutu:</strong> ${(file.size / (1024 * 1024)).toFixed(2)} MB</div>
+          <div><strong>Format:</strong> ${file.type}</div>
+        `;
+        
+        videoInfo.style.display = 'block';
+        
+        // Enable video generate button
+        document.getElementById('videoGenerateButton').disabled = false;
+        document.getElementById('saveButton').disabled = false;
+        
+        showStatus('Video başarıyla yüklendi!');
+      });
+
+      video.addEventListener('error', () => {
+        showStatus('Video yüklenirken hata oluştu.', 'error');
+      });
+    }
+
+    // File input events
+    document.getElementById("imageInput1").addEventListener("change", function(e) {
       const file = e.target.files[0];
       if (file) {
-        processImage(file);
+        processImage(file, 1);
       }
     });
 
-    // Generate post
+    document.getElementById("imageInput2").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        processImage(file, 2);
+      }
+    });
+
+    document.getElementById("videoInput").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        processVideo(file);
+      }
+    });
+
+    // Generate image post function
     function generate() {
-      if (!userImage) {
-        showStatus('Lütfen önce görsel yükleyin.', 'error');
+      if (!userImage1 && !userImage2) {
+        showStatus('Lütfen en az bir görsel yükleyin.', 'error');
         return;
       }
       
@@ -1266,9 +1645,8 @@
         return;
       }
 
-      console.log('Generating post...');
+      console.log('Generating post with dual images...');
 
-      // Fixed settings
       const bottomPadding = 200;
       const lineSpacing = 1;
       const leftPadding = 100;
@@ -1277,20 +1655,37 @@
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // 1. Draw user image
-      const sizeFactor = imageSize / 100;
-      const scaledWidth = userImage.width * sizeFactor;
-      const scaledHeight = userImage.height * sizeFactor;
-      
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      
-      const finalX = centerX + imageX - (scaledWidth / 2);
-      const finalY = centerY + imageY - (scaledHeight / 2);
-      
-      ctx.drawImage(userImage, finalX, finalY, scaledWidth, scaledHeight);
+      // Draw first image if exists
+      if (userImage1) {
+        const sizeFactor1 = image1Size / 100;
+        const scaledWidth1 = userImage1.width * sizeFactor1;
+        const scaledHeight1 = userImage1.height * sizeFactor1;
+        
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        
+        const finalX1 = centerX + image1X - (scaledWidth1 / 2);
+        const finalY1 = centerY + image1Y - (scaledHeight1 / 2);
+        
+        ctx.drawImage(userImage1, finalX1, finalY1, scaledWidth1, scaledHeight1);
+      }
 
-      // 2. Add watermark
+      // Draw second image if exists
+      if (userImage2) {
+        const sizeFactor2 = image2Size / 100;
+        const scaledWidth2 = userImage2.width * sizeFactor2;
+        const scaledHeight2 = userImage2.height * sizeFactor2;
+        
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        
+        const finalX2 = centerX + image2X - (scaledWidth2 / 2);
+        const finalY2 = centerY + image2Y - (scaledHeight2 / 2);
+        
+        ctx.drawImage(userImage2, finalX2, finalY2, scaledWidth2, scaledHeight2);
+      }
+
+      // Add watermark
       if (filigran.complete) {
         ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
       } else {
@@ -1300,7 +1695,6 @@
         };
       }
       
-      // 3. Draw text
       drawText();
       
       function drawText() {
@@ -1311,7 +1705,6 @@
         ctx.textAlign = "left";
         ctx.font = `bold ${fontSize}px Helvetica, Arial, sans-serif`;
         
-        // Add shadow effect
         ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
         ctx.shadowBlur = 10;
         ctx.shadowOffsetX = 2;
@@ -1322,7 +1715,6 @@
           y -= (fontSize + lineSpacing);
         }
         
-        // Reset shadow
         ctx.shadowColor = "transparent";
         ctx.shadowBlur = 0;
         ctx.shadowOffsetX = 0;
@@ -1330,7 +1722,174 @@
       }
     }
 
-    // Text wrapping
+    // Video generation function with progress tracking
+    async function generateVideo() {
+      if (!userVideo) {
+        showStatus('Lütfen önce video yükleyin.', 'error');
+        return;
+      }
+      
+      const text = document.getElementById("textInput").value;
+      if (!text.trim()) {
+        showStatus('Lütfen haber metnini girin.', 'error');
+        return;
+      }
+
+      // Show progress panel
+      document.getElementById('progressPanel').classList.add('show');
+      
+      try {
+        // Create video processing canvas
+        const videoCanvas = document.createElement('canvas');
+        const videoCtx = videoCanvas.getContext('2d');
+        
+        // Set 3:4 aspect ratio (1080x1440)
+        videoCanvas.width = 1080;
+        videoCanvas.height = 1440;
+        
+        // Calculate crop dimensions for 3:4 ratio
+        const targetAspectRatio = 3 / 4;
+        const videoAspectRatio = userVideo.videoWidth / userVideo.videoHeight;
+        
+        let cropWidth, cropHeight, cropX, cropY;
+        
+        if (videoAspectRatio > targetAspectRatio) {
+          // Video is wider, crop horizontally
+          cropHeight = userVideo.videoHeight;
+          cropWidth = cropHeight * targetAspectRatio;
+          cropX = (userVideo.videoWidth - cropWidth) / 2;
+          cropY = 0;
+        } else {
+          // Video is taller, crop vertically
+          cropWidth = userVideo.videoWidth;
+          cropHeight = cropWidth / targetAspectRatio;
+          cropX = 0;
+          cropY = (userVideo.videoHeight - cropHeight) / 2;
+        }
+
+        // Setup MediaRecorder
+        const stream = videoCanvas.captureStream(30); // 30 FPS
+        const mediaRecorder = new MediaRecorder(stream, {
+          mimeType: 'video/webm;codecs=vp9'
+        });
+        
+        const chunks = [];
+        let startTime = Date.now();
+        let totalFrames = Math.floor(userVideo.duration * 30); // 30 FPS
+        let processedFrames = 0;
+
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            chunks.push(event.data);
+          }
+        };
+
+        mediaRecorder.onstop = () => {
+          processedVideoBlob = new Blob(chunks, { type: 'video/webm' });
+          
+          // Update preview
+          videoPreview.src = URL.createObjectURL(processedVideoBlob);
+          videoPreview.style.display = 'block';
+          canvas.style.display = 'none';
+          
+          // Hide progress panel
+          document.getElementById('progressPanel').classList.remove('show');
+          
+          showStatus('Video başarıyla oluşturuldu!');
+          console.log('Video processing completed');
+        };
+
+        // Start recording
+        mediaRecorder.start();
+        
+        // Process video frame by frame
+        userVideo.currentTime = 0;
+        
+        const processFrame = () => {
+          if (userVideo.currentTime >= userVideo.duration) {
+            mediaRecorder.stop();
+            return;
+          }
+
+          // Clear canvas
+          videoCtx.clearRect(0, 0, videoCanvas.width, videoCanvas.height);
+          
+          // Draw cropped video frame
+          videoCtx.drawImage(
+            userVideo,
+            cropX, cropY, cropWidth, cropHeight,
+            0, 0, videoCanvas.width, videoCanvas.height
+          );
+          
+          // Add watermark
+          if (filigran.complete) {
+            videoCtx.drawImage(filigran, 0, 0, videoCanvas.width, videoCanvas.height);
+          }
+          
+          // Add text overlay
+          const bottomPadding = 200;
+          const lineSpacing = 1;
+          const leftPadding = 100;
+          const rightLimit = 1000;
+          const maxWidth = rightLimit - leftPadding;
+          
+          const wrappedLines = wrapText(text, maxWidth);
+          let y = videoCanvas.height - bottomPadding;
+          videoCtx.fillStyle = textColor;
+          videoCtx.textBaseline = "bottom";
+          videoCtx.textAlign = "left";
+          videoCtx.font = `bold ${fontSize}px Helvetica, Arial, sans-serif`;
+          
+          videoCtx.shadowColor = "rgba(0, 0, 0, 0.7)";
+          videoCtx.shadowBlur = 10;
+          videoCtx.shadowOffsetX = 2;
+          videoCtx.shadowOffsetY = 2;
+          
+          for (let i = wrappedLines.length - 1; i >= 0; i--) {
+            videoCtx.fillText(wrappedLines[i], leftPadding, y);
+            y -= (fontSize + lineSpacing);
+          }
+          
+          videoCtx.shadowColor = "transparent";
+          videoCtx.shadowBlur = 0;
+          videoCtx.shadowOffsetX = 0;
+          videoCtx.shadowOffsetY = 0;
+
+          // Update progress
+          processedFrames++;
+          const progress = Math.min((processedFrames / totalFrames) * 100, 100);
+          const elapsed = (Date.now() - startTime) / 1000;
+          const estimatedTotal = (elapsed / progress) * 100;
+          const remaining = Math.max(0, estimatedTotal - elapsed);
+          
+          document.getElementById('progressBar').style.width = progress + '%';
+          document.getElementById('progressText').textContent = `%${Math.round(progress)} Tamamlandı`;
+          document.getElementById('progressDetails').textContent = `${processedFrames}/${totalFrames} kare işlendi`;
+          
+          const minutes = Math.floor(remaining / 60);
+          const seconds = Math.round(remaining % 60);
+          document.getElementById('progressTime').textContent = 
+            `Kalan süre: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+          // Move to next frame
+          userVideo.currentTime += 1/30; // 30 FPS
+          
+          // Continue processing
+          setTimeout(processFrame, 33); // ~30 FPS
+        };
+
+        // Wait for video to be ready and start processing
+        userVideo.addEventListener('seeked', processFrame, { once: true });
+        userVideo.currentTime = 0;
+
+      } catch (error) {
+        console.error('Video processing error:', error);
+        document.getElementById('progressPanel').classList.remove('show');
+        showStatus('Video işleme hatası oluştu.', 'error');
+      }
+    }
+
+    // Text wrapping function
     function wrapText(text, maxWidth) {
       const words = text.split(/\s+/);
       const lines = [];
@@ -1355,8 +1914,8 @@
 
     // Share Modal Functions
     function openShareModal() {
-      if (!userImage) {
-        showStatus('Önce bir görsel yükleyip gönderi oluşturun.', 'error');
+      if (!userImage1 && !userImage2 && !processedVideoBlob) {
+        showStatus('Önce içerik oluşturun.', 'error');
         return;
       }
       
@@ -1376,77 +1935,98 @@
       document.getElementById('shareModal').classList.remove('show');
     }
 
-    function downloadImage() {
-      const link = document.createElement("a");
-      link.download = "istikamet-gonderi.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-      
-      showStatus('Görsel başarıyla indirildi!');
+    function downloadContent() {
+      if (isVideoMode && processedVideoBlob) {
+        // Download video
+        const link = document.createElement("a");
+        link.download = "istikamet-video.webm";
+        link.href = URL.createObjectURL(processedVideoBlob);
+        link.click();
+        showStatus('Video başarıyla indirildi!');
+      } else {
+        // Download image
+        const link = document.createElement("a");
+        link.download = "istikamet-gonderi.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        showStatus('Görsel başarıyla indirildi!');
+      }
       closeShareModal();
     }
 
     // Native Share API Function
-    async function shareImage() {
+    async function shareContent() {
       try {
-        // Check if Web Share API is supported
         if (!navigator.share) {
-          showStatus('Bu tarayıcı direkt paylaşımı desteklemiyor. Görseli indirin.', 'error');
-          downloadImage();
+          showStatus('Bu tarayıcı direkt paylaşımı desteklemiyor. İçeriği indirin.', 'error');
+          downloadContent();
           return;
         }
 
-        // Convert canvas to blob
-        const canvas = document.getElementById('canvas');
-        
-        canvas.toBlob(async (blob) => {
-          if (!blob) {
-            showStatus('Görsel oluşturulamadı.', 'error');
-            return;
-          }
+        const text = document.getElementById("textInput").value.trim();
+        const shareText = text ? text + '\n\n#İSTİKAMET' : 'İSTİKAMET - Haber\n\n#İSTİKAMET';
 
-          const text = document.getElementById("textInput").value.trim();
-          const shareText = text ? text + '\n\n#İSTİKAMET' : 'İSTİKAMET - Haber\n\n#İSTİKAMET';
-          
-          // Create file from blob
-          const file = new File([blob], 'istikamet-gonderi.png', { 
-            type: 'image/png',
+        if (isVideoMode && processedVideoBlob) {
+          // Share video
+          const file = new File([processedVideoBlob], 'istikamet-video.webm', { 
+            type: 'video/webm',
             lastModified: Date.now()
           });
 
           const shareData = {
-            title: 'İSTİKAMET - Haber',
+            title: 'İSTİKAMET - Video Haber',
             text: shareText,
             files: [file]
           };
 
-          // Check if files can be shared
           if (navigator.canShare && !navigator.canShare(shareData)) {
-            showStatus('Bu cihaz dosya paylaşımını desteklemiyor.', 'error');
-            downloadImage();
+            showStatus('Bu cihaz video paylaşımını desteklemiyor.', 'error');
+            downloadContent();
             return;
           }
 
-          try {
+          await navigator.share(shareData);
+          showStatus('Video başarıyla paylaşıldı!');
+        } else {
+          // Share image
+          canvas.toBlob(async (blob) => {
+            if (!blob) {
+              showStatus('Görsel oluşturulamadı.', 'error');
+              return;
+            }
+
+            const file = new File([blob], 'istikamet-gonderi.png', { 
+              type: 'image/png',
+              lastModified: Date.now()
+            });
+
+            const shareData = {
+              title: 'İSTİKAMET - Haber',
+              text: shareText,
+              files: [file]
+            };
+
+            if (navigator.canShare && !navigator.canShare(shareData)) {
+              showStatus('Bu cihaz dosya paylaşımını desteklemiyor.', 'error');
+              downloadContent();
+              return;
+            }
+
             await navigator.share(shareData);
             showStatus('Görsel başarıyla paylaşıldı!');
-            closeShareModal();
-          } catch (error) {
-            if (error.name === 'AbortError') {
-              // User cancelled the share
-              showStatus('Paylaşım iptal edildi.');
-            } else {
-              console.error('Share failed:', error);
-              showStatus('Paylaşım başarısız. Görseli indirin.', 'error');
-              downloadImage();
-            }
-          }
-        }, 'image/png', 0.9);
+          }, 'image/png', 0.9);
+        }
+        
+        closeShareModal();
 
       } catch (error) {
-        console.error('Share error:', error);
-        showStatus('Paylaşım hatası. Görseli indirin.', 'error');
-        downloadImage();
+        if (error.name === 'AbortError') {
+          showStatus('Paylaşım iptal edildi.');
+        } else {
+          console.error('Share error:', error);
+          showStatus('Paylaşım hatası. İçeriği indirin.', 'error');
+          downloadContent();
+        }
       }
     }
 
@@ -1457,9 +2037,9 @@
       }
     });
 
-    // Auto-update
+    // Auto-update for images
     document.getElementById("textInput").addEventListener("input", function() {
-      if (userImage && this.value.trim()) {
+      if ((userImage1 || userImage2) && this.value.trim() && !isVideoMode) {
         setTimeout(generate, 500);
       }
     });
@@ -1475,7 +2055,7 @@
     }, false);
 
     // Initialize
-    console.log('İSTİKAMET fixed panel app loaded successfully!');
+    console.log('İSTİKAMET video + dual image app loaded successfully!');
   </script>
 </body>
 </html>
