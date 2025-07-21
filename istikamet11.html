@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>İSTİKAMET - Şeffaf Arka Plan</title>
+  <title>İSTİKAMET</title>
   <style>
     * {
       margin: 0;
@@ -120,14 +120,14 @@
       cursor: not-allowed;
     }
 
-    /* Preview Area */
+    /* Preview Area - Smaller and positioned at top */
     .preview-area {
       position: fixed;
-      top: 80px;
+      top: 80px; /* Below navbar with some spacing */
       left: 50%;
       transform: translateX(-50%);
-      width: 280px;
-      height: 360px;
+      width: 280px; /* Fixed smaller width */
+      height: 360px; /* Fixed smaller height */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -151,31 +151,11 @@
       box-shadow: 
         0 20px 40px rgba(0,0,0,0.6),
         0 0 0 1px rgba(255,255,255,0.1);
-      background: transparent;
+      background: #000;
       transition: all 0.3s ease;
     }
 
-    /* Transparent background indicator */
-    .canvas-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-image: 
-        linear-gradient(45deg, #ccc 25%, transparent 25%), 
-        linear-gradient(-45deg, #ccc 25%, transparent 25%), 
-        linear-gradient(45deg, transparent 75%, #ccc 75%), 
-        linear-gradient(-45deg, transparent 75%, #ccc 75%);
-      background-size: 20px 20px;
-      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-      border-radius: 15px;
-      z-index: -1;
-      opacity: 0.3;
-    }
-
-    /* Bottom Panel */
+    /* Bottom Panel - Fixed height and positioning */
     .bottom-panel {
       position: fixed;
       bottom: 0;
@@ -187,14 +167,12 @@
       transform: translateY(calc(100% - 80px));
       transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       z-index: 900;
-      height: calc(100vh - 120px);
-      max-height: 600px;
-      min-height: 400px;
+      height: calc(100vh - 120px); /* Dynamic height based on viewport */
+      max-height: 600px; /* Maximum height limit */
+      min-height: 400px; /* Minimum height */
       overflow: hidden;
       touch-action: none;
       will-change: transform;
-      display: flex;
-      flex-direction: column;
     }
 
     .bottom-panel.expanded {
@@ -202,10 +180,10 @@
     }
 
     .bottom-panel.dragging {
-      transition: none;
+      transition: none; /* Disable transition during drag */
     }
 
-    /* Panel Handle */
+    /* Panel Handle - Enhanced for better dragging */
     .panel-handle {
       width: 50px;
       height: 5px;
@@ -215,7 +193,7 @@
       cursor: grab;
       transition: all 0.3s ease;
       position: relative;
-      flex-shrink: 0;
+      flex-shrink: 0; /* Prevent shrinking */
     }
 
     .panel-handle:active {
@@ -231,6 +209,7 @@
       left: -30px;
       right: -30px;
       bottom: -20px;
+      /* Larger invisible touch area */
     }
 
     .panel-handle::after {
@@ -249,7 +228,7 @@
     .panel-header {
       padding: 0 20px 15px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      flex-shrink: 0;
+      flex-shrink: 0; /* Prevent shrinking */
     }
 
     .panel-title {
@@ -260,7 +239,7 @@
       margin-bottom: 15px;
     }
 
-    /* Tab Navigation */
+    /* Tab Navigation - Updated for 3 tabs */
     .tab-navigation {
       display: flex;
       background: rgba(255, 255, 255, 0.05);
@@ -271,17 +250,18 @@
 
     .tab-button {
       flex: 1;
-      padding: 12px;
+      padding: 12px 8px;
       background: transparent;
       border: none;
       border-radius: 8px;
       color: rgba(255, 255, 255, 0.6);
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      text-align: center;
     }
 
     .tab-button.active {
@@ -294,12 +274,12 @@
       transform: scale(0.98);
     }
 
-    /* Panel Content */
+    /* Panel Content - Fixed to use remaining space */
     .panel-content {
-      flex: 1;
+      flex: 1; /* Take remaining space */
       overflow-y: auto;
       padding: 20px;
-      padding-bottom: 30px;
+      padding-bottom: 30px; /* Extra bottom padding for safety */
       -webkit-overflow-scrolling: touch;
       display: flex;
       flex-direction: column;
@@ -318,7 +298,7 @@
     /* Form Elements */
     .form-group {
       margin-bottom: 20px;
-      flex-shrink: 0;
+      flex-shrink: 0; /* Prevent shrinking */
     }
 
     .form-label {
@@ -329,43 +309,6 @@
       font-size: 13px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-    }
-
-    /* Background Options */
-    .background-options {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      padding: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .background-option {
-      flex: 1;
-      padding: 12px;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      color: white;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .background-option.active {
-      border-color: #4CAF50;
-      background: rgba(76, 175, 80, 0.2);
-      color: #4CAF50;
-    }
-
-    .background-option:active {
-      transform: scale(0.95);
     }
 
     /* Image Section Styling */
@@ -593,12 +536,36 @@
       letter-spacing: 0.5px;
       margin-top: 15px;
       touch-action: manipulation;
-      flex-shrink: 0;
+      flex-shrink: 0; /* Prevent shrinking */
     }
 
     .generate-button:active {
       transform: scale(0.98);
       background: linear-gradient(135deg, #555 0%, #777 100%);
+    }
+
+    /* Transparent Mode Button */
+    .transparent-button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #2a5a2a 0%, #4a8a4a 100%);
+      border: none;
+      border-radius: 22px;
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 15px;
+      touch-action: manipulation;
+      flex-shrink: 0;
+    }
+
+    .transparent-button:active {
+      transform: scale(0.98);
+      background: linear-gradient(135deg, #3a6a3a 0%, #5a9a5a 100%);
     }
 
     /* Status Message */
@@ -795,6 +762,27 @@
       transform: scale(0.95);
     }
 
+    /* Transparent Mode Info */
+    .transparent-info {
+      background: rgba(46, 125, 50, 0.1);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      line-height: 1.4;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .transparent-info-title {
+      font-weight: 600;
+      color: #4CAF50;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 480px) {
       .navbar {
@@ -841,9 +829,9 @@
         max-height: 60px;
       }
 
-      .background-options {
-        flex-direction: column;
-        gap: 8px;
+      .tab-button {
+        font-size: 11px;
+        padding: 10px 6px;
       }
     }
 
@@ -906,6 +894,12 @@
       opacity: 1;
       visibility: visible;
     }
+
+    /* Ensure panel structure uses flexbox properly */
+    .bottom-panel {
+      display: flex;
+      flex-direction: column;
+    }
   </style>
 </head>
 <body>
@@ -915,14 +909,14 @@
 
     <!-- Navbar -->
     <div class="navbar">
-      <div class="navbar-title">İSTİKAMET - Şeffaf</div>
+      <div class="navbar-title">İSTİKAMET</div>
       <button class="save-button" id="saveButton" onclick="openShareModal()" disabled>
         <span>📤</span>
         <span>Paylaş</span>
       </button>
     </div>
 
-    <!-- Preview Area -->
+    <!-- Preview Area - Now smaller and at top -->
     <div class="preview-area" id="previewArea">
       <div class="canvas-container">
         <canvas id="canvas" width="1080" height="1440"></canvas>
@@ -936,48 +930,21 @@
       <div class="panel-header">
         <div class="panel-title">Düzenleme Paneli</div>
         <div class="tab-navigation">
-          <button class="tab-button active" data-tab="settings">
-            ⚙️ AYARLAR
-          </button>
-          <button class="tab-button" data-tab="image">
+          <button class="tab-button active" data-tab="image">
             📷 GÖRSEL
           </button>
           <button class="tab-button" data-tab="text">
             ✍️ METİN
           </button>
+          <button class="tab-button" data-tab="transparent">
+            🎭 ŞEFFAF
+          </button>
         </div>
       </div>
 
       <div class="panel-content">
-        <!-- Settings Tab -->
-        <div class="tab-content active" id="settingsTab">
-          <div class="form-group">
-            <label class="form-label">🎨 Arka Plan Seçeneği</label>
-            <div class="background-options">
-              <div class="background-option active" data-bg="transparent">
-                🔍 Şeffaf Arka Plan
-              </div>
-              <div class="background-option" data-bg="black">
-                ⚫ Siyah Arka Plan
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">💧 Filigran Göster</label>
-            <div class="background-options">
-              <div class="background-option active" data-watermark="true">
-                ✅ Filigran Var
-              </div>
-              <div class="background-option" data-watermark="false">
-                ❌ Filigran Yok
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- Image Tab -->
-        <div class="tab-content" id="imageTab">
+        <div class="tab-content active" id="imageTab">
           <!-- First Image Section -->
           <div class="image-section">
             <div class="image-section-title">🖼️ Birinci Görsel</div>
@@ -1104,7 +1071,6 @@
               <div class="color-option" style="background-color: #ccc;" data-color="#ccc"></div>
               <div class="color-option" style="background-color: #888;" data-color="#888"></div>
               <div class="color-option" style="background-color: #444;" data-color="#444"></div>
-              <div class="color-option" style="background-color: #000;" data-color="#000"></div>
             </div>
           </div>
 
@@ -1122,6 +1088,50 @@
             ✨ Gönderiyi Oluştur
           </button>
         </div>
+
+        <!-- NEW: Transparent Tab -->
+        <div class="tab-content" id="transparentTab">
+          <div class="transparent-info">
+            <div class="transparent-info-title">
+              🎭 Şeffaf Arka Plan Modu
+            </div>
+            Bu modda sadece metin ve filigran ile şeffaf PNG oluşturulur. Görsel yüklemenize gerek yoktur.
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">✍️ Haber Metni</label>
+            <textarea 
+              id="transparentTextInput" 
+              class="text-input" 
+              placeholder="Şeffaf arka plan için haber metnini buraya yazın..."
+              rows="4"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">🎨 Metin Rengi</label>
+            <div class="color-options">
+              <div class="color-option active" style="background-color: white;" data-color="white" data-transparent="true"></div>
+              <div class="color-option" style="background-color: #ccc;" data-color="#ccc" data-transparent="true"></div>
+              <div class="color-option" style="background-color: #888;" data-color="#888" data-transparent="true"></div>
+              <div class="color-option" style="background-color: #444;" data-color="#444" data-transparent="true"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">📏 Yazı Boyutu</label>
+            <div class="slider-container">
+              <span class="slider-value">Küçük</span>
+              <input type="range" id="transparentFontSizeInput" class="position-slider" min="40" max="90" value="65">
+              <span class="slider-value">Büyük</span>
+            </div>
+            <div class="slider-value" id="transparentFontSizeValue">65px</div>
+          </div>
+
+          <button class="transparent-button" onclick="generateTransparent()">
+            🎭 Şeffaf Görsel Oluştur
+          </button>
+        </div>
       </div>
     </div>
 
@@ -1130,7 +1140,7 @@
       <div class="share-modal-content">
         <div class="share-modal-header">
           <div class="share-modal-title">📤 Paylaş</div>
-          <div class="share-modal-subtitle">Şeffaf PNG gönderinizi paylaşın veya indirin</div>
+          <div class="share-modal-subtitle">Gönderinizi paylaşın veya indirin</div>
         </div>
 
         <div class="share-description" id="shareDescription">
@@ -1142,7 +1152,7 @@
             📱 Direkt Paylaş
           </button>
           <button class="share-action-button secondary" onclick="downloadImage()">
-            💾 PNG İndir
+            💾 İndir
           </button>
         </div>
 
@@ -1162,10 +1172,6 @@
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
     
-    // Settings
-    let isTransparentBackground = true;
-    let showWatermark = true;
-    
     // Dual image support
     let userImage1 = null;
     let userImage2 = null;
@@ -1174,23 +1180,13 @@
     
     // Watermark image
     const filigran = new Image();
-    filigran.crossOrigin = "anonymous";
-    filigran.src = "data:image/svg+xml;base64," + btoa(`
-      <svg width="1080" height="1440" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="watermark" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
-            <text x="100" y="100" text-anchor="middle" dominant-baseline="middle" 
-                  font-family="Arial, sans-serif" font-size="24" font-weight="bold" 
-                  fill="rgba(255,255,255,0.1)" transform="rotate(-45 100 100)">İSTİKAMET</text>
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#watermark)"/>
-      </svg>
-    `);
+    filigran.src = "filigran3.png";
 
     // Text settings
     let textColor = "white";
     let fontSize = 65;
+    let transparentTextColor = "white";
+    let transparentFontSize = 65;
 
     // Panel functionality
     const bottomPanel = document.getElementById('bottomPanel');
@@ -1210,16 +1206,19 @@
       backgroundOverlay.classList.toggle('show', isPanelExpanded);
     }
 
-    // Touch events for panel dragging
+    // Improved touch events for smooth dragging
     panelHandle.addEventListener('touchstart', (e) => {
       startY = e.touches[0].clientY;
       isDragging = true;
       
+      // Get current transform value
       const rect = bottomPanel.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       startTransform = windowHeight - rect.top;
       
+      // Add dragging class to disable transitions
       bottomPanel.classList.add('dragging');
+      
     }, { passive: true });
 
     panelHandle.addEventListener('touchmove', (e) => {
@@ -1229,38 +1228,50 @@
       currentY = e.touches[0].clientY;
       const deltaY = startY - currentY;
       
+      // Calculate new position
       let newTransform = startTransform + deltaY;
       
+      // Constrain movement between collapsed (80px) and fully expanded
       const minTransform = 80;
       const maxTransform = bottomPanel.offsetHeight;
       newTransform = Math.max(minTransform, Math.min(newTransform, maxTransform));
       
+      // Apply transform
       const translateY = bottomPanel.offsetHeight - newTransform;
       bottomPanel.style.transform = `translateY(${translateY}px)`;
       
+      // Update background overlay opacity based on panel position
       const progress = (newTransform - minTransform) / (maxTransform - minTransform);
       backgroundOverlay.style.opacity = progress * 0.3;
       backgroundOverlay.style.visibility = progress > 0 ? 'visible' : 'hidden';
+      
     }, { passive: false });
 
     panelHandle.addEventListener('touchend', (e) => {
       if (!isDragging) return;
       
       isDragging = false;
+      
+      // Remove dragging class to re-enable transitions
       bottomPanel.classList.remove('dragging');
       
       const deltaY = startY - currentY;
-      const threshold = 100;
+      const threshold = 100; // Minimum drag distance to trigger toggle
       
+      // Determine final state based on drag distance and direction
       if (Math.abs(deltaY) > threshold) {
         if (deltaY > 0 && !isPanelExpanded) {
+          // Dragged up significantly, expand panel
           togglePanel();
         } else if (deltaY < 0 && isPanelExpanded) {
+          // Dragged down significantly, collapse panel
           togglePanel();
         } else {
+          // Reset to current state
           resetPanelPosition();
         }
       } else {
+        // Small movement, reset to current state
         resetPanelPosition();
       }
     }, { passive: true });
@@ -1274,19 +1285,21 @@
       }
     }
 
+    // Click to toggle (backup)
     panelHandle.addEventListener('click', (e) => {
       if (!isDragging) {
         togglePanel();
       }
     });
 
+    // Close panel when clicking background overlay
     backgroundOverlay.addEventListener('click', () => {
       if (isPanelExpanded) {
         togglePanel();
       }
     });
 
-    // Tab functionality
+    // Tab functionality - Updated for 3 tabs
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabContents = document.querySelectorAll('.tab-content');
 
@@ -1294,49 +1307,46 @@
       button.addEventListener('click', () => {
         const tabName = button.getAttribute('data-tab');
         
+        // Update active tab button
         tabButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
         
+        // Update active tab content
         tabContents.forEach(content => content.classList.remove('active'));
         document.getElementById(tabName + 'Tab').classList.add('active');
       });
     });
 
-    // Background options
-    document.querySelectorAll('[data-bg]').forEach(option => {
+    // Color options for regular mode
+    document.querySelectorAll('.color-option:not([data-transparent])').forEach(option => {
       option.addEventListener('click', function() {
-        document.querySelectorAll('[data-bg]').forEach(opt => opt.classList.remove('active'));
-        this.classList.add('active');
-        isTransparentBackground = this.getAttribute('data-bg') === 'transparent';
-        if (userImage1 || userImage2) generate();
-      });
-    });
-
-    // Watermark options
-    document.querySelectorAll('[data-watermark]').forEach(option => {
-      option.addEventListener('click', function() {
-        document.querySelectorAll('[data-watermark]').forEach(opt => opt.classList.remove('active'));
-        this.classList.add('active');
-        showWatermark = this.getAttribute('data-watermark') === 'true';
-        if (userImage1 || userImage2) generate();
-      });
-    });
-
-    // Color options
-    document.querySelectorAll('.color-option').forEach(option => {
-      option.addEventListener('click', function() {
-        document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
+        document.querySelectorAll('.color-option:not([data-transparent])').forEach(opt => opt.classList.remove('active'));
         this.classList.add('active');
         textColor = this.getAttribute('data-color');
         if (userImage1 || userImage2) generate();
       });
     });
 
-    // Font size
+    // Color options for transparent mode
+    document.querySelectorAll('.color-option[data-transparent]').forEach(option => {
+      option.addEventListener('click', function() {
+        document.querySelectorAll('.color-option[data-transparent]').forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        transparentTextColor = this.getAttribute('data-color');
+      });
+    });
+
+    // Font size for regular mode
     document.getElementById('fontSizeInput').addEventListener('input', function() {
       fontSize = parseInt(this.value);
       document.getElementById('fontSizeValue').textContent = fontSize + 'px';
       if (userImage1 || userImage2) generate();
+    });
+
+    // Font size for transparent mode
+    document.getElementById('transparentFontSizeInput').addEventListener('input', function() {
+      transparentFontSize = parseInt(this.value);
+      document.getElementById('transparentFontSizeValue').textContent = transparentFontSize + 'px';
     });
 
     // Position controls for both images
@@ -1375,6 +1385,7 @@
       });
     }
 
+    // Initialize position controls for both images
     setupPositionControls(1);
     setupPositionControls(2);
 
@@ -1432,7 +1443,6 @@
       const reader = new FileReader();
       reader.onload = function(event) {
         const img = new Image();
-        img.crossOrigin = "anonymous";
         img.onload = function() {
           console.log(`Image ${imageNum} loaded:`, img.width, 'x', img.height);
           
@@ -1442,14 +1452,19 @@
             userImage2 = img;
           }
           
+          // Show preview
           const preview = document.getElementById(`imagePreview${imageNum}`);
           preview.innerHTML = `<img src="${event.target.result}" class="image-preview" alt="Önizleme ${imageNum}">`;
           
+          // Show position controls
           document.getElementById(`positionControls${imageNum}`).style.display = 'block';
+          
+          // Enable save button if at least one image is loaded
           document.getElementById('saveButton').disabled = false;
           
           showStatus(`${imageNum}. görsel başarıyla yüklendi!`);
           
+          // Auto-generate if text exists
           if (document.getElementById("textInput").value.trim()) {
             generate();
           }
@@ -1465,7 +1480,7 @@
       reader.readAsDataURL(file);
     }
 
-    // File input events
+    // File input events for both images
     document.getElementById("imageInput1").addEventListener("change", function(e) {
       const file = e.target.files[0];
       if (file) {
@@ -1480,7 +1495,7 @@
       }
     });
 
-    // Generate post function with transparent background support
+    // Generate post function - updated for dual images
     function generate() {
       if (!userImage1 && !userImage2) {
         showStatus('Lütfen en az bir görsel yükleyin.', 'error');
@@ -1493,23 +1508,18 @@
         return;
       }
 
-      console.log('Generating post with transparent background:', isTransparentBackground);
+      console.log('Generating post with dual images...');
 
+      // Fixed settings
       const bottomPadding = 200;
       const lineSpacing = 1;
       const leftPadding = 100;
       const rightLimit = 1000;
       const maxWidth = rightLimit - leftPadding;
 
-      // Clear canvas with transparent or black background
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      if (!isTransparentBackground) {
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
-      
-      // Draw first image if exists
+      // 1. Draw first image if exists
       if (userImage1) {
         const sizeFactor1 = image1Size / 100;
         const scaledWidth1 = userImage1.width * sizeFactor1;
@@ -1524,7 +1534,7 @@
         ctx.drawImage(userImage1, finalX1, finalY1, scaledWidth1, scaledHeight1);
       }
 
-      // Draw second image if exists
+      // 2. Draw second image if exists
       if (userImage2) {
         const sizeFactor2 = image2Size / 100;
         const scaledWidth2 = userImage2.width * sizeFactor2;
@@ -1539,20 +1549,17 @@
         ctx.drawImage(userImage2, finalX2, finalY2, scaledWidth2, scaledHeight2);
       }
 
-      // Add watermark if enabled
-      if (showWatermark && filigran.complete) {
-        ctx.globalAlpha = 0.3;
+      // 3. Add watermark
+      if (filigran.complete) {
         ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
-        ctx.globalAlpha = 1.0;
-      } else if (showWatermark) {
+      } else {
         filigran.onload = () => {
-          ctx.globalAlpha = 0.3;
           ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
-          ctx.globalAlpha = 1.0;
           drawText();
         };
       }
       
+      // 4. Draw text
       drawText();
       
       function drawText() {
@@ -1563,8 +1570,8 @@
         ctx.textAlign = "left";
         ctx.font = `bold ${fontSize}px Helvetica, Arial, sans-serif`;
         
-        // Add shadow effect for better readability
-        ctx.shadowColor = isTransparentBackground ? "rgba(0, 0, 0, 0.8)" : "rgba(0, 0, 0, 0.7)";
+        // Add shadow effect
+        ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
         ctx.shadowBlur = 10;
         ctx.shadowOffsetX = 2;
         ctx.shadowOffsetY = 2;
@@ -1582,12 +1589,75 @@
       }
     }
 
-    // Text wrapping
-    function wrapText(text, maxWidth) {
+    // NEW: Generate transparent function
+    function generateTransparent() {
+      const text = document.getElementById("transparentTextInput").value;
+      if (!text.trim()) {
+        showStatus('Lütfen şeffaf mod için haber metnini girin.', 'error');
+        return;
+      }
+
+      console.log('Generating transparent post...');
+
+      // Fixed settings
+      const bottomPadding = 200;
+      const lineSpacing = 1;
+      const leftPadding = 100;
+      const rightLimit = 1000;
+      const maxWidth = rightLimit - leftPadding;
+
+      // Clear canvas with transparent background
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Add watermark first
+      if (filigran.complete) {
+        ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
+        drawTransparentText();
+      } else {
+        filigran.onload = () => {
+          ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
+          drawTransparentText();
+        };
+      }
+      
+      function drawTransparentText() {
+        const wrappedLines = wrapText(text, maxWidth, transparentFontSize);
+        let y = canvas.height - bottomPadding;
+        ctx.fillStyle = transparentTextColor;
+        ctx.textBaseline = "bottom";
+        ctx.textAlign = "left";
+        ctx.font = `bold ${transparentFontSize}px Helvetica, Arial, sans-serif`;
+        
+        // Add shadow effect for better readability
+        ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetX = 3;
+        ctx.shadowOffsetY = 3;
+        
+        for (let i = wrappedLines.length - 1; i >= 0; i--) {
+          ctx.fillText(wrappedLines[i], leftPadding, y);
+          y -= (transparentFontSize + lineSpacing);
+        }
+        
+        // Reset shadow
+        ctx.shadowColor = "transparent";
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+      }
+
+      // Enable save button
+      document.getElementById('saveButton').disabled = false;
+      showStatus('Şeffaf görsel başarıyla oluşturuldu!');
+    }
+
+    // Text wrapping - Updated to accept custom font size
+    function wrapText(text, maxWidth, customFontSize = null) {
       const words = text.split(/\s+/);
       const lines = [];
       let line = "";
-      ctx.font = `bold ${fontSize}px Helvetica, Arial, sans-serif`;
+      const useFontSize = customFontSize || fontSize;
+      ctx.font = `bold ${useFontSize}px Helvetica, Arial, sans-serif`;
       
       for (let i = 0; i < words.length; i++) {
         const testLine = line + words[i] + " ";
@@ -1607,18 +1677,29 @@
 
     // Share Modal Functions
     function openShareModal() {
-      if (!userImage1 && !userImage2) {
-        showStatus('Önce en az bir görsel yükleyip gönderi oluşturun.', 'error');
+      // Check if any content exists (images or transparent mode was used)
+      const hasImages = userImage1 || userImage2;
+      const hasTransparentText = document.getElementById("transparentTextInput").value.trim();
+      const hasRegularText = document.getElementById("textInput").value.trim();
+      
+      if (!hasImages && !hasTransparentText && !hasRegularText) {
+        showStatus('Önce bir görsel yükleyip gönderi oluşturun veya şeffaf mod kullanın.', 'error');
         return;
       }
       
-      const text = document.getElementById("textInput").value.trim();
       const shareDescription = document.getElementById('shareDescription');
+      let text = '';
+      
+      if (hasTransparentText) {
+        text = hasTransparentText;
+      } else if (hasRegularText) {
+        text = hasRegularText;
+      }
       
       if (text) {
         shareDescription.textContent = text;
       } else {
-        shareDescription.textContent = 'İSTİKAMET - Şeffaf PNG sosyal medya gönderisi';
+        shareDescription.textContent = 'İSTİKAMET - Sosyal medya gönderisi';
       }
       
       document.getElementById('shareModal').classList.add('show');
@@ -1630,43 +1711,52 @@
 
     function downloadImage() {
       const link = document.createElement("a");
-      link.download = "istikamet-seffaf-gonderi.png";
+      link.download = "istikamet-gonderi.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
       
-      showStatus('Şeffaf PNG başarıyla indirildi!');
+      showStatus('Görsel başarıyla indirildi!');
       closeShareModal();
     }
 
     // Native Share API Function
     async function shareImage() {
       try {
+        // Check if Web Share API is supported
         if (!navigator.share) {
-          showStatus('Bu tarayıcı direkt paylaşımı desteklemiyor. PNG\'yi indirin.', 'error');
+          showStatus('Bu tarayıcı direkt paylaşımı desteklemiyor. Görseli indirin.', 'error');
           downloadImage();
           return;
         }
 
+        // Convert canvas to blob
+        const canvas = document.getElementById('canvas');
+        
         canvas.toBlob(async (blob) => {
           if (!blob) {
             showStatus('Görsel oluşturulamadı.', 'error');
             return;
           }
 
-          const text = document.getElementById("textInput").value.trim();
-          const shareText = text ? text + '\n\n#İSTİKAMET' : 'İSTİKAMET - Şeffaf PNG Haber\n\n#İSTİKAMET';
+          // Get text from appropriate input
+          const regularText = document.getElementById("textInput").value.trim();
+          const transparentText = document.getElementById("transparentTextInput").value.trim();
+          const text = transparentText || regularText;
+          const shareText = text ? text + '\n\n#İSTİKAMET' : 'İSTİKAMET - Haber\n\n#İSTİKAMET';
           
-          const file = new File([blob], 'istikamet-seffaf-gonderi.png', { 
+          // Create file from blob
+          const file = new File([blob], 'istikamet-gonderi.png', { 
             type: 'image/png',
             lastModified: Date.now()
           });
 
           const shareData = {
-            title: 'İSTİKAMET - Şeffaf PNG Haber',
+            title: 'İSTİKAMET - Haber',
             text: shareText,
             files: [file]
           };
 
+          // Check if files can be shared
           if (navigator.canShare && !navigator.canShare(shareData)) {
             showStatus('Bu cihaz dosya paylaşımını desteklemiyor.', 'error');
             downloadImage();
@@ -1675,22 +1765,23 @@
 
           try {
             await navigator.share(shareData);
-            showStatus('Şeffaf PNG başarıyla paylaşıldı!');
+            showStatus('Görsel başarıyla paylaşıldı!');
             closeShareModal();
           } catch (error) {
             if (error.name === 'AbortError') {
+              // User cancelled the share
               showStatus('Paylaşım iptal edildi.');
             } else {
               console.error('Share failed:', error);
-              showStatus('Paylaşım başarısız. PNG\'yi indirin.', 'error');
+              showStatus('Paylaşım başarısız. Görseli indirin.', 'error');
               downloadImage();
             }
           }
-        }, 'image/png', 1.0);
+        }, 'image/png', 0.9);
 
       } catch (error) {
         console.error('Share error:', error);
-        showStatus('Paylaşım hatası. PNG\'yi indirin.', 'error');
+        showStatus('Paylaşım hatası. Görseli indirin.', 'error');
         downloadImage();
       }
     }
@@ -1702,10 +1793,18 @@
       }
     });
 
-    // Auto-update
+    // Auto-update for regular text input
     document.getElementById("textInput").addEventListener("input", function() {
       if ((userImage1 || userImage2) && this.value.trim()) {
         setTimeout(generate, 500);
+      }
+    });
+
+    // Auto-update for transparent text input
+    document.getElementById("transparentTextInput").addEventListener("input", function() {
+      // Enable save button when transparent text is entered
+      if (this.value.trim()) {
+        document.getElementById('saveButton').disabled = false;
       }
     });
 
@@ -1719,7 +1818,8 @@
       lastTouchEnd = now;
     }, false);
 
-    console.log('İSTİKAMET transparent background app loaded successfully!');
+    // Initialize
+    console.log('İSTİKAMET enhanced app with transparent mode loaded successfully!');
   </script>
 </body>
 </html>
