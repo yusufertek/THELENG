@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>İSTİKAMET</title>
+  <title>SERT</title>
   <style>
     * {
       margin: 0;
@@ -909,7 +909,7 @@
 
     <!-- Navbar -->
     <div class="navbar">
-      <div class="navbar-title">İSTİKAMET</div>
+      <div class="navbar-title">SERT</div>
       <button class="save-button" id="saveButton" onclick="openShareModal()" disabled>
         <span>📤</span>
         <span>Paylaş</span>
@@ -1699,7 +1699,7 @@
       if (text) {
         shareDescription.textContent = text;
       } else {
-        shareDescription.textContent = 'İSTİKAMET - Sosyal medya gönderisi';
+        shareDescription.textContent = 'SERT - Sosyal medya gönderisi';
       }
       
       document.getElementById('shareModal').classList.add('show');
@@ -1742,7 +1742,7 @@
           const regularText = document.getElementById("textInput").value.trim();
           const transparentText = document.getElementById("transparentTextInput").value.trim();
           const text = transparentText || regularText;
-          const shareText = text ? text + '\n\n#İSTİKAMET' : 'İSTİKAMET - Haber\n\n#İSTİKAMET';
+          const shareText = text ? text + '\n\n#SERT' : 'SERT - Haber\n\n#SERT';
           
           // Create file from blob
           const file = new File([blob], 'istikamet-gonderi.png', { 
@@ -1751,7 +1751,7 @@
           });
 
           const shareData = {
-            title: 'İSTİKAMET - Haber',
+            title: 'SERT - Haber',
             text: shareText,
             files: [file]
           };
@@ -1819,7 +1819,7 @@
     }, false);
 
     // Initialize
-    console.log('İSTİKAMET enhanced app with transparent mode loaded successfully!');
+    console.log('SERT enhanced app with transparent mode loaded successfully!');
   </script>
 </body>
 </html>
