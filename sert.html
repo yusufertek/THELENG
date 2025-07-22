@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>İSTİKAMET</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #000;
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.04) 0%, transparent 40%),
+        linear-gradient(135deg, #000 0%, #1a1a1a 50%, #2a2a2a 100%);
+      z-index: -2;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(1px 1px at 20px 30px, #eee, transparent),
+        radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent);
+      background-repeat: repeat;
+      background-size: 150px 80px;
+      animation: sparkle 15s linear infinite;
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    @keyframes sparkle {
+      from { transform: translateX(0); }
+      to { transform: translateX(-150px); }
+    }
+
+    /* App Layout */
+    .app-container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 1000;
+    }
+
+    .navbar-title {
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(45deg, #fff, #ccc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .save-button {
+      background: linear-gradient(135deg, #333, #555);
+      border: none;
+      border-radius: 20px;
+      color: white;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .save-button:active {
+      transform: scale(0.95);
+      background: linear-gradient(135deg, #444, #666);
+    }
+
+    .save-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Preview Area - Smaller and positioned at top */
+    .preview-area {
+      position: fixed;
+      top: 80px; /* Below navbar with some spacing */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 280px; /* Fixed smaller width */
+      height: 360px; /* Fixed smaller height */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #canvas {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 15px;
+      box-shadow: 
+        0 20px 40px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(255,255,255,0.1);
+      background: #000;
+      transition: all 0.3s ease;
+    }
+
+    /* Bottom Panel - Fixed height and positioning */
+    .bottom-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(20, 20, 20, 0.98);
+      backdrop-filter: blur(20px);
+      border-radius: 20px 20px 0 0;
+      transform: translateY(calc(100% - 80px));
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: 900;
+      height: calc(100vh - 120px); /* Dynamic height based on viewport */
+      max-height: 600px; /* Maximum height limit */
+      min-height: 400px; /* Minimum height */
+      overflow: hidden;
+      touch-action: none;
+      will-change: transform;
+    }
+
+    .bottom-panel.expanded {
+      transform: translateY(0);
+    }
+
+    .bottom-panel.dragging {
+      transition: none; /* Disable transition during drag */
+    }
+
+    /* Panel Handle - Enhanced for better dragging */
+    .panel-handle {
+      width: 50px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 3px;
+      margin: 15px auto 10px;
+      cursor: grab;
+      transition: all 0.3s ease;
+      position: relative;
+      flex-shrink: 0; /* Prevent shrinking */
+    }
+
+    .panel-handle:active {
+      cursor: grabbing;
+      background: rgba(255, 255, 255, 0.7);
+      transform: scaleY(1.5);
+    }
+
+    .panel-handle::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: -30px;
+      right: -30px;
+      bottom: -20px;
+      /* Larger invisible touch area */
+    }
+
+    .panel-handle::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 1px;
+    }
+
+    /* Panel Header */
+    .panel-header {
+      padding: 0 20px 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0; /* Prevent shrinking */
+    }
+
+    .panel-title {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 15px;
+    }
+
+    /* Tab Navigation - Updated for 3 tabs */
+    .tab-navigation {
+      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .tab-button {
+      flex: 1;
+      padding: 12px 8px;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .tab-button.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+    }
+
+    .tab-button:active {
+      transform: scale(0.98);
+    }
+
+    /* Panel Content - Fixed to use remaining space */
+    .panel-content {
+      flex: 1; /* Take remaining space */
+      overflow-y: auto;
+      padding: 20px;
+      padding-bottom: 30px; /* Extra bottom padding for safety */
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tab-content {
+      display: none;
+      flex: 1;
+    }
+
+    .tab-content.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 20px;
+      flex-shrink: 0; /* Prevent shrinking */
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #fff;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Image Section Styling */
+    .image-section {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .image-section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 15px;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Upload Button */
+    .upload-button {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #333 0%, #555 100%);
+      border: 2px dashed rgba(255,255,255,0.3);
+      border-radius: 12px;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      touch-action: manipulation;
+    }
+
+    .upload-button:active {
+      transform: scale(0.98);
+      background: linear-gradient(135deg, #444 0%, #666 100%);
+    }
+
+    /* Image Preview */
+    .image-preview-container {
+      text-align: center;
+      margin: 12px 0;
+    }
+
+    .image-preview {
+      max-width: 80px;
+      max-height: 80px;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    /* Position Controls */
+    .position-controls {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slider-value {
+      min-width: 30px;
+      text-align: center;
+      font-size: 10px;
+      color: #ccc;
+      font-weight: 500;
+    }
+
+    .position-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 3px;
+      outline: none;
+      touch-action: manipulation;
+    }
+
+    .position-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, #fff, #ddd);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .position-slider::-webkit-slider-thumb:active {
+      transform: scale(1.2);
+      box-shadow: 0 0 12px rgba(255,255,255,0.5);
+    }
+
+    /* Text Input */
+    .text-input {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 15px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .text-input:focus {
+      outline: none;
+      border-color: #fff;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+      background: rgba(255,255,255,0.15);
+    }
+
+    .text-input::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* Color Options */
+    .color-options {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      justify-content: center;
+    }
+
+    .color-option {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.3s ease;
+      touch-action: manipulation;
+      position: relative;
+    }
+
+    .color-option:active {
+      transform: scale(0.9);
+    }
+
+    .color-option.active {
+      border-color: white;
+      box-shadow: 0 0 12px rgba(255,255,255,0.5);
+    }
+
+    .color-option.active::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #000;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    /* Reset Button */
+    .reset-button {
+      width: 100%;
+      padding: 10px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 18px;
+      color: white;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      margin-top: 15px;
+      touch-action: manipulation;
+    }
+
+    .reset-button:active {
+      background: rgba(255,255,255,0.2);
+      transform: scale(0.98);
+    }
+
+    /* Generate Button */
+    .generate-button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #444 0%, #666 100%);
+      border: none;
+      border-radius: 22px;
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 15px;
+      touch-action: manipulation;
+      flex-shrink: 0; /* Prevent shrinking */
+    }
+
+    .generate-button:active {
+      transform: scale(0.98);
+      background: linear-gradient(135deg, #555 0%, #777 100%);
+    }
+
+    /* Transparent Mode Button */
+    .transparent-button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #2a5a2a 0%, #4a8a4a 100%);
+      border: none;
+      border-radius: 22px;
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 15px;
+      touch-action: manipulation;
+      flex-shrink: 0;
+    }
+
+    .transparent-button:active {
+      transform: scale(0.98);
+      background: linear-gradient(135deg, #3a6a3a 0%, #5a9a5a 100%);
+    }
+
+    /* Status Message */
+    .status-message {
+      position: fixed;
+      top: 80px;
+      left: 20px;
+      right: 20px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      text-align: center;
+      transform: translateY(-100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1100;
+    }
+
+    .status-message.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .status-success {
+      background: rgba(34, 197, 94, 0.9);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #fff;
+    }
+
+    .status-error {
+      background: rgba(239, 68, 68, 0.9);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fff;
+    }
+
+    /* Hidden Input */
+    .hidden-input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Social Share Modal */
+    .share-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .share-modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .share-modal-content {
+      background: rgba(20, 20, 20, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 400px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .share-modal.show .share-modal-content {
+      transform: scale(1);
+    }
+
+    .share-modal-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .share-modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .share-modal-subtitle {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .share-description {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 25px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.9);
+      max-height: 100px;
+      overflow-y: auto;
+    }
+
+    .share-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .share-action-button {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .share-action-button.primary {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+    }
+
+    .share-action-button.secondary {
+      background: linear-gradient(135deg, #444, #666);
+      color: white;
+    }
+
+    .share-action-button:active {
+      transform: scale(0.95);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .modal-button.primary {
+      background: linear-gradient(135deg, #444, #666);
+      color: white;
+    }
+
+    .modal-button.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-button:active {
+      transform: scale(0.95);
+    }
+
+    /* Transparent Mode Info */
+    .transparent-info {
+      background: rgba(46, 125, 50, 0.1);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      line-height: 1.4;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .transparent-info-title {
+      font-weight: 600;
+      color: #4CAF50;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .navbar {
+        padding: 0 15px;
+      }
+      
+      .navbar-title {
+        font-size: 16px;
+      }
+      
+      .preview-area {
+        width: 250px;
+        height: 320px;
+        top: 75px;
+      }
+      
+      .panel-content {
+        padding: 15px;
+        padding-bottom: 25px;
+      }
+      
+      .color-option {
+        width: 32px;
+        height: 32px;
+      }
+      
+      .bottom-panel {
+        height: calc(100vh - 100px);
+        max-height: 500px;
+        min-height: 350px;
+      }
+
+      .share-modal-content {
+        padding: 20px;
+        width: 95%;
+      }
+
+      .share-actions {
+        flex-direction: column;
+      }
+
+      .image-preview {
+        max-width: 60px;
+        max-height: 60px;
+      }
+
+      .tab-button {
+        font-size: 11px;
+        padding: 10px 6px;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 360px) {
+      .bottom-panel {
+        height: calc(100vh - 80px);
+        max-height: 450px;
+        min-height: 320px;
+      }
+      
+      .panel-content {
+        padding: 12px;
+        padding-bottom: 20px;
+      }
+    }
+
+    /* Custom scrollbar */
+    .panel-content::-webkit-scrollbar,
+    .share-modal-content::-webkit-scrollbar,
+    .share-description::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .panel-content::-webkit-scrollbar-track,
+    .share-modal-content::-webkit-scrollbar-track,
+    .share-description::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+    }
+
+    .panel-content::-webkit-scrollbar-thumb,
+    .share-modal-content::-webkit-scrollbar-thumb,
+    .share-description::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+    }
+
+    .panel-content::-webkit-scrollbar-thumb:hover,
+    .share-modal-content::-webkit-scrollbar-thumb:hover,
+    .share-description::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Background overlay when panel is open */
+    .background-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 50;
+    }
+
+    .background-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Ensure panel structure uses flexbox properly */
+    .bottom-panel {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Background overlay -->
+    <div class="background-overlay" id="backgroundOverlay"></div>
+
+    <!-- Navbar -->
+    <div class="navbar">
+      <div class="navbar-title">İSTİKAMET</div>
+      <button class="save-button" id="saveButton" onclick="openShareModal()" disabled>
+        <span>📤</span>
+        <span>Paylaş</span>
+      </button>
+    </div>
+
+    <!-- Preview Area - Now smaller and at top -->
+    <div class="preview-area" id="previewArea">
+      <div class="canvas-container">
+        <canvas id="canvas" width="1080" height="1440"></canvas>
+      </div>
+    </div>
+
+    <!-- Bottom Panel -->
+    <div class="bottom-panel" id="bottomPanel">
+      <div class="panel-handle" id="panelHandle"></div>
+      
+      <div class="panel-header">
+        <div class="panel-title">Düzenleme Paneli</div>
+        <div class="tab-navigation">
+          <button class="tab-button active" data-tab="image">
+            📷 GÖRSEL
+          </button>
+          <button class="tab-button" data-tab="text">
+            ✍️ METİN
+          </button>
+          <button class="tab-button" data-tab="transparent">
+            🎭 ŞEFFAF
+          </button>
+        </div>
+      </div>
+
+      <div class="panel-content">
+        <!-- Image Tab -->
+        <div class="tab-content active" id="imageTab">
+          <!-- First Image Section -->
+          <div class="image-section">
+            <div class="image-section-title">🖼️ Birinci Görsel</div>
+            
+            <input type="file" id="imageInput1" class="hidden-input" accept="image/*">
+            
+            <button class="upload-button" onclick="document.getElementById('imageInput1').click()">
+              📸 Birinci Görseli Seç
+            </button>
+            
+            <div class="image-preview-container" id="imagePreview1"></div>
+
+            <div class="form-group" id="positionControls1" style="display: none;">
+              <label class="form-label">🎯 Birinci Görsel Konumu</label>
+              
+              <div class="position-controls">
+                <div class="control-group">
+                  <label class="control-label">↔️ Yatay Konum</label>
+                  <div class="slider-container">
+                    <span class="slider-value">Sol</span>
+                    <input type="range" id="xPositionSlider1" class="position-slider" min="-540" max="540" value="0">
+                    <span class="slider-value">Sağ</span>
+                  </div>
+                  <div class="slider-value" id="xValue1">0</div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">↕️ Dikey Konum</label>
+                  <div class="slider-container">
+                    <span class="slider-value">Üst</span>
+                    <input type="range" id="yPositionSlider1" class="position-slider" min="-720" max="720" value="0">
+                    <span class="slider-value">Alt</span>
+                  </div>
+                  <div class="slider-value" id="yValue1">0</div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">🔍 Görsel Boyutu</label>
+                  <div class="slider-container">
+                    <span class="slider-value">Küçük</span>
+                    <input type="range" id="sizeSlider1" class="position-slider" min="25" max="500" value="300">
+                    <span class="slider-value">Büyük</span>
+                  </div>
+                  <div class="slider-value" id="sizeValue1">%300</div>
+                </div>
+              </div>
+
+              <button class="reset-button" onclick="resetImagePosition(1)">
+                🔄 Birinci Görseli Sıfırla
+              </button>
+            </div>
+          </div>
+
+          <!-- Second Image Section -->
+          <div class="image-section">
+            <div class="image-section-title">🖼️ İkinci Görsel</div>
+            
+            <input type="file" id="imageInput2" class="hidden-input" accept="image/*">
+            
+            <button class="upload-button" onclick="document.getElementById('imageInput2').click()">
+              📸 İkinci Görseli Seç
+            </button>
+            
+            <div class="image-preview-container" id="imagePreview2"></div>
+
+            <div class="form-group" id="positionControls2" style="display: none;">
+              <label class="form-label">🎯 İkinci Görsel Konumu</label>
+              
+              <div class="position-controls">
+                <div class="control-group">
+                  <label class="control-label">↔️ Yatay Konum</label>
+                  <div class="slider-container">
+                    <span class="slider-value">Sol</span>
+                    <input type="range" id="xPositionSlider2" class="position-slider" min="-540" max="540" value="0">
+                    <span class="slider-value">Sağ</span>
+                  </div>
+                  <div class="slider-value" id="xValue2">0</div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">↕️ Dikey Konum</label>
+                  <div class="slider-container">
+                    <span class="slider-value">Üst</span>
+                    <input type="range" id="yPositionSlider2" class="position-slider" min="-720" max="720" value="0">
+                    <span class="slider-value">Alt</span>
+                  </div>
+                  <div class="slider-value" id="yValue2">0</div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">🔍 Görsel Boyutu</label>
+                  <div class="slider-container">
+                    <span class="slider-value">Küçük</span>
+                    <input type="range" id="sizeSlider2" class="position-slider" min="25" max="500" value="300">
+                    <span class="slider-value">Büyük</span>
+                  </div>
+                  <div class="slider-value" id="sizeValue2">%300</div>
+                </div>
+              </div>
+
+              <button class="reset-button" onclick="resetImagePosition(2)">
+                🔄 İkinci Görseli Sıfırla
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Text Tab -->
+        <div class="tab-content" id="textTab">
+          <div class="form-group">
+            <label class="form-label">✍️ Haber Metni</label>
+            <textarea 
+              id="textInput" 
+              class="text-input" 
+              placeholder="Haber metnini buraya yazın..."
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">🎨 Metin Rengi</label>
+            <div class="color-options">
+              <div class="color-option active" style="background-color: white;" data-color="white"></div>
+              <div class="color-option" style="background-color: #ccc;" data-color="#ccc"></div>
+              <div class="color-option" style="background-color: #888;" data-color="#888"></div>
+              <div class="color-option" style="background-color: #444;" data-color="#444"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">📏 Yazı Boyutu</label>
+            <div class="slider-container">
+              <span class="slider-value">Küçük</span>
+              <input type="range" id="fontSizeInput" class="position-slider" min="40" max="90" value="65">
+              <span class="slider-value">Büyük</span>
+            </div>
+            <div class="slider-value" id="fontSizeValue">65px</div>
+          </div>
+
+          <button class="generate-button" onclick="generate()">
+            ✨ Gönderiyi Oluştur
+          </button>
+        </div>
+
+        <!-- NEW: Transparent Tab -->
+        <div class="tab-content" id="transparentTab">
+          <div class="transparent-info">
+            <div class="transparent-info-title">
+              🎭 Şeffaf Arka Plan Modu
+            </div>
+            Bu modda sadece metin ve filigran ile şeffaf PNG oluşturulur. Görsel yüklemenize gerek yoktur.
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">✍️ Haber Metni</label>
+            <textarea 
+              id="transparentTextInput" 
+              class="text-input" 
+              placeholder="Şeffaf arka plan için haber metnini buraya yazın..."
+              rows="4"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">🎨 Metin Rengi</label>
+            <div class="color-options">
+              <div class="color-option active" style="background-color: white;" data-color="white" data-transparent="true"></div>
+              <div class="color-option" style="background-color: #ccc;" data-color="#ccc" data-transparent="true"></div>
+              <div class="color-option" style="background-color: #888;" data-color="#888" data-transparent="true"></div>
+              <div class="color-option" style="background-color: #444;" data-color="#444" data-transparent="true"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">📏 Yazı Boyutu</label>
+            <div class="slider-container">
+              <span class="slider-value">Küçük</span>
+              <input type="range" id="transparentFontSizeInput" class="position-slider" min="40" max="90" value="65">
+              <span class="slider-value">Büyük</span>
+            </div>
+            <div class="slider-value" id="transparentFontSizeValue">65px</div>
+          </div>
+
+          <button class="transparent-button" onclick="generateTransparent()">
+            🎭 Şeffaf Görsel Oluştur
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Share Modal -->
+    <div class="share-modal" id="shareModal">
+      <div class="share-modal-content">
+        <div class="share-modal-header">
+          <div class="share-modal-title">📤 Paylaş</div>
+          <div class="share-modal-subtitle">Gönderinizi paylaşın veya indirin</div>
+        </div>
+
+        <div class="share-description" id="shareDescription">
+          Paylaşım açıklaması burada görünecek...
+        </div>
+
+        <div class="share-actions">
+          <button class="share-action-button primary" onclick="shareImage()">
+            📱 Direkt Paylaş
+          </button>
+          <button class="share-action-button secondary" onclick="downloadImage()">
+            💾 İndir
+          </button>
+        </div>
+
+        <div class="modal-actions">
+          <button class="modal-button secondary" onclick="closeShareModal()">
+            ❌ Kapat
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Message -->
+    <div id="statusMessage" class="status-message"></div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    
+    // Dual image support
+    let userImage1 = null;
+    let userImage2 = null;
+    let image1X = 0, image1Y = 0, image1Size = 300;
+    let image2X = 0, image2Y = 0, image2Size = 300;
+    
+    // Watermark image
+    const filigran = new Image();
+    filigran.src = "sert.png";
+
+    // Text settings
+    let textColor = "white";
+    let fontSize = 65;
+    let transparentTextColor = "white";
+    let transparentFontSize = 65;
+
+    // Panel functionality
+    const bottomPanel = document.getElementById('bottomPanel');
+    const panelHandle = document.getElementById('panelHandle');
+    const backgroundOverlay = document.getElementById('backgroundOverlay');
+    let isPanelExpanded = false;
+
+    // Enhanced drag functionality
+    let startY = 0;
+    let currentY = 0;
+    let isDragging = false;
+    let startTransform = 0;
+
+    function togglePanel() {
+      isPanelExpanded = !isPanelExpanded;
+      bottomPanel.classList.toggle('expanded', isPanelExpanded);
+      backgroundOverlay.classList.toggle('show', isPanelExpanded);
+    }
+
+    // Improved touch events for smooth dragging
+    panelHandle.addEventListener('touchstart', (e) => {
+      startY = e.touches[0].clientY;
+      isDragging = true;
+      
+      // Get current transform value
+      const rect = bottomPanel.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      startTransform = windowHeight - rect.top;
+      
+      // Add dragging class to disable transitions
+      bottomPanel.classList.add('dragging');
+      
+    }, { passive: true });
+
+    panelHandle.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      
+      e.preventDefault();
+      currentY = e.touches[0].clientY;
+      const deltaY = startY - currentY;
+      
+      // Calculate new position
+      let newTransform = startTransform + deltaY;
+      
+      // Constrain movement between collapsed (80px) and fully expanded
+      const minTransform = 80;
+      const maxTransform = bottomPanel.offsetHeight;
+      newTransform = Math.max(minTransform, Math.min(newTransform, maxTransform));
+      
+      // Apply transform
+      const translateY = bottomPanel.offsetHeight - newTransform;
+      bottomPanel.style.transform = `translateY(${translateY}px)`;
+      
+      // Update background overlay opacity based on panel position
+      const progress = (newTransform - minTransform) / (maxTransform - minTransform);
+      backgroundOverlay.style.opacity = progress * 0.3;
+      backgroundOverlay.style.visibility = progress > 0 ? 'visible' : 'hidden';
+      
+    }, { passive: false });
+
+    panelHandle.addEventListener('touchend', (e) => {
+      if (!isDragging) return;
+      
+      isDragging = false;
+      
+      // Remove dragging class to re-enable transitions
+      bottomPanel.classList.remove('dragging');
+      
+      const deltaY = startY - currentY;
+      const threshold = 100; // Minimum drag distance to trigger toggle
+      
+      // Determine final state based on drag distance and direction
+      if (Math.abs(deltaY) > threshold) {
+        if (deltaY > 0 && !isPanelExpanded) {
+          // Dragged up significantly, expand panel
+          togglePanel();
+        } else if (deltaY < 0 && isPanelExpanded) {
+          // Dragged down significantly, collapse panel
+          togglePanel();
+        } else {
+          // Reset to current state
+          resetPanelPosition();
+        }
+      } else {
+        // Small movement, reset to current state
+        resetPanelPosition();
+      }
+    }, { passive: true });
+
+    function resetPanelPosition() {
+      bottomPanel.style.transform = '';
+      if (isPanelExpanded) {
+        backgroundOverlay.classList.add('show');
+      } else {
+        backgroundOverlay.classList.remove('show');
+      }
+    }
+
+    // Click to toggle (backup)
+    panelHandle.addEventListener('click', (e) => {
+      if (!isDragging) {
+        togglePanel();
+      }
+    });
+
+    // Close panel when clicking background overlay
+    backgroundOverlay.addEventListener('click', () => {
+      if (isPanelExpanded) {
+        togglePanel();
+      }
+    });
+
+    // Tab functionality - Updated for 3 tabs
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const tabName = button.getAttribute('data-tab');
+        
+        // Update active tab button
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        // Update active tab content
+        tabContents.forEach(content => content.classList.remove('active'));
+        document.getElementById(tabName + 'Tab').classList.add('active');
+      });
+    });
+
+    // Color options for regular mode
+    document.querySelectorAll('.color-option:not([data-transparent])').forEach(option => {
+      option.addEventListener('click', function() {
+        document.querySelectorAll('.color-option:not([data-transparent])').forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        textColor = this.getAttribute('data-color');
+        if (userImage1 || userImage2) generate();
+      });
+    });
+
+    // Color options for transparent mode
+    document.querySelectorAll('.color-option[data-transparent]').forEach(option => {
+      option.addEventListener('click', function() {
+        document.querySelectorAll('.color-option[data-transparent]').forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        transparentTextColor = this.getAttribute('data-color');
+      });
+    });
+
+    // Font size for regular mode
+    document.getElementById('fontSizeInput').addEventListener('input', function() {
+      fontSize = parseInt(this.value);
+      document.getElementById('fontSizeValue').textContent = fontSize + 'px';
+      if (userImage1 || userImage2) generate();
+    });
+
+    // Font size for transparent mode
+    document.getElementById('transparentFontSizeInput').addEventListener('input', function() {
+      transparentFontSize = parseInt(this.value);
+      document.getElementById('transparentFontSizeValue').textContent = transparentFontSize + 'px';
+    });
+
+    // Position controls for both images
+    function setupPositionControls(imageNum) {
+      document.getElementById(`xPositionSlider${imageNum}`).addEventListener('input', function() {
+        if (imageNum === 1) {
+          image1X = parseInt(this.value);
+          document.getElementById('xValue1').textContent = image1X;
+        } else {
+          image2X = parseInt(this.value);
+          document.getElementById('xValue2').textContent = image2X;
+        }
+        if (userImage1 || userImage2) generate();
+      });
+
+      document.getElementById(`yPositionSlider${imageNum}`).addEventListener('input', function() {
+        if (imageNum === 1) {
+          image1Y = parseInt(this.value);
+          document.getElementById('yValue1').textContent = image1Y;
+        } else {
+          image2Y = parseInt(this.value);
+          document.getElementById('yValue2').textContent = image2Y;
+        }
+        if (userImage1 || userImage2) generate();
+      });
+
+      document.getElementById(`sizeSlider${imageNum}`).addEventListener('input', function() {
+        if (imageNum === 1) {
+          image1Size = parseInt(this.value);
+          document.getElementById('sizeValue1').textContent = '%' + image1Size;
+        } else {
+          image2Size = parseInt(this.value);
+          document.getElementById('sizeValue2').textContent = '%' + image2Size;
+        }
+        if (userImage1 || userImage2) generate();
+      });
+    }
+
+    // Initialize position controls for both images
+    setupPositionControls(1);
+    setupPositionControls(2);
+
+    // Reset position function
+    function resetImagePosition(imageNum) {
+      if (imageNum === 1) {
+        image1X = 0;
+        image1Y = 0;
+        image1Size = 300;
+        
+        document.getElementById('xPositionSlider1').value = 0;
+        document.getElementById('yPositionSlider1').value = 0;
+        document.getElementById('sizeSlider1').value = 300;
+        
+        document.getElementById('xValue1').textContent = '0';
+        document.getElementById('yValue1').textContent = '0';
+        document.getElementById('sizeValue1').textContent = '%300';
+      } else {
+        image2X = 0;
+        image2Y = 0;
+        image2Size = 300;
+        
+        document.getElementById('xPositionSlider2').value = 0;
+        document.getElementById('yPositionSlider2').value = 0;
+        document.getElementById('sizeSlider2').value = 300;
+        
+        document.getElementById('xValue2').textContent = '0';
+        document.getElementById('yValue2').textContent = '0';
+        document.getElementById('sizeValue2').textContent = '%300';
+      }
+      
+      if (userImage1 || userImage2) generate();
+    }
+
+    // Status message
+    function showStatus(message, type = 'success') {
+      const statusEl = document.getElementById('statusMessage');
+      statusEl.textContent = message;
+      statusEl.className = `status-message status-${type} show`;
+      
+      setTimeout(() => {
+        statusEl.classList.remove('show');
+      }, 3000);
+    }
+
+    // Image processing function
+    function processImage(file, imageNum) {
+      console.log(`Processing image ${imageNum}:`, file.name);
+      
+      if (!file.type.startsWith('image/')) {
+        showStatus('Lütfen geçerli bir görsel dosyası seçin.', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          console.log(`Image ${imageNum} loaded:`, img.width, 'x', img.height);
+          
+          if (imageNum === 1) {
+            userImage1 = img;
+          } else {
+            userImage2 = img;
+          }
+          
+          // Show preview
+          const preview = document.getElementById(`imagePreview${imageNum}`);
+          preview.innerHTML = `<img src="${event.target.result}" class="image-preview" alt="Önizleme ${imageNum}">`;
+          
+          // Show position controls
+          document.getElementById(`positionControls${imageNum}`).style.display = 'block';
+          
+          // Enable save button if at least one image is loaded
+          document.getElementById('saveButton').disabled = false;
+          
+          showStatus(`${imageNum}. görsel başarıyla yüklendi!`);
+          
+          // Auto-generate if text exists
+          if (document.getElementById("textInput").value.trim()) {
+            generate();
+          }
+        };
+        img.onerror = function() {
+          showStatus('Görsel yüklenirken hata oluştu.', 'error');
+        };
+        img.src = event.target.result;
+      };
+      reader.onerror = function() {
+        showStatus('Dosya okuma hatası.', 'error');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // File input events for both images
+    document.getElementById("imageInput1").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        processImage(file, 1);
+      }
+    });
+
+    document.getElementById("imageInput2").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        processImage(file, 2);
+      }
+    });
+
+    // Generate post function - updated for dual images
+    function generate() {
+      if (!userImage1 && !userImage2) {
+        showStatus('Lütfen en az bir görsel yükleyin.', 'error');
+        return;
+      }
+      
+      const text = document.getElementById("textInput").value;
+      if (!text.trim()) {
+        showStatus('Lütfen haber metnini girin.', 'error');
+        return;
+      }
+
+      console.log('Generating post with dual images...');
+
+      // Fixed settings
+      const bottomPadding = 200;
+      const lineSpacing = 1;
+      const leftPadding = 100;
+      const rightLimit = 1000;
+      const maxWidth = rightLimit - leftPadding;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // 1. Draw first image if exists
+      if (userImage1) {
+        const sizeFactor1 = image1Size / 100;
+        const scaledWidth1 = userImage1.width * sizeFactor1;
+        const scaledHeight1 = userImage1.height * sizeFactor1;
+        
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        
+        const finalX1 = centerX + image1X - (scaledWidth1 / 2);
+        const finalY1 = centerY + image1Y - (scaledHeight1 / 2);
+        
+        ctx.drawImage(userImage1, finalX1, finalY1, scaledWidth1, scaledHeight1);
+      }
+
+      // 2. Draw second image if exists
+      if (userImage2) {
+        const sizeFactor2 = image2Size / 100;
+        const scaledWidth2 = userImage2.width * sizeFactor2;
+        const scaledHeight2 = userImage2.height * sizeFactor2;
+        
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        
+        const finalX2 = centerX + image2X - (scaledWidth2 / 2);
+        const finalY2 = centerY + image2Y - (scaledHeight2 / 2);
+        
+        ctx.drawImage(userImage2, finalX2, finalY2, scaledWidth2, scaledHeight2);
+      }
+
+      // 3. Add watermark
+      if (filigran.complete) {
+        ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
+      } else {
+        filigran.onload = () => {
+          ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
+          drawText();
+        };
+      }
+      
+      // 4. Draw text
+      drawText();
+      
+      function drawText() {
+        const wrappedLines = wrapText(text, maxWidth);
+        let y = canvas.height - bottomPadding;
+        ctx.fillStyle = textColor;
+        ctx.textBaseline = "bottom";
+        ctx.textAlign = "left";
+        ctx.font = `bold ${fontSize}px Helvetica, Arial, sans-serif`;
+        
+        // Add shadow effect
+        ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+        
+        for (let i = wrappedLines.length - 1; i >= 0; i--) {
+          ctx.fillText(wrappedLines[i], leftPadding, y);
+          y -= (fontSize + lineSpacing);
+        }
+        
+        // Reset shadow
+        ctx.shadowColor = "transparent";
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+      }
+    }
+
+    // NEW: Generate transparent function
+    function generateTransparent() {
+      const text = document.getElementById("transparentTextInput").value;
+      if (!text.trim()) {
+        showStatus('Lütfen şeffaf mod için haber metnini girin.', 'error');
+        return;
+      }
+
+      console.log('Generating transparent post...');
+
+      // Fixed settings
+      const bottomPadding = 200;
+      const lineSpacing = 1;
+      const leftPadding = 100;
+      const rightLimit = 1000;
+      const maxWidth = rightLimit - leftPadding;
+
+      // Clear canvas with transparent background
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Add watermark first
+      if (filigran.complete) {
+        ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
+        drawTransparentText();
+      } else {
+        filigran.onload = () => {
+          ctx.drawImage(filigran, 0, 0, canvas.width, canvas.height);
+          drawTransparentText();
+        };
+      }
+      
+      function drawTransparentText() {
+        const wrappedLines = wrapText(text, maxWidth, transparentFontSize);
+        let y = canvas.height - bottomPadding;
+        ctx.fillStyle = transparentTextColor;
+        ctx.textBaseline = "bottom";
+        ctx.textAlign = "left";
+        ctx.font = `bold ${transparentFontSize}px Helvetica, Arial, sans-serif`;
+        
+        // Add shadow effect for better readability
+        ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetX = 3;
+        ctx.shadowOffsetY = 3;
+        
+        for (let i = wrappedLines.length - 1; i >= 0; i--) {
+          ctx.fillText(wrappedLines[i], leftPadding, y);
+          y -= (transparentFontSize + lineSpacing);
+        }
+        
+        // Reset shadow
+        ctx.shadowColor = "transparent";
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+      }
+
+      // Enable save button
+      document.getElementById('saveButton').disabled = false;
+      showStatus('Şeffaf görsel başarıyla oluşturuldu!');
+    }
+
+    // Text wrapping - Updated to accept custom font size
+    function wrapText(text, maxWidth, customFontSize = null) {
+      const words = text.split(/\s+/);
+      const lines = [];
+      let line = "";
+      const useFontSize = customFontSize || fontSize;
+      ctx.font = `bold ${useFontSize}px Helvetica, Arial, sans-serif`;
+      
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line + words[i] + " ";
+        const width = ctx.measureText(testLine).width;
+        if (width > maxWidth && line !== "") {
+          lines.push(line.trim());
+          line = words[i] + " ";
+        } else {
+          line = testLine;
+        }
+      }
+      if (line) {
+        lines.push(line.trim());
+      }
+      return lines;
+    }
+
+    // Share Modal Functions
+    function openShareModal() {
+      // Check if any content exists (images or transparent mode was used)
+      const hasImages = userImage1 || userImage2;
+      const hasTransparentText = document.getElementById("transparentTextInput").value.trim();
+      const hasRegularText = document.getElementById("textInput").value.trim();
+      
+      if (!hasImages && !hasTransparentText && !hasRegularText) {
+        showStatus('Önce bir görsel yükleyip gönderi oluşturun veya şeffaf mod kullanın.', 'error');
+        return;
+      }
+      
+      const shareDescription = document.getElementById('shareDescription');
+      let text = '';
+      
+      if (hasTransparentText) {
+        text = hasTransparentText;
+      } else if (hasRegularText) {
+        text = hasRegularText;
+      }
+      
+      if (text) {
+        shareDescription.textContent = text;
+      } else {
+        shareDescription.textContent = 'İSTİKAMET - Sosyal medya gönderisi';
+      }
+      
+      document.getElementById('shareModal').classList.add('show');
+    }
+
+    function closeShareModal() {
+      document.getElementById('shareModal').classList.remove('show');
+    }
+
+    function downloadImage() {
+      const link = document.createElement("a");
+      link.download = "istikamet-gonderi.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      
+      showStatus('Görsel başarıyla indirildi!');
+      closeShareModal();
+    }
+
+    // Native Share API Function
+    async function shareImage() {
+      try {
+        // Check if Web Share API is supported
+        if (!navigator.share) {
+          showStatus('Bu tarayıcı direkt paylaşımı desteklemiyor. Görseli indirin.', 'error');
+          downloadImage();
+          return;
+        }
+
+        // Convert canvas to blob
+        const canvas = document.getElementById('canvas');
+        
+        canvas.toBlob(async (blob) => {
+          if (!blob) {
+            showStatus('Görsel oluşturulamadı.', 'error');
+            return;
+          }
+
+          // Get text from appropriate input
+          const regularText = document.getElementById("textInput").value.trim();
+          const transparentText = document.getElementById("transparentTextInput").value.trim();
+          const text = transparentText || regularText;
+          const shareText = text ? text + '\n\n#İSTİKAMET' : 'İSTİKAMET - Haber\n\n#İSTİKAMET';
+          
+          // Create file from blob
+          const file = new File([blob], 'istikamet-gonderi.png', { 
+            type: 'image/png',
+            lastModified: Date.now()
+          });
+
+          const shareData = {
+            title: 'İSTİKAMET - Haber',
+            text: shareText,
+            files: [file]
+          };
+
+          // Check if files can be shared
+          if (navigator.canShare && !navigator.canShare(shareData)) {
+            showStatus('Bu cihaz dosya paylaşımını desteklemiyor.', 'error');
+            downloadImage();
+            return;
+          }
+
+          try {
+            await navigator.share(shareData);
+            showStatus('Görsel başarıyla paylaşıldı!');
+            closeShareModal();
+          } catch (error) {
+            if (error.name === 'AbortError') {
+              // User cancelled the share
+              showStatus('Paylaşım iptal edildi.');
+            } else {
+              console.error('Share failed:', error);
+              showStatus('Paylaşım başarısız. Görseli indirin.', 'error');
+              downloadImage();
+            }
+          }
+        }, 'image/png', 0.9);
+
+      } catch (error) {
+        console.error('Share error:', error);
+        showStatus('Paylaşım hatası. Görseli indirin.', 'error');
+        downloadImage();
+      }
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('shareModal').addEventListener('click', (e) => {
+      if (e.target.id === 'shareModal') {
+        closeShareModal();
+      }
+    });
+
+    // Auto-update for regular text input
+    document.getElementById("textInput").addEventListener("input", function() {
+      if ((userImage1 || userImage2) && this.value.trim()) {
+        setTimeout(generate, 500);
+      }
+    });
+
+    // Auto-update for transparent text input
+    document.getElementById("transparentTextInput").addEventListener("input", function() {
+      // Enable save button when transparent text is entered
+      if (this.value.trim()) {
+        document.getElementById('saveButton').disabled = false;
+      }
+    });
+
+    // Prevent zoom on double tap
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+      const now = (new Date()).getTime();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+
+    // Initialize
+    console.log('İSTİKAMET enhanced app with transparent mode loaded successfully!');
+  </script>
+</body>
+</html>
