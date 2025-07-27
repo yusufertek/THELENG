@@ -4,7 +4,7 @@ const urlsToCache = [
   '/index.html',
   '/manifest.json',
   '/sitelogo.jpg',
-  '/logo2.PNG'
+  '/logo2.PNG',
   '/logo3.PNG'
   // Google AdSense scriptlerini cache'den çıkardık
 ];
