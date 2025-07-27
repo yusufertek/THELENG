@@ -1740,23 +1740,19 @@
 
             const tbody = document.getElementById('recentTransactions');
             tbody.innerHTML = allTransactions.map(transaction => `
-                <tr>
-                    <td>${new Date(transaction.date).toLocaleDateString('tr-TR')}</td>
-                    <td>${transaction.type}</td>
-                    <td>${transaction.amount >= 0 ? '+' : ''}${transaction.amount.toLocaleString('tr-TR')} ₺</td>
-                    <td>
-                        ${transaction.paymentType !== '-' ? 
-                            `<span class="payment-type-badge payment-${transaction.paymentType}">${getPaymentTypeDisplay(transaction.paymentType)}</span>` : 
-                            '-'
-                        }
-                    </td>
-                    <td>${transaction.employee}</td>  : 
-                            '-'
-                        }
-                    </td>
-                    <td>${transaction.employee}</td>
-                </tr>
-            `).join('');
+    <tr>
+        <td>${new Date(transaction.date).toLocaleDateString('tr-TR')}</td>
+        <td>${transaction.type}</td>
+        <td>${transaction.amount >= 0 ? '+' : ''}${transaction.amount.toLocaleString('tr-TR')} ₺</td>
+        <td>
+            ${transaction.paymentType !== '-' ? 
+                `<span class="payment-type-badge payment-${transaction.paymentType}">${getPaymentTypeDisplay(transaction.paymentType)}</span>` : 
+                '-'
+            }
+        </td>
+        <td>${transaction.employee}</td>
+    </tr>
+`).join('');
         }
 
         // Load customers
