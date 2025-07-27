@@ -1349,36 +1349,108 @@
             if (saleIndex !== -1) {
                 const oldSale = {...salesData[saleIndex]};
                 
+                const newSalePrice = parseFloat(document.getElementById('editSalePrice').value);
+                const newPaidAmount = parseFloat(document.getElementById('editPaidAmount').value);
+                
                 salesData[saleIndex].customerName = document.getElementById('editCustomerName').value;
                 salesData[saleIndex].customerSurname = document.getElementById('editCustomerSurname').value;
                 salesData[saleIndex].customerPhone = document.getElementById('editCustomerPhone').value;
                 salesData[saleIndex].carpetArea = parseFloat(document.getElementById('editCarpetArea').value);
-                salesData[saleIndex].salePrice = parseFloat(document.getElementById('editSalePrice').value);
-                salesData[saleIndex].paidAmount = parseFloat(document.getElementById('editPaidAmount').value);
+                salesData[saleIndex].salePrice = newSalePrice;
+                salesData[saleIndex].paidAmount = newPaidAmount;
+                
+                // Update payment type based on amounts
+                if (newPaidAmount < newSalePrice) {
+                    salesData[saleIndex].paymentType = 'debt';
+                } else {
+                    salesData[saleIndex].paymentType = salesData[saleIndex].paidPaymentType;
+                }
                 
                 localStorage.setItem('ertHaliSales', JSON.stringify(salesData));
                 
-                // Update debt if exists
-                const debtIndex = debtsData.findIndex(d => d.saleId === currentEditSaleId);
-                if (debtIndex !== -1) {
-                    const newRemainingAmount = salesData[saleIndex].salePrice - salesData[saleIndex].paidAmount;
-                    debtsData[debtIndex].totalAmount = salesData[saleIndex].salePrice;
-                    debtsData[debtIndex].remainingAmount = newRemainingAmount;
-                    
-                    if (newRemainingAmount <= 0) {
-                        debtsData.splice(debtIndex, 1);
+                // Handle debt logic
+                const existingDebtIndex = debtsData.findIndex(d => d.saleId === currentEditSaleId);
+                const remainingAmount = newSalePrice - newPaidAmount;
+                
+                if (remainingAmount > 0) {
+                    // There should be a debt
+                    if (existingDebtIndex !== -1) {
+                        // Update existing debt
+                        debtsData[existingDebtIndex].customerName = salesData[saleIndex].customerName;
+                        debtsData[existingDebtIndex].customerSurname = salesData[saleIndex].customerSurname;
+                        debtsData[existingDebtIndex].customerPhone = salesData[saleIndex].customerPhone;
+                        debtsData[existingDebtIndex].totalAmount = newSalePrice;
+                        debtsData[existingDebtIndex].paidAmount = newPaidAmount;
+                        debtsData[existingDebtIndex].remainingAmount = remainingAmount;
+                    } else {
+                        // Create new debt
+                        const newDebt = {
+                            id: Date.now(),
+                            saleId: currentEditSaleId,
+                            customerName: salesData[saleIndex].customerName,
+                            customerSurname: salesData[saleIndex].customerSurname,
+                            customerPhone: salesData[saleIndex].customerPhone,
+                            totalAmount: newSalePrice,
+                            paidAmount: newPaidAmount,
+                            remainingAmount: remainingAmount,
+                            date: salesData[saleIndex].date,
+                            employee: salesData[saleIndex].employee
+                        };
+                        debtsData.push(newDebt);
                     }
-                    
-                    localStorage.setItem('ertHaliDebts', JSON.stringify(debtsData));
+                } else {
+                    // No debt needed, remove if exists
+                    if (existingDebtIndex !== -1) {
+                        debtsData.splice(existingDebtIndex, 1);
+                    }
                 }
+                
+                localStorage.setItem('ertHaliDebts', JSON.stringify(debtsData));
+                
+                // Update customer data
+                updateCustomerAfterSaleEdit(oldSale, salesData[saleIndex]);
                 
                 loadAdminData();
                 updateDashboard();
                 closeEditSale();
-                showAlert('Satış güncellendi!', 'success');
+                showAlert('Satış güncellendi ve borç durumu ayarlandı!', 'success');
             }
         });
 
+        function updateCustomerAfterSaleEdit(oldSale, newSale) {
+            const customerIndex = customersData.findIndex(c => c.phone === oldSale.customerPhone);
+            if (customerIndex !== -1) {
+                const customer = customersData[customerIndex];
+                
+                // Find and update the sale in customer's sales array
+                const saleIndex = customer.sales.findIndex(s => s.id === newSale.id);
+                if (saleIndex !== -1) {
+                    // Update total purchases (subtract old, add new)
+                    customer.totalPurchases = customer.totalPurchases - oldSale.salePrice + newSale.salePrice;
+                    
+                    // Update the sale data
+                    customer.sales[saleIndex] = {...newSale};
+                    
+                    // If phone number changed, move customer
+                    if (oldSale.customerPhone !== newSale.customerPhone) {
+                        // Remove sale from old customer
+                        customer.sales.splice(saleIndex, 1);
+                        customer.totalPurchases -= newSale.salePrice;
+                        
+                        if (customer.sales.length === 0) {
+                            customersData.splice(customerIndex, 1);
+                        }
+                        
+                        // Add to new customer or create new customer
+                        updateCustomer(newSale.customerName, newSale.customerSurname, newSale.customerPhone, newSale);
+                    }
+                }
+                
+                localStorage.setItem('ertHaliCustomers', JSON.stringify(customersData));
+            }
+        }
+
+        // Edit forms
         document.getElementById('editExpenseForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
