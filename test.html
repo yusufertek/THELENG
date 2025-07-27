@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Test</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+</head>
+<body>
+    <h1>PWA Test</h1>
+    <div id="status"></div>
+    
+    <script>
+        const status = document.getElementById('status');
+        
+        // Manifest kontrolü
+        fetch('manifest.json')
+            .then(response => {
+                if (response.ok) {
+                    status.innerHTML += '<p>✅ Manifest dosyası bulundu</p>';
+                    return response.json();
+                } else {
+                    status.innerHTML += '<p>❌ Manifest dosyası bulunamadı</p>';
+                }
+            })
+            .then(manifest => {
+                if (manifest) {
+                    status.innerHTML += '<p>✅ Manifest içeriği: ' + manifest.name + '</p>';
+                }
+            })
+            .catch(error => {
+                status.innerHTML += '<p>❌ Manifest hatası: ' + error + '</p>';
+            });
+            
+        // Service Worker kontrolü
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => {
+                    status.innerHTML += '<p>✅ Service Worker kayıtlı</p>';
+                })
+                .catch(err => {
+                    status.innerHTML += '<p>❌ Service Worker hatası: ' + err + '</p>';
+                });
+        }
+        
+        // Install prompt kontrolü
+        window.addEventListener('beforeinstallprompt', (e) => {
+            status.innerHTML += '<p>✅ PWA kurulum prompt hazır!</p>';
+        });
+    </script>
+</body>
+</html>
