@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="tr">
 	<head>
-		<elevenlabs-convai agent-id="bA0ZStC9RuD9zmSbuBHz"></elevenlabs-convai><script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+		<elevenlabs-convai agent-id="bA0ZStC9RuD9zmSbuBHz"></elevenlabs-convai>
+		<script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
 		<script
 			async
 			src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6785168572073733"
@@ -10,9 +11,25 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 		<title>SONSUZ MİRAS</title>
-		<meta name="description" content="SONSUZ MİRAS" />
+		<meta name="description" content="SONSUZ MİRAS - Toplumsal ilerleme ve sürdürülebilir kalkınma için çalışan projeler platformu" />
+		
+		<!-- PWA Meta Tags -->
+		<meta name="theme-color" content="#000000" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<meta name="apple-mobile-web-app-title" content="SONSUZ MİRAS" />
+		<meta name="msapplication-TileColor" content="#000000" />
+		
+		<!-- Icons -->
 		<link rel="icon" type="image/png" href="/sitelogo.jpg" />
 		<link rel="apple-touch-icon" href="/sitelogo.jpg">
+		<link rel="apple-touch-icon" sizes="152x152" href="/sitelogo.jpg">
+		<link rel="apple-touch-icon" sizes="180x180" href="/sitelogo.jpg">
+		<link rel="apple-touch-icon" sizes="167x167" href="/sitelogo.jpg">
+		
+		<!-- PWA Manifest -->
+		<link rel="manifest" href="/manifest.json">
+		
 		<style>
 			* {
 				margin: 0;
@@ -29,6 +46,77 @@
 				overflow-y: auto;
 				-webkit-overflow-scrolling: touch;
 			}
+			
+			/* PWA Install Banner */
+			.pwa-install-banner {
+				position: fixed;
+				bottom: 20px;
+				left: 50%;
+				transform: translateX(-50%);
+				background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9));
+				color: white;
+				padding: 15px 25px;
+				border-radius: 10px;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+				z-index: 1000;
+				display: none;
+				text-align: center;
+				max-width: 90%;
+				border: 1px solid rgba(255, 255, 255, 0.2);
+			}
+			
+			.pwa-install-banner.show {
+				display: block;
+				animation: slideUp 0.5s ease-out;
+			}
+			
+			.pwa-install-text {
+				margin-bottom: 10px;
+				font-size: 14px;
+			}
+			
+			.pwa-install-buttons {
+				display: flex;
+				gap: 10px;
+				justify-content: center;
+			}
+			
+			.pwa-btn {
+				padding: 8px 16px;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				font-size: 12px;
+				transition: all 0.3s ease;
+			}
+			
+			.pwa-btn-install {
+				background: linear-gradient(45deg, #4CAF50, #45a049);
+				color: white;
+			}
+			
+			.pwa-btn-dismiss {
+				background: rgba(255, 255, 255, 0.1);
+				color: white;
+				border: 1px solid rgba(255, 255, 255, 0.3);
+			}
+			
+			.pwa-btn:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+			}
+			
+			@keyframes slideUp {
+				from {
+					transform: translateX(-50%) translateY(100px);
+					opacity: 0;
+				}
+				to {
+					transform: translateX(-50%) translateY(0);
+					opacity: 1;
+				}
+			}
+			
 			.navbar {
 				position: fixed;
 				top: 0;
@@ -144,7 +232,7 @@
 				background: rgba(0, 0, 0, 0.85);
 				z-index: 10;
 				transform: translateX(100%);
-				transition: transform 0.3s ease-in-out; /* Minimal geçiş */
+				transition: transform 0.3s ease-in-out;
 				display: flex;
 				flex-direction: column;
 				padding: 20px;
@@ -203,7 +291,7 @@
 				background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.15));
 			}
 			.menu.active a {
-				animation: fadeInMinimal 0.4s ease forwards; /* Minimal animasyon */
+				animation: fadeInMinimal 0.4s ease forwards;
 				animation-delay: calc(0.1s * var(--i));
 			}
 			.star {
@@ -394,6 +482,15 @@
 		</style>
 	</head>
 	<body>
+		<!-- PWA Install Banner -->
+		<div id="pwaInstallBanner" class="pwa-install-banner">
+			<div class="pwa-install-text">Bu uygulamayı ana ekranınıza ekleyin!</div>
+			<div class="pwa-install-buttons">
+				<button id="pwaInstallBtn" class="pwa-btn pwa-btn-install">Yükle</button>
+				<button id="pwaDismissBtn" class="pwa-btn pwa-btn-dismiss">Kapat</button>
+			</div>
+		</div>
+
 		<div class="navbar">
 			<img
 				src="logo2.PNG"
@@ -429,13 +526,13 @@
 				<a href="https://sadecekuran.com.tr/kuran" class="project-item">
 					Sadece Kuran / Meal
 					<div class="project-desc">
-						Kuran-ı Kerim’in sade ve anlaşılır bir şekilde sunulduğu bir platform. Bu proje, Kuran'ın modern bir arayüzle okuyuculara sunarak herkesin kolayca erişmesini ve anlamasını amaçlar. İçerikte yorumlardan arındırılmış, yalnızca orijinal metne odaklanan bir deneyim sunuyoruz.
+						Kuran-ı Kerim'in sade ve anlaşılır bir şekilde sunulduğu bir platform. Bu proje, Kuran'ın modern bir arayüzle okuyuculara sunarak herkesin kolayca erişmesini ve anlamasını amaçlar. İçerikte yorumlardan arındırılmış, yalnızca orijinal metne odaklanan bir deneyim sunuyoruz.
 					</div>
 				</a>
 				<a href="https://sadecekuran.com.tr/" class="project-item">
 					Sadece Kuran / Makaleler
 					<div class="project-desc">
-						Bu bölümde, İslam’ı yalnızca Kur’an merkezli bir bakış açısıyla ele alan derinlemesine makaleler bulacaksınız. Geleneksel yorumların ötesine geçerek, doğrudan Kur’an’ın rehberliğinde dini konuları inceliyoruz. Ayetlerin anlamlarını, tarihsel bağlamlarını ve günümüz dünyasındaki yansımalarını titizlikle analiz ediyoruz.
+						Bu bölümde, İslam'ı yalnızca Kur'an merkezli bir bakış açısıyla ele alan derinlemesine makaleler bulacaksınız. Geleneksel yorumların ötesine geçerek, doğrudan Kur'an'ın rehberliğinde dini konuları inceliyoruz. Ayetlerin anlamlarını, tarihsel bağlamlarını ve günümüz dünyasındaki yansımalarını titizlikle analiz ediyoruz.
 					</div>
 				</a>
 				<a href="https://theleng.site/PANEL" class="project-item">
@@ -461,6 +558,7 @@
 			</div>
 		</div>
 		<script>
+			// Canvas wave animation
 			const canvas = document.getElementById("waveCanvas");
 			const ctx = canvas.getContext("2d");
 			let time = 0;
@@ -490,6 +588,7 @@
 			}
 			drawWaves();
 
+			// Menu toggle
 			function toggleMenu() {
 				const menu = document.getElementById("menu");
 				const btn = document.querySelector(".menu-btn");
@@ -497,6 +596,7 @@
 				btn.classList.toggle("active");
 			}
 
+			// Stars animation
 			for (let i = 0; i < 100; i++) {
 				const star = document.createElement("div");
 				star.className = "star";
@@ -504,6 +604,86 @@
 				star.style.top = Math.random() * 85 + 15 + "vh";
 				star.style.animationDelay = Math.random() * 5 + "s";
 				document.querySelector(".content").appendChild(star);
+			}
+
+			// PWA Installation
+			let deferredPrompt;
+			const pwaInstallBanner = document.getElementById('pwaInstallBanner');
+			const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+			const pwaDismissBtn = document.getElementById('pwaDismissBtn');
+
+			// Service Worker Registration
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', () => {
+					navigator.serviceWorker.register('/sw.js')
+						.then((registration) => {
+							console.log('SW registered: ', registration);
+						})
+						.catch((registrationError) => {
+							console.log('SW registration failed: ', registrationError);
+						});
+				});
+			}
+
+			// PWA Install Prompt
+			window.addEventListener('beforeinstallprompt', (e) => {
+				e.preventDefault();
+				deferredPrompt = e;
+				
+				// Show install banner after 3 seconds
+				setTimeout(() => {
+					if (!localStorage.getItem('pwa-dismissed')) {
+						pwaInstallBanner.classList.add('show');
+					}
+				}, 3000);
+			});
+
+			// Install button click
+			pwaInstallBtn.addEventListener('click', async () => {
+				if (deferredPrompt) {
+					deferredPrompt.prompt();
+					const { outcome } = await deferredPrompt.userChoice;
+					console.log(`User response to the install prompt: ${outcome}`);
+					deferredPrompt = null;
+				}
+				pwaInstallBanner.classList.remove('show');
+			});
+
+			// Dismiss button click
+			pwaDismissBtn.addEventListener('click', () => {
+				pwaInstallBanner.classList.remove('show');
+				localStorage.setItem('pwa-dismissed', 'true');
+			});
+
+			// Hide banner when app is installed
+			window.addEventListener('appinstalled', () => {
+				console.log('PWA was installed');
+				pwaInstallBanner.classList.remove('show');
+			});
+
+			// iOS Safari install instructions
+			function isIOS() {
+				return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+			}
+
+			function isInStandaloneMode() {
+				return ('standalone' in window.navigator) && (window.navigator.standalone);
+			}
+
+			if (isIOS() && !isInStandaloneMode()) {
+				setTimeout(() => {
+					if (!localStorage.getItem('ios-pwa-dismissed')) {
+						const iosInstallBanner = document.createElement('div');
+						iosInstallBanner.className = 'pwa-install-banner show';
+						iosInstallBanner.innerHTML = `
+							<div class="pwa-install-text">Bu uygulamayı ana ekranınıza eklemek için Safari'de paylaş butonuna basın ve "Ana Ekrana Ekle"yi seçin.</div>
+							<div class="pwa-install-buttons">
+								<button onclick="this.parentElement.parentElement.remove(); localStorage.setItem('ios-pwa-dismissed', 'true');" class="pwa-btn pwa-btn-dismiss">Anladım</button>
+							</div>
+						`;
+						document.body.appendChild(iosInstallBanner);
+					}
+				}, 5000);
 			}
 		</script>
 	</body>
