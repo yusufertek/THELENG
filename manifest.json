@@ -1,7 +1,7 @@
 {
   "name": "TheLeng",
   "short_name": "TheLeng",
-  "start_url": "/",
+  "start_url": "/ert.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
