@@ -4,9 +4,8 @@ const urlsToCache = [
   '/index.html',
   '/manifest.json',
   '/sitelogo.jpg',
-  '/logo3.PNG',
-  'https://elevenlabs.io/convai-widget/index.js',
-  'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+  '/logo2.PNG'
+  // Google AdSense scriptlerini cache'den çıkardık
 ];
 
 // Install event - cache resources
@@ -25,6 +24,13 @@ self.addEventListener('install', (event) => {
 
 // Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', (event) => {
+  // Google AdSense ve dış kaynaklı scriptleri cache'leme
+  if (event.request.url.includes('googlesyndication.com') || 
+      event.request.url.includes('elevenlabs.io') ||
+      event.request.url.includes('pagead2.googlesyndication.com')) {
+    return; // Bu istekleri service worker ile işleme
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
@@ -32,13 +38,14 @@ self.addEventListener('fetch', (event) => {
         if (response) {
           return response;
         }
-        return fetch(event.request);
-      })
-      .catch(() => {
-        // If both cache and network fail, return offline page
-        if (event.request.destination === 'document') {
-          return caches.match('/');
-        }
+        
+        // Network'ten getir
+        return fetch(event.request).catch(() => {
+          // Eğer network de başarısız olursa ve document ise ana sayfayı döndür
+          if (event.request.destination === 'document') {
+            return caches.match('/');
+          }
+        });
       })
   );
 });
@@ -102,17 +109,15 @@ self.addEventListener('notificationclick', (event) => {
       clients.openWindow('/')
     );
   } else if (event.action === 'close') {
-    // Just close the notification
     return;
   } else {
-    // Default action - open the app
     event.waitUntil(
       clients.openWindow('/')
     );
   }
 });
 
-// Background sync event (for offline functionality)
+// Background sync event
 self.addEventListener('sync', (event) => {
   if (event.tag === 'background-sync') {
     event.waitUntil(doBackgroundSync());
@@ -120,11 +125,10 @@ self.addEventListener('sync', (event) => {
 });
 
 function doBackgroundSync() {
-  // Implement background sync logic here
   console.log('Background sync triggered');
 }
 
-// Message event - communicate with main thread
+// Message event
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
