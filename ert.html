@@ -14,123 +14,123 @@
         :root {
             --bg-primary: #ffffff;
             --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
             --text-primary: #000000;
-            --text-secondary: #666666;
-            --border-color: #e0e0e0;
-            --accent-color: #007bff;
-            --success-color: #28a745;
-            --danger-color: #dc3545;
-            --warning-color: #ffc107;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-dark: rgba(0, 0, 0, 0.2);
         }
 
         [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
+            --bg-primary: #000000;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #2d2d2d;
             --text-primary: #ffffff;
-            --text-secondary: #cccccc;
-            --border-color: #404040;
-            --accent-color: #0d6efd;
-            --success-color: #198754;
-            --danger-color: #dc3545;
-            --warning-color: #ffc107;
+            --text-secondary: #adb5bd;
+            --border-color: #495057;
+            --shadow: rgba(255, 255, 255, 0.1);
+            --shadow-dark: rgba(255, 255, 255, 0.2);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-primary);
             color: var(--text-primary);
             transition: all 0.3s ease;
+            line-height: 1.6;
         }
 
         .navbar {
             background-color: var(--bg-secondary);
-            padding: 1rem 2rem;
-            border-bottom: 2px solid var(--border-color);
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px var(--shadow);
         }
 
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--accent-color);
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .nav-controls {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 1px;
         }
 
         .theme-toggle {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
+            background: none;
+            border: 2px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
             transition: all 0.3s ease;
-            font-weight: 500;
+            color: var(--text-primary);
         }
 
         .theme-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+            border-color: var(--text-primary);
+            transform: scale(1.1);
         }
 
         .container {
+            padding: 1rem;
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
+            margin: 0 auto;
         }
 
         .tabs {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
             background-color: var(--bg-secondary);
-            border-radius: 10px;
+            border-radius: 8px;
             padding: 0.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
         }
 
         .tab {
-            flex: 1;
-            padding: 1rem;
+            padding: 0.75rem 0.5rem;
             text-align: center;
             background: transparent;
             border: none;
             color: var(--text-secondary);
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 6px;
             transition: all 0.3s ease;
             font-weight: 500;
+            font-size: 0.9rem;
         }
 
         .tab.active {
-            background-color: var(--accent-color);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
         }
 
         .tab-content {
             display: none;
             background-color: var(--bg-secondary);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
         }
 
         .tab-content.active {
             display: block;
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.3s ease;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -139,8 +139,8 @@
         }
 
         .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            display: flex;
+            flex-direction: column;
             gap: 1rem;
         }
 
@@ -149,13 +149,14 @@
             margin-bottom: 0.5rem;
             font-weight: 600;
             color: var(--text-primary);
+            font-size: 0.9rem;
         }
 
         input, select, textarea {
             width: 100%;
             padding: 0.75rem;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
             background-color: var(--bg-primary);
             color: var(--text-primary);
             font-size: 1rem;
@@ -164,79 +165,91 @@
 
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+            border-color: var(--text-primary);
+            box-shadow: 0 0 0 2px var(--shadow);
         }
 
         .btn {
-            padding: 0.75rem 2rem;
-            border: none;
-            border-radius: 8px;
+            width: 100%;
+            padding: 0.875rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
             cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
         }
 
         .btn-primary {
-            background-color: var(--accent-color);
-            color: white;
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+            border-color: var(--text-primary);
         }
 
-        .btn-success {
-            background-color: var(--success-color);
-            color: white;
+        .btn-secondary {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            border-color: var(--text-primary);
         }
 
         .btn-danger {
-            background-color: var(--danger-color);
-            color: white;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            border: 2px solid var(--text-primary);
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px var(--shadow-dark);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
             margin-bottom: 2rem;
         }
 
         .stat-card {
-            background: linear-gradient(135deg, var(--accent-color), #0056b3);
-            color: white;
-            padding: 2rem;
-            border-radius: 15px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 8px;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(0,123,255,0.3);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
+            box-shadow: 0 4px 12px var(--shadow-dark);
+            transform: translateY(-2px);
         }
 
         .stat-value {
-            font-size: 2.5rem;
-            font-weight: bold;
+            font-size: 1.8rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
+            color: var(--text-primary);
         }
 
         .stat-label {
-            font-size: 1rem;
-            opacity: 0.9;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
         .table-container {
             background-color: var(--bg-primary);
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            margin-top: 1rem;
         }
 
         table {
@@ -245,13 +258,14 @@
         }
 
         th, td {
-            padding: 1rem;
+            padding: 0.75rem 0.5rem;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
         }
 
         th {
-            background-color: var(--bg-secondary);
+            background-color: var(--bg-tertiary);
             font-weight: 600;
             color: var(--text-primary);
         }
@@ -269,6 +283,7 @@
             height: 100%;
             background-color: rgba(0,0,0,0.5);
             z-index: 1000;
+            padding: 1rem;
         }
 
         .modal-content {
@@ -278,10 +293,10 @@
             transform: translate(-50%, -50%);
             background-color: var(--bg-primary);
             padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            width: 100%;
             max-width: 400px;
-            width: 90%;
         }
 
         .close {
@@ -295,37 +310,42 @@
 
         .alert {
             padding: 1rem;
-            border-radius: 8px;
+            border-radius: 6px;
             margin-bottom: 1rem;
             font-weight: 500;
+            border: 1px solid var(--border-color);
         }
 
         .alert-success {
-            background-color: rgba(40, 167, 69, 0.1);
-            color: var(--success-color);
-            border: 1px solid var(--success-color);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
         }
 
         .alert-error {
-            background-color: rgba(220, 53, 69, 0.1);
-            color: var(--danger-color);
-            border: 1px solid var(--danger-color);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border-color: var(--text-primary);
         }
 
         .file-input-wrapper {
             position: relative;
-            display: inline-block;
+            display: block;
             cursor: pointer;
-            background-color: var(--accent-color);
-            color: white;
-            padding: 0.75rem 2rem;
-            border-radius: 8px;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 0.875rem;
+            border: 1px solid var(--text-primary);
+            border-radius: 6px;
             transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .file-input-wrapper:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
         }
 
         .file-input-wrapper input[type=file] {
@@ -333,50 +353,127 @@
             left: -9999px;
         }
 
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 1rem;
-                flex-direction: column;
-                gap: 1rem;
-            }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
 
+        .info-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        /* Desktop Styles */
+        @media (min-width: 768px) {
             .container {
-                padding: 0 1rem;
+                padding: 2rem;
             }
 
             .tabs {
-                flex-direction: column;
+                grid-template-columns: repeat(5, 1fr);
             }
 
             .form-row {
-                grid-template-columns: 1fr;
+                flex-direction: row;
             }
 
             .stats-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .button-group {
+                flex-direction: row;
+            }
+
+            .btn {
+                width: auto;
+                min-width: 150px;
+            }
+
+            th, td {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Large Desktop */
+        @media (min-width: 1024px) {
+            .navbar {
+                padding: 1.5rem 2rem;
+            }
+
+            .nav-title {
+                font-size: 1.8rem;
+            }
+
+            .theme-toggle {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Small Mobile */
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.75rem;
+            }
+
+            .tabs {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.25rem;
+            }
+
+            .tab {
+                padding: 0.5rem 0.25rem;
+                font-size: 0.8rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .stat-label {
+                font-size: 0.75rem;
+            }
+
+            th, td {
+                padding: 0.5rem 0.25rem;
+                font-size: 0.8rem;
             }
         }
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo">🏺 ERT HALI</div>
-        <div class="nav-controls">
-            <button class="theme-toggle" onclick="toggleTheme()">🌙 Gece Modu</button>
-        </div>
+        <div class="nav-title">ERT HALI</div>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
     </nav>
 
     <div class="container">
         <div class="tabs">
-            <button class="tab active" onclick="showTab('dashboard')">📊 Dashboard</button>
-            <button class="tab" onclick="showTab('sales')">💰 Satış Girişi</button>
-            <button class="tab" onclick="showTab('expenses')">📝 Gider Girişi</button>
-            <button class="tab" onclick="showTab('reports')">📈 Raporlar</button>
-            <button class="tab" onclick="showTab('data')">💾 Veri Yönetimi</button>
+            <button class="tab active" onclick="showTab('dashboard')">📊 Panel</button>
+            <button class="tab" onclick="showTab('sales')">💰 Satış</button>
+            <button class="tab" onclick="showTab('expenses')">📝 Gider</button>
+            <button class="tab" onclick="showTab('reports')">📈 Rapor</button>
+            <button class="tab" onclick="showTab('data')">💾 Veri</button>
         </div>
 
         <!-- Dashboard Tab -->
         <div id="dashboard" class="tab-content active">
+            <div class="section-title">Genel Durum</div>
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-value" id="totalSales">0</div>
@@ -392,18 +489,17 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-value" id="totalArea">0</div>
-                    <div class="stat-label">Toplam m² Satış</div>
+                    <div class="stat-label">Toplam m²</div>
                 </div>
             </div>
 
-            <h3>Son İşlemler</h3>
+            <div class="section-title">Son İşlemler</div>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
                             <th>Tarih</th>
                             <th>Tür</th>
-                            <th>Açıklama</th>
                             <th>Tutar</th>
                             <th>Çalışan</th>
                         </tr>
@@ -416,7 +512,7 @@
 
         <!-- Sales Tab -->
         <div id="sales" class="tab-content">
-            <h2>💰 Satış Girişi</h2>
+            <div class="section-title">Satış Girişi</div>
             <form id="salesForm">
                 <div class="form-row">
                     <div class="form-group">
@@ -448,13 +544,13 @@
                         <input type="password" id="employeeCode" maxlength="3" required>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success">Satış Kaydet</button>
+                <button type="submit" class="btn btn-primary">Satış Kaydet</button>
             </form>
         </div>
 
         <!-- Expenses Tab -->
         <div id="expenses" class="tab-content">
-            <h2>📝 Gider Girişi</h2>
+            <div class="section-title">Gider Girişi</div>
             <form id="expensesForm">
                 <div class="form-row">
                     <div class="form-group">
@@ -485,13 +581,13 @@
                         <input type="password" id="expenseEmployeeCode" maxlength="3" required>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-danger">Gider Kaydet</button>
+                <button type="submit" class="btn btn-primary">Gider Kaydet</button>
             </form>
         </div>
 
         <!-- Reports Tab -->
         <div id="reports" class="tab-content">
-            <h2>📈 Raporlar</h2>
+            <div class="section-title">Raporlar</div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="reportType">Rapor Türü:</label>
@@ -506,9 +602,9 @@
                     <input type="date" id="reportDate">
                 </div>
             </div>
-            <div style="margin-bottom: 2rem;">
+            <div class="button-group">
                 <button class="btn btn-primary" onclick="generateReport()">Rapor Oluştur</button>
-                <button class="btn btn-success" onclick="downloadReport()">Rapor İndir</button>
+                <button class="btn btn-secondary" onclick="downloadReport()">Rapor İndir</button>
             </div>
             
             <div id="reportContent"></div>
@@ -516,38 +612,24 @@
 
         <!-- Data Management Tab -->
         <div id="data" class="tab-content">
-            <h2>💾 Veri Yönetimi</h2>
-            <div class="form-row">
-                <div class="form-group">
-                    <button class="btn btn-success" onclick="exportData()">Verileri Dışa Aktar</button>
-                    <p style="margin-top: 0.5rem; color: var(--text-secondary);">Tüm verilerinizi JSON formatında indirir</p>
-                </div>
-                <div class="form-group">
-                    <div class="file-input-wrapper">
-                        <input type="file" id="importFile" accept=".json" onchange="importData(event)">
-                        Veri Dosyası Yükle
-                    </div>
-                    <p style="margin-top: 0.5rem; color: var(--text-secondary);">Daha önce dışa aktarılan JSON dosyasını yükler</p>
-                </div>
+            <div class="section-title">Veri Yönetimi</div>
+            
+            <div class="form-group">
+                <button class="btn btn-primary" onclick="exportData()">Verileri Dışa Aktar</button>
+                <div class="info-text">Tüm verilerinizi JSON formatında indirir</div>
             </div>
             
-            <div style="margin-top: 2rem;">
-                <button class="btn btn-danger" onclick="clearAllData()">Tüm Verileri Temizle</button>
-                <p style="margin-top: 0.5rem; color: var(--danger-color);">⚠️ Bu işlem geri alınamaz!</p>
+            <div class="form-group">
+                <label class="file-input-wrapper">
+                    <input type="file" id="importFile" accept=".json">
+                    Veri Dosyası Yükle
+                </label>
+                <div class="info-text">Daha önce dışa aktarılan JSON dosyasını yükler</div>
             </div>
-        </div>
-    </div>
-
-    <!-- Employee Code Modal -->
-    <div id="employeeModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h3>Çalışan Kodu Gerekli</h3>
-            <p>Bu işlemi gerçekleştirmek için çalışan kodunuzu girin:</p>
-            <input type="password" id="modalEmployeeCode" maxlength="3">
-            <div style="margin-top: 1rem;">
-                <button class="btn btn-primary" onclick="verifyEmployee()">Doğrula</button>
-                <button class="btn btn-danger" onclick="closeModal()">İptal</button>
+            
+            <div class="form-group">
+                <button class="btn btn-danger" onclick="clearAllData()">Tüm Verileri Temizle</button>
+                <div class="info-text">⚠️ Bu işlem geri alınamaz!</div>
             </div>
         </div>
     </div>
@@ -566,15 +648,15 @@
         // Theme management
         function toggleTheme() {
             const body = document.body;
-            const themeToggle = document.querySelector('.theme-toggle');
+            const themeToggle = document.getElementById('themeToggle');
             
             if (body.getAttribute('data-theme') === 'dark') {
                 body.removeAttribute('data-theme');
-                themeToggle.innerHTML = '🌙 Gece Modu';
+                themeToggle.textContent = '🌙';
                 localStorage.setItem('ertHaliTheme', 'light');
             } else {
                 body.setAttribute('data-theme', 'dark');
-                themeToggle.innerHTML = '☀️ Gündüz Modu';
+                themeToggle.textContent = '☀️';
                 localStorage.setItem('ertHaliTheme', 'dark');
             }
         }
@@ -584,7 +666,7 @@
             const savedTheme = localStorage.getItem('ertHaliTheme');
             if (savedTheme === 'dark') {
                 document.body.setAttribute('data-theme', 'dark');
-                document.querySelector('.theme-toggle').innerHTML = '☀️ Gündüz Modu';
+                document.getElementById('themeToggle').textContent = '☀️';
             }
         }
 
@@ -695,7 +777,7 @@
                 ...salesData.map(sale => ({
                     date: sale.date,
                     type: 'Satış',
-                    description: `${sale.customerName} ${sale.customerSurname} - ${sale.carpetArea}m²`,
+                    description: `${sale.customerName} ${sale.customerSurname}`,
                     amount: sale.salePrice,
                     employee: sale.employee
                 })),
@@ -713,10 +795,7 @@
                 <tr>
                     <td>${new Date(transaction.date).toLocaleDateString('tr-TR')}</td>
                     <td>${transaction.type}</td>
-                    <td>${transaction.description}</td>
-                    <td style="color: ${transaction.amount >= 0 ? 'var(--success-color)' : 'var(--danger-color)'}">
-                        ${transaction.amount >= 0 ? '+' : ''}${transaction.amount.toLocaleString('tr-TR')} ₺
-                    </td>
+                    <td>${transaction.amount >= 0 ? '+' : ''}${transaction.amount.toLocaleString('tr-TR')} ₺</td>
                     <td>${transaction.employee}</td>
                 </tr>
             `).join('');
@@ -767,73 +846,58 @@
 
             const reportContent = document.getElementById('reportContent');
             reportContent.innerHTML = `
-                <div class="table-container">
-                    <h3>${reportType === 'daily' ? 'Günlük' : reportType === 'monthly' ? 'Aylık' : 'Yıllık'} Rapor - ${new Date(reportDate).toLocaleDateString('tr-TR')}</h3>
-                    
-                    <div class="stats-grid" style="margin: 2rem 0;">
-                        <div class="stat-card">
-                            <div class="stat-value">${totalSales.toLocaleString('tr-TR')}</div>
-                            <div class="stat-label">Toplam Satış (₺)</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">${totalExpenses.toLocaleString('tr-TR')}</div>
-                            <div class="stat-label">Toplam Gider (₺)</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">${(totalSales - totalExpenses).toLocaleString('tr-TR')}</div>
-                            <div class="stat-label">Net Kar (₺)</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">${totalArea.toFixed(2)}</div>
-                            <div class="stat-label">Toplam m² Satış</div>
-                        </div>
+                <div class="section-title">${reportType === 'daily' ? 'Günlük' : reportType === 'monthly' ? 'Aylık' : 'Yıllık'} Rapor</div>
+                
+                <div class="stats-grid" style="margin: 1.5rem 0;">
+                    <div class="stat-card">
+                        <div class="stat-value">${totalSales.toLocaleString('tr-TR')}</div>
+                        <div class="stat-label">Satış (₺)</div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${totalExpenses.toLocaleString('tr-TR')}</div>
+                        <div class="stat-label">Gider (₺)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${(totalSales - totalExpenses).toLocaleString('tr-TR')}</div>
+                        <div class="stat-label">Kar (₺)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${totalArea.toFixed(2)}</div>
+                        <div class="stat-label">m²</div>
+                    </div>
+                </div>
 
-                    <h4>Satışlar</h4>
+                <div class="table-container">
                     <table>
                         <thead>
                             <tr>
                                 <th>Tarih</th>
-                                <th>Müşteri</th>
-                                <th>Telefon</th>
-                                <th>m²</th>
-                                <th>Fiyat</th>
-                                <th>Çalışan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${filteredSales.map(sale => `
-                                <tr>
-                                    <td>${new Date(sale.date).toLocaleDateString('tr-TR')}</td>
-                                    <td>${sale.customerName} ${sale.customerSurname}</td>
-                                    <td>${sale.customerPhone}</td>
-                                    <td>${sale.carpetArea}</td>
-                                    <td>${sale.salePrice.toLocaleString('tr-TR')} ₺</td>
-                                    <td>${sale.employee}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-
-                    <h4 style="margin-top: 2rem;">Giderler</h4>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tarih</th>
+                                <th>Tür</th>
                                 <th>Açıklama</th>
-                                <th>Kategori</th>
                                 <th>Tutar</th>
                                 <th>Çalışan</th>
                             </tr>
                         </thead>
                         <tbody>
-                            ${filteredExpenses.map(expense => `
+                            ${[...filteredSales.map(sale => ({
+                                date: sale.date,
+                                type: 'Satış',
+                                description: `${sale.customerName} ${sale.customerSurname}`,
+                                amount: sale.salePrice,
+                                employee: sale.employee
+                            })), ...filteredExpenses.map(expense => ({
+                                date: expense.date,
+                                type: 'Gider',
+                                description: expense.description,
+                                amount: -expense.amount,
+                                employee: expense.employee
+                            }))].sort((a, b) => new Date(b.date) - new Date(a.date)).map(item => `
                                 <tr>
-                                    <td>${new Date(expense.date).toLocaleDateString('tr-TR')}</td>
-                                    <td>${expense.description}</td>
-                                    <td>${expense.category}</td>
-                                    <td>${expense.amount.toLocaleString('tr-TR')} ₺</td>
-                                    <td>${expense.employee}</td>
+                                    <td>${new Date(item.date).toLocaleDateString('tr-TR')}</td>
+                                    <td>${item.type}</td>
+                                    <td>${item.description}</td>
+                                    <td>${item.amount >= 0 ? '+' : ''}${item.amount.toLocaleString('tr-TR')} ₺</td>
+                                    <td>${item.employee}</td>
                                 </tr>
                             `).join('')}
                         </tbody>
@@ -859,18 +923,18 @@
                 <head>
                     <title>ERT HALI - ${reportType} Rapor</title>
                     <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        body { font-family: Arial, sans-serif; margin: 20px; color: #000; }
                         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
                         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
                         th { background-color: #f2f2f2; }
                         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 20px 0; }
                         .stat-card { border: 1px solid #ddd; padding: 20px; text-align: center; }
                         .stat-value { font-size: 24px; font-weight: bold; }
-                        h3, h4 { color: #333; }
+                        h1, h3 { color: #333; }
                     </style>
                 </head>
                 <body>
-                    <h1>🏺 ERT HALI</h1>
+                    <h1>ERT HALI</h1>
                     ${reportContent.innerHTML}
                 </body>
                 </html>
@@ -898,8 +962,8 @@
             showAlert('Veriler başarıyla dışa aktarıldı!', 'success');
         }
 
-        // Import data
-        function importData(event) {
+        // Import data - Fixed version
+        document.getElementById('importFile').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (!file) return;
 
@@ -909,14 +973,19 @@
                     const data = JSON.parse(e.target.result);
                     
                     if (data.sales && data.expenses) {
-                        salesData = data.sales;
-                        expensesData = data.expenses;
-                        
-                        localStorage.setItem('ertHaliSales', JSON.stringify(salesData));
-                        localStorage.setItem('ertHaliExpenses', JSON.stringify(expensesData));
-                        
-                        updateDashboard();
-                        showAlert('Veriler başarıyla yüklendi!', 'success');
+                        if (confirm('Mevcut veriler silinecek ve yeni veriler yüklenecek. Devam etmek istiyor musunuz?')) {
+                            salesData = data.sales;
+                            expensesData = data.expenses;
+                            
+                            localStorage.setItem('ertHaliSales', JSON.stringify(salesData));
+                            localStorage.setItem('ertHaliExpenses', JSON.stringify(expensesData));
+                            
+                            updateDashboard();
+                            showAlert('Veriler başarıyla yüklendi!', 'success');
+                            
+                            // Reset file input
+                            event.target.value = '';
+                        }
                     } else {
                         showAlert('Geçersiz dosya formatı!', 'error');
                     }
@@ -925,7 +994,7 @@
                 }
             };
             reader.readAsText(file);
-        }
+        });
 
         // Clear all data
         function clearAllData() {
@@ -942,14 +1011,16 @@
         // Show alert
         function showAlert(message, type) {
             const alertDiv = document.createElement('div');
-            alertDiv.className = `alert alert-${type === 'success' ? 'success' : 'error'}`;
+            alertDiv.className = `alert alert-${type}`;
             alertDiv.textContent = message;
             
             document.body.appendChild(alertDiv);
             alertDiv.style.position = 'fixed';
             alertDiv.style.top = '20px';
-            alertDiv.style.right = '20px';
+            alertDiv.style.left = '50%';
+            alertDiv.style.transform = 'translateX(-50%)';
             alertDiv.style.zIndex = '9999';
+            alertDiv.style.maxWidth = '90%';
             
             setTimeout(() => {
                 alertDiv.remove();
