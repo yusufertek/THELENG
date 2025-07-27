@@ -9,6 +9,36 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            outline: none;
+        }
+
+        *:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        button:focus,
+        input:focus,
+        select:focus,
+        textarea:focus,
+        .btn:focus,
+        .tab:focus,
+        .payment-option:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        :focus {
+            outline: none !important;
+        }
+
+        ::-moz-focus-inner {
+            border: 0 !important;
+        }
+
+        button::-moz-focus-inner,
+        input::-moz-focus-inner {
+            border: 0 !important;
         }
 
         :root {
@@ -224,7 +254,7 @@
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--text-primary);
-            box-shadow: 0 0 0 2px var(--shadow);
+            box-shadow: none;
         }
 
         .btn {
