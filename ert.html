@@ -22,6 +22,7 @@
             --shadow-dark: rgba(0, 0, 0, 0.2);
             --danger-color: #dc3545;
             --warning-color: #ffc107;
+            --ripple-color: rgba(0, 0, 0, 0.3);
         }
 
         [data-theme="dark"] {
@@ -33,6 +34,7 @@
             --border-color: #495057;
             --shadow: rgba(255, 255, 255, 0.1);
             --shadow-dark: rgba(255, 255, 255, 0.2);
+            --ripple-color: rgba(255, 255, 255, 0.3);
         }
 
         body {
@@ -41,6 +43,36 @@
             color: var(--text-primary);
             transition: all 0.3s ease;
             line-height: 1.6;
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--ripple-color);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            z-index: 0;
+        }
+
+        .ripple:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .ripple > * {
+            position: relative;
+            z-index: 1;
         }
 
         .navbar {
@@ -448,6 +480,30 @@
             font-weight: 600;
         }
 
+        .payment-type-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+
+        .payment-cash {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .payment-card {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .payment-debt {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
         /* Desktop Styles */
         @media (min-width: 768px) {
             .container {
@@ -536,36 +592,36 @@
 <body>
     <nav class="navbar">
         <div class="nav-title">ERT HALI</div>
-        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
+        <button class="theme-toggle ripple" onclick="toggleTheme()" id="themeToggle">🌙</button>
     </nav>
 
     <div class="container">
         <div class="tabs">
-            <button class="tab active" onclick="showTab('dashboard')">📊 Panel</button>
-            <button class="tab" onclick="showTab('sales')">💰 Satış</button>
-            <button class="tab" onclick="showTab('expenses')">📝 Gider</button>
-            <button class="tab" onclick="showTab('customers')">👥 Müşteri</button>
-            <button class="tab" onclick="showTab('reports')">📈 Rapor</button>
-            <button class="tab" onclick="showTab('data')">💾 Veri</button>
+            <button class="tab active ripple" onclick="showTab('dashboard')">📊 Panel</button>
+            <button class="tab ripple" onclick="showTab('sales')">💰 Satış</button>
+            <button class="tab ripple" onclick="showTab('expenses')">📝 Gider</button>
+            <button class="tab ripple" onclick="showTab('customers')">👥 Müşteri</button>
+            <button class="tab ripple" onclick="showTab('reports')">📈 Rapor</button>
+            <button class="tab ripple" onclick="showTab('data')">💾 Veri</button>
         </div>
 
         <!-- Dashboard Tab -->
         <div id="dashboard" class="tab-content active">
             <div class="section-title">Genel Durum</div>
             <div class="stats-grid">
-                <div class="stat-card">
+                <div class="stat-card ripple">
                     <div class="stat-value" id="totalSales">0</div>
                     <div class="stat-label">Toplam Satış (₺)</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card ripple">
                     <div class="stat-value" id="totalExpenses">0</div>
                     <div class="stat-label">Toplam Gider (₺)</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card ripple">
                     <div class="stat-value" id="netProfit">0</div>
                     <div class="stat-label">Net Kar (₺)</div>
                 </div>
-                <div class="stat-card debt-card" onclick="showPendingPayments()">
+                <div class="stat-card debt-card ripple" onclick="showPendingPayments()">
                     <div class="stat-value debt-amount" id="totalDebt">0</div>
                     <div class="stat-label">Bekleyen Borç (₺)</div>
                 </div>
@@ -579,6 +635,7 @@
                             <th>Tarih</th>
                             <th>Tür</th>
                             <th>Tutar</th>
+                            <th>Ödeme</th>
                             <th>Çalışan</th>
                         </tr>
                     </thead>
@@ -626,9 +683,9 @@
                 <div class="form-group">
                     <label>Ödeme Türü:</label>
                     <div class="payment-options">
-                        <div class="payment-option selected" onclick="selectPaymentType('cash')">💵 Nakit</div>
-                        <div class="payment-option" onclick="selectPaymentType('card')">💳 Kart</div>
-                        <div class="payment-option" onclick="selectPaymentType('debt')">📋 Borç</div>
+                        <div class="payment-option selected ripple" onclick="selectPaymentType('cash')">💵 Nakit</div>
+                        <div class="payment-option ripple" onclick="selectPaymentType('card')">💳 Kart</div>
+                        <div class="payment-option ripple" onclick="selectPaymentType('debt')">📋 Borç</div>
                     </div>
                 </div>
 
@@ -637,9 +694,16 @@
                         <label for="paidAmount">Ödenen Tutar (₺):</label>
                         <input type="number" id="paidAmount" step="0.01" value="0">
                     </div>
+                    <div class="form-group" id="paidPaymentTypeGroup">
+                        <label>Ödenen Kısmın Türü:</label>
+                        <div class="payment-options">
+                            <div class="payment-option selected ripple" onclick="selectPaidPaymentType('cash')">💵 Nakit</div>
+                            <div class="payment-option ripple" onclick="selectPaidPaymentType('card')">💳 Kart</div>
+                        </div>
+                    </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Satış Kaydet</button>
+                <button type="submit" class="btn btn-primary ripple">Satış Kaydet</button>
             </form>
         </div>
 
@@ -676,7 +740,7 @@
                         <input type="password" id="expenseEmployeeCode" maxlength="3" required>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Gider Kaydet</button>
+                <button type="submit" class="btn btn-primary ripple">Gider Kaydet</button>
             </form>
         </div>
 
@@ -707,8 +771,8 @@
                 </div>
             </div>
             <div class="button-group">
-                <button class="btn btn-primary" onclick="generateReport()">Rapor Oluştur</button>
-                <button class="btn btn-secondary" onclick="downloadReport()">Rapor İndir</button>
+                <button class="btn btn-primary ripple" onclick="generateReport()">Rapor Oluştur</button>
+                <button class="btn btn-secondary ripple" onclick="downloadReport()">Rapor İndir</button>
             </div>
             
             <div id="reportContent"></div>
@@ -719,12 +783,12 @@
             <div class="section-title">Veri Yönetimi</div>
             
             <div class="form-group">
-                <button class="btn btn-primary" onclick="exportData()">Verileri Dışa Aktar</button>
+                <button class="btn btn-primary ripple" onclick="exportData()">Verileri Dışa Aktar</button>
                 <div class="info-text">Tüm verilerinizi JSON formatında indirir</div>
             </div>
             
             <div class="form-group">
-                <label class="file-input-wrapper">
+                <label class="file-input-wrapper ripple">
                     <input type="file" id="importFile" accept=".json">
                     Veri Dosyası Yükle
                 </label>
@@ -732,7 +796,7 @@
             </div>
             
             <div class="form-group">
-                <button class="btn btn-danger" onclick="clearAllData()">Tüm Verileri Temizle</button>
+                <button class="btn btn-danger ripple" onclick="clearAllData()">Tüm Verileri Temizle</button>
                 <div class="info-text">⚠️ Bu işlem geri alınamaz!</div>
             </div>
         </div>
@@ -741,7 +805,7 @@
     <!-- Customer Details Modal -->
     <div id="customerModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeCustomerModal()">&times;</span>
+            <span class="close ripple" onclick="closeCustomerModal()">&times;</span>
             <div id="customerDetails"></div>
         </div>
     </div>
@@ -749,7 +813,7 @@
     <!-- Pending Payments Modal -->
     <div id="paymentsModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closePaymentsModal()">&times;</span>
+            <span class="close ripple" onclick="closePaymentsModal()">&times;</span>
             <div class="section-title">Bekleyen Ödemeler</div>
             <div id="pendingPaymentsList"></div>
         </div>
@@ -758,7 +822,7 @@
     <!-- Payment Modal -->
     <div id="paymentModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closePaymentModal()">&times;</span>
+            <span class="close ripple" onclick="closePaymentModal()">&times;</span>
             <div class="section-title">Ödeme Al</div>
             <div id="paymentForm">
                 <div class="form-group">
@@ -774,10 +838,17 @@
                     <input type="number" id="paymentAmount" step="0.01" required>
                 </div>
                 <div class="form-group">
+                    <label>Ödeme Türü:</label>
+                    <div class="payment-options">
+                        <div class="payment-option selected ripple" onclick="selectDebtPaymentType('cash')">💵 Nakit</div>
+                        <div class="payment-option ripple" onclick="selectDebtPaymentType('card')">💳 Kart</div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="paymentEmployeeCode">Çalışan Kodu:</label>
                     <input type="password" id="paymentEmployeeCode" maxlength="3" required>
                 </div>
-                <button class="btn btn-primary" onclick="processPayment()">Ödeme Al</button>
+                <button class="btn btn-primary ripple" onclick="processPayment()">Ödeme Al</button>
             </div>
         </div>
     </div>
@@ -794,8 +865,11 @@
         let expensesData = JSON.parse(localStorage.getItem('ertHaliExpenses')) || [];
         let customersData = JSON.parse(localStorage.getItem('ertHaliCustomers')) || [];
         let debtsData = JSON.parse(localStorage.getItem('ertHaliDebts')) || [];
+        let paymentsData = JSON.parse(localStorage.getItem('ertHaliPayments')) || [];
 
         let selectedPaymentType = 'cash';
+        let selectedPaidPaymentType = 'cash';
+        let selectedDebtPaymentType = 'cash';
         let currentPaymentCustomer = null;
 
         // Theme management
@@ -847,7 +921,7 @@
         // Payment type selection
         function selectPaymentType(type) {
             selectedPaymentType = type;
-            document.querySelectorAll('.payment-option').forEach(option => {
+            document.querySelectorAll('#sales .payment-option').forEach(option => {
                 option.classList.remove('selected');
             });
             event.target.classList.add('selected');
@@ -860,9 +934,35 @@
             }
         }
 
+        function selectPaidPaymentType(type) {
+            selectedPaidPaymentType = type;
+            document.querySelectorAll('#paidPaymentTypeGroup .payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+        }
+
+        function selectDebtPaymentType(type) {
+            selectedDebtPaymentType = type;
+            document.querySelectorAll('#paymentModal .payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+        }
+
         // Employee verification
         function verifyEmployeeCode(code) {
             return employees[code] || null;
+        }
+
+        // Get payment type display
+        function getPaymentTypeDisplay(type) {
+            switch(type) {
+                case 'cash': return 'Nakit';
+                case 'card': return 'Kart';
+                case 'debt': return 'Borç';
+                default: return type;
+            }
         }
 
         // Sales form submission
@@ -893,6 +993,7 @@
                 salePrice: salePrice,
                 paymentType: selectedPaymentType,
                 paidAmount: paidAmount,
+                paidPaymentType: selectedPaymentType === 'debt' ? selectedPaidPaymentType : selectedPaymentType,
                 employee: employeeName,
                 employeeCode: employeeCode
             };
@@ -925,6 +1026,7 @@
             showAlert('Satış başarıyla kaydedildi!', 'success');
             document.getElementById('salesForm').reset();
             selectPaymentType('cash');
+            selectPaidPaymentType('cash');
             updateDashboard();
         });
 
@@ -989,11 +1091,13 @@
         // Update dashboard
         function updateDashboard() {
             const totalSales = salesData.reduce((sum, sale) => sum + sale.paidAmount, 0);
+            const totalPayments = paymentsData.reduce((sum, payment) => sum + payment.amount, 0);
+            const totalIncome = totalSales + totalPayments;
             const totalExpenses = expensesData.reduce((sum, expense) => sum + expense.amount, 0);
             const totalDebt = debtsData.reduce((sum, debt) => sum + debt.remainingAmount, 0);
-            const netProfit = totalSales - totalExpenses;
+            const netProfit = totalIncome - totalExpenses;
 
-            document.getElementById('totalSales').textContent = totalSales.toLocaleString('tr-TR');
+            document.getElementById('totalSales').textContent = totalIncome.toLocaleString('tr-TR');
             document.getElementById('totalExpenses').textContent = totalExpenses.toLocaleString('tr-TR');
             document.getElementById('netProfit').textContent = netProfit.toLocaleString('tr-TR');
             document.getElementById('totalDebt').textContent = totalDebt.toLocaleString('tr-TR');
@@ -1009,13 +1113,23 @@
                     type: 'Satış',
                     description: `${sale.customerName} ${sale.customerSurname}`,
                     amount: sale.paidAmount,
+                    paymentType: sale.paidPaymentType,
                     employee: sale.employee
+                })),
+                ...paymentsData.map(payment => ({
+                    date: payment.date,
+                    type: 'Ödeme',
+                    description: `${payment.customerName} ${payment.customerSurname}`,
+                    amount: payment.amount,
+                    paymentType: payment.paymentType,
+                    employee: payment.employee
                 })),
                 ...expensesData.map(expense => ({
                     date: expense.date,
                     type: 'Gider',
                     description: expense.description,
                     amount: -expense.amount,
+                    paymentType: '-',
                     employee: expense.employee
                 }))
             ].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
@@ -1026,6 +1140,12 @@
                     <td>${new Date(transaction.date).toLocaleDateString('tr-TR')}</td>
                     <td>${transaction.type}</td>
                     <td>${transaction.amount >= 0 ? '+' : ''}${transaction.amount.toLocaleString('tr-TR')} ₺</td>
+                    <td>
+                        ${transaction.paymentType !== '-' ? 
+                            `<span class="payment-type-badge payment-${transaction.paymentType}">${getPaymentTypeDisplay(transaction.paymentType)}</span>` : 
+                            '-'
+                        }
+                    </td>
                     <td>${transaction.employee}</td>
                 </tr>
             `).join('');
@@ -1035,7 +1155,7 @@
         function loadCustomers() {
             const customersList = document.getElementById('customersList');
             customersList.innerHTML = customersData.map(customer => `
-                <div class="customer-item" onclick="showCustomerDetails('${customer.id}')">
+                <div class="customer-item ripple" onclick="showCustomerDetails('${customer.id}')">
                     <div class="customer-name">${customer.name} ${customer.surname}</div>
                     <div class="customer-info">
                         📞 ${customer.phone} | 
@@ -1057,7 +1177,7 @@
 
             const customersList = document.getElementById('customersList');
             customersList.innerHTML = filteredCustomers.map(customer => `
-                <div class="customer-item" onclick="showCustomerDetails('${customer.id}')">
+                <div class="customer-item ripple" onclick="showCustomerDetails('${customer.id}')">
                     <div class="customer-name">${customer.name} ${customer.surname}</div>
                     <div class="customer-info">
                         📞 ${customer.phone} | 
@@ -1074,6 +1194,7 @@
             if (!customer) return;
 
             const customerDebt = debtsData.find(debt => debt.customerPhone === customer.phone);
+            const customerPayments = paymentsData.filter(payment => payment.customerPhone === customer.phone);
             
             document.getElementById('customerDetails').innerHTML = `
                 <div class="section-title">${customer.name} ${customer.surname}</div>
@@ -1102,13 +1223,48 @@
                                     <td>${new Date(sale.date).toLocaleDateString('tr-TR')}</td>
                                     <td>${sale.carpetArea}</td>
                                     <td>${sale.salePrice.toLocaleString('tr-TR')} ₺</td>
-                                    <td>${sale.paymentType === 'cash' ? 'Nakit' : sale.paymentType === 'card' ? 'Kart' : 'Borç'}</td>
+                                    <td>
+                                        <span class="payment-type-badge payment-${sale.paidPaymentType}">
+                                            ${getPaymentTypeDisplay(sale.paidPaymentType)}
+                                        </span>
+                                        ${sale.paymentType === 'debt' ? ' (Borç)' : ''}
+                                    </td>
                                     <td>${sale.employee}</td>
                                 </tr>
                             `).join('')}
                         </tbody>
                     </table>
                 </div>
+
+                ${customerPayments.length > 0 ? `
+                    <div class="section-title">Ödeme Geçmişi</div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tarih</th>
+                                    <th>Tutar</th>
+                                    <th>Ödeme Türü</th>
+                                    <th>Çalışan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${customerPayments.map(payment => `
+                                    <tr>
+                                        <td>${new Date(payment.date).toLocaleDateString('tr-TR')}</td>
+                                        <td>${payment.amount.toLocaleString('tr-TR')} ₺</td>
+                                        <td>
+                                            <span class="payment-type-badge payment-${payment.paymentType}">
+                                                ${getPaymentTypeDisplay(payment.paymentType)}
+                                            </span>
+                                        </td>
+                                        <td>${payment.employee}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                ` : ''}
             `;
             
             document.getElementById('customerModal').style.display = 'block';
@@ -1118,7 +1274,7 @@
         function showPendingPayments() {
             const pendingPaymentsList = document.getElementById('pendingPaymentsList');
             pendingPaymentsList.innerHTML = debtsData.map(debt => `
-                <div class="customer-item" onclick="showPaymentModal('${debt.customerPhone}')">
+                <div class="customer-item ripple" onclick="showPaymentModal('${debt.customerPhone}')">
                     <div class="customer-name">${debt.customerName} ${debt.customerSurname}</div>
                     <div class="customer-info">
                         📞 ${debt.customerPhone} | 
@@ -1142,6 +1298,13 @@
             document.getElementById('paymentCustomerInfo').textContent = `${debt.customerName} ${debt.customerSurname} (${debt.customerPhone})`;
             document.getElementById('paymentTotalDebt').textContent = `${debt.remainingAmount.toLocaleString('tr-TR')} ₺`;
             document.getElementById('paymentAmount').value = debt.remainingAmount;
+            
+            // Reset payment type selection
+            selectedDebtPaymentType = 'cash';
+            document.querySelectorAll('#paymentModal .payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector('#paymentModal .payment-option').classList.add('selected');
             
             document.getElementById('paymentsModal').style.display = 'none';
             document.getElementById('paymentModal').style.display = 'block';
@@ -1178,7 +1341,7 @@
                 localStorage.setItem('ertHaliDebts', JSON.stringify(debtsData));
             }
 
-            // Add payment as income
+            // Add payment record
             const paymentRecord = {
                 id: Date.now(),
                 date: new Date().toISOString(),
@@ -1186,11 +1349,14 @@
                 customerSurname: currentPaymentCustomer.customerSurname,
                 customerPhone: currentPaymentCustomer.customerPhone,
                 amount: paymentAmount,
-                type: 'payment',
-                employee: employeeName
+                paymentType: selectedDebtPaymentType,
+                type: 'debt_payment',
+                employee: employeeName,
+                debtId: currentPaymentCustomer.id
             };
 
-            // You might want to track payments separately or add to sales
+            paymentsData.push(paymentRecord);
+            localStorage.setItem('ertHaliPayments', JSON.stringify(paymentsData));
             
             showAlert('Ödeme başarıyla alındı!', 'success');
             closePaymentModal();
@@ -1217,7 +1383,7 @@
             const reportType = document.getElementById('reportType').value;
             const reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
             
-            let filteredSales, filteredExpenses, filteredDebts;
+            let filteredSales, filteredExpenses, filteredDebts, filteredPayments;
             const targetDate = new Date(reportDate);
 
             if (reportType === 'daily') {
@@ -1232,6 +1398,10 @@
                 filteredDebts = debtsData.filter(debt => {
                     const debtDate = new Date(debt.date);
                     return debtDate.toDateString() === targetDate.toDateString();
+                });
+                filteredPayments = paymentsData.filter(payment => {
+                    const paymentDate = new Date(payment.date);
+                    return paymentDate.toDateString() === targetDate.toDateString();
                 });
             } else if (reportType === 'monthly') {
                 filteredSales = salesData.filter(sale => {
@@ -1249,6 +1419,11 @@
                     return debtDate.getMonth() === targetDate.getMonth() && 
                            debtDate.getFullYear() === targetDate.getFullYear();
                 });
+                filteredPayments = paymentsData.filter(payment => {
+                    const paymentDate = new Date(payment.date);
+                    return paymentDate.getMonth() === targetDate.getMonth() && 
+                           paymentDate.getFullYear() === targetDate.getFullYear();
+                });
             } else {
                 filteredSales = salesData.filter(sale => {
                     const saleDate = new Date(sale.date);
@@ -1262,9 +1437,15 @@
                     const debtDate = new Date(debt.date);
                     return debtDate.getFullYear() === targetDate.getFullYear();
                 });
+                filteredPayments = paymentsData.filter(payment => {
+                    const paymentDate = new Date(payment.date);
+                    return paymentDate.getFullYear() === targetDate.getFullYear();
+                });
             }
 
             const totalSales = filteredSales.reduce((sum, sale) => sum + sale.paidAmount, 0);
+            const totalPayments = filteredPayments.reduce((sum, payment) => sum + payment.amount, 0);
+            const totalIncome = totalSales + totalPayments;
             const totalExpenses = filteredExpenses.reduce((sum, expense) => sum + expense.amount, 0);
             const totalDebt = filteredDebts.reduce((sum, debt) => sum + debt.remainingAmount, 0);
             const totalArea = filteredSales.reduce((sum, sale) => sum + sale.carpetArea, 0);
@@ -1275,15 +1456,15 @@
                 
                 <div class="stats-grid" style="margin: 1.5rem 0;">
                     <div class="stat-card">
-                        <div class="stat-value">${totalSales.toLocaleString('tr-TR')}</div>
-                        <div class="stat-label">Satış (₺)</div>
+                        <div class="stat-value">${totalIncome.toLocaleString('tr-TR')}</div>
+                        <div class="stat-label">Toplam Gelir (₺)</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value">${totalExpenses.toLocaleString('tr-TR')}</div>
                         <div class="stat-label">Gider (₺)</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">${(totalSales - totalExpenses).toLocaleString('tr-TR')}</div>
+                        <div class="stat-value">${(totalIncome - totalExpenses).toLocaleString('tr-TR')}</div>
                         <div class="stat-label">Kar (₺)</div>
                     </div>
                     <div class="stat-card">
@@ -1305,21 +1486,32 @@
                             </tr>
                         </thead>
                         <tbody>
-                            ${[...filteredSales.map(sale => ({
-                                date: sale.date,
-                                type: 'Satış',
-                                description: `${sale.customerName} ${sale.customerSurname}`,
-                                amount: sale.paidAmount,
-                                payment: sale.paymentType === 'cash' ? 'Nakit' : sale.paymentType === 'card' ? 'Kart' : 'Borç',
-                                employee: sale.employee
-                            })), ...filteredExpenses.map(expense => ({
-                                date: expense.date,
-                                type: 'Gider',
-                                description: expense.description,
-                                amount: -expense.amount,
-                                payment: '-',
-                                employee: expense.employee
-                            }))].sort((a, b) => new Date(b.date) - new Date(a.date)).map(item => `
+                            ${[
+                                ...filteredSales.map(sale => ({
+                                    date: sale.date,
+                                    type: 'Satış',
+                                    description: `${sale.customerName} ${sale.customerSurname}`,
+                                    amount: sale.paidAmount,
+                                    payment: getPaymentTypeDisplay(sale.paidPaymentType),
+                                    employee: sale.employee
+                                })),
+                                ...filteredPayments.map(payment => ({
+                                    date: payment.date,
+                                    type: 'Ödeme',
+                                    description: `${payment.customerName} ${payment.customerSurname}`,
+                                    amount: payment.amount,
+                                    payment: getPaymentTypeDisplay(payment.paymentType),
+                                    employee: payment.employee
+                                })),
+                                ...filteredExpenses.map(expense => ({
+                                    date: expense.date,
+                                    type: 'Gider',
+                                    description: expense.description,
+                                    amount: -expense.amount,
+                                    payment: '-',
+                                    employee: expense.employee
+                                }))
+                            ].sort((a, b) => new Date(b.date) - new Date(a.date)).map(item => `
                                 <tr>
                                     <td>${new Date(item.date).toLocaleDateString('tr-TR')}</td>
                                     <td>${item.type}</td>
@@ -1385,9 +1577,17 @@
                         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
                         th { background-color: #f2f2f2; }
                         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 20px 0; }
+                        .stat-template-columns: repeat(4, 1fr); gap: 20px; margin: 20px 0; }
                         .stat-card { border: 1px solid #ddd; padding: 20px; text-align: center; }
                         .stat-value { font-size: 24px; font-weight: bold; }
                         .debt-amount { color: #dc3545; font-weight: bold; }
+                        .payment-type-badge { 
+                            display: inline-block; 
+                            padding: 2px 6px; 
+                            border-radius: 3px; 
+                            font-size: 12px; 
+                            background-color: #f0f0f0; 
+                        }
                         h1, h3 { color: #333; }
                     </style>
                 </head>
@@ -1408,6 +1608,7 @@
                 expenses: expensesData,
                 customers: customersData,
                 debts: debtsData,
+                payments: paymentsData,
                 exportDate: new Date().toISOString()
             };
 
@@ -1438,11 +1639,13 @@
                             expensesData = data.expenses || [];
                             customersData = data.customers || [];
                             debtsData = data.debts || [];
+                            paymentsData = data.payments || [];
                             
                             localStorage.setItem('ertHaliSales', JSON.stringify(salesData));
                             localStorage.setItem('ertHaliExpenses', JSON.stringify(expensesData));
                             localStorage.setItem('ertHaliCustomers', JSON.stringify(customersData));
                             localStorage.setItem('ertHaliDebts', JSON.stringify(debtsData));
+                            localStorage.setItem('ertHaliPayments', JSON.stringify(paymentsData));
                             
                             updateDashboard();
                             showAlert('Veriler başarıyla yüklendi!', 'success');
@@ -1467,10 +1670,12 @@
                 localStorage.removeItem('ertHaliExpenses');
                 localStorage.removeItem('ertHaliCustomers');
                 localStorage.removeItem('ertHaliDebts');
+                localStorage.removeItem('ertHaliPayments');
                 salesData = [];
                 expensesData = [];
                 customersData = [];
                 debtsData = [];
+                paymentsData = [];
                 updateDashboard();
                 showAlert('Tüm veriler temizlendi!', 'success');
             }
