@@ -1,0 +1,50 @@
+{
+  "MAT-VEL-001": {
+    "code": "MAT-VEL-001",
+    "name": { "tr": "Kadife Kumaş", "en": "Velvet Fabric" },
+    "image": "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400&h=400&fit=crop",
+    "category": { "tr": "Kumaş", "en": "Fabric" }
+  },
+  "MAT-OAK-002": {
+    "code": "MAT-OAK-002",
+    "name": { "tr": "Meşe Ahşap", "en": "Oak Wood" },
+    "image": "https://images.unsplash.com/photo-1541123603104-512919d6a96c?w=400&h=400&fit=crop",
+    "category": { "tr": "Ahşap", "en": "Wood" }
+  },
+  "MAT-LTH-003": {
+    "code": "MAT-LTH-003",
+    "name": { "tr": "İtalyan Deri", "en": "Italian Leather" },
+    "image": "https://images.unsplash.com/photo-1531310197839-ccf54634509e?w=400&h=400&fit=crop",
+    "category": { "tr": "Deri", "en": "Leather" }
+  },
+  "MAT-WAL-004": {
+    "code": "MAT-WAL-004",
+    "name": { "tr": "Ceviz Ahşap", "en": "Walnut Wood" },
+    "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop",
+    "category": { "tr": "Ahşap", "en": "Wood" }
+  },
+  "MAT-MRB-005": {
+    "code": "MAT-MRB-005",
+    "name": { "tr": "Carrara Mermer", "en": "Carrara Marble" },
+    "image": "https://images.unsplash.com/photo-1618220179428-22790b461013?w=400&h=400&fit=crop",
+    "category": { "tr": "Taş", "en": "Stone" }
+  },
+  "MAT-BRS-006": {
+    "code": "MAT-BRS-006",
+    "name": { "tr": "Pirinç", "en": "Brass" },
+    "image": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=400&fit=crop",
+    "category": { "tr": "Metal", "en": "Metal" }
+  },
+  "MAT-LNN-007": {
+    "code": "MAT-LNN-007",
+    "name": { "tr": "Keten Kumaş", "en": "Linen Fabric" },
+    "image": "https://images.unsplash.com/photo-1528459105426-b9548367069b?w=400&h=400&fit=crop",
+    "category": { "tr": "Kumaş", "en": "Fabric" }
+  },
+  "MAT-STL-008": {
+    "code": "MAT-STL-008",
+    "name": { "tr": "Paslanmaz Çelik", "en": "Stainless Steel" },
+    "image": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=400&fit=crop",
+    "category": { "tr": "Metal", "en": "Metal" }
+  }
+}
