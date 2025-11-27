@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATELIER | Mobilya Koleksiyonu</title>
+    <meta name="description" content="El yapımı lüks mobilya koleksiyonu">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --background: #FAFAFA;
+            --foreground: #171717;
+            --card: #FFFFFF;
+            --muted: #F5F5F5;
+            --muted-foreground: #737373;
+            --border: #E5E5E5;
+            --radius: 8px;
+            --sides: 24px;
+            --header-height: 72px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--foreground);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            padding: 0 var(--sides);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            background: linear-gradient(to bottom, var(--background) 0%, var(--background) 60%, transparent 100%);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            text-decoration: none;
+            color: var(--foreground);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-list {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--foreground);
+            opacity: 0.5;
+            transition: opacity 0.2s;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            opacity: 1;
+        }
+
+        .lang-switch {
+            display: flex;
+            background: var(--card);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .lang-btn {
+            padding: 0.375rem 0.625rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.4;
+            transition: all 0.2s;
+        }
+
+        .lang-btn.active {
+            background: var(--foreground);
+            color: var(--background);
+            opacity: 1;
+        }
+
+        /* ===== MOBILE MENU BUTTON ===== */
+        .mobile-menu-btn {
+            display: none;
+            width: 40px;
+            height: 40px;
+            background: var(--card);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10001;
+        }
+
+        .mobile-menu-btn span {
+            width: 18px;
+            height: 2px;
+            background: var(--foreground);
+            border-radius: 1px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-menu-btn:hover {
+            background: var(--muted);
+        }
+
+        /* Hamburger X animasyonu */
+        .mobile-menu-btn.active {
+            background: transparent;
+        }
+
+        .mobile-menu-btn.active span {
+            background: var(--background);
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ===== FULLSCREEN MOBILE MENU - YENİ TASARIM ===== */
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: var(--foreground);
+            display: flex;
+            flex-direction: column;
+            clip-path: circle(0% at calc(100% - 44px) 36px);
+            transition: clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            visibility: hidden;
+        }
+
+        .mobile-menu.active {
+            clip-path: circle(150% at calc(100% - 44px) 36px);
+            visibility: visible;
+        }
+
+        .mobile-menu-header {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--sides);
+        }
+
+        .mobile-menu-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--background);
+            text-decoration: none;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+        }
+
+        .mobile-menu.active .mobile-menu-logo {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .mobile-menu-lang {
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+        }
+
+        .mobile-menu.active .mobile-menu-lang {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .mobile-menu-lang .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--background);
+            border-radius: 4px;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .mobile-menu-lang .lang-btn.active {
+            background: var(--background);
+            color: var(--foreground);
+            opacity: 1;
+        }
+
+        .mobile-menu-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem var(--sides);
+            overflow-y: auto;
+        }
+
+        .mobile-menu-category {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        }
+
+        .mobile-menu.active .mobile-menu-category {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-menu-nav {
+            list-style: none;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .mobile-menu-nav li {
+            overflow: hidden;
+        }
+
+        .mobile-menu-link {
+            display: block;
+            padding: 0.875rem 1.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--background);
+            letter-spacing: -0.01em;
+            border-radius: var(--radius);
+            transform: translateY(40px);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease, background 0.2s;
+        }
+
+        .mobile-menu.active .mobile-menu-link {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mobile-menu.active .mobile-menu-nav li:nth-child(1) .mobile-menu-link { transition-delay: 0.25s; }
+        .mobile-menu.active .mobile-menu-nav li:nth-child(2) .mobile-menu-link { transition-delay: 0.3s; }
+        .mobile-menu.active .mobile-menu-nav li:nth-child(3) .mobile-menu-link { transition-delay: 0.35s; }
+        .mobile-menu.active .mobile-menu-nav li:nth-child(4) .mobile-menu-link { transition-delay: 0.4s; }
+        .mobile-menu.active .mobile-menu-nav li:nth-child(5) .mobile-menu-link { transition-delay: 0.45s; }
+        .mobile-menu.active .mobile-menu-nav li:nth-child(6) .mobile-menu-link { transition-delay: 0.5s; }
+        .mobile-menu.active .mobile-menu-nav li:nth-child(7) .mobile-menu-link { transition-delay: 0.55s; }
+        .mobile-menu.active .mobile-menu-nav li:nth-child(8) .mobile-menu-link { transition-delay: 0.6s; }
+
+        .mobile-menu-link:hover,
+        .mobile-menu-link.active {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .mobile-menu-count {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.4);
+            margin-left: 0.5rem;
+        }
+
+        /* ===== LAYOUT ===== */
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            padding: var(--sides);
+            padding-top: calc(var(--header-height) + 24px);
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted-foreground);
+            margin-bottom: 1rem;
+        }
+
+        .filter-list {
+            list-style: none;
+        }
+
+        .filter-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            background: none;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            color: var(--foreground);
+        }
+
+        .filter-btn:hover {
+            background: var(--muted);
+        }
+
+        .filter-btn.active {
+            background: var(--foreground);
+            color: var(--background);
+        }
+
+        .filter-count {
+            font-size: 0.75rem;
+            opacity: 0.5;
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: calc(var(--header-height) + 24px) var(--sides) var(--sides) var(--sides);
+        }
+
+        /* ===== PRODUCT GRID ===== */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+        }
+
+        .product-card {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            cursor: pointer;
+            background: var(--muted);
+        }
+
+        .product-card.wide {
+            grid-column: span 2;
+            aspect-ratio: 2/1;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.05);
+        }
+
+        .product-overlay {
+            position: absolute;
+            inset: 0;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            pointer-events: none;
+            background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%);
+        }
+
+        .product-top {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+
+        .product-name {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: #fff;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            margin-bottom: 0.25rem;
+        }
+
+        .product-code {
+            font-size: 0.6875rem;
+            font-weight: 500;
+            color: var(--foreground);
+            background: rgba(255,255,255,0.95);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            backdrop-filter: blur(4px);
+        }
+
+        .product-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .product-dims {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .product-dot {
+            width: 3px;
+            height: 3px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+        }
+
+        .product-tags {
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 0.625rem;
+            font-weight: 500;
+            padding: 0.1875rem 0.5rem;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            border-radius: 3px;
+            color: #fff;
+        }
+
+        /* ===== PRODUCT DETAIL PAGE - TAM SAYFA ===== */
+        .detail-page {
+            display: none;
+            min-height: 100vh;
+            background: var(--background);
+        }
+
+        .detail-page.active {
+            display: block;
+        }
+
+        .detail-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            padding: 0 var(--sides);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            background: linear-gradient(to bottom, var(--background) 0%, var(--background) 60%, transparent 100%);
+        }
+
+        .detail-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--foreground);
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            opacity: 1;
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .detail-content {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .detail-info {
+            width: 420px;
+            flex-shrink: 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            padding: var(--sides);
+            padding-top: calc(var(--header-height) + 24px);
+            overflow-y: auto;
+        }
+
+        .detail-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            margin-bottom: 1.5rem;
+        }
+
+        .breadcrumb-sep {
+            color: var(--border);
+        }
+
+        .detail-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.375rem;
+            letter-spacing: -0.02em;
+        }
+
+        .detail-code {
+            font-size: 0.8125rem;
+            color: var(--muted-foreground);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .detail-desc {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            line-height: 1.6;
+        }
+
+        .detail-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-label {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted-foreground);
+            margin-bottom: 0.75rem;
+        }
+
+        /* MATERIALS GRID */
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .mat-card {
+            display: flex;
+            flex-direction: column;
+            background: var(--card);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .mat-card-img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .mat-card:hover .mat-card-img {
+            transform: scale(1.05);
+        }
+
+        .mat-card-name {
+            padding: 0.75rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            text-align: center;
+            background: var(--card);
+        }
+
+        /* DIMENSIONS */
+        .dims-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .dim-box {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .dim-val {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .dim-label {
+            font-size: 0.6875rem;
+            color: var(--muted-foreground);
+        }
+
+        /* GALLERY */
+        .detail-gallery {
+            flex: 1;
+            padding: var(--sides);
+            padding-top: calc(var(--header-height) + 24px);
+        }
+
+        .gallery-main {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+
+        .gallery-thumbs {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+        }
+
+        .gallery-thumb {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.2s;
+        }
+
+        .gallery-thumb:hover,
+        .gallery-thumb.active {
+            opacity: 1;
+        }
+
+        /* ===== HOME PAGE CONTAINER ===== */
+        .home-page {
+            display: block;
+        }
+
+        .home-page.hidden {
+            display: none;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--foreground);
+            color: var(--background);
+            padding: 4rem var(--sides);
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-logo {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+        }
+
+        .footer-desc {
+            font-size: 0.875rem;
+            opacity: 0.6;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            font-size: 0.875rem;
+            color: var(--background);
+            text-decoration: none;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-copy {
+            font-size: 0.75rem;
+            opacity: 0.4;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-social a {
+            color: var(--background);
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .footer-social a:hover {
+            opacity: 1;
+        }
+
+        .footer-social svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ===== LOADING ===== */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem;
+            grid-column: span 3;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--border);
+            border-top-color: var(--foreground);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 280px;
+            }
+
+            .detail-info {
+                width: 340px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --sides: 16px;
+                --header-height: 64px;
+            }
+
+            .nav-list {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .layout {
+                display: block;
+            }
+
+            .main {
+                padding-top: var(--header-height);
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .product-card.wide {
+                grid-column: span 2;
+                aspect-ratio: 16/9;
+            }
+
+            /* Mobilde kart overlay düzenleme - gradient daha kısa */
+            .product-overlay {
+                background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+                padding: 0.75rem;
+            }
+
+            .product-name {
+                font-size: 0.8125rem;
+                line-height: 1.3;
+            }
+
+            .product-meta {
+                margin-top: 0.25rem;
+            }
+
+            .product-dims {
+                font-size: 0.6875rem;
+            }
+
+            .tag {
+                font-size: 0.5625rem;
+                padding: 0.125rem 0.375rem;
+            }
+
+            .product-code {
+                font-size: 0.5625rem;
+                padding: 0.1875rem 0.375rem;
+            }
+
+            .detail-content {
+                flex-direction: column;
+            }
+
+            .detail-gallery {
+                order: 1;
+                padding-top: var(--header-height);
+            }
+
+            .detail-info {
+                order: 2;
+                width: 100%;
+                height: auto;
+                position: static;
+                padding-top: 0;
+            }
+
+            .gallery-main {
+                aspect-ratio: 4/3;
+            }
+
+            .gallery-thumbs {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .dims-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .materials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-top {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .footer-links {
+                text-align: left;
+            }
+
+            .footer-links a {
+                text-align: left;
+            }
+
+            .footer-logo {
+                font-size: 2.5rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .loading {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-card.wide {
+                grid-column: span 1;
+                aspect-ratio: 4/3;
+            }
+
+            .gallery-thumbs {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .loading {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== FULLSCREEN MOBILE MENU ===== -->
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+        <a href="#" class="mobile-menu-logo" onclick="closeMobileMenu(); goHome(); return false;">ATELIER</a>
+        <div class="mobile-menu-lang">
+            <button class="lang-btn active" onclick="setLang('tr')">TR</button>
+            <button class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+    </div>
+    <div class="mobile-menu-content">
+        <div class="mobile-menu-category" data-tr="Malzemelere Göre" data-en="By Material">Malzemelere Göre</div>
+        <nav>
+            <ul class="mobile-menu-nav" id="mobileMenuNav">
+                <!-- Dynamically generated from materials JSON -->
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+    <a href="#" class="logo" onclick="goHome(); return false;">ATELIER</a>
+    <nav class="nav">
+        <ul class="nav-list">
+            <li><a href="#" class="nav-link active" onclick="goHome(); return false;" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a></li>
+            <li><a href="#footer" class="nav-link" data-tr="İletişim" data-en="Contact">İletişim</a></li>
+        </ul>
+        <div class="lang-switch">
+            <button class="lang-btn active" onclick="setLang('tr')">TR</button>
+            <button class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+</header>
+
+<!-- ===== HOME PAGE ===== -->
+<div class="home-page" id="homePage">
+    <!-- ===== MAIN LAYOUT ===== -->
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-title" data-tr="Malzemelere Göre Filtrele" data-en="Filter by Material">Malzemelere Göre Filtrele</div>
+            <ul class="filter-list" id="filterList">
+                <!-- Dynamically generated -->
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="product-grid" id="productGrid">
+                <div class="loading"><div class="spinner"></div></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" id="footer">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="footer-logo">ATELIER</div>
+                <p class="footer-desc" data-tr="El yapımı lüks mobilyalar ile yaşam alanlarınızı dönüştürün." data-en="Transform your living spaces with handcrafted luxury furniture.">El yapımı lüks mobilyalar ile yaşam alanlarınızı dönüştürün.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a>
+                <a href="#" data-tr="Hakkımızda" data-en="About">Hakkımızda</a>
+                <a href="#" data-tr="İletişim" data-en="Contact">İletişim</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span class="footer-copy">© 2025 ATELIER. All rights reserved.</span>
+            <div class="footer-social">
+                <a href="#" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="18" cy="6" r="1.5" fill="currentColor"/></svg>
+                </a>
+                <a href="#" aria-label="Pinterest">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M9 15l3 3 3-3"/></svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- ===== DETAIL PAGES CONTAINER ===== -->
+<div id="detailPages"></div>
+
+<script>
+    // ===== JSON DATA =====
+    const materialsDB = {
+        "MAT-KAD-001": {
+            "code": "MAT-KAD-001",
+            "name": { "tr": "Kadife Kumaş", "en": "Velvet Fabric" },
+            "image": "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400&h=400&fit=crop"
+        },
+        "MAT-MSE-002": {
+            "code": "MAT-MSE-002",
+            "name": { "tr": "Meşe Ahşap", "en": "Oak Wood" },
+            "image": "https://images.unsplash.com/photo-1541123603104-512919d6a96c?w=400&h=400&fit=crop"
+        },
+        "MAT-DRI-003": {
+            "code": "MAT-DRI-003",
+            "name": { "tr": "Hakiki Deri", "en": "Genuine Leather" },
+            "image": "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?w=400&h=400&fit=crop"
+        },
+        "MAT-CVZ-004": {
+            "code": "MAT-CVZ-004",
+            "name": { "tr": "Ceviz Ahşap", "en": "Walnut Wood" },
+            "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop"
+        },
+        "MAT-MRM-005": {
+            "code": "MAT-MRM-005",
+            "name": { "tr": "Carrara Mermer", "en": "Carrara Marble" },
+            "image": "https://images.unsplash.com/photo-1618220179428-22790b461013?w=400&h=400&fit=crop"
+        },
+        "MAT-PRN-006": {
+            "code": "MAT-PRN-006",
+            "name": { "tr": "Pirinç", "en": "Brass" },
+            "image": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=400&fit=crop"
+        },
+        "MAT-KTN-007": {
+            "code": "MAT-KTN-007",
+            "name": { "tr": "Keten Kumaş", "en": "Linen Fabric" },
+            "image": "https://images.unsplash.com/photo-1528459105426-b9548367069b?w=400&h=400&fit=crop"
+        },
+        "MAT-CLK-008": {
+            "code": "MAT-CLK-008",
+            "name": { "tr": "Paslanmaz Çelik", "en": "Stainless Steel" },
+            "image": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=400&fit=crop"
+        }
+    };
+
+    const productsDB = [
+        {
+            "id": "oslo-sofa",
+            "code": "ATL-OSL-001",
+            "name": { "tr": "Oslo Üçlü Koltuk", "en": "Oslo Three-Seater Sofa" },
+            "category": { "tr": "Oturma Grupları", "en": "Living Room" },
+            "description": {
+                "tr": "Skandinav tasarım felsefesinin zarif bir yansıması olan Oslo Koltuk, minimalist çizgileri ve üstün konforu bir araya getiriyor. El yapımı meşe çerçevesi ve premium kadife döşemesiyle yaşam alanlarınıza sofistike bir dokunuş katıyor.",
+                "en": "Oslo Sofa, an elegant reflection of Scandinavian design philosophy, combines minimalist lines with superior comfort. With its handcrafted oak frame and premium velvet upholstery, it adds a sophisticated touch to your living spaces."
+            },
+            "images": [
+                "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&h=900&fit=crop",
+                "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800&h=800&fit=crop",
+                "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=800&h=800&fit=crop"
+            ],
+            "materials": ["MAT-KAD-001", "MAT-MSE-002"],
+            "dimensions": { "width": 220, "depth": 95, "height": 82 },
+            "wide": true
+        },
+        {
+            "id": "bergen-chair",
+            "code": "ATL-BRG-002",
+            "name": { "tr": "Bergen Berjer", "en": "Bergen Armchair" },
+            "category": { "tr": "Tekli Koltuklar", "en": "Armchairs" },
+            "description": {
+                "tr": "Bergen Berjer, geleneksel zanaatkarlığı modern estetiğe dönüştüren eşsiz bir parça. Yüksek sırt desteği ve geniş oturma alanıyla maksimum konfor sağlar.",
+                "en": "Bergen Armchair is a unique piece that transforms traditional craftsmanship into modern aesthetics. It provides maximum comfort with high back support and wide seating area."
+            },
+            "images": [
+                "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800&h=800&fit=crop",
+                "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=800&h=800&fit=crop"
+            ],
+            "materials": ["MAT-DRI-003", "MAT-CVZ-004"],
+            "dimensions": { "width": 85, "depth": 90, "height": 105 },
+            "wide": false
+        },
+        {
+            "id": "aurora-table",
+            "code": "ATL-ARR-003",
+            "name": { "tr": "Aurora Yemek Masası", "en": "Aurora Dining Table" },
+            "category": { "tr": "Masalar", "en": "Tables" },
+            "description": {
+                "tr": "Aurora Yemek Masası, Carrara mermer tablosu ve pirinç detaylarıyla dikkat çekiyor. 8 kişilik kapasitesiyle aile yemeklerinizin merkezi olacak.",
+                "en": "Aurora Dining Table stands out with its Carrara marble top and brass details. With its 8-person capacity, it will be the center of your family dinners."
+            },
+            "images": [
+                "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=1200&h=900&fit=crop",
+                "https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=800&h=800&fit=crop"
+            ],
+            "materials": ["MAT-MRM-005", "MAT-PRN-006"],
+            "dimensions": { "width": 240, "depth": 110, "height": 76 },
+            "wide": true
+        },
+        {
+            "id": "nordic-bed",
+            "code": "ATL-NRD-004",
+            "name": { "tr": "Nordic Yatak Başlığı", "en": "Nordic Headboard" },
+            "category": { "tr": "Yatak Odası", "en": "Bedroom" },
+            "description": {
+                "tr": "Nordic Yatak Başlığı, keten kumaş kaplaması ve doğal ahşap çerçevesiyle huzurlu bir uyku ortamı yaratır.",
+                "en": "Nordic Headboard creates a peaceful sleeping environment with its linen fabric cover and natural wood frame."
+            },
+            "images": [
+                "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=800&fit=crop",
+                "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&h=800&fit=crop"
+            ],
+            "materials": ["MAT-KTN-007", "MAT-MSE-002"],
+            "dimensions": { "width": 180, "depth": 12, "height": 130 },
+            "wide": false
+        },
+        {
+            "id": "metro-shelf",
+            "code": "ATL-MTR-005",
+            "name": { "tr": "Metro Kitaplık", "en": "Metro Bookshelf" },
+            "category": { "tr": "Depolama", "en": "Storage" },
+            "description": {
+                "tr": "Metro Kitaplık, endüstriyel tasarımı ceviz ahşap raflarla birleştirerek modern bir görünüm sunar.",
+                "en": "Metro Bookshelf offers a modern look by combining industrial design with walnut wood shelves."
+            },
+            "images": [
+                "https://images.unsplash.com/photo-1594620302200-9a762244a156?w=800&h=800&fit=crop",
+                "https://images.unsplash.com/photo-1598300056393-4aac492f4344?w=800&h=800&fit=crop"
+            ],
+            "materials": ["MAT-CVZ-004", "MAT-CLK-008"],
+            "dimensions": { "width": 120, "depth": 35, "height": 200 },
+            "wide": false
+        },
+        {
+            "id": "luna-lamp",
+            "code": "ATL-LNA-006",
+            "name": { "tr": "Luna Lambader", "en": "Luna Floor Lamp" },
+            "category": { "tr": "Aydınlatma", "en": "Lighting" },
+            "description": {
+                "tr": "Luna Lambader, zarif pirinç gövdesi ve keten abajuruyla odalara sıcak bir ambiyans katar.",
+                "en": "Luna Floor Lamp adds a warm ambiance to rooms with its elegant brass body and linen shade."
+            },
+            "images": [
+                "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&h=800&fit=crop",
+                "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=800&h=800&fit=crop"
+            ],
+            "materials": ["MAT-PRN-006", "MAT-KTN-007"],
+            "dimensions": { "width": 45, "depth": 45, "height": 165 },
+            "wide": false
+        }
+    ];
+
+    let currentLang = 'tr';
+    let activeFilter = 'all';
+
+    // ===== INIT =====
+    document.addEventListener('DOMContentLoaded', () => {
+        renderSidebarFilters();
+        renderMobileMenu();
+        renderProducts();
+        renderDetailPages();
+        checkHash();
+    });
+
+    // ===== RENDER SIDEBAR FILTERS =====
+    function renderSidebarFilters() {
+        const container = document.getElementById('filterList');
+        const allCount = productsDB.length;
+        
+        let html = `
+            <li>
+                <button class="filter-btn ${activeFilter === 'all' ? 'active' : ''}" onclick="filterBy('all')">
+                    <span data-tr="Tümü" data-en="All">${currentLang === 'tr' ? 'Tümü' : 'All'}</span>
+                    <span class="filter-count">${allCount}</span>
+                </button>
+            </li>
+        `;
+
+        Object.values(materialsDB).forEach(mat => {
+            const count = productsDB.filter(p => p.materials.includes(mat.code)).length;
+            if (count > 0) {
+                html += `
+                    <li>
+                        <button class="filter-btn ${activeFilter === mat.code ? 'active' : ''}" onclick="filterBy('${mat.code}')">
+                            <span>${mat.name[currentLang]}</span>
+                            <span class="filter-count">${count}</span>
+                        </button>
+                    </li>
+                `;
+            }
+        });
+
+        container.innerHTML = html;
+    }
+
+    // ===== RENDER MOBILE MENU =====
+    function renderMobileMenu() {
+        const container = document.getElementById('mobileMenuNav');
+        const allCount = productsDB.length;
+        
+        let html = `
+            <li>
+                <a href="#" class="mobile-menu-link ${activeFilter === 'all' ? 'active' : ''}" onclick="closeMobileMenu(); filterBy('all'); return false;">
+                    ${currentLang === 'tr' ? 'Tümü' : 'All'}<span class="mobile-menu-count">${allCount}</span>
+                </a>
+            </li>
+        `;
+
+        Object.values(materialsDB).forEach(mat => {
+            const count = productsDB.filter(p => p.materials.includes(mat.code)).length;
+            if (count > 0) {
+                html += `
+                    <li>
+                        <a href="#" class="mobile-menu-link ${activeFilter === mat.code ? 'active' : ''}" onclick="closeMobileMenu(); filterBy('${mat.code}'); return false;">
+                            ${mat.name[currentLang]}<span class="mobile-menu-count">${count}</span>
+                        </a>
+                    </li>
+                `;
+            }
+        });
+
+        container.innerHTML = html;
+    }
+
+    // ===== FILTER =====
+    function filterBy(code) {
+        activeFilter = code;
+        renderSidebarFilters();
+        renderMobileMenu();
+        renderProducts();
+    }
+
+    // ===== RENDER PRODUCTS =====
+    function renderProducts() {
+        const container = document.getElementById('productGrid');
+        let filtered = productsDB;
+        
+        if (activeFilter !== 'all') {
+            filtered = productsDB.filter(p => p.materials.includes(activeFilter));
+        }
+
+        let html = '';
+
+        filtered.forEach(product => {
+            const materialTags = product.materials.map(code => {
+                const mat = materialsDB[code];
+                return `<span class="tag">${mat.name[currentLang]}</span>`;
+            }).join('');
+
+            const dims = `${product.dimensions.width}×${product.dimensions.depth}×${product.dimensions.height}`;
+
+            html += `
+                <article class="product-card ${product.wide ? 'wide' : ''}" onclick="openDetail('${product.id}')">
+                    <img src="${product.images[0]}" alt="${product.name[currentLang]}" class="product-img" loading="lazy">
+                    <div class="product-overlay">
+                        <div class="product-top">
+                            <span class="product-code">${product.code}</span>
+                        </div>
+                        <div class="product-bottom">
+                            <div class="product-name">${product.name[currentLang]}</div>
+                            <div class="product-meta">
+                                <span class="product-dims">${dims} cm</span>
+                                <span class="product-dot"></span>
+                                <div class="product-tags">${materialTags}</div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            `;
+        });
+
+        container.innerHTML = html || `<div class="loading" style="grid-column: span 3;"><p data-tr="Ürün bulunamadı" data-en="No products found">${currentLang === 'tr' ? 'Ürün bulunamadı' : 'No products found'}</p></div>`;
+    }
+
+    // ===== RENDER DETAIL PAGES =====
+    function renderDetailPages() {
+        const container = document.getElementById('detailPages');
+        let html = '';
+
+        productsDB.forEach(product => {
+            const thumbsHtml = product.images.map((img, idx) => `
+                <img src="${img.replace('1200', '400').replace('900', '400')}" 
+                     alt="${product.name[currentLang]} ${idx + 1}" 
+                     class="gallery-thumb ${idx === 0 ? 'active' : ''}" 
+                     onclick="changeImage('main-${product.id}', '${img}', this)">
+            `).join('');
+
+            const materialsHtml = product.materials.map(code => {
+                const mat = materialsDB[code];
+                return `
+                    <div class="mat-card">
+                        <img src="${mat.image}" alt="${mat.name[currentLang]}" class="mat-card-img">
+                        <div class="mat-card-name">${mat.name[currentLang]}</div>
+                    </div>
+                `;
+            }).join('');
+
+            html += `
+                <div class="detail-page" id="${product.id}">
+                    <header class="detail-header">
+                        <a href="#" class="back-btn" onclick="closeDetail(); return false;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            <span data-tr="Geri" data-en="Back">${currentLang === 'tr' ? 'Geri' : 'Back'}</span>
+                        </a>
+                        <span class="logo">${product.code}</span>
+                        <div class="detail-nav">
+                            <div class="lang-switch">
+                                <button class="lang-btn ${currentLang === 'tr' ? 'active' : ''}" onclick="setLang('tr')">TR</button>
+                                <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" onclick="setLang('en')">EN</button>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="detail-content">
+                        <aside class="detail-info">
+                            <div class="detail-breadcrumb">
+                                <span data-tr="Koleksiyon" data-en="Collection">${currentLang === 'tr' ? 'Koleksiyon' : 'Collection'}</span>
+                                <span class="breadcrumb-sep">/</span>
+                                <span>${product.category[currentLang]}</span>
+                            </div>
+                            <div class="detail-card">
+                                <h1 class="detail-title">${product.name[currentLang]}</h1>
+                                <div class="detail-code">${product.code}</div>
+                                <p class="detail-desc">${product.description[currentLang]}</p>
+                            </div>
+                            
+                            <div class="detail-section">
+                                <div class="section-label" data-tr="Malzemeler" data-en="Materials">${currentLang === 'tr' ? 'Malzemeler' : 'Materials'}</div>
+                                <div class="materials-grid">${materialsHtml}</div>
+                            </div>
+                            
+                            <div class="detail-section">
+                                <div class="section-label" data-tr="Boyutlar" data-en="Dimensions">${currentLang === 'tr' ? 'Boyutlar' : 'Dimensions'}</div>
+                                <div class="dims-grid">
+                                    <div class="dim-box">
+                                        <div class="dim-val">${product.dimensions.width}</div>
+                                        <div class="dim-label" data-tr="Genişlik (cm)" data-en="Width (cm)">${currentLang === 'tr' ? 'Genişlik (cm)' : 'Width (cm)'}</div>
+                                    </div>
+                                    <div class="dim-box">
+                                        <div class="dim-val">${product.dimensions.depth}</div>
+                                        <div class="dim-label" data-tr="Derinlik (cm)" data-en="Depth (cm)">${currentLang === 'tr' ? 'Derinlik (cm)' : 'Depth (cm)'}</div>
+                                    </div>
+                                    <div class="dim-box">
+                                        <div class="dim-val">${product.dimensions.height}</div>
+                                        <div class="dim-label" data-tr="Yükseklik (cm)" data-en="Height (cm)">${currentLang === 'tr' ? 'Yükseklik (cm)' : 'Height (cm)'}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
+                        <div class="detail-gallery">
+                            <img src="${product.images[0]}" alt="${product.name[currentLang]}" class="gallery-main" id="main-${product.id}">
+                            <div class="gallery-thumbs">${thumbsHtml}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    // ===== MOBILE MENU =====
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const btn = document.getElementById('mobileMenuBtn');
+        
+        if (menu.classList.contains('active')) {
+            closeMobileMenu();
+        } else {
+            openMobileMenu();
+        }
+    }
+
+    function openMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const btn = document.getElementById('mobileMenuBtn');
+        menu.classList.add('active');
+        btn.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const btn = document.getElementById('mobileMenuBtn');
+        menu.classList.remove('active');
+        btn.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // ===== DETAIL PAGE =====
+    function openDetail(id) {
+        const detailPage = document.getElementById(id);
+        const homePage = document.getElementById('homePage');
+        
+        if (detailPage) {
+            homePage.classList.add('hidden');
+            detailPage.classList.add('active');
+            window.scrollTo(0, 0);
+            history.pushState(null, '', '#' + id);
+        }
+    }
+
+    function closeDetail() {
+        const homePage = document.getElementById('homePage');
+        document.querySelectorAll('.detail-page').forEach(p => p.classList.remove('active'));
+        homePage.classList.remove('hidden');
+        history.pushState(null, '', window.location.pathname);
+    }
+
+    function goHome() {
+        closeDetail();
+        closeMobileMenu();
+        activeFilter = 'all';
+        renderSidebarFilters();
+        renderMobileMenu();
+        renderProducts();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function changeImage(mainId, src, thumb) {
+        document.getElementById(mainId).src = src;
+        const gallery = thumb.parentElement;
+        gallery.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+    }
+
+    // ===== LANGUAGE =====
+    function setLang(lang) {
+        currentLang = lang;
+        
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+        });
+        
+        document.querySelectorAll('[data-tr]').forEach(el => {
+            el.textContent = el.getAttribute('data-' + lang);
+        });
+        
+        renderSidebarFilters();
+        renderMobileMenu();
+        renderProducts();
+        renderDetailPages();
+        
+        document.documentElement.lang = lang;
+    }
+
+    // ===== URL HASH =====
+    function checkHash() {
+        const hash = window.location.hash.slice(1);
+        if (hash && document.getElementById(hash)) {
+            openDetail(hash);
+        }
+    }
+
+    window.addEventListener('popstate', () => {
+        const hash = window.location.hash.slice(1);
+        if (hash && document.getElementById(hash)) {
+            openDetail(hash);
+        } else {
+            closeDetail();
+        }
+    });
+
+    // ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeMobileMenu();
+            closeDetail();
+        }
+    });
+</script>
+</body>
+</html>
