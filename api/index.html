@@ -13,6 +13,9 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            /* Mavi dokunma efektini kaldır */
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
         }
 
         :root {
@@ -25,6 +28,8 @@
             --radius: 8px;
             --sides: 24px;
             --header-height: 72px;
+            /* Ripple efekti için renk değişkeni */
+            --ripple-color: rgba(23, 23, 23, 0.15);
         }
 
         body {
@@ -33,6 +38,38 @@
             color: var(--foreground);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
+        }
+
+        /* Ripple efekti stilleri */
+        .ripple-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--ripple-color);
+            transform: scale(0);
+            animation: ripple-animation 0.6s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Açık arka planlı elementler için ripple */
+        .ripple-light {
+            --ripple-color: rgba(23, 23, 23, 0.12);
+        }
+
+        /* Koyu arka planlı elementler için ripple */
+        .ripple-dark {
+            --ripple-color: rgba(255, 255, 255, 0.25);
         }
 
         /* ===== HEADER ===== */
@@ -80,6 +117,8 @@
             opacity: 0.5;
             transition: opacity 0.2s;
             letter-spacing: 0.02em;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius);
         }
 
         .nav-link:hover, .nav-link.active {
@@ -102,6 +141,8 @@
             cursor: pointer;
             opacity: 0.4;
             transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
         }
 
         .lang-btn.active {
@@ -126,6 +167,7 @@
             transition: all 0.3s ease;
             position: relative;
             z-index: 10001;
+            overflow: hidden;
         }
 
         .mobile-menu-btn span {
@@ -222,6 +264,8 @@
             color: var(--background);
             border-radius: 4px;
             padding: 0.5rem 0.75rem;
+            position: relative;
+            overflow: hidden;
         }
 
         .mobile-menu-lang .lang-btn.active {
@@ -283,6 +327,8 @@
             transform: translateY(40px);
             opacity: 0;
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease, background 0.2s;
+            position: relative;
+            overflow: hidden;
         }
 
         .mobile-menu.active .mobile-menu-link {
@@ -356,6 +402,8 @@
             text-align: left;
             transition: all 0.2s;
             color: var(--foreground);
+            position: relative;
+            overflow: hidden;
         }
 
         .filter-btn:hover {
@@ -523,6 +571,10 @@
             opacity: 0.6;
             transition: opacity 0.2s;
             text-decoration: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
         }
 
         .back-btn:hover {
@@ -750,6 +802,10 @@
             text-decoration: none;
             opacity: 0.6;
             transition: opacity 0.2s;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
         }
 
         .footer-links a:hover {
@@ -778,6 +834,10 @@
             color: var(--background);
             opacity: 0.6;
             transition: opacity 0.2s;
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
         }
 
         .footer-social a:hover {
@@ -974,8 +1034,8 @@
     <div class="mobile-menu-header">
         <a href="#" class="mobile-menu-logo" onclick="closeMobileMenu(); goHome(); return false;">ÖZPINAR</a>
         <div class="mobile-menu-lang">
-            <button class="lang-btn active" onclick="setLang('tr')">TR</button>
-            <button class="lang-btn" onclick="setLang('en')">EN</button>
+            <button class="lang-btn active ripple-container" onclick="createRipple(event); setLang('tr')">TR</button>
+            <button class="lang-btn ripple-container" onclick="createRipple(event); setLang('en')">EN</button>
         </div>
     </div>
     <div class="mobile-menu-content">
@@ -990,17 +1050,17 @@
 
 <!-- ===== HEADER ===== -->
 <header class="header">
-    <a href="#" class="logo" onclick="goHome(); return false;">ÖZPINAR</a>
+    <a href="#" class="logo ripple-container" onclick="createRipple(event); goHome(); return false;">ÖZPINAR</a>
     <nav class="nav">
         <ul class="nav-list">
-            <li><a href="#" class="nav-link active" onclick="goHome(); return false;" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a></li>
-            <li><a href="#footer" class="nav-link" data-tr="İletişim" data-en="Contact">İletişim</a></li>
+            <li><a href="#" class="nav-link active ripple-container" onclick="createRipple(event); goHome(); return false;" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a></li>
+            <li><a href="#footer" class="nav-link ripple-container" onclick="createRipple(event)" data-tr="İletişim" data-en="Contact">İletişim</a></li>
         </ul>
         <div class="lang-switch">
-            <button class="lang-btn active" onclick="setLang('tr')">TR</button>
-            <button class="lang-btn" onclick="setLang('en')">EN</button>
+            <button class="lang-btn active ripple-container" onclick="createRipple(event); setLang('tr')">TR</button>
+            <button class="lang-btn ripple-container" onclick="createRipple(event); setLang('en')">EN</button>
         </div>
-        <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+        <button class="mobile-menu-btn ripple-container" id="mobileMenuBtn" onclick="createRipple(event); toggleMobileMenu()">
             <span></span>
             <span></span>
             <span></span>
@@ -1036,18 +1096,18 @@
                 <p class="footer-desc" data-tr="El yapımı lüks mobilyalar ile yaşam alanlarınızı dönüştürün." data-en="Transform your living spaces with handcrafted luxury furniture.">El yapımı lüks mobilyalar ile yaşam alanlarınızı dönüştürün.</p>
             </div>
             <div class="footer-links">
-                <a href="#" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a>
-                <a href="#" data-tr="Hakkımızda" data-en="About">Hakkımızda</a>
-                <a href="#" data-tr="İletişim" data-en="Contact">İletişim</a>
+                <a href="#" class="ripple-container ripple-dark" onclick="createRipple(event)" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a>
+                <a href="#" class="ripple-container ripple-dark" onclick="createRipple(event)" data-tr="Hakkımızda" data-en="About">Hakkımızda</a>
+                <a href="#" class="ripple-container ripple-dark" onclick="createRipple(event)" data-tr="İletişim" data-en="Contact">İletişim</a>
             </div>
         </div>
         <div class="footer-bottom">
             <span class="footer-copy">© 2025 ÖZPINAR. All rights reserved.</span>
             <div class="footer-social">
-                <a href="#" aria-label="Instagram">
+                <a href="#" aria-label="Instagram" class="ripple-container ripple-dark" onclick="createRipple(event)">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="18" cy="6" r="1.5" fill="currentColor"/></svg>
                 </a>
-                <a href="#" aria-label="Pinterest">
+                <a href="#" aria-label="Pinterest" class="ripple-container ripple-dark" onclick="createRipple(event)">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M9 15l3 3 3-3"/></svg>
                 </a>
             </div>
@@ -1211,6 +1271,33 @@
 
     let currentLang = 'tr';
     let activeFilter = 'all';
+    let currentDetailId = null;
+
+    function createRipple(event) {
+        const element = event.currentTarget;
+        
+        // Mevcut ripple'ları temizle
+        const existingRipples = element.querySelectorAll('.ripple');
+        existingRipples.forEach(ripple => ripple.remove());
+        
+        const rect = element.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = event.clientX - rect.left - size / 2;
+        const y = event.clientY - rect.top - size / 2;
+        
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        
+        element.appendChild(ripple);
+        
+        // Animasyon bittikten sonra ripple'ı kaldır
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
+    }
 
     // ===== INIT =====
     document.addEventListener('DOMContentLoaded', () => {
@@ -1225,10 +1312,10 @@
     function renderSidebarFilters() {
         const container = document.getElementById('filterList');
         const allCount = productsDB.length;
-        
+
         let html = `
             <li>
-                <button class="filter-btn ${activeFilter === 'all' ? 'active' : ''}" onclick="filterBy('all')">
+                <button class="filter-btn ripple-container ${activeFilter === 'all' ? 'active' : ''}" onclick="createRipple(event); filterBy('all')">
                     <span data-tr="Tümü" data-en="All">${currentLang === 'tr' ? 'Tümü' : 'All'}</span>
                     <span class="filter-count">${allCount}</span>
                 </button>
@@ -1240,7 +1327,7 @@
             if (count > 0) {
                 html += `
                     <li>
-                        <button class="filter-btn ${activeFilter === mat.code ? 'active' : ''}" onclick="filterBy('${mat.code}')">
+                        <button class="filter-btn ripple-container ${activeFilter === mat.code ? 'active' : ''}" onclick="createRipple(event); filterBy('${mat.code}')">
                             <span>${mat.name[currentLang]}</span>
                             <span class="filter-count">${count}</span>
                         </button>
@@ -1256,10 +1343,10 @@
     function renderMobileMenu() {
         const container = document.getElementById('mobileMenuNav');
         const allCount = productsDB.length;
-        
+
         let html = `
             <li>
-                <a href="#" class="mobile-menu-link ${activeFilter === 'all' ? 'active' : ''}" onclick="closeMobileMenu(); filterBy('all'); return false;">
+                <a href="#" class="mobile-menu-link ripple-container ripple-dark ${activeFilter === 'all' ? 'active' : ''}" onclick="createRipple(event); closeMobileMenu(); filterBy('all'); goToHomePage(); return false;">
                     ${currentLang === 'tr' ? 'Tümü' : 'All'}<span class="mobile-menu-count">${allCount}</span>
                 </a>
             </li>
@@ -1270,7 +1357,7 @@
             if (count > 0) {
                 html += `
                     <li>
-                        <a href="#" class="mobile-menu-link ${activeFilter === mat.code ? 'active' : ''}" onclick="closeMobileMenu(); filterBy('${mat.code}'); return false;">
+                        <a href="#" class="mobile-menu-link ripple-container ripple-dark ${activeFilter === mat.code ? 'active' : ''}" onclick="createRipple(event); closeMobileMenu(); filterBy('${mat.code}'); goToHomePage(); return false;">
                             ${mat.name[currentLang]}<span class="mobile-menu-count">${count}</span>
                         </a>
                     </li>
@@ -1279,6 +1366,15 @@
         });
 
         container.innerHTML = html;
+    }
+
+    function goToHomePage() {
+        const homePage = document.getElementById('homePage');
+        document.querySelectorAll('.detail-page').forEach(p => p.classList.remove('active'));
+        homePage.classList.remove('hidden');
+        currentDetailId = null;
+        history.pushState(null, '', window.location.pathname);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // ===== FILTER =====
@@ -1293,7 +1389,7 @@
     function renderProducts() {
         const container = document.getElementById('productGrid');
         let filtered = productsDB;
-        
+
         if (activeFilter !== 'all') {
             filtered = productsDB.filter(p => p.materials.includes(activeFilter));
         }
@@ -1309,7 +1405,7 @@
             const dims = `${product.dimensions.width}×${product.dimensions.depth}×${product.dimensions.height}`;
 
             html += `
-                <article class="product-card ${product.wide ? 'wide' : ''}" onclick="openDetail('${product.id}')">
+                <article class="product-card ripple-container ${product.wide ? 'wide' : ''}" onclick="createRipple(event); openDetail('${product.id}')">
                     <img src="${product.images[0]}" alt="${product.name[currentLang]}" class="product-img" loading="lazy">
                     <div class="product-overlay">
                         <div class="product-top">
@@ -1357,15 +1453,15 @@
             html += `
                 <div class="detail-page" id="${product.id}">
                     <header class="detail-header">
-                        <a href="#" class="back-btn" onclick="closeDetail(); return false;">
+                        <a href="#" class="back-btn ripple-container" onclick="createRipple(event); closeDetail(); return false;">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                             <span data-tr="Geri" data-en="Back">${currentLang === 'tr' ? 'Geri' : 'Back'}</span>
                         </a>
                         <span class="logo">${product.code}</span>
                         <div class="detail-nav">
                             <div class="lang-switch">
-                                <button class="lang-btn ${currentLang === 'tr' ? 'active' : ''}" onclick="setLang('tr')">TR</button>
-                                <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" onclick="setLang('en')">EN</button>
+                                <button class="lang-btn ripple-container ${currentLang === 'tr' ? 'active' : ''}" onclick="createRipple(event); setLang('tr')">TR</button>
+                                <button class="lang-btn ripple-container ${currentLang === 'en' ? 'active' : ''}" onclick="createRipple(event); setLang('en')">EN</button>
                             </div>
                         </div>
                     </header>
@@ -1381,12 +1477,12 @@
                                 <div class="detail-code">${product.code}</div>
                                 <p class="detail-desc">${product.description[currentLang]}</p>
                             </div>
-                            
+
                             <div class="detail-section">
                                 <div class="section-label" data-tr="Malzemeler" data-en="Materials">${currentLang === 'tr' ? 'Malzemeler' : 'Materials'}</div>
                                 <div class="materials-grid">${materialsHtml}</div>
                             </div>
-                            
+
                             <div class="detail-section">
                                 <div class="section-label" data-tr="Boyutlar" data-en="Dimensions">${currentLang === 'tr' ? 'Boyutlar' : 'Dimensions'}</div>
                                 <div class="dims-grid">
@@ -1421,7 +1517,7 @@
     function toggleMobileMenu() {
         const menu = document.getElementById('mobileMenu');
         const btn = document.getElementById('mobileMenuBtn');
-        
+
         if (menu.classList.contains('active')) {
             closeMobileMenu();
         } else {
@@ -1449,10 +1545,11 @@
     function openDetail(id) {
         const detailPage = document.getElementById(id);
         const homePage = document.getElementById('homePage');
-        
+
         if (detailPage) {
             homePage.classList.add('hidden');
             detailPage.classList.add('active');
+            currentDetailId = id;
             window.scrollTo(0, 0);
             history.pushState(null, '', '#' + id);
         }
@@ -1462,6 +1559,7 @@
         const homePage = document.getElementById('homePage');
         document.querySelectorAll('.detail-page').forEach(p => p.classList.remove('active'));
         homePage.classList.remove('hidden');
+        currentDetailId = null;
         history.pushState(null, '', window.location.pathname);
     }
 
@@ -1485,20 +1583,35 @@
     // ===== LANGUAGE =====
     function setLang(lang) {
         currentLang = lang;
-        
+
+        // Dil butonlarını güncelle
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
         });
-        
+
+        // data-tr ve data-en içeren elementleri güncelle
         document.querySelectorAll('[data-tr]').forEach(el => {
             el.textContent = el.getAttribute('data-' + lang);
         });
-        
+
+        // Sidebar filtrelerini güncelle
         renderSidebarFilters();
+        // Mobil menüyü güncelle
         renderMobileMenu();
+        // Ürünleri güncelle
         renderProducts();
+        // Detay sayfalarını yeniden oluştur
         renderDetailPages();
-        
+
+        if (currentDetailId) {
+            const detailPage = document.getElementById(currentDetailId);
+            const homePage = document.getElementById('homePage');
+            if (detailPage) {
+                homePage.classList.add('hidden');
+                detailPage.classList.add('active');
+            }
+        }
+
         document.documentElement.lang = lang;
     }
 
