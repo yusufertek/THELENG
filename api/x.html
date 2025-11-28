@@ -130,6 +130,183 @@
         .filter-count { font-size: 0.75rem; opacity: 0.5; }
         .main { flex: 1; min-width: 0; padding: calc(var(--header-height) + 24px) var(--sides) var(--sides) var(--sides); }
 
+        /* Kategori Carousel - Daha büyük boyut */
+        .category-carousel-section {
+            padding: calc(var(--header-height) + 24px) var(--sides) 2rem;
+        }
+        .carousel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        .carousel-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted-foreground);
+        }
+        .carousel-nav {
+            display: flex;
+            gap: 8px;
+        }
+        .carousel-nav-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--card);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .carousel-nav-btn:hover {
+            background: var(--foreground);
+            color: var(--background);
+            border-color: var(--foreground);
+        }
+        .carousel-nav-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+        .category-carousel-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+        .category-carousel {
+            display: flex;
+            gap: 20px;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Carousel slide daha büyük */
+        .category-slide {
+            flex: 0 0 calc(25% - 15px);
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 4/3;
+        }
+        .category-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .category-slide:hover img {
+            transform: scale(1.08);
+        }
+        .category-slide-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+            transition: background 0.3s;
+        }
+        .category-slide:hover .category-slide-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.2) 100%);
+        }
+        .category-slide-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .category-slide-count {
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.7);
+        }
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .carousel-dot.active {
+            background: var(--foreground);
+            width: 28px;
+            border-radius: 5px;
+        }
+
+        /* Kategori Sayfası */
+        .category-page {
+            display: none;
+            min-height: 100vh;
+            background: var(--background);
+        }
+        .category-page.active {
+            display: block;
+        }
+        .category-hero {
+            height: 350px;
+            position: relative;
+            overflow: hidden;
+        }
+        .category-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .category-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem var(--sides);
+        }
+        .category-hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .category-hero-desc {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.8);
+            max-width: 600px;
+        }
+        .category-products {
+            padding: 2rem var(--sides);
+        }
+        .category-back-btn {
+            position: absolute;
+            top: calc(var(--header-height) + 16px);
+            left: var(--sides);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: #fff;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            z-index: 10;
+            transition: background 0.2s;
+        }
+        .category-back-btn:hover {
+            background: rgba(0,0,0,0.7);
+        }
+
         /* Yeni Grid - Satırda daha fazla ürün */
         .product-grid { 
             display: grid; 
@@ -200,34 +377,13 @@
             transform: scale(1.2);
         }
 
-        /* Kart üst badge */
-        .card-badge {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            z-index: 10;
-        }
-        .card-badge span {
-            font-size: 0.625rem;
-            font-weight: 700;
-            color: #fff;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(8px);
-            padding: 0.35rem 0.6rem;
-            border-radius: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
         /* Kart içerik alanı */
         .card-content {
             padding: 16px;
         }
 
+        /* card-header düzenlendi, artık sadece isim var */
         .card-header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
             margin-bottom: 8px;
         }
 
@@ -237,16 +393,6 @@
             color: var(--foreground);
             line-height: 1.3;
             letter-spacing: -0.01em;
-        }
-
-        .card-code {
-            font-size: 0.6875rem;
-            font-weight: 600;
-            color: var(--muted-foreground);
-            background: var(--muted);
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            white-space: nowrap;
         }
 
         .card-specs {
@@ -283,7 +429,7 @@
             color: var(--foreground);
         }
 
-        .card-category {
+        .card-material {
             font-size: 0.625rem;
             font-weight: 600;
             text-transform: uppercase;
@@ -320,15 +466,50 @@
         .detail-desc { font-size: 0.9375rem; color: var(--foreground); line-height: 1.7; margin-bottom: 2.5rem; opacity: 0.9; }
         .section-label { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted-foreground); margin-bottom: 1rem; }
         
-        /* Specs Grid */
+        /* Yeni Specs Grid - SVG ikonlu */
         .specs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
-        .spec-box { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
-        .spec-val { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
-        .spec-label { font-size: 0.6875rem; color: var(--muted-foreground); }
+        .spec-box { 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            border-radius: var(--radius); 
+            padding: 1.25rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: all 0.2s;
+        }
+        .spec-box:hover {
+            border-color: var(--foreground);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .spec-icon {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--muted);
+            border-radius: 10px;
+        }
+        .spec-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--foreground);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .spec-text {
+            flex: 1;
+        }
+        .spec-val { font-size: 1.125rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--foreground); }
+        .spec-label { font-size: 0.75rem; color: var(--muted-foreground); }
 
         /* Gallery */
         .detail-gallery { flex: 1; padding: var(--sides); padding-top: calc(var(--header-height) + 24px); background: #fff; }
-        .gallery-main { width: 100%; aspect-ratio: 1; object-fit: contain; margin-bottom: 1.5rem; mix-blend-mode: multiply; }
+        .gallery-main { width: 100%; aspect-ratio: 1; object-fit: contain; margin-bottom: 1.5rem; mix-blend-mode: multiply; transition: opacity 0.15s; }
         .gallery-thumbs { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem; }
         .gallery-thumb {
             width: 80px; height: 80px; object-fit: cover; border-radius: 6px; cursor: pointer;
@@ -347,13 +528,15 @@
         .spinner { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--foreground); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Responsive - Daha fazla kart, küçük yazı */
+        /* Responsive */
         @media (max-width: 1400px) {
             .product-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+            .category-slide { flex: 0 0 calc(33.333% - 14px); }
         }
         @media (max-width: 1200px) {
             .product-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
             .sidebar { width: 240px; }
+            .category-slide { flex: 0 0 calc(50% - 10px); }
         }
         @media (max-width: 1024px) {
             .sidebar { width: 220px; }
@@ -371,15 +554,37 @@
             
             /* Mobilde küçük yazı */
             .card-name { font-size: 0.75rem; }
-            .card-code { font-size: 0.5625rem; padding: 0.2rem 0.4rem; }
             .card-spec { font-size: 0.625rem; }
             .card-price { font-size: 0.75rem; }
-            .card-category { font-size: 0.5rem; padding: 0.2rem 0.4rem; }
+            .card-material { font-size: 0.5rem; padding: 0.2rem 0.4rem; }
             .card-content { padding: 10px; }
             .card-footer { padding-top: 8px; }
             .slider-dot { width: 5px; height: 5px; }
             .slider-dots { bottom: 8px; gap: 4px; }
-            .card-badge span { font-size: 0.5rem; padding: 0.25rem 0.4rem; }
+            
+            /* Carousel mobilde tek tek görünüm */
+            .category-slide { flex: 0 0 100%; aspect-ratio: 16/9; }
+            .category-carousel { gap: 0; }
+            .carousel-nav { display: none; }
+            .category-carousel-section { padding-top: calc(var(--header-height) + 16px); padding-bottom: 1.5rem; }
+            .carousel-title { font-size: 0.625rem; }
+            .category-slide-title { font-size: 1.25rem; }
+            .category-slide-count { font-size: 0.75rem; }
+            .category-slide-overlay { padding: 1.5rem; }
+            .carousel-dot { width: 8px; height: 8px; }
+            .carousel-dot.active { width: 24px; }
+            
+            /* Kategori sayfası */
+            .category-hero { height: 220px; }
+            .category-hero-title { font-size: 1.75rem; }
+            .category-hero-desc { font-size: 0.875rem; }
+            
+            /* Detail specs */
+            .specs-grid { grid-template-columns: 1fr; }
+            .spec-box { padding: 1rem; }
+            .spec-icon { width: 40px; height: 40px; }
+            .spec-icon svg { width: 22px; height: 22px; }
+            .spec-val { font-size: 1rem; }
             
             .detail-content { flex-direction: column; }
             .detail-gallery { order: 1; padding-top: calc(var(--header-height) + 16px); padding-bottom: 0; }
@@ -398,9 +603,13 @@
             .card-header { margin-bottom: 4px; }
             .card-footer { padding-top: 6px; }
             .card-price { font-size: 0.6875rem; }
+            
+            /* Carousel mobilde tam ekran */
+            .category-slide { flex: 0 0 100%; }
+            .category-slide-title { font-size: 1.125rem; }
         }
 
-        /* Touch swipe için mobil stil */
+        /* Mobil swipe desteği */
         @media (hover: none) and (pointer: coarse) {
             .card-slider {
                 scroll-snap-type: x mandatory;
@@ -410,6 +619,17 @@
             }
             .card-slider::-webkit-scrollbar { display: none; }
             .card-slider img {
+                scroll-snap-align: start;
+            }
+            .category-carousel {
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+                -webkit-overflow-scrolling: touch;
+            }
+            .category-carousel::-webkit-scrollbar { display: none; }
+            .category-slide {
                 scroll-snap-align: start;
             }
         }
@@ -447,6 +667,25 @@
 </header>
 
 <div class="home-page" id="homePage">
+    <!-- Kategori Carousel -->
+    <section class="category-carousel-section">
+        <div class="carousel-header">
+            <span class="carousel-title" data-tr="Koleksiyonları Keşfet" data-en="Explore Collections">Koleksiyonları Keşfet</span>
+            <div class="carousel-nav">
+                <button class="carousel-nav-btn" onclick="WatchApp.slideCarousel(-1)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button class="carousel-nav-btn" onclick="WatchApp.slideCarousel(1)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+            </div>
+        </div>
+        <div class="category-carousel-wrapper">
+            <div class="category-carousel" id="categoryCarousel"></div>
+        </div>
+        <div class="carousel-dots" id="carouselDots"></div>
+    </section>
+
     <div class="layout">
         <aside class="sidebar">
             <div class="sidebar-title" data-tr="Kategoriye Göre" data-en="By Category">Kategoriye Göre</div>
@@ -477,6 +716,9 @@
     </footer>
 </div>
 
+<!-- Kategori Sayfaları Container -->
+<div id="categoryPages"></div>
+
 <div id="detailPages"></div>
 
 <script>
@@ -505,14 +747,48 @@
             this.state = {
                 lang: 'tr',
                 filter: 'all',
-                activeDetail: null
+                activeDetail: null,
+                activeCategory: null,
+                carouselIndex: 0
             };
 
             this.categories = {
-                "CAT-DIV": { tr: "Dalgıç", en: "Diver" },
-                "CAT-DRS": { tr: "Klasik", en: "Dress" },
-                "CAT-PLT": { tr: "Pilot", en: "Pilot" },
-                "CAT-CHR": { tr: "Kronograf", en: "Chronograph" }
+                "CAT-DIV": { 
+                    tr: "Dalgıç", 
+                    en: "Diver",
+                    desc: {
+                        tr: "Profesyonel dalgıçlar için tasarlanan, yüksek su geçirmezlik özellikli saatler.",
+                        en: "High water resistance watches designed for professional divers."
+                    },
+                    image: "https://images.unsplash.com/photo-1547996160-71df45efd2f7?w=800&q=80"
+                },
+                "CAT-DRS": { 
+                    tr: "Klasik", 
+                    en: "Dress",
+                    desc: {
+                        tr: "Zarif tasarımları ve ince profilleriyle özel günler için ideal saatler.",
+                        en: "Elegant designs with slim profiles, ideal for special occasions."
+                    },
+                    image: "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=800&q=80"
+                },
+                "CAT-PLT": { 
+                    tr: "Pilot", 
+                    en: "Pilot",
+                    desc: {
+                        tr: "Havacılık tarihinden ilham alan, büyük kadran ve kolay okunabilir saatler.",
+                        en: "Aviation-inspired watches with large dials and easy readability."
+                    },
+                    image: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800&q=80"
+                },
+                "CAT-CHR": { 
+                    tr: "Kronograf", 
+                    en: "Chronograph",
+                    desc: {
+                        tr: "Hassas zamanlama fonksiyonlarına sahip sportif kronograf saatler.",
+                        en: "Sporty chronograph watches with precise timing functions."
+                    },
+                    image: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=800&q=80"
+                }
             };
 
             this.materials = {
@@ -521,6 +797,14 @@
                 "MAT-GLD": { tr: "18K Altın", en: "18K Gold" },
                 "MAT-CER": { tr: "Seramik", en: "Ceramic" },
                 "MAT-LTR": { tr: "Deri", en: "Leather" }
+            };
+
+            this.specIcons = {
+                case: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg>`,
+                thick: `<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/><path d="M8 6v12M16 6v12"/></svg>`,
+                water: `<svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`,
+                material: `<svg viewBox="0 0 24 24"><path d="M12 3l9 4.5v9L12 21l-9-4.5v-9L12 3z"/><path d="M12 12l9-4.5M12 12v9M12 12L3 7.5"/></svg>`,
+                move: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>`
             };
 
             this.products = [
@@ -537,8 +821,9 @@
                     },
                     specs: { case: "42mm", thick: "13.5mm", move: "Caliber M-05 Auto", water: "30 ATM" },
                     images: [
-                        "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=800&q=80",
-                        "https://images.unsplash.com/photo-1533139323819-e5e29796e47f?w=800&q=80",
+                        "/mabilya/mob2.jpg",
+                        "/mabilya/mob3.webp",
+                        "/mabilya/mob4.webp",
                         "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800&q=80"
                     ]
                 },
@@ -555,6 +840,7 @@
                     },
                     specs: { case: "39mm", thick: "9.8mm", move: "Manual Wind", water: "5 ATM" },
                     images: [
+                        "/mabilya/mob2.jpg",
                         "https://images.unsplash.com/photo-1547996160-71df45efd2f7?w=800&q=80",
                         "https://images.unsplash.com/photo-1619134778706-c27e061c34df?w=800&q=80",
                         "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=800&q=80"
@@ -573,6 +859,7 @@
                     },
                     specs: { case: "44mm", thick: "14mm", move: "GMT Automatic", water: "10 ATM" },
                     images: [
+                        "/mabilya/mob2.jpg",
                         "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800&q=80",
                         "https://images.unsplash.com/photo-1623998021446-45cd96e318cf?w=800&q=80",
                         "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=800&q=80"
@@ -591,6 +878,7 @@
                     },
                     specs: { case: "41mm", thick: "12mm", move: "Auto Chronograph", water: "10 ATM" },
                     images: [
+                        "/mabilya/mob2.jpg",
                         "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=800&q=80",
                         "https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=800&q=80",
                         "https://images.unsplash.com/photo-1547996160-71df45efd2f7?w=800&q=80"
@@ -609,6 +897,7 @@
                     },
                     specs: { case: "43mm", thick: "11mm", move: "Caliber M-01", water: "20 ATM" },
                     images: [
+                        "/mabilya/mob2.jpg",
                         "https://images.unsplash.com/photo-1620625515032-608130563da6?w=800&q=80",
                         "https://images.unsplash.com/photo-1622434641406-a158123450f9?w=800&q=80",
                         "https://images.unsplash.com/photo-1533139323819-e5e29796e47f?w=800&q=80"
@@ -627,6 +916,7 @@
                     },
                     specs: { case: "38mm", thick: "8.5mm", move: "Quartz Precision", water: "3 ATM" },
                     images: [
+                        "/mabilya/mob2.jpg",
                         "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=800&q=80",
                         "https://images.unsplash.com/photo-1548171915-e79a380a2a4b?w=800&q=80",
                         "https://images.unsplash.com/photo-1619134778706-c27e061c34df?w=800&q=80"
@@ -635,6 +925,7 @@
             ];
 
             this.hoverIntervals = {};
+            this.carouselAutoPlay = null;
 
             this.init();
         }
@@ -643,19 +934,212 @@
             document.addEventListener('DOMContentLoaded', () => {
                 this.renderAll();
                 this.checkHash();
+                this.startCarouselAutoPlay();
                 window.addEventListener('popstate', () => this.checkHash());
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape') this.goHome();
                 });
+                
+                this.initCarouselSwipe();
+            });
+        }
+
+        initCarouselSwipe() {
+            const carousel = document.getElementById('categoryCarousel');
+            if (!carousel) return;
+            
+            let startX = 0;
+            let scrollLeft = 0;
+            
+            carousel.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].pageX;
+                scrollLeft = carousel.scrollLeft;
+            }, { passive: true });
+            
+            carousel.addEventListener('touchend', (e) => {
+                const endX = e.changedTouches[0].pageX;
+                const diff = startX - endX;
+                const threshold = 50;
+                
+                if (Math.abs(diff) > threshold) {
+                    if (diff > 0) {
+                        this.slideCarousel(1);
+                    } else {
+                        this.slideCarousel(-1);
+                    }
+                }
+            }, { passive: true });
+            
+            // Scroll event ile dot güncelleme
+            carousel.addEventListener('scroll', () => {
+                const slideWidth = carousel.offsetWidth;
+                const newIndex = Math.round(carousel.scrollLeft / slideWidth);
+                if (newIndex !== this.state.carouselIndex) {
+                    this.state.carouselIndex = newIndex;
+                    this.updateCarouselDots();
+                }
+            }, { passive: true });
+        }
+        
+        updateCarouselDots() {
+            document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === this.state.carouselIndex);
             });
         }
 
         renderAll() {
+            this.renderCategoryCarousel();
             this.renderFilters();
             this.renderMobileMenu();
             this.renderProducts();
+            this.renderCategoryPages();
             this.renderDetailPages();
             this.updateLangDOM();
+        }
+
+        renderCategoryCarousel() {
+            const carousel = document.getElementById('categoryCarousel');
+            const dotsContainer = document.getElementById('carouselDots');
+            
+            let html = '';
+            const categoryKeys = Object.keys(this.categories);
+            
+            categoryKeys.forEach((key) => {
+                const cat = this.categories[key];
+                const count = this.products.filter(p => p.category === key).length;
+                html += `
+                <div class="category-slide" onclick="WatchApp.openCategory('${key}')">
+                    <img src="${cat.image}" alt="${cat[this.state.lang]}" loading="lazy">
+                    <div class="category-slide-overlay">
+                        <div class="category-slide-title">${cat[this.state.lang]}</div>
+                        <div class="category-slide-count">${count} ${this.state.lang === 'tr' ? 'ürün' : 'products'}</div>
+                    </div>
+                </div>`;
+            });
+            
+            carousel.innerHTML = html;
+            
+            // Dots
+            const totalSlides = this.getTotalCarouselSlides();
+            let dotsHtml = '';
+            for (let i = 0; i < totalSlides; i++) {
+                dotsHtml += `<span class="carousel-dot ${i === 0 ? 'active' : ''}" onclick="WatchApp.goToCarouselSlide(${i})"></span>`;
+            }
+            dotsContainer.innerHTML = dotsHtml;
+        }
+
+        getSlidesPerView() {
+            if (window.innerWidth <= 768) return 1;
+            if (window.innerWidth <= 1200) return 2;
+            if (window.innerWidth <= 1400) return 3;
+            return 4;
+        }
+        
+        getTotalCarouselSlides() {
+            const categoryKeys = Object.keys(this.categories);
+            if (window.innerWidth <= 768) return categoryKeys.length;
+            return Math.ceil(categoryKeys.length / this.getSlidesPerView());
+        }
+
+        slideCarousel(direction) {
+            const totalSlides = this.getTotalCarouselSlides();
+            
+            this.state.carouselIndex += direction;
+            if (this.state.carouselIndex < 0) this.state.carouselIndex = totalSlides - 1;
+            if (this.state.carouselIndex >= totalSlides) this.state.carouselIndex = 0;
+            
+            this.updateCarouselPosition();
+        }
+
+        goToCarouselSlide(index) {
+            this.state.carouselIndex = index;
+            this.updateCarouselPosition();
+        }
+
+        updateCarouselPosition() {
+            const carousel = document.getElementById('categoryCarousel');
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isMobile) {
+                // Mobilde her slide tam ekran
+                const slideWidth = carousel.offsetWidth;
+                carousel.scrollTo({
+                    left: this.state.carouselIndex * slideWidth,
+                    behavior: 'smooth'
+                });
+            } else {
+                const slidesPerView = this.getSlidesPerView();
+                const slideWidth = 100 / slidesPerView;
+                const offset = this.state.carouselIndex * slideWidth * slidesPerView;
+                carousel.style.transform = `translateX(-${offset}%)`;
+            }
+            
+            this.updateCarouselDots();
+        }
+
+        startCarouselAutoPlay() {
+            this.carouselAutoPlay = setInterval(() => {
+                this.slideCarousel(1);
+            }, 4000);
+        }
+
+        stopCarouselAutoPlay() {
+            if (this.carouselAutoPlay) {
+                clearInterval(this.carouselAutoPlay);
+            }
+        }
+
+        renderCategoryPages() {
+            const container = document.getElementById('categoryPages');
+            let html = '';
+            
+            for (const [key, cat] of Object.entries(this.categories)) {
+                const products = this.products.filter(p => p.category === key);
+                
+                html += `
+                <div class="category-page" id="category-${key}">
+                    <div class="category-hero">
+                        <img src="${cat.image}" alt="${cat[this.state.lang]}">
+                        <div class="category-hero-overlay">
+                            <button class="category-back-btn" onclick="WatchApp.goHome()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                                <span data-tr="Ana Sayfa" data-en="Home">${this.state.lang === 'tr' ? 'Ana Sayfa' : 'Home'}</span>
+                            </button>
+                            <h1 class="category-hero-title">${cat[this.state.lang]}</h1>
+                            <p class="category-hero-desc">${cat.desc[this.state.lang]}</p>
+                        </div>
+                    </div>
+                    <div class="category-products">
+                        <div class="product-grid" id="categoryGrid-${key}"></div>
+                    </div>
+                </div>`;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        openCategory(key) {
+            this.stopCarouselAutoPlay();
+            document.getElementById('homePage').style.display = 'none';
+            document.querySelectorAll('.category-page').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.detail-page').forEach(el => el.classList.remove('active'));
+            
+            const target = document.getElementById(`category-${key}`);
+            if (target) {
+                target.classList.add('active');
+                this.state.activeCategory = key;
+                this.renderCategoryProducts(key);
+                window.scrollTo(0, 0);
+                history.pushState({ category: key }, '', `#category-${key}`);
+            }
+        }
+
+        renderCategoryProducts(key) {
+            const grid = document.getElementById(`categoryGrid-${key}`);
+            const products = this.products.filter(p => p.category === key);
+            
+            grid.innerHTML = products.map(p => this.renderProductCard(p)).join('');
+            this.initCardSliders(grid);
         }
 
         renderFilters() {
@@ -679,57 +1163,54 @@
             list.innerHTML = html;
         }
 
+        renderProductCard(p) {
+            const dots = p.images.map((_, i) => 
+                `<span class="slider-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></span>`
+            ).join('');
+
+            const images = p.images.map(img => 
+                `<img src="${img}" loading="lazy" alt="${p.name}">`
+            ).join('');
+
+            return `
+            <article class="product-card" data-id="${p.id}" onclick="WatchApp.openDetail('${p.id}')">
+                <div class="card-image-container">
+                    <div class="card-slider" data-product="${p.id}">
+                        ${images}
+                    </div>
+                    <div class="slider-dots" data-product="${p.id}">
+                        ${dots}
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="card-name">${p.name}</div>
+                    </div>
+                    <div class="card-specs">
+                        <span class="card-spec">${p.specs.case}</span>
+                        <span class="card-spec-dot"></span>
+                        <span class="card-spec">${p.specs.move}</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-price">${p.price}</span>
+                        <span class="card-material">${this.materials[p.material][this.state.lang]}</span>
+                    </div>
+                </div>
+            </article>`;
+        }
+
         renderProducts() {
             const grid = document.getElementById('productGrid');
             const filtered = this.state.filter === 'all' 
                 ? this.products 
                 : this.products.filter(p => p.category === this.state.filter || p.material === this.state.filter);
 
-            grid.innerHTML = filtered.map(p => {
-                const dots = p.images.map((_, i) => 
-                    `<span class="slider-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></span>`
-                ).join('');
-
-                const images = p.images.map(img => 
-                    `<img src="${img}" loading="lazy" alt="${p.name}">`
-                ).join('');
-
-                return `
-                <article class="product-card" data-id="${p.id}" onclick="WatchApp.openDetail('${p.id}')">
-                    <div class="card-image-container">
-                        <div class="card-badge">
-                            <span>${this.categories[p.category][this.state.lang]}</span>
-                        </div>
-                        <div class="card-slider" data-product="${p.id}">
-                            ${images}
-                        </div>
-                        <div class="slider-dots" data-product="${p.id}">
-                            ${dots}
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-header">
-                            <div class="card-name">${p.name}</div>
-                            <span class="card-code">${p.code}</span>
-                        </div>
-                        <div class="card-specs">
-                            <span class="card-spec">${p.specs.case}</span>
-                            <span class="card-spec-dot"></span>
-                            <span class="card-spec">${p.specs.move}</span>
-                        </div>
-                        <div class="card-footer">
-                            <span class="card-price">${p.price}</span>
-                            <span class="card-category">${this.materials[p.material][this.state.lang]}</span>
-                        </div>
-                    </div>
-                </article>`;
-            }).join('');
-
-            this.initCardSliders();
+            grid.innerHTML = filtered.map(p => this.renderProductCard(p)).join('');
+            this.initCardSliders(grid);
         }
 
-        initCardSliders() {
-            const cards = document.querySelectorAll('.product-card');
+        initCardSliders(container = document) {
+            const cards = container.querySelectorAll('.product-card');
             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
             cards.forEach(card => {
@@ -741,14 +1222,11 @@
 
                 let currentIndex = 0;
 
-                // Mobilde swipe
                 if (isTouchDevice) {
                     let startX = 0;
-                    let scrollLeft = 0;
 
                     slider.addEventListener('touchstart', (e) => {
                         startX = e.touches[0].pageX;
-                        scrollLeft = slider.scrollLeft;
                     }, { passive: true });
 
                     slider.addEventListener('touchend', (e) => {
@@ -766,7 +1244,6 @@
                         }
                     }, { passive: true });
 
-                    // Scroll ile de senkronize et
                     slider.addEventListener('scroll', () => {
                         const width = slider.offsetWidth;
                         const newIndex = Math.round(slider.scrollLeft / width);
@@ -778,7 +1255,6 @@
                         }
                     }, { passive: true });
                 } else {
-                    // Desktop: hover ile otomatik geçiş
                     card.addEventListener('mouseenter', () => {
                         this.hoverIntervals[productId] = setInterval(() => {
                             currentIndex = (currentIndex + 1) % imageCount;
@@ -796,7 +1272,6 @@
                     });
                 }
 
-                // Dot'lara tıklama
                 dots.forEach((dot, i) => {
                     dot.addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -843,10 +1318,34 @@
                             
                             <div class="section-label" data-tr="Teknik Özellikler" data-en="Technical Specs">${this.state.lang==='tr'?'Teknik Özellikler':'Technical Specs'}</div>
                             <div class="specs-grid">
-                                <div class="spec-box"><div class="spec-val">${p.specs.case}</div><div class="spec-label" data-tr="Kasa Çapı" data-en="Case Diameter">${this.state.lang==='tr'?'Kasa Çapı':'Case Diameter'}</div></div>
-                                <div class="spec-box"><div class="spec-val">${p.specs.thick}</div><div class="spec-label" data-tr="Kalınlık" data-en="Thickness">${this.state.lang==='tr'?'Kalınlık':'Thickness'}</div></div>
-                                <div class="spec-box"><div class="spec-val">${p.specs.water}</div><div class="spec-label" data-tr="Su Geçirmezlik" data-en="Water Resist">${this.state.lang==='tr'?'Su Geçirmezlik':'Water Resist'}</div></div>
-                                <div class="spec-box"><div class="spec-val">${this.materials[p.material][this.state.lang]}</div><div class="spec-label" data-tr="Materyal" data-en="Material">${this.state.lang==='tr'?'Materyal':'Material'}</div></div>
+                                <div class="spec-box">
+                                    <div class="spec-icon">${this.specIcons.case}</div>
+                                    <div class="spec-text">
+                                        <div class="spec-val">${p.specs.case}</div>
+                                        <div class="spec-label" data-tr="Kasa Çapı" data-en="Case Diameter">${this.state.lang==='tr'?'Kasa Çapı':'Case Diameter'}</div>
+                                    </div>
+                                </div>
+                                <div class="spec-box">
+                                    <div class="spec-icon">${this.specIcons.thick}</div>
+                                    <div class="spec-text">
+                                        <div class="spec-val">${p.specs.thick}</div>
+                                        <div class="spec-label" data-tr="Kalınlık" data-en="Thickness">${this.state.lang==='tr'?'Kalınlık':'Thickness'}</div>
+                                    </div>
+                                </div>
+                                <div class="spec-box">
+                                    <div class="spec-icon">${this.specIcons.water}</div>
+                                    <div class="spec-text">
+                                        <div class="spec-val">${p.specs.water}</div>
+                                        <div class="spec-label" data-tr="Su Geçirmezlik" data-en="Water Resist">${this.state.lang==='tr'?'Su Geçirmezlik':'Water Resist'}</div>
+                                    </div>
+                                </div>
+                                <div class="spec-box">
+                                    <div class="spec-icon">${this.specIcons.material}</div>
+                                    <div class="spec-text">
+                                        <div class="spec-val">${this.materials[p.material][this.state.lang]}</div>
+                                        <div class="spec-label" data-tr="Materyal" data-en="Material">${this.state.lang==='tr'?'Materyal':'Material'}</div>
+                                    </div>
+                                </div>
                             </div>
                         </aside>
                         <div class="detail-gallery">
@@ -865,7 +1364,7 @@
             </a></li>`;
             
             for (const [key, val] of Object.entries(this.categories)) {
-                html += `<li><a href="#" class="mobile-menu-link" onclick="WatchApp.goHome(); WatchApp.filterBy('${key}')">
+                html += `<li><a href="#" class="mobile-menu-link" onclick="WatchApp.openCategory('${key}')">
                     ${val[this.state.lang]}
                 </a></li>`;
             }
@@ -897,12 +1396,15 @@
         }
 
         openDetail(id) {
+            this.stopCarouselAutoPlay();
             document.getElementById('homePage').style.display = 'none';
+            document.querySelectorAll('.category-page').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.detail-page').forEach(el => el.classList.remove('active'));
             const target = document.getElementById(id);
             if(target) {
                 target.classList.add('active');
                 this.state.activeDetail = id;
+                this.state.activeCategory = null;
                 window.scrollTo(0,0);
                 history.pushState({id}, '', `#${id}`);
             }
@@ -910,11 +1412,14 @@
 
         goHome() {
             document.getElementById('homePage').style.display = 'block';
+            document.querySelectorAll('.category-page').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.detail-page').forEach(el => el.classList.remove('active'));
             this.state.activeDetail = null;
+            this.state.activeCategory = null;
             history.pushState(null, '', window.location.pathname);
             window.scrollTo(0,0);
             this.closeMobileMenu();
+            this.startCarouselAutoPlay();
         }
 
         changeImage(mainId, src, thumb) {
@@ -948,8 +1453,18 @@
 
         checkHash() {
             const hash = window.location.hash.slice(1);
-            if(hash && document.getElementById(hash)) this.openDetail(hash);
-            else this.goHome();
+            if (hash.startsWith('category-')) {
+                const key = hash.replace('category-', '');
+                if (this.categories[key]) {
+                    this.openCategory(key);
+                } else {
+                    this.goHome();
+                }
+            } else if (hash && document.getElementById(hash)) {
+                this.openDetail(hash);
+            } else {
+                this.goHome();
+            }
         }
     }
 
