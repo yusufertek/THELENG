@@ -131,7 +131,7 @@
         .filter-count { font-size: 0.75rem; opacity: 0.5; }
         .main { flex: 1; min-width: 0; padding: calc(var(--header-height) + 24px) var(--sides) var(--sides) var(--sides); }
 
-        /* Carousel - Daha akıcı ve muhteşem animasyonlar */
+        /* Carousel */
         .category-carousel-section {
             padding: calc(var(--header-height) + 24px) var(--sides) 2rem;
         }
@@ -309,27 +309,53 @@
         .category-products {
             padding: 2rem var(--sides);
         }
+        
+        /* Kategori header - üst kısımda sabit nav bar */
+        .category-nav-header {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: rgba(250, 250, 250, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--sides);
+            z-index: 100;
+        }
         .category-back-btn {
-            position: absolute;
-            top: calc(var(--header-height) + 16px);
-            left: var(--sides);
             display: flex;
             align-items: center;
             gap: 0.5rem;
             font-size: 0.8125rem;
             font-weight: 600;
-            color: #fff;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(8px);
-            border: none;
+            color: var(--foreground);
+            background: var(--muted);
+            border: 1px solid var(--border);
             cursor: pointer;
-            padding: 0.5rem 1rem;
+            padding: 0.625rem 1rem;
             border-radius: var(--radius);
-            z-index: 10;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
         }
         .category-back-btn:hover {
-            background: rgba(0,0,0,0.7);
+            background: var(--foreground);
+            color: var(--background);
+            border-color: var(--foreground);
+        }
+        .category-back-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+        .category-nav-title {
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .category-nav-spacer {
+            width: 120px;
         }
 
         /* Grid */
@@ -339,7 +365,7 @@
             gap: 16px; 
         }
 
-        /* Ürün kartları - Daha akıcı animasyonlar */
+        /* Ürün kartları */
         .product-card { 
             position: relative; 
             background: var(--card); 
@@ -357,25 +383,25 @@
             border-color: transparent;
         }
 
-        /* Görsel slider container - Tamamen yenilenmiş swipe mekanizması */
+        /* Görsel slider - tamamen yenilenmiş stabil swipe */
         .card-image-container {
             position: relative;
             aspect-ratio: 1;
             overflow: hidden;
             background: var(--muted);
             touch-action: pan-y pinch-zoom;
+            user-select: none;
         }
 
         .card-slider {
             display: flex;
             width: 100%;
             height: 100%;
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             will-change: transform;
         }
 
-        .card-slider.dragging {
-            transition: none;
+        .card-slider.animating {
+            transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
         }
 
         .card-slider img {
@@ -407,7 +433,7 @@
             height: 6px;
             border-radius: 50%;
             background: rgba(255,255,255,0.5);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.35s cubic-bezier(0.32, 0.72, 0, 1);
             cursor: pointer;
         }
         .slider-dot.active {
@@ -567,7 +593,7 @@
         .spinner { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--foreground); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Responsive - Mobil için özel carousel ve kart stilleri */
+        /* Responsive */
         @media (max-width: 1400px) {
             .product-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
             .category-slide { flex: 0 0 calc(33.333% - 14px); }
@@ -600,7 +626,7 @@
             .slider-dot.active { width: 14px; }
             .slider-dots { bottom: 8px; gap: 4px; padding: 4px 8px; }
             
-            /* Carousel mobilde tam ekran, swipe destekli */
+            /* Carousel mobilde */
             .category-carousel-wrapper {
                 margin: 0 calc(-1 * var(--sides));
                 border-radius: 0;
@@ -633,6 +659,11 @@
             .category-hero { height: 220px; }
             .category-hero-title { font-size: 1.75rem; }
             .category-hero-desc { font-size: 0.875rem; }
+            .category-nav-header { height: 56px; }
+            .category-back-btn { padding: 0.5rem 0.75rem; font-size: 0.75rem; }
+            .category-back-btn svg { width: 16px; height: 16px; }
+            .category-nav-title { font-size: 0.875rem; }
+            .category-nav-spacer { width: 80px; }
             
             .specs-grid { grid-template-columns: 1fr; }
             .spec-box { padding: 1rem; }
@@ -868,7 +899,7 @@
                     },
                     specs: { case: "39mm", thick: "9.8mm", move: "Manual Wind", water: "5 ATM" },
                     images: [
-                        "/api/mob3.jpg",
+                        "/mabilya/mob2.jpg",
                         "https://images.unsplash.com/photo-1547996160-71df45efd2f7?w=800&q=80",
                         "https://images.unsplash.com/photo-1619134778706-c27e061c34df?w=800&q=80",
                         "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=800&q=80"
@@ -887,9 +918,10 @@
                     },
                     specs: { case: "44mm", thick: "14mm", move: "GMT Automatic", water: "10 ATM" },
                     images: [
-                        "/api/mob3.webp",
-                        "/api/mob4.webp",
-                        "/api/mob5.webp"
+                        "/mabilya/mob2.jpg",
+                        "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800&q=80",
+                        "https://images.unsplash.com/photo-1623998021446-45cd96e318cf?w=800&q=80",
+                        "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=800&q=80"
                     ]
                 },
                 {
@@ -905,9 +937,10 @@
                     },
                     specs: { case: "41mm", thick: "12mm", move: "Auto Chronograph", water: "10 ATM" },
                     images: [
-                        "/api/mob6.webp",
-                        "/api/mob7.webp",
-                        "/api/mob8.webp"
+                        "/mabilya/mob2.jpg",
+                        "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=800&q=80",
+                        "https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=800&q=80",
+                        "https://images.unsplash.com/photo-1547996160-71df45efd2f7?w=800&q=80"
                     ]
                 },
                 {
@@ -923,9 +956,10 @@
                     },
                     specs: { case: "43mm", thick: "11mm", move: "Caliber M-01", water: "20 ATM" },
                     images: [
-                        "/api/mob9.webp",
-                        "/api/mob10.webp",
-                        "/api/mob11.webp"
+                        "/mabilya/mob2.jpg",
+                        "https://images.unsplash.com/photo-1620625515032-608130563da6?w=800&q=80",
+                        "https://images.unsplash.com/photo-1622434641406-a158123450f9?w=800&q=80",
+                        "https://images.unsplash.com/photo-1533139323819-e5e29796e47f?w=800&q=80"
                     ]
                 },
                 {
@@ -941,9 +975,10 @@
                     },
                     specs: { case: "38mm", thick: "8.5mm", move: "Quartz Precision", water: "3 ATM" },
                     images: [
-                        "/api/mob12.webp",
-                        "/api/mob13.webp",
-                        "/api/mob14.webp"
+                        "/mabilya/mob2.jpg",
+                        "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=800&q=80",
+                        "https://images.unsplash.com/photo-1548171915-e79a380a2a4b?w=800&q=80",
+                        "https://images.unsplash.com/photo-1619134778706-c27e061c34df?w=800&q=80"
                     ]
                 }
             ];
@@ -980,7 +1015,6 @@
             const isMobile = window.innerWidth <= 768;
             
             if (isMobile) {
-                // Mobilde native scroll kullan
                 carousel.addEventListener('scroll', () => {
                     const slideWidth = carousel.offsetWidth;
                     const newIndex = Math.round(carousel.scrollLeft / slideWidth);
@@ -1030,7 +1064,6 @@
             
             carousel.innerHTML = html;
             
-            // Dots
             const totalSlides = this.getTotalCarouselSlides();
             let dotsHtml = '';
             for (let i = 0; i < totalSlides; i++) {
@@ -1104,17 +1137,19 @@
             let html = '';
             
             for (const [key, cat] of Object.entries(this.categories)) {
-                const products = this.products.filter(p => p.category === key);
-                
                 html += `
                 <div class="category-page" id="category-${key}">
+                    <div class="category-nav-header">
+                        <button class="category-back-btn" onclick="WatchApp.goHome()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            <span data-tr="Ana Sayfa" data-en="Home">${this.state.lang === 'tr' ? 'Ana Sayfa' : 'Home'}</span>
+                        </button>
+                        <span class="category-nav-title">${cat[this.state.lang]}</span>
+                        <div class="category-nav-spacer"></div>
+                    </div>
                     <div class="category-hero">
                         <img src="${cat.image}" alt="${cat[this.state.lang]}">
                         <div class="category-hero-overlay">
-                            <button class="category-back-btn" onclick="WatchApp.goHome()">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                                <span data-tr="Ana Sayfa" data-en="Home">${this.state.lang === 'tr' ? 'Ana Sayfa' : 'Home'}</span>
-                            </button>
                             <h1 class="category-hero-title">${cat[this.state.lang]}</h1>
                             <p class="category-hero-desc">${cat.desc[this.state.lang]}</p>
                         </div>
@@ -1183,7 +1218,7 @@
             ).join('');
 
             return `
-            <article class="product-card" data-id="${p.id}" onclick="WatchApp.openDetail('${p.id}')">
+            <article class="product-card" data-id="${p.id}">
                 <div class="card-image-container">
                     <div class="card-slider" data-product="${p.id}">
                         ${images}
@@ -1192,7 +1227,7 @@
                         ${dots}
                     </div>
                 </div>
-                <div class="card-content">
+                <div class="card-content" onclick="WatchApp.openDetail('${p.id}')">
                     <div class="card-header">
                         <div class="card-name">${p.name}</div>
                     </div>
@@ -1226,39 +1261,56 @@
             cards.forEach(card => {
                 const productId = card.dataset.id;
                 const slider = card.querySelector('.card-slider');
-                const dots = card.querySelectorAll('.slider-dot');
+                const dotsContainer = card.querySelector('.slider-dots');
+                const dots = dotsContainer.querySelectorAll('.slider-dot');
                 const product = this.products.find(p => p.id === productId);
                 const imageCount = product.images.length;
+                const sliderWidth = () => slider.offsetWidth;
 
                 let currentIndex = 0;
-                let startX = 0;
-                let startY = 0;
-                let currentX = 0;
+                let touchStartX = 0;
+                let touchStartY = 0;
+                let touchCurrentX = 0;
+                let touchStartTime = 0;
                 let isDragging = false;
-                let isHorizontalSwipe = null;
+                let isHorizontal = null;
 
-                const updateSlider = (index, animate = true) => {
-                    currentIndex = Math.max(0, Math.min(index, imageCount - 1));
-                    const offset = currentIndex * slider.offsetWidth;
-                    
+                const setSliderPosition = (offset, animate = false) => {
                     if (animate) {
-                        slider.classList.remove('dragging');
+                        slider.classList.add('animating');
+                    } else {
+                        slider.classList.remove('animating');
                     }
-                    slider.style.transform = `translateX(-${offset}px)`;
+                    slider.style.transform = `translateX(${offset}px)`;
+                };
+
+                const goToSlide = (index, animate = true) => {
+                    currentIndex = Math.max(0, Math.min(index, imageCount - 1));
+                    const offset = -currentIndex * sliderWidth();
+                    setSliderPosition(offset, animate);
                     
                     dots.forEach((dot, i) => {
                         dot.classList.toggle('active', i === currentIndex);
                     });
                 };
 
+                // Dot tıklama
+                dots.forEach((dot, i) => {
+                    dot.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        goToSlide(i);
+                    });
+                });
+
                 if (isTouchDevice) {
                     slider.addEventListener('touchstart', (e) => {
-                        startX = e.touches[0].clientX;
-                        startY = e.touches[0].clientY;
-                        currentX = startX;
+                        touchStartX = e.touches[0].clientX;
+                        touchStartY = e.touches[0].clientY;
+                        touchCurrentX = touchStartX;
+                        touchStartTime = Date.now();
                         isDragging = true;
-                        isHorizontalSwipe = null;
-                        slider.classList.add('dragging');
+                        isHorizontal = null;
+                        slider.classList.remove('animating');
                     }, { passive: true });
 
                     slider.addEventListener('touchmove', (e) => {
@@ -1266,78 +1318,69 @@
                         
                         const touchX = e.touches[0].clientX;
                         const touchY = e.touches[0].clientY;
-                        const diffX = touchX - startX;
-                        const diffY = touchY - startY;
+                        const diffX = touchX - touchStartX;
+                        const diffY = touchY - touchStartY;
                         
-                        // İlk harekette yönü belirle
-                        if (isHorizontalSwipe === null && (Math.abs(diffX) > 5 || Math.abs(diffY) > 5)) {
-                            isHorizontalSwipe = Math.abs(diffX) > Math.abs(diffY);
+                        // İlk harekette yönü belirle (10px eşik)
+                        if (isHorizontal === null && (Math.abs(diffX) > 10 || Math.abs(diffY) > 10)) {
+                            isHorizontal = Math.abs(diffX) > Math.abs(diffY);
                         }
                         
-                        // Yatay kaydırma ise
-                        if (isHorizontalSwipe) {
-                            currentX = touchX;
-                            const baseOffset = currentIndex * slider.offsetWidth;
-                            const dragOffset = startX - touchX;
+                        // Sadece yatay kaydırma
+                        if (isHorizontal === true) {
+                            e.preventDefault();
+                            touchCurrentX = touchX;
                             
-                            // Sınırları kontrol et
-                            let newOffset = baseOffset + dragOffset;
-                            const maxOffset = (imageCount - 1) * slider.offsetWidth;
+                            const baseOffset = -currentIndex * sliderWidth();
+                            let dragOffset = diffX;
                             
-                            // Elastik direnç uygula
-                            if (newOffset < 0) {
-                                newOffset = newOffset * 0.3;
-                            } else if (newOffset > maxOffset) {
-                                newOffset = maxOffset + (newOffset - maxOffset) * 0.3;
+                            // Sınırlarda elastik direnç
+                            if (currentIndex === 0 && diffX > 0) {
+                                dragOffset = diffX * 0.3;
+                            } else if (currentIndex === imageCount - 1 && diffX < 0) {
+                                dragOffset = diffX * 0.3;
                             }
                             
-                            slider.style.transform = `translateX(-${newOffset}px)`;
+                            setSliderPosition(baseOffset + dragOffset, false);
                         }
-                    }, { passive: true });
+                    }, { passive: false });
 
-                    slider.addEventListener('touchend', (e) => {
+                    const handleTouchEnd = () => {
                         if (!isDragging) return;
                         isDragging = false;
                         
-                        if (isHorizontalSwipe) {
-                            const endX = e.changedTouches[0].clientX;
-                            const diff = startX - endX;
-                            const threshold = slider.offsetWidth * 0.2; // %20 eşik
-                            const velocity = Math.abs(diff) / (Date.now() - e.timeStamp + 1);
+                        if (isHorizontal === true) {
+                            const diff = touchStartX - touchCurrentX;
+                            const timeDiff = Date.now() - touchStartTime;
+                            const velocity = Math.abs(diff) / timeDiff;
+                            const threshold = sliderWidth() * 0.15;
                             
-                            // Hızlı veya yeterli mesafe kaydırıldıysa
-                            if (Math.abs(diff) > threshold || velocity > 0.5) {
+                            // Hızlı swipe veya yeterli mesafe
+                            if (velocity > 0.3 || Math.abs(diff) > threshold) {
                                 if (diff > 0 && currentIndex < imageCount - 1) {
-                                    updateSlider(currentIndex + 1);
+                                    goToSlide(currentIndex + 1);
                                 } else if (diff < 0 && currentIndex > 0) {
-                                    updateSlider(currentIndex - 1);
+                                    goToSlide(currentIndex - 1);
                                 } else {
-                                    updateSlider(currentIndex);
+                                    goToSlide(currentIndex);
                                 }
                             } else {
-                                updateSlider(currentIndex);
+                                goToSlide(currentIndex);
                             }
-                        } else {
-                            slider.classList.remove('dragging');
                         }
                         
-                        isHorizontalSwipe = null;
-                    }, { passive: true });
+                        isHorizontal = null;
+                    };
 
-                    // Touch cancel durumunda
-                    slider.addEventListener('touchcancel', () => {
-                        isDragging = false;
-                        isHorizontalSwipe = null;
-                        slider.classList.remove('dragging');
-                        updateSlider(currentIndex);
-                    }, { passive: true });
+                    slider.addEventListener('touchend', handleTouchEnd, { passive: true });
+                    slider.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
                 } else {
                     // Masaüstü: hover ile otomatik geçiş
                     card.addEventListener('mouseenter', () => {
                         this.hoverIntervals[productId] = setInterval(() => {
                             const nextIndex = (currentIndex + 1) % imageCount;
-                            updateSlider(nextIndex);
+                            goToSlide(nextIndex);
                         }, 1200);
                     });
 
@@ -1346,17 +1389,9 @@
                             clearInterval(this.hoverIntervals[productId]);
                             delete this.hoverIntervals[productId];
                         }
-                        updateSlider(0);
+                        goToSlide(0);
                     });
                 }
-
-                // Dot tıklama
-                dots.forEach((dot, i) => {
-                    dot.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        updateSlider(i);
-                    });
-                });
             });
         }
 
@@ -1484,9 +1519,17 @@
 
         setLang(lang) {
             this.state.lang = lang;
+            
+            // Dil butonlarını güncelle
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
             });
+            
+            // Aktif sayfa bilgisini sakla
+            const activeDetail = this.state.activeDetail;
+            const activeCategory = this.state.activeCategory;
+            
+            // Sayfaları yeniden render et
             this.updateLangDOM();
             this.renderCategoryCarousel();
             this.renderFilters();
@@ -1494,6 +1537,24 @@
             this.renderProducts();
             this.renderCategoryPages();
             this.renderDetailPages();
+            
+            // Aktif sayfayı geri yükle
+            if (activeDetail) {
+                this.state.activeDetail = activeDetail;
+                document.getElementById('homePage').style.display = 'none';
+                const detailPage = document.getElementById(activeDetail);
+                if (detailPage) {
+                    detailPage.classList.add('active');
+                }
+            } else if (activeCategory) {
+                this.state.activeCategory = activeCategory;
+                document.getElementById('homePage').style.display = 'none';
+                const categoryPage = document.getElementById(`category-${activeCategory}`);
+                if (categoryPage) {
+                    categoryPage.classList.add('active');
+                    this.renderCategoryProducts(activeCategory);
+                }
+            }
         }
 
         updateLangDOM() {
