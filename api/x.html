@@ -36,6 +36,7 @@
             color: var(--foreground);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
         /* Ripple Effects */
@@ -130,7 +131,7 @@
         .filter-count { font-size: 0.75rem; opacity: 0.5; }
         .main { flex: 1; min-width: 0; padding: calc(var(--header-height) + 24px) var(--sides) var(--sides) var(--sides); }
 
-        /* Kategori Carousel - Daha büyük boyut */
+        /* Carousel - Daha akıcı ve muhteşem animasyonlar */
         .category-carousel-section {
             padding: calc(var(--header-height) + 24px) var(--sides) 2rem;
         }
@@ -152,8 +153,8 @@
             gap: 8px;
         }
         .carousel-nav-btn {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             border: 1px solid var(--border);
             background: var(--card);
@@ -161,12 +162,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .carousel-nav-btn:hover {
             background: var(--foreground);
             color: var(--background);
             border-color: var(--foreground);
+            transform: scale(1.05);
+        }
+        .carousel-nav-btn:active {
+            transform: scale(0.95);
         }
         .carousel-nav-btn svg {
             width: 18px;
@@ -175,13 +180,14 @@
         .category-carousel-wrapper {
             position: relative;
             overflow: hidden;
+            border-radius: var(--radius);
         }
         .category-carousel {
             display: flex;
             gap: 20px;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
         }
-        /* Carousel slide daha büyük */
         .category-slide {
             flex: 0 0 calc(25% - 15px);
             position: relative;
@@ -189,15 +195,21 @@
             overflow: hidden;
             cursor: pointer;
             aspect-ratio: 4/3;
+            transform: scale(1);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+        }
+        .category-slide:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
         .category-slide img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .category-slide:hover img {
-            transform: scale(1.08);
+            transform: scale(1.1);
         }
         .category-slide-overlay {
             position: absolute;
@@ -207,7 +219,7 @@
             flex-direction: column;
             justify-content: flex-end;
             padding: 2rem;
-            transition: background 0.3s;
+            transition: background 0.4s ease;
         }
         .category-slide:hover .category-slide-overlay {
             background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.2) 100%);
@@ -217,10 +229,20 @@
             font-weight: 700;
             color: #fff;
             margin-bottom: 0.5rem;
+            transform: translateY(0);
+            transition: transform 0.4s ease;
+        }
+        .category-slide:hover .category-slide-title {
+            transform: translateY(-4px);
         }
         .category-slide-count {
             font-size: 0.875rem;
             color: rgba(255,255,255,0.7);
+            transform: translateY(0);
+            transition: transform 0.4s ease 0.05s;
+        }
+        .category-slide:hover .category-slide-count {
+            transform: translateY(-4px);
         }
         .carousel-dots {
             display: flex;
@@ -234,11 +256,14 @@
             border-radius: 50%;
             background: var(--border);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .carousel-dot:hover {
+            background: var(--muted-foreground);
         }
         .carousel-dot.active {
             background: var(--foreground);
-            width: 28px;
+            width: 32px;
             border-radius: 5px;
         }
 
@@ -307,14 +332,14 @@
             background: rgba(0,0,0,0.7);
         }
 
-        /* Yeni Grid - Satırda daha fazla ürün */
+        /* Grid */
         .product-grid { 
             display: grid; 
             grid-template-columns: repeat(4, 1fr); 
             gap: 16px; 
         }
 
-        /* Yeniden tasarlanmış ürün kartları */
+        /* Ürün kartları - Daha akıcı animasyonlar */
         .product-card { 
             position: relative; 
             background: var(--card); 
@@ -322,29 +347,35 @@
             overflow: hidden; 
             cursor: pointer; 
             border: 1px solid var(--border);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            will-change: transform, box-shadow;
         }
         .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.12);
             border-color: transparent;
         }
 
-        /* Görsel slider container */
+        /* Görsel slider container - Tamamen yenilenmiş swipe mekanizması */
         .card-image-container {
             position: relative;
             aspect-ratio: 1;
             overflow: hidden;
             background: var(--muted);
+            touch-action: pan-y pinch-zoom;
         }
 
-        /* Görsel slider wrapper */
         .card-slider {
             display: flex;
             width: 100%;
             height: 100%;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+
+        .card-slider.dragging {
+            transition: none;
         }
 
         .card-slider img {
@@ -352,6 +383,9 @@
             height: 100%;
             object-fit: cover;
             flex-shrink: 0;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
         }
 
         /* Slider noktaları */
@@ -363,18 +397,23 @@
             display: flex;
             gap: 6px;
             z-index: 10;
+            padding: 6px 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
         }
         .slider-dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
             background: rgba(255,255,255,0.5);
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             cursor: pointer;
         }
         .slider-dot.active {
             background: #fff;
-            transform: scale(1.2);
+            width: 18px;
+            border-radius: 3px;
         }
 
         /* Kart içerik alanı */
@@ -382,7 +421,6 @@
             padding: 16px;
         }
 
-        /* card-header düzenlendi, artık sadece isim var */
         .card-header {
             margin-bottom: 8px;
         }
@@ -466,7 +504,7 @@
         .detail-desc { font-size: 0.9375rem; color: var(--foreground); line-height: 1.7; margin-bottom: 2.5rem; opacity: 0.9; }
         .section-label { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted-foreground); margin-bottom: 1rem; }
         
-        /* Yeni Specs Grid - SVG ikonlu */
+        /* Specs Grid - SVG ikonlu */
         .specs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
         .spec-box { 
             background: var(--card); 
@@ -476,11 +514,12 @@
             display: flex;
             align-items: flex-start;
             gap: 1rem;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .spec-box:hover {
             border-color: var(--foreground);
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
         }
         .spec-icon {
             width: 48px;
@@ -528,7 +567,7 @@
         .spinner { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--foreground); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Responsive */
+        /* Responsive - Mobil için özel carousel ve kart stilleri */
         @media (max-width: 1400px) {
             .product-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
             .category-slide { flex: 0 0 calc(33.333% - 14px); }
@@ -543,16 +582,14 @@
             .detail-info { width: 380px; }
         }
         @media (max-width: 768px) {
-            :root { --sides: 12px; --header-height: 64px; }
+            :root { --sides: 16px; --header-height: 64px; }
             .nav-list { display: none; }
             .mobile-menu-btn { display: flex; }
             .sidebar { display: none; }
             .layout { display: block; }
             
-            /* Tablet: 3 kart */
-            .product-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .product-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
             
-            /* Mobilde küçük yazı */
             .card-name { font-size: 0.75rem; }
             .card-spec { font-size: 0.625rem; }
             .card-price { font-size: 0.75rem; }
@@ -560,26 +597,43 @@
             .card-content { padding: 10px; }
             .card-footer { padding-top: 8px; }
             .slider-dot { width: 5px; height: 5px; }
-            .slider-dots { bottom: 8px; gap: 4px; }
+            .slider-dot.active { width: 14px; }
+            .slider-dots { bottom: 8px; gap: 4px; padding: 4px 8px; }
             
-            /* Carousel mobilde tek tek görünüm */
-            .category-slide { flex: 0 0 100%; aspect-ratio: 16/9; }
-            .category-carousel { gap: 0; }
+            /* Carousel mobilde tam ekran, swipe destekli */
+            .category-carousel-wrapper {
+                margin: 0 calc(-1 * var(--sides));
+                border-radius: 0;
+            }
+            .category-carousel { 
+                gap: 0;
+                scroll-snap-type: x mandatory;
+                overflow-x: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+                -webkit-overflow-scrolling: touch;
+            }
+            .category-carousel::-webkit-scrollbar { display: none; }
+            .category-slide { 
+                flex: 0 0 100%; 
+                aspect-ratio: 16/10;
+                scroll-snap-align: start;
+                scroll-snap-stop: always;
+                border-radius: 0;
+            }
             .carousel-nav { display: none; }
             .category-carousel-section { padding-top: calc(var(--header-height) + 16px); padding-bottom: 1.5rem; }
             .carousel-title { font-size: 0.625rem; }
-            .category-slide-title { font-size: 1.25rem; }
-            .category-slide-count { font-size: 0.75rem; }
+            .category-slide-title { font-size: 1.375rem; }
+            .category-slide-count { font-size: 0.8125rem; }
             .category-slide-overlay { padding: 1.5rem; }
             .carousel-dot { width: 8px; height: 8px; }
             .carousel-dot.active { width: 24px; }
             
-            /* Kategori sayfası */
             .category-hero { height: 220px; }
             .category-hero-title { font-size: 1.75rem; }
             .category-hero-desc { font-size: 0.875rem; }
             
-            /* Detail specs */
             .specs-grid { grid-template-columns: 1fr; }
             .spec-box { padding: 1rem; }
             .spec-icon { width: 40px; height: 40px; }
@@ -593,7 +647,7 @@
             .footer { padding: 3rem var(--sides); }
         }
         @media (max-width: 480px) {
-            /* Mobil: 2 kart */
+            :root { --sides: 12px; }
             .product-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
             .card-name { font-size: 0.6875rem; }
             .card-specs { gap: 4px; margin-bottom: 8px; }
@@ -604,34 +658,8 @@
             .card-footer { padding-top: 6px; }
             .card-price { font-size: 0.6875rem; }
             
-            /* Carousel mobilde tam ekran */
-            .category-slide { flex: 0 0 100%; }
+            .category-slide { aspect-ratio: 16/9; }
             .category-slide-title { font-size: 1.125rem; }
-        }
-
-        /* Mobil swipe desteği */
-        @media (hover: none) and (pointer: coarse) {
-            .card-slider {
-                scroll-snap-type: x mandatory;
-                overflow-x: auto;
-                scrollbar-width: none;
-                -ms-overflow-style: none;
-            }
-            .card-slider::-webkit-scrollbar { display: none; }
-            .card-slider img {
-                scroll-snap-align: start;
-            }
-            .category-carousel {
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                scrollbar-width: none;
-                -ms-overflow-style: none;
-                -webkit-overflow-scrolling: touch;
-            }
-            .category-carousel::-webkit-scrollbar { display: none; }
-            .category-slide {
-                scroll-snap-align: start;
-            }
         }
     </style>
 </head>
@@ -821,9 +849,9 @@
                     },
                     specs: { case: "42mm", thick: "13.5mm", move: "Caliber M-05 Auto", water: "30 ATM" },
                     images: [
-                        "/api/mob3.webp",
-                        "/api/mob5.webp",
-                        "/api/mob4.webp",
+                        "/mabilya/mob2.jpg",
+                        "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=800&q=80",
+                        "https://images.unsplash.com/photo-1533139323819-e5e29796e47f?w=800&q=80",
                         "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800&q=80"
                     ]
                 },
@@ -941,44 +969,31 @@
                 });
                 
                 this.initCarouselSwipe();
+                window.addEventListener('resize', () => this.handleResize());
             });
+        }
+
+        handleResize() {
+            this.updateCarouselDots();
         }
 
         initCarouselSwipe() {
             const carousel = document.getElementById('categoryCarousel');
             if (!carousel) return;
             
-            let startX = 0;
-            let scrollLeft = 0;
+            const isMobile = window.innerWidth <= 768;
             
-            carousel.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].pageX;
-                scrollLeft = carousel.scrollLeft;
-            }, { passive: true });
-            
-            carousel.addEventListener('touchend', (e) => {
-                const endX = e.changedTouches[0].pageX;
-                const diff = startX - endX;
-                const threshold = 50;
-                
-                if (Math.abs(diff) > threshold) {
-                    if (diff > 0) {
-                        this.slideCarousel(1);
-                    } else {
-                        this.slideCarousel(-1);
+            if (isMobile) {
+                // Mobilde native scroll kullan
+                carousel.addEventListener('scroll', () => {
+                    const slideWidth = carousel.offsetWidth;
+                    const newIndex = Math.round(carousel.scrollLeft / slideWidth);
+                    if (newIndex !== this.state.carouselIndex) {
+                        this.state.carouselIndex = newIndex;
+                        this.updateCarouselDots();
                     }
-                }
-            }, { passive: true });
-            
-            // Scroll event ile dot güncelleme
-            carousel.addEventListener('scroll', () => {
-                const slideWidth = carousel.offsetWidth;
-                const newIndex = Math.round(carousel.scrollLeft / slideWidth);
-                if (newIndex !== this.state.carouselIndex) {
-                    this.state.carouselIndex = newIndex;
-                    this.updateCarouselDots();
-                }
-            }, { passive: true });
+                }, { passive: true });
+            }
         }
         
         updateCarouselDots() {
@@ -1061,7 +1076,6 @@
             const isMobile = window.innerWidth <= 768;
             
             if (isMobile) {
-                // Mobilde her slide tam ekran
                 const slideWidth = carousel.offsetWidth;
                 carousel.scrollTo({
                     left: this.state.carouselIndex * slideWidth,
@@ -1071,7 +1085,7 @@
                 const slidesPerView = this.getSlidesPerView();
                 const slideWidth = 100 / slidesPerView;
                 const offset = this.state.carouselIndex * slideWidth * slidesPerView;
-                carousel.style.transform = `translateX(-${offset}%)`;
+                carousel.style.transform = `translateX(-${Math.min(offset, 100 - (100 / slidesPerView) * Object.keys(this.categories).length + 100)}%)`;
             }
             
             this.updateCarouselDots();
@@ -1080,7 +1094,7 @@
         startCarouselAutoPlay() {
             this.carouselAutoPlay = setInterval(() => {
                 this.slideCarousel(1);
-            }, 4000);
+            }, 5000);
         }
 
         stopCarouselAutoPlay() {
@@ -1221,44 +1235,113 @@
                 const imageCount = product.images.length;
 
                 let currentIndex = 0;
+                let startX = 0;
+                let startY = 0;
+                let currentX = 0;
+                let isDragging = false;
+                let isHorizontalSwipe = null;
+
+                const updateSlider = (index, animate = true) => {
+                    currentIndex = Math.max(0, Math.min(index, imageCount - 1));
+                    const offset = currentIndex * slider.offsetWidth;
+                    
+                    if (animate) {
+                        slider.classList.remove('dragging');
+                    }
+                    slider.style.transform = `translateX(-${offset}px)`;
+                    
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === currentIndex);
+                    });
+                };
 
                 if (isTouchDevice) {
-                    let startX = 0;
-
                     slider.addEventListener('touchstart', (e) => {
-                        startX = e.touches[0].pageX;
+                        startX = e.touches[0].clientX;
+                        startY = e.touches[0].clientY;
+                        currentX = startX;
+                        isDragging = true;
+                        isHorizontalSwipe = null;
+                        slider.classList.add('dragging');
+                    }, { passive: true });
+
+                    slider.addEventListener('touchmove', (e) => {
+                        if (!isDragging) return;
+                        
+                        const touchX = e.touches[0].clientX;
+                        const touchY = e.touches[0].clientY;
+                        const diffX = touchX - startX;
+                        const diffY = touchY - startY;
+                        
+                        // İlk harekette yönü belirle
+                        if (isHorizontalSwipe === null && (Math.abs(diffX) > 5 || Math.abs(diffY) > 5)) {
+                            isHorizontalSwipe = Math.abs(diffX) > Math.abs(diffY);
+                        }
+                        
+                        // Yatay kaydırma ise
+                        if (isHorizontalSwipe) {
+                            currentX = touchX;
+                            const baseOffset = currentIndex * slider.offsetWidth;
+                            const dragOffset = startX - touchX;
+                            
+                            // Sınırları kontrol et
+                            let newOffset = baseOffset + dragOffset;
+                            const maxOffset = (imageCount - 1) * slider.offsetWidth;
+                            
+                            // Elastik direnç uygula
+                            if (newOffset < 0) {
+                                newOffset = newOffset * 0.3;
+                            } else if (newOffset > maxOffset) {
+                                newOffset = maxOffset + (newOffset - maxOffset) * 0.3;
+                            }
+                            
+                            slider.style.transform = `translateX(-${newOffset}px)`;
+                        }
                     }, { passive: true });
 
                     slider.addEventListener('touchend', (e) => {
-                        const endX = e.changedTouches[0].pageX;
-                        const diff = startX - endX;
-                        const threshold = 50;
-
-                        if (Math.abs(diff) > threshold) {
-                            if (diff > 0 && currentIndex < imageCount - 1) {
-                                currentIndex++;
-                            } else if (diff < 0 && currentIndex > 0) {
-                                currentIndex--;
+                        if (!isDragging) return;
+                        isDragging = false;
+                        
+                        if (isHorizontalSwipe) {
+                            const endX = e.changedTouches[0].clientX;
+                            const diff = startX - endX;
+                            const threshold = slider.offsetWidth * 0.2; // %20 eşik
+                            const velocity = Math.abs(diff) / (Date.now() - e.timeStamp + 1);
+                            
+                            // Hızlı veya yeterli mesafe kaydırıldıysa
+                            if (Math.abs(diff) > threshold || velocity > 0.5) {
+                                if (diff > 0 && currentIndex < imageCount - 1) {
+                                    updateSlider(currentIndex + 1);
+                                } else if (diff < 0 && currentIndex > 0) {
+                                    updateSlider(currentIndex - 1);
+                                } else {
+                                    updateSlider(currentIndex);
+                                }
+                            } else {
+                                updateSlider(currentIndex);
                             }
-                            this.slideToIndex(slider, dots, currentIndex);
+                        } else {
+                            slider.classList.remove('dragging');
                         }
+                        
+                        isHorizontalSwipe = null;
                     }, { passive: true });
 
-                    slider.addEventListener('scroll', () => {
-                        const width = slider.offsetWidth;
-                        const newIndex = Math.round(slider.scrollLeft / width);
-                        if (newIndex !== currentIndex) {
-                            currentIndex = newIndex;
-                            dots.forEach((dot, i) => {
-                                dot.classList.toggle('active', i === currentIndex);
-                            });
-                        }
+                    // Touch cancel durumunda
+                    slider.addEventListener('touchcancel', () => {
+                        isDragging = false;
+                        isHorizontalSwipe = null;
+                        slider.classList.remove('dragging');
+                        updateSlider(currentIndex);
                     }, { passive: true });
+
                 } else {
+                    // Masaüstü: hover ile otomatik geçiş
                     card.addEventListener('mouseenter', () => {
                         this.hoverIntervals[productId] = setInterval(() => {
-                            currentIndex = (currentIndex + 1) % imageCount;
-                            this.slideToIndex(slider, dots, currentIndex);
+                            const nextIndex = (currentIndex + 1) % imageCount;
+                            updateSlider(nextIndex);
                         }, 1200);
                     });
 
@@ -1267,26 +1350,17 @@
                             clearInterval(this.hoverIntervals[productId]);
                             delete this.hoverIntervals[productId];
                         }
-                        currentIndex = 0;
-                        this.slideToIndex(slider, dots, 0);
+                        updateSlider(0);
                     });
                 }
 
+                // Dot tıklama
                 dots.forEach((dot, i) => {
                     dot.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        currentIndex = i;
-                        this.slideToIndex(slider, dots, i);
+                        updateSlider(i);
                     });
                 });
-            });
-        }
-
-        slideToIndex(slider, dots, index) {
-            const width = slider.offsetWidth;
-            slider.style.transform = `translateX(-${index * width}px)`;
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
             });
         }
 
@@ -1336,90 +1410,25 @@
                                     <div class="spec-icon">${this.specIcons.water}</div>
                                     <div class="spec-text">
                                         <div class="spec-val">${p.specs.water}</div>
-                                        <div class="spec-label" data-tr="Su Geçirmezlik" data-en="Water Resist">${this.state.lang==='tr'?'Su Geçirmezlik':'Water Resist'}</div>
+                                        <div class="spec-label" data-tr="Su Geçirmezlik" data-en="Water Resistance">${this.state.lang==='tr'?'Su Geçirmezlik':'Water Resistance'}</div>
                                     </div>
                                 </div>
                                 <div class="spec-box">
-                                    <div class="spec-icon">${this.specIcons.material}</div>
+                                    <div class="spec-icon">${this.specIcons.move}</div>
                                     <div class="spec-text">
-                                        <div class="spec-val">${this.materials[p.material][this.state.lang]}</div>
-                                        <div class="spec-label" data-tr="Materyal" data-en="Material">${this.state.lang==='tr'?'Materyal':'Material'}</div>
+                                        <div class="spec-val">${p.specs.move}</div>
+                                        <div class="spec-label" data-tr="Mekanizma" data-en="Movement">${this.state.lang==='tr'?'Mekanizma':'Movement'}</div>
                                     </div>
                                 </div>
                             </div>
                         </aside>
-                        <div class="detail-gallery">
-                            <img src="${p.images[0]}" id="main-${p.id}" class="gallery-main">
+                        <section class="detail-gallery">
+                            <img src="${p.images[0]}" id="main-${p.id}" class="gallery-main" alt="${p.name}">
                             <div class="gallery-thumbs">${thumbs}</div>
-                        </div>
+                        </section>
                     </div>
                 </div>`;
             }).join('');
-        }
-
-        renderMobileMenu() {
-            const nav = document.getElementById('mobileMenuNav');
-            let html = `<li><a href="#" class="mobile-menu-link" onclick="WatchApp.goHome(); WatchApp.filterBy('all')">
-                ${this.state.lang==='tr'?'Tümü':'All Collection'}
-            </a></li>`;
-            
-            for (const [key, val] of Object.entries(this.categories)) {
-                html += `<li><a href="#" class="mobile-menu-link" onclick="WatchApp.openCategory('${key}')">
-                    ${val[this.state.lang]}
-                </a></li>`;
-            }
-            nav.innerHTML = html;
-        }
-
-        filterBy(key) {
-            this.state.filter = key;
-            this.renderFilters();
-            this.renderProducts();
-            this.closeMobileMenu();
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        }
-
-        setLang(lang) {
-            this.state.lang = lang;
-            document.documentElement.lang = lang;
-            this.updateLangDOM();
-            this.renderAll();
-        }
-
-        updateLangDOM() {
-            document.querySelectorAll('[data-' + this.state.lang + ']').forEach(el => {
-                el.textContent = el.getAttribute('data-' + this.state.lang);
-            });
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent.toLowerCase() === this.state.lang);
-            });
-        }
-
-        openDetail(id) {
-            this.stopCarouselAutoPlay();
-            document.getElementById('homePage').style.display = 'none';
-            document.querySelectorAll('.category-page').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.detail-page').forEach(el => el.classList.remove('active'));
-            const target = document.getElementById(id);
-            if(target) {
-                target.classList.add('active');
-                this.state.activeDetail = id;
-                this.state.activeCategory = null;
-                window.scrollTo(0,0);
-                history.pushState({id}, '', `#${id}`);
-            }
-        }
-
-        goHome() {
-            document.getElementById('homePage').style.display = 'block';
-            document.querySelectorAll('.category-page').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.detail-page').forEach(el => el.classList.remove('active'));
-            this.state.activeDetail = null;
-            this.state.activeCategory = null;
-            history.pushState(null, '', window.location.pathname);
-            window.scrollTo(0,0);
-            this.closeMobileMenu();
-            this.startCarouselAutoPlay();
         }
 
         changeImage(mainId, src, thumb) {
@@ -1434,41 +1443,105 @@
             thumb.classList.add('active');
         }
 
-        toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.getElementById('mobileMenuBtn');
-            const isActive = menu.classList.contains('active');
-            if(isActive) this.closeMobileMenu(); else {
-                menu.classList.add('active');
-                btn.classList.add('active');
-                document.body.style.overflow = 'hidden';
+        openDetail(id) {
+            this.stopCarouselAutoPlay();
+            document.getElementById('homePage').style.display = 'none';
+            document.querySelectorAll('.category-page').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.detail-page').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById(id);
+            if (target) {
+                target.classList.add('active');
+                this.state.activeDetail = id;
+                window.scrollTo(0, 0);
+                history.pushState({ detail: id }, '', '#' + id);
             }
         }
 
-        closeMobileMenu() {
-            document.getElementById('mobileMenu').classList.remove('active');
-            document.getElementById('mobileMenuBtn').classList.remove('active');
-            document.body.style.overflow = '';
+        goHome() {
+            document.querySelectorAll('.detail-page').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.category-page').forEach(el => el.classList.remove('active'));
+            document.getElementById('homePage').style.display = 'block';
+            this.state.activeDetail = null;
+            this.state.activeCategory = null;
+            history.pushState({}, '', window.location.pathname);
+            this.closeMobileMenu();
+            this.startCarouselAutoPlay();
         }
 
         checkHash() {
             const hash = window.location.hash.slice(1);
             if (hash.startsWith('category-')) {
-                const key = hash.replace('category-', '');
-                if (this.categories[key]) {
-                    this.openCategory(key);
-                } else {
-                    this.goHome();
-                }
-            } else if (hash && document.getElementById(hash)) {
+                const catKey = hash.replace('category-', '');
+                this.openCategory(catKey);
+            } else if (hash && this.products.some(p => p.id === hash)) {
                 this.openDetail(hash);
             } else {
                 this.goHome();
             }
         }
+
+        filterBy(key) {
+            this.state.filter = key;
+            this.renderFilters();
+            this.renderProducts();
+        }
+
+        setLang(lang) {
+            this.state.lang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+            });
+            this.updateLangDOM();
+            this.renderCategoryCarousel();
+            this.renderFilters();
+            this.renderMobileMenu();
+            this.renderProducts();
+            this.renderCategoryPages();
+            this.renderDetailPages();
+        }
+
+        updateLangDOM() {
+            document.querySelectorAll('[data-tr][data-en]').forEach(el => {
+                el.textContent = el.getAttribute(`data-${this.state.lang}`);
+            });
+        }
+
+        renderMobileMenu() {
+            const nav = document.getElementById('mobileMenuNav');
+            let html = `<li><a href="#" class="mobile-menu-link ripple-container ripple-dark" onclick="createRipple(event); WatchApp.goHome(); WatchApp.closeMobileMenu()">
+                <span data-tr="Tüm Koleksiyon" data-en="All Collection">${this.state.lang === 'tr' ? 'Tüm Koleksiyon' : 'All Collection'}</span>
+                <span class="mobile-menu-count">${this.products.length}</span>
+            </a></li>`;
+            
+            for (const [key, val] of Object.entries(this.categories)) {
+                const count = this.products.filter(p => p.category === key).length;
+                html += `<li><a href="#category-${key}" class="mobile-menu-link ripple-container ripple-dark" onclick="createRipple(event); WatchApp.openCategory('${key}'); WatchApp.closeMobileMenu()">
+                    <span>${val[this.state.lang]}</span>
+                    <span class="mobile-menu-count">${count}</span>
+                </a></li>`;
+            }
+            nav.innerHTML = html;
+        }
+
+        toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.getElementById('mobileMenuBtn');
+            menu.classList.toggle('active');
+            btn.classList.toggle('active');
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        closeMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.getElementById('mobileMenuBtn');
+            menu.classList.remove('active');
+            btn.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     }
 
     const WatchApp = new WatchStore();
 </script>
+
 </body>
 </html>
