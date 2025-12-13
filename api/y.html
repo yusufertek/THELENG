@@ -7,7 +7,8 @@
     <meta name="description" content="Zarafet ve prestijin buluştuğu premium saat koleksiyonu. Zamana değer katıyoruz.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bold ve keskin köşeli font eklendi - Bebas Neue ve Oswald -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -25,8 +26,8 @@
             --muted-foreground: #6B6B6B;
             --border: #E8E5E0;
             --radius: 16px;
-            --sides: 20px;
-            --header-height: 64px;
+            --sides: 16px;
+            --header-height: 60px;
             --nav-height: 72px;
             --accent: #8B7355;
             --accent-light: #A89078;
@@ -43,8 +44,16 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
 
-        h1, h2, h3, .category-slide-title, .category-hero-title, .detail-title, .footer-logo {
-            font-family: 'Playfair Display', serif;
+        /* Başlık fontları bold ve keskin Bebas Neue ve Oswald olarak değiştirildi */
+        h1, h2, h3, .category-slide-title, .category-hero-title, .detail-title, .footer-logo, .logo, .mobile-menu-logo {
+            font-family: 'Bebas Neue', 'Oswald', sans-serif;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .card-name, .filter-panel-title, .section-title, .carousel-title {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 600;
         }
 
         /* ============================================
@@ -61,17 +70,16 @@
             align-items: center;
             justify-content: space-between;
             z-index: 1000;
-            background: rgba(250, 249, 247, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(250, 249, 247, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(0,0,0,0.06);
         }
 
         .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
             text-decoration: none;
             color: var(--foreground);
         }
@@ -93,7 +101,6 @@
             align-items: center;
             justify-content: center;
             transition: background 0.2s ease;
-            will-change: transform;
         }
         .search-btn:active {
             background: var(--border);
@@ -102,30 +109,6 @@
             width: 22px;
             height: 22px;
             stroke: var(--foreground);
-        }
-
-        .lang-switch {
-            display: flex;
-            background: var(--muted);
-            border-radius: 8px;
-            overflow: hidden;
-            padding: 3px;
-        }
-        .lang-btn {
-            padding: 6px 10px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            background: none;
-            border: none;
-            cursor: pointer;
-            opacity: 0.4;
-            transition: opacity 0.2s, background 0.2s;
-            border-radius: 5px;
-        }
-        .lang-btn.active {
-            background: var(--card);
-            opacity: 1;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .mobile-menu-btn {
@@ -168,7 +151,7 @@
         }
 
         /* ============================================
-           FULLSCREEN MOBILE MENU - OPTIMIZED
+           FULLSCREEN MOBILE MENU - FIXED
         ============================================ */
         .mobile-menu {
             position: fixed;
@@ -179,11 +162,13 @@
             flex-direction: column;
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
         .mobile-menu.active {
             opacity: 1;
             visibility: visible;
+            pointer-events: auto;
         }
 
         .mobile-menu-header {
@@ -194,9 +179,7 @@
         }
 
         .mobile-menu-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.25rem;
-            font-weight: 700;
+            font-size: 1.5rem;
             color: var(--background);
             text-decoration: none;
             opacity: 0;
@@ -218,7 +201,8 @@
         }
 
         .mobile-menu-category {
-            font-size: 0.6875rem;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.15em;
@@ -246,11 +230,11 @@
         .mobile-menu-link {
             display: block;
             padding: 1rem 1.5rem;
-            font-size: 1.25rem;
-            font-weight: 700;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.75rem;
             text-decoration: none;
             color: var(--background);
-            letter-spacing: -0.01em;
+            letter-spacing: 0.05em;
             border-radius: var(--radius);
             transform: translateY(20px);
             opacity: 0;
@@ -270,6 +254,7 @@
         .mobile-menu.active .mobile-menu-nav li:nth-child(5) .mobile-menu-link { transition-delay: 0.3s; }
 
         .mobile-menu-count {
+            font-family: 'Inter', sans-serif;
             font-size: 0.75rem;
             font-weight: 500;
             color: rgba(255,255,255,0.4);
@@ -381,7 +366,8 @@
             margin-bottom: 16px;
         }
         .search-empty-title {
-            font-size: 1.125rem;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.25rem;
             font-weight: 600;
             color: var(--foreground);
             margin-bottom: 4px;
@@ -419,10 +405,10 @@
         }
 
         .carousel-title {
-            font-size: 0.6875rem;
-            font-weight: 700;
+            font-size: 0.8rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.1em;
             color: var(--muted-foreground);
         }
 
@@ -457,7 +443,6 @@
             aspect-ratio: 16/11;
             scroll-snap-align: center;
             scroll-snap-stop: always;
-            opacity: 1;
         }
 
         .hero-slide img,
@@ -481,7 +466,6 @@
             flex-direction: column;
             justify-content: flex-end;
             padding: 28px var(--sides);
-            opacity: 1;
         }
 
         .hero-slide-badge {
@@ -492,8 +476,9 @@
             background: rgba(255,255,255,0.15);
             backdrop-filter: blur(10px);
             border-radius: 100px;
-            font-size: 0.65rem;
-            font-weight: 700;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             color: #fff;
@@ -502,13 +487,12 @@
         }
 
         .hero-slide-title {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 2.5rem;
             color: #fff;
-            letter-spacing: -0.02em;
+            letter-spacing: 0.05em;
             margin-bottom: 8px;
             text-shadow: 0 2px 20px rgba(0,0,0,0.4);
-            line-height: 1.1;
+            line-height: 1;
         }
 
         .hero-slide-desc {
@@ -561,7 +545,7 @@
         }
 
         /* ============================================
-           FILTER PANEL
+           FILTER PANEL - MOBILE FIXED
         ============================================ */
         .filter-section {
             padding: 0 var(--sides) 16px;
@@ -575,8 +559,9 @@
             align-items: center;
             gap: 8px;
             padding: 12px 18px;
-            font-size: 0.875rem;
-            font-weight: 600;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
             background: var(--card);
             border: 1.5px solid var(--border);
             border-radius: 100px;
@@ -644,6 +629,7 @@
             stroke: var(--foreground);
         }
 
+        /* Filter panel overlay ve panel varsayılan olarak gizli, sadece JavaScript ile açılır */
         .filter-panel-overlay {
             position: fixed;
             inset: 0;
@@ -651,11 +637,13 @@
             z-index: 9998;
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
         .filter-panel-overlay.active {
             opacity: 1;
             visibility: visible;
+            pointer-events: auto;
         }
 
         .filter-panel {
@@ -669,11 +657,15 @@
             max-height: 80vh;
             overflow-y: auto;
             transform: translateY(100%);
-            transition: transform 0.3s ease;
+            visibility: hidden;
+            pointer-events: none;
+            transition: transform 0.3s ease, visibility 0.3s ease;
             -webkit-overflow-scrolling: touch;
         }
         .filter-panel.active {
             transform: translateY(0);
+            visibility: visible;
+            pointer-events: auto;
         }
 
         .filter-panel-header {
@@ -689,8 +681,8 @@
         }
 
         .filter-panel-title {
-            font-size: 1.125rem;
-            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: 0.05em;
         }
 
         .filter-panel-close {
@@ -723,8 +715,9 @@
         }
 
         .filter-group-title {
-            font-size: 0.6875rem;
-            font-weight: 700;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             color: var(--muted-foreground);
@@ -769,8 +762,9 @@
         .filter-reset-btn {
             flex: 1;
             padding: 16px;
-            font-size: 0.9375rem;
-            font-weight: 600;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
             background: var(--muted);
             border: none;
             border-radius: 14px;
@@ -784,8 +778,9 @@
         .filter-apply-btn {
             flex: 2;
             padding: 16px;
-            font-size: 0.9375rem;
-            font-weight: 600;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
             background: var(--foreground);
             color: var(--background);
             border: none;
@@ -805,10 +800,9 @@
         }
 
         .section-title {
-            font-size: 0.6875rem;
-            font-weight: 700;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.1em;
             color: var(--muted-foreground);
             margin-bottom: 16px;
         }
@@ -892,36 +886,15 @@
             width: 16px;
         }
 
-        .card-video-indicator {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(6px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 5;
-        }
-        .card-video-indicator svg {
-            width: 14px;
-            height: 14px;
-            fill: #fff;
-        }
-
         .card-content {
             padding: 12px;
         }
 
         .card-name {
-            font-size: 0.8125rem;
-            font-weight: 700;
+            font-size: 0.9rem;
             color: var(--foreground);
             line-height: 1.3;
-            letter-spacing: -0.01em;
+            letter-spacing: 0.02em;
             margin-bottom: 4px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -958,8 +931,9 @@
         }
 
         .card-material {
-            font-size: 0.5625rem;
-            font-weight: 700;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.625rem;
+            font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.04em;
             color: var(--muted-foreground);
@@ -986,9 +960,9 @@
             left: 0;
             right: 0;
             height: var(--header-height);
-            background: rgba(250, 249, 247, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(250, 249, 247, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -1019,9 +993,9 @@
         }
 
         .category-nav-title {
-            font-size: 0.9375rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.25rem;
+            letter-spacing: 0.05em;
         }
 
         .category-nav-spacer {
@@ -1057,11 +1031,10 @@
         }
 
         .category-hero-title {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 2.5rem;
             color: #fff;
             margin-bottom: 8px;
-            letter-spacing: -0.02em;
+            letter-spacing: 0.05em;
         }
 
         .category-hero-desc {
@@ -1090,8 +1063,9 @@
 
         .category-filter-chip {
             padding: 10px 16px;
-            font-size: 0.8125rem;
-            font-weight: 600;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
             background: var(--muted);
             border: 1.5px solid transparent;
             border-radius: 100px;
@@ -1131,9 +1105,9 @@
             align-items: center;
             justify-content: space-between;
             z-index: 100;
-            background: rgba(250, 249, 247, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(250, 249, 247, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
         }
 
@@ -1159,8 +1133,9 @@
         }
 
         .detail-code {
-            font-size: 0.75rem;
-            font-weight: 700;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
             color: var(--muted-foreground);
             letter-spacing: 0.02em;
         }
@@ -1194,12 +1169,6 @@
             transition: opacity 0.2s ease;
         }
 
-        .gallery-main-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
         .gallery-thumbs {
             display: flex;
             gap: 10px;
@@ -1231,48 +1200,6 @@
             border-color: var(--accent);
         }
 
-        .gallery-thumb-video {
-            position: relative;
-            width: 64px;
-            height: 64px;
-            flex-shrink: 0;
-            border-radius: 10px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            opacity: 0.5;
-            transition: opacity 0.2s, border-color 0.2s;
-            overflow: hidden;
-            background: var(--muted);
-        }
-        .gallery-thumb-video.active {
-            opacity: 1;
-            border-color: var(--accent);
-        }
-        .gallery-thumb-video video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .gallery-thumb-video::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .gallery-thumb-video .play-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 20px;
-            height: 20px;
-            fill: #fff;
-            z-index: 2;
-        }
-
         .detail-info {
             padding: 24px var(--sides);
         }
@@ -1292,32 +1219,32 @@
         }
 
         .detail-title {
-            font-size: 1.75rem;
-            font-weight: 700;
+            font-size: 2rem;
             margin-bottom: 4px;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
+            letter-spacing: 0.03em;
+            line-height: 1;
         }
 
         .detail-product-code {
+            font-family: monospace;
             font-size: 0.8125rem;
             font-weight: 600;
             color: var(--muted-foreground);
             margin-bottom: 16px;
-            font-family: monospace;
         }
 
         .detail-desc {
             font-size: 0.9375rem;
             color: var(--foreground);
             line-height: 1.7;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
             opacity: 0.85;
         }
 
         .section-label {
-            font-size: 0.6875rem;
-            font-weight: 700;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             color: var(--muted-foreground);
@@ -1367,8 +1294,9 @@
         }
 
         .spec-val {
+            font-family: 'Oswald', sans-serif;
             font-size: 1rem;
-            font-weight: 700;
+            font-weight: 600;
             margin-bottom: 2px;
             color: var(--foreground);
         }
@@ -1386,8 +1314,10 @@
             gap: 12px;
             width: 100%;
             padding: 18px 24px;
-            font-size: 1rem;
-            font-weight: 700;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
             background: var(--whatsapp);
             color: #fff;
             border: none;
@@ -1416,9 +1346,8 @@
         }
 
         .footer-logo {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
+            font-size: 2.5rem;
+            letter-spacing: 0.08em;
             margin-bottom: 12px;
         }
 
@@ -1529,7 +1458,7 @@
             }
 
             .card-name {
-                font-size: 0.9375rem;
+                font-size: 1rem;
             }
 
             .card-spec {
@@ -1579,10 +1508,6 @@
 
         /* Performance optimizations for mobile */
         @media (max-width: 767px) {
-            * {
-                -webkit-transform: translateZ(0);
-            }
-            
             .hero-slide img,
             .hero-slide video,
             .card-slider-media {
@@ -1599,7 +1524,7 @@
         <a href="#" class="mobile-menu-logo" onclick="WatchApp.goHome()">FETİH SAAT</a>
     </div>
     <div class="mobile-menu-content">
-        <div class="mobile-menu-category" data-tr="Koleksiyonlar" data-en="Collections" data-ge="კოლექციები">Koleksiyonlar</div>
+        <div class="mobile-menu-category">Koleksiyonlar</div>
         <nav>
             <ul class="mobile-menu-nav" id="mobileMenuNav"></ul>
         </nav>
@@ -1640,7 +1565,7 @@
 <!-- Filter Panel -->
 <div class="filter-panel" id="filterPanel">
     <div class="filter-panel-header">
-        <span class="filter-panel-title" data-tr="Filtrele ve Sırala" data-en="Filter & Sort" data-ge="ფილტრი და დახარისხება">Filtrele ve Sırala</span>
+        <span class="filter-panel-title">FİLTRELE VE SIRALA</span>
         <button class="filter-panel-close" onclick="WatchApp.closeFilterPanel()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M18 6L6 18M6 6l12 12"/>
@@ -1649,8 +1574,8 @@
     </div>
     <div class="filter-panel-content" id="filterPanelContent"></div>
     <div class="filter-panel-actions">
-        <button class="filter-reset-btn" onclick="WatchApp.resetFilters()" data-tr="Sıfırla" data-en="Reset" data-ge="გადატვირთვა">Sıfırla</button>
-        <button class="filter-apply-btn" onclick="WatchApp.applyFilters()" data-tr="Uygula" data-en="Apply" data-ge="მიმართვა">Uygula</button>
+        <button class="filter-reset-btn" onclick="WatchApp.resetFilters()">SIFIRLA</button>
+        <button class="filter-apply-btn" onclick="WatchApp.applyFilters()">UYGULA</button>
     </div>
 </div>
 
@@ -1664,11 +1589,7 @@
                 <path d="m21 21-4.35-4.35"/>
             </svg>
         </button>
-        <div class="lang-switch">
-            <button class="lang-btn active" onclick="WatchApp.setLang('tr')">TR</button>
-            <button class="lang-btn" onclick="WatchApp.setLang('en')">EN</button>
-            <button class="lang-btn" onclick="WatchApp.setLang('ge')">GE</button>
-        </div>
+        <!-- Dil seçenekleri kaldırıldı, sadece Türkçe -->
         <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="WatchApp.toggleMobileMenu()">
             <span></span><span></span><span></span>
         </button>
@@ -1680,7 +1601,7 @@
     <!-- Hero Carousel -->
     <section class="hero-carousel-section">
         <div class="carousel-header">
-            <span class="carousel-title" data-tr="Koleksiyonları Keşfet" data-en="Explore Collections" data-ge="კოლექციების აღმოჩენა">Koleksiyonları Keşfet</span>
+            <span class="carousel-title">KOLEKSİYONLARI KEŞFET</span>
             <div class="carousel-nav">
                 <button class="carousel-nav-btn" onclick="WatchApp.slideCarousel(-1)">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
@@ -1710,7 +1631,7 @@
                 <line x1="9" y1="8" x2="15" y2="8"/>
                 <line x1="17" y1="16" x2="23" y2="16"/>
             </svg>
-            <span data-tr="Filtrele" data-en="Filter" data-ge="ფილტრი">Filtrele</span>
+            <span>FİLTRELE</span>
             <span class="filter-badge" id="filterBadge">0</span>
         </button>
         <div class="active-filter-tag" id="activeFilterTag">
@@ -1725,7 +1646,7 @@
 
     <!-- Products -->
     <section class="product-section">
-        <div class="section-title" data-tr="Tüm Saatler" data-en="All Watches" data-ge="ყველა საათი" id="productSectionTitle">Tüm Saatler</div>
+        <div class="section-title" id="productSectionTitle">TÜM SAATLER</div>
         <div class="product-grid" id="productGrid">
             <div class="loading"><div class="spinner"></div></div>
         </div>
@@ -1734,7 +1655,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-logo">FETİH SAAT</div>
-        <p class="footer-desc" data-tr="Zarafet ve prestijin buluştuğu nokta. 1995'ten beri zamana değer katıyoruz." data-en="Where elegance meets prestige. Adding value to time since 1995." data-ge="სადაც ელეგანტურობა პრესტიჟს ხვდება. 1995 წლიდან დროს ღირებულებას ვმატებთ.">
+        <p class="footer-desc">
             Zarafet ve prestijin buluştuğu nokta. 1995'ten beri zamana değer katıyoruz.
         </p>
         <div class="footer-contact">
@@ -1749,7 +1670,7 @@
         </div>
         <div class="footer-bottom">
             <span>© 2025 FETİH SAAT</span>
-            <span data-tr="Tüm hakları saklıdır" data-en="All rights reserved" data-ge="ყველა უფლება დაცულია">Tüm hakları saklıdır</span>
+            <span>Tüm hakları saklıdır</span>
         </div>
     </footer>
 </div>
@@ -1764,7 +1685,6 @@
 class WatchStore {
     constructor() {
         this.state = {
-            lang: 'tr',
             filter: 'all',
             sort: 'default',
             tempFilter: 'all',
@@ -1780,57 +1700,33 @@ class WatchStore {
 
         this.categories = {
             "CAT-LUX": { 
-                tr: "Lüks Koleksiyon", 
-                en: "Luxury Collection",
-                ge: "ძვირადღირებული კოლექცია",
-                desc: {
-                    tr: "En prestijli markalardan özenle seçilmiş, zamanı bir sanat eserine dönüştüren lüks saatler.",
-                    en: "Luxury watches carefully selected from the most prestigious brands, turning time into a work of art.",
-                    ge: "ძვირადღირებული საათები, რომლებიც გულდასმით არის შერჩეული ყველაზე პრესტიჟული ბრენდებიდან."
-                },
+                name: "Lüks Koleksiyon",
+                desc: "En prestijli markalardan özenle seçilmiş, zamanı bir sanat eserine dönüştüren lüks saatler.",
                 image: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=800&q=80"
             },
             "CAT-SPO": { 
-                tr: "Spor Saatler", 
-                en: "Sport Watches",
-                ge: "სპორტული საათები",
-                desc: {
-                    tr: "Aktif yaşam tarzınız için tasarlanmış, dayanıklı ve şık spor saatler.",
-                    en: "Durable and stylish sport watches designed for your active lifestyle.",
-                    ge: "გამძლე და სტილიანი სპორტული საათები თქვენი აქტიური ცხოვრების წესისთვის."
-                },
+                name: "Spor Saatler",
+                desc: "Aktif yaşam tarzınız için tasarlanmış, dayanıklı ve şık spor saatler.",
                 image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800&q=80"
             },
             "CAT-CLA": { 
-                tr: "Klasik Saatler", 
-                en: "Classic Watches",
-                ge: "კლასიკური საათები",
-                desc: {
-                    tr: "Zamansız tasarımlarıyla her zaman şık kalan, klasik ve zarif saatler.",
-                    en: "Classic and elegant watches that always stay stylish with timeless designs.",
-                    ge: "კლასიკური და ელეგანტური საათები, რომლებიც ყოველთვის სტილიანი რჩება."
-                },
+                name: "Klasik Saatler",
+                desc: "Zamansız tasarımlarıyla her zaman şık kalan, klasik ve zarif saatler.",
                 image: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800&q=80"
             },
             "CAT-SMT": { 
-                tr: "Akıllı Saatler", 
-                en: "Smart Watches",
-                ge: "ჭკვიანი საათები",
-                desc: {
-                    tr: "Teknoloji ve şıklığı bir arada sunan, hayatınızı kolaylaştıran akıllı saatler.",
-                    en: "Smart watches that combine technology and style, making your life easier.",
-                    ge: "ჭკვიანი საათები, რომლებიც აერთიანებენ ტექნოლოგიას და სტილს."
-                },
+                name: "Akıllı Saatler",
+                desc: "Teknoloji ve şıklığı bir arada sunan, hayatınızı kolaylaştıran akıllı saatler.",
                 image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=800&q=80"
             }
         };
 
         this.materials = {
-            "MAT-STL": { tr: "Paslanmaz Çelik", en: "Stainless Steel", ge: "უჟანგავი ფოლადი" },
-            "MAT-GLD": { tr: "Altın Kaplama", en: "Gold Plated", ge: "ოქროთი დაფარული" },
-            "MAT-TIT": { tr: "Titanyum", en: "Titanium", ge: "ტიტანი" },
-            "MAT-LTR": { tr: "Hakiki Deri", en: "Genuine Leather", ge: "ნამდვილი ტყავი" },
-            "MAT-CER": { tr: "Seramik", en: "Ceramic", ge: "კერამიკა" }
+            "MAT-STL": "Paslanmaz Çelik",
+            "MAT-GLD": "Altın Kaplama",
+            "MAT-TIT": "Titanyum",
+            "MAT-LTR": "Hakiki Deri",
+            "MAT-CER": "Seramik"
         };
 
         this.specIcons = {
@@ -1847,11 +1743,7 @@ class WatchStore {
                 name: "Fetih Royal Chronograph",
                 category: "CAT-LUX",
                 material: "MAT-GLD",
-                desc: {
-                    tr: "18 ayar altın kaplama kasası ve İsviçre mekanizmasıyla üretilen prestijli kronograf. Safir cam ve su geçirmezlik özelliği ile mükemmel bir şaheser.",
-                    en: "Prestigious chronograph with 18-karat gold-plated case and Swiss movement. A perfect masterpiece with sapphire crystal and water resistance.",
-                    ge: "პრესტიჟული ქრონოგრაფი 18 კარატიანი ოქროთი დაფარული კორპუსით და შვეიცარიული მექანიზმით."
-                },
+                desc: "18 ayar altın kaplama kasası ve İsviçre mekanizmasıyla üretilen prestijli kronograf. Safir cam ve su geçirmezlik özelliği ile mükemmel bir şaheser.",
                 specs: { dim: "42mm", color: "Altın/Siyah", material: "18K Altın Kaplama", warranty: "5 Yıl" },
                 media: [
                     { type: "image", src: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600&q=80" },
@@ -1864,11 +1756,7 @@ class WatchStore {
                 name: "Fetih Emperor Tourbillon",
                 category: "CAT-LUX",
                 material: "MAT-TIT",
-                desc: {
-                    tr: "El yapımı tourbillon mekanizması ile üretilen eşsiz bir başyapıt. Titanyum kasa ve skeleton kadran tasarımı.",
-                    en: "A unique masterpiece with hand-crafted tourbillon movement. Titanium case and skeleton dial design.",
-                    ge: "უნიკალური შედევრი ხელნაკეთი ტურბილონის მექანიზმით. ტიტანის კორპუსი და სკელეტონ ციფერბლატის დიზაინი."
-                },
+                desc: "El yapımı tourbillon mekanizması ile üretilen eşsiz bir başyapıt. Titanyum kasa ve skeleton kadran tasarımı.",
                 specs: { dim: "44mm", color: "Gümüş/Mavi", material: "Titanyum", warranty: "10 Yıl" },
                 media: [
                     { type: "image", src: "https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=600&q=80" },
@@ -1881,11 +1769,7 @@ class WatchStore {
                 name: "Fetih Diver Pro 300",
                 category: "CAT-SPO",
                 material: "MAT-STL",
-                desc: {
-                    tr: "300 metre su geçirmezlik özelliği ile profesyonel dalgıçlar için tasarlanmış spor saat. Otomatik mekanizma ve döner bezel.",
-                    en: "Sport watch designed for professional divers with 300m water resistance. Automatic movement and rotating bezel.",
-                    ge: "სპორტული საათი პროფესიონალი მყვინთავებისთვის 300მ წყალგაუმტარობით."
-                },
+                desc: "300 metre su geçirmezlik özelliği ile profesyonel dalgıçlar için tasarlanmış spor saat. Otomatik mekanizma ve döner bezel.",
                 specs: { dim: "45mm", color: "Siyah/Yeşil", material: "Paslanmaz Çelik", warranty: "3 Yıl" },
                 media: [
                     { type: "image", src: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&q=80" },
@@ -1898,11 +1782,7 @@ class WatchStore {
                 name: "Fetih Pilot Aviation",
                 category: "CAT-SPO",
                 material: "MAT-TIT",
-                desc: {
-                    tr: "Havacılık tutkunları için tasarlanmış pilot saati. GMT fonksiyonu ve slide rule bezel ile mükemmel bir araç.",
-                    en: "Pilot watch designed for aviation enthusiasts. A perfect tool with GMT function and slide rule bezel.",
-                    ge: "საპილოტე საათი ავიაციის მოყვარულებისთვის. სრულყოფილი ხელსაწყო GMT ფუნქციით."
-                },
+                desc: "Havacılık tutkunları için tasarlanmış pilot saati. GMT fonksiyonu ve slide rule bezel ile mükemmel bir araç.",
                 specs: { dim: "43mm", color: "Lacivert/Gümüş", material: "Titanyum", warranty: "5 Yıl" },
                 media: [
                     { type: "image", src: "https://images.unsplash.com/photo-1539874754764-5a96559165b0?w=600&q=80" },
@@ -1915,11 +1795,7 @@ class WatchStore {
                 name: "Fetih Heritage 1923",
                 category: "CAT-CLA",
                 material: "MAT-LTR",
-                desc: {
-                    tr: "Cumhuriyetin kuruluşundan ilham alan klasik tasarım. Hakiki deri kayış ve vintage kadran ile zamansız şıklık.",
-                    en: "Classic design inspired by the founding of the Republic. Timeless elegance with genuine leather strap and vintage dial.",
-                    ge: "კლასიკური დიზაინი რესპუბლიკის დაარსებით შთაგონებული. დროის მიუხედავად ელეგანტური."
-                },
+                desc: "Cumhuriyetin kuruluşundan ilham alan klasik tasarım. Hakiki deri kayış ve vintage kadran ile zamansız şıklık.",
                 specs: { dim: "40mm", color: "Beyaz/Kahverengi", material: "Hakiki Deri", warranty: "3 Yıl" },
                 media: [
                     { type: "image", src: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&q=80" },
@@ -1932,11 +1808,7 @@ class WatchStore {
                 name: "Fetih Elegance Lady",
                 category: "CAT-CLA",
                 material: "MAT-GLD",
-                desc: {
-                    tr: "Kadınlar için tasarlanmış zarif ve ince saat. Rose gold kaplama ve pırlanta detayları ile benzersiz güzellik.",
-                    en: "Elegant and slim watch designed for women. Unique beauty with rose gold plating and diamond details.",
-                    ge: "ელეგანტური და თხელი საათი ქალებისთვის. უნიკალური სილამაზე ვარდისფერი ოქროს დაფარვით."
-                },
+                desc: "Kadınlar için tasarlanmış zarif ve ince saat. Rose gold kaplama ve pırlanta detayları ile benzersiz güzellik.",
                 specs: { dim: "34mm", color: "Rose Gold", material: "Rose Gold Kaplama", warranty: "3 Yıl" },
                 media: [
                     { type: "image", src: "https://images.unsplash.com/photo-1612817159949-195b6eb9e31a?w=600&q=80" },
@@ -1949,11 +1821,7 @@ class WatchStore {
                 name: "Fetih Smart Pro",
                 category: "CAT-SMT",
                 material: "MAT-CER",
-                desc: {
-                    tr: "En son teknoloji ile donatılmış akıllı saat. Sağlık takibi, GPS ve 7 gün pil ömrü ile hayatınızı kolaylaştırın.",
-                    en: "Smart watch equipped with the latest technology. Make your life easier with health tracking, GPS and 7-day battery life.",
-                    ge: "ჭკვიანი საათი უახლესი ტექნოლოგიით აღჭურვილი. გაიადვილეთ ცხოვრება ჯანმრთელობის თვალყურის დევნებით."
-                },
+                desc: "En son teknoloji ile donatılmış akıllı saat. Sağlık takibi, GPS ve 7 gün pil ömrü ile hayatınızı kolaylaştırın.",
                 specs: { dim: "46mm", color: "Siyah", material: "Seramik", warranty: "2 Yıl" },
                 media: [
                     { type: "image", src: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=600&q=80" },
@@ -1966,11 +1834,7 @@ class WatchStore {
                 name: "Fetih Hybrid Connect",
                 category: "CAT-SMT",
                 material: "MAT-STL",
-                desc: {
-                    tr: "Klasik saat görünümü ile akıllı saat fonksiyonlarını birleştiren hibrit model. Bildirimler ve aktivite takibi.",
-                    en: "Hybrid model combining classic watch appearance with smart watch functions. Notifications and activity tracking.",
-                    ge: "ჰიბრიდული მოდელი, რომელიც აერთიანებს კლასიკურ საათის გარეგნობას ჭკვიანი საათის ფუნქციებთან."
-                },
+                desc: "Klasik saat görünümü ile akıllı saat fonksiyonlarını birleştiren hibrit model. Bildirimler ve aktivite takibi.",
                 specs: { dim: "42mm", color: "Gümüş/Beyaz", material: "Paslanmaz Çelik", warranty: "2 Yıl" },
                 media: [
                     { type: "image", src: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&q=80" },
@@ -1983,11 +1847,7 @@ class WatchStore {
                 name: "Fetih Prestige Moon Phase",
                 category: "CAT-LUX",
                 material: "MAT-GLD",
-                desc: {
-                    tr: "Ay evresi komplikasyonu ile donatılmış lüks saat. El yapımı gravür detayları ve limit edisyon üretim.",
-                    en: "Luxury watch equipped with moon phase complication. Hand-engraved details and limited edition production.",
-                    ge: "ძვირადღირებული საათი მთვარის ფაზის კომპლიკაციით. ხელნაკეთი გრავირების დეტალები."
-                },
+                desc: "Ay evresi komplikasyonu ile donatılmış lüks saat. El yapımı gravür detayları ve limit edisyon üretim.",
                 specs: { dim: "41mm", color: "Altın/Lacivert", material: "18K Altın", warranty: "10 Yıl" },
                 media: [
                     { type: "image", src: "https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?w=600&q=80" },
@@ -2000,11 +1860,7 @@ class WatchStore {
                 name: "Fetih Racing Chronograph",
                 category: "CAT-SPO",
                 material: "MAT-CER",
-                desc: {
-                    tr: "Motorsporları tutkunları için tasarlanmış yarış kronografı. Karbon fiber kadran ve takometre skalası.",
-                    en: "Racing chronograph designed for motorsports enthusiasts. Carbon fiber dial and tachymeter scale.",
-                    ge: "რბოლის ქრონოგრაფი მოტოსპორტის მოყვარულებისთვის. ნახშირბადის ბოჭკოს ციფერბლატი."
-                },
+                desc: "Motorsporları tutkunları için tasarlanmış yarış kronografı. Karbon fiber kadran ve takometre skalası.",
                 specs: { dim: "44mm", color: "Kırmızı/Siyah", material: "Seramik", warranty: "3 Yıl" },
                 media: [
                     { type: "image", src: "https://images.unsplash.com/photo-1455859247190-3213e0580b6c?w=600&q=80" },
@@ -2014,9 +1870,9 @@ class WatchStore {
         ];
 
         this.sortOptions = {
-            default: { tr: "Varsayılan", en: "Default", ge: "ნაგულისხმევი" },
-            nameAZ: { tr: "İsim: A-Z", en: "Name: A-Z", ge: "სახელი: A-Z" },
-            nameZA: { tr: "İsim: Z-A", en: "Name: Z-A", ge: "სახელი: Z-A" }
+            default: "Varsayılan",
+            nameAZ: "İsim: A-Z",
+            nameZA: "İsim: Z-A"
         };
     }
 
@@ -2056,13 +1912,6 @@ class WatchStore {
     renderSearchResults() {
         const container = document.getElementById('searchResults');
         const query = this.state.searchQuery;
-        const lang = this.state.lang;
-
-        const searchTexts = {
-            tr: { title: 'Arama Yap', desc: 'Koleksiyondaki saatleri arayın', noResult: 'Sonuç Bulunamadı', match: 'ile eşleşen ürün yok', results: 'sonuç bulundu' },
-            en: { title: 'Search', desc: 'Search watches in collection', noResult: 'No Results Found', match: 'no matching products', results: 'results found' },
-            ge: { title: 'ძებნა', desc: 'მოძებნეთ საათები კოლექციაში', noResult: 'შედეგი ვერ მოიძებნა', match: 'შესაბამისი პროდუქტი არ არის', results: 'შედეგი მოიძებნა' }
-        };
 
         if (!query) {
             container.innerHTML = `
@@ -2071,8 +1920,8 @@ class WatchStore {
                         <circle cx="11" cy="11" r="8"/>
                         <path d="m21 21-4.35-4.35"/>
                     </svg>
-                    <div class="search-empty-title">${searchTexts[lang].title}</div>
-                    <div class="search-empty-desc">${searchTexts[lang].desc}</div>
+                    <div class="search-empty-title">Arama Yap</div>
+                    <div class="search-empty-desc">Koleksiyondaki saatleri arayın</div>
                 </div>
             `;
             return;
@@ -2081,8 +1930,8 @@ class WatchStore {
         const results = this.products.filter(p => {
             const name = p.name.toLowerCase();
             const code = p.code.toLowerCase();
-            const category = this.categories[p.category][lang].toLowerCase();
-            const material = this.materials[p.material][lang].toLowerCase();
+            const category = this.categories[p.category].name.toLowerCase();
+            const material = this.materials[p.material].toLowerCase();
             return name.includes(query) || code.includes(query) || category.includes(query) || material.includes(query);
         });
 
@@ -2095,15 +1944,15 @@ class WatchStore {
                         <line x1="9" y1="9" x2="9.01" y2="9"/>
                         <line x1="15" y1="9" x2="15.01" y2="9"/>
                     </svg>
-                    <div class="search-empty-title">${searchTexts[lang].noResult}</div>
-                    <div class="search-empty-desc">"${query}" ${searchTexts[lang].match}</div>
+                    <div class="search-empty-title">Sonuç Bulunamadı</div>
+                    <div class="search-empty-desc">"${query}" ile eşleşen ürün yok</div>
                 </div>
             `;
             return;
         }
 
         container.innerHTML = `
-            <div class="search-result-count">${results.length} ${searchTexts[lang].results}</div>
+            <div class="search-result-count">${results.length} sonuç bulundu</div>
             <div class="search-results-grid">
                 ${results.map(p => this.renderProductCard(p, true)).join('')}
             </div>
@@ -2129,30 +1978,25 @@ class WatchStore {
 
     renderFilterPanelContent() {
         const content = document.getElementById('filterPanelContent');
-        const lang = this.state.lang;
         
-        const allText = { tr: 'Tümü', en: 'All', ge: 'ყველა' };
-        const categoryText = { tr: 'Kategori', en: 'Category', ge: 'კატეგორია' };
-        const sortText = { tr: 'Sıralama', en: 'Sort By', ge: 'დალაგება' };
-        
-        let categoryOptions = `<button class="filter-option ${this.state.tempFilter === 'all' ? 'active' : ''}" onclick="WatchApp.setTempFilter('all')">${allText[lang]}</button>`;
+        let categoryOptions = `<button class="filter-option ${this.state.tempFilter === 'all' ? 'active' : ''}" onclick="WatchApp.setTempFilter('all')">Tümü</button>`;
         for (const [key, val] of Object.entries(this.categories)) {
             const count = this.products.filter(p => p.category === key).length;
-            categoryOptions += `<button class="filter-option ${this.state.tempFilter === key ? 'active' : ''}" onclick="WatchApp.setTempFilter('${key}')">${val[lang]} (${count})</button>`;
+            categoryOptions += `<button class="filter-option ${this.state.tempFilter === key ? 'active' : ''}" onclick="WatchApp.setTempFilter('${key}')">${val.name} (${count})</button>`;
         }
 
         let sortOptions = '';
         for (const [key, val] of Object.entries(this.sortOptions)) {
-            sortOptions += `<button class="filter-option ${this.state.tempSort === key ? 'active' : ''}" onclick="WatchApp.setTempSort('${key}')">${val[lang]}</button>`;
+            sortOptions += `<button class="filter-option ${this.state.tempSort === key ? 'active' : ''}" onclick="WatchApp.setTempSort('${key}')">${val}</button>`;
         }
 
         content.innerHTML = `
             <div class="filter-group">
-                <div class="filter-group-title">${categoryText[lang]}</div>
+                <div class="filter-group-title">KATEGORİ</div>
                 <div class="filter-options">${categoryOptions}</div>
             </div>
             <div class="filter-group">
-                <div class="filter-group-title">${sortText[lang]}</div>
+                <div class="filter-group-title">SIRALAMA</div>
                 <div class="filter-options">${sortOptions}</div>
             </div>
         `;
@@ -2203,7 +2047,7 @@ class WatchStore {
             
             if (this.state.filter !== 'all') {
                 tag.classList.add('show');
-                tagText.textContent = this.categories[this.state.filter][this.state.lang];
+                tagText.textContent = this.categories[this.state.filter].name;
             } else {
                 tag.classList.remove('show');
             }
@@ -2216,28 +2060,25 @@ class WatchStore {
     renderHeroCarousel() {
         const carousel = document.getElementById('heroCarousel');
         const dots = document.getElementById('carouselDots');
-        const lang = this.state.lang;
 
         let slidesHTML = '';
         let dotsHTML = '';
         let index = 0;
 
-        const badgeTexts = { tr: 'Koleksiyon', en: 'Collection', ge: 'კოლექცია' };
-
         for (const [key, val] of Object.entries(this.categories)) {
             slidesHTML += `
                 <div class="hero-slide" data-category="${key}" onclick="WatchApp.openCategory('${key}')">
-                    <img src="${val.image}" alt="${val[lang]}" loading="lazy">
+                    <img src="${val.image}" alt="${val.name}" loading="lazy">
                     <div class="hero-slide-overlay">
                         <div class="hero-slide-badge">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
                                 <circle cx="12" cy="12" r="10"/>
                                 <polyline points="12,6 12,12 16,14"/>
                             </svg>
-                            ${badgeTexts[lang]}
+                            KOLEKSİYON
                         </div>
-                        <h2 class="hero-slide-title">${val[lang]}</h2>
-                        <p class="hero-slide-desc">${val.desc[lang]}</p>
+                        <h2 class="hero-slide-title">${val.name.toUpperCase()}</h2>
+                        <p class="hero-slide-desc">${val.desc}</p>
                     </div>
                     <div class="hero-slide-arrow">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2344,19 +2185,15 @@ class WatchStore {
 
     updateSectionTitle() {
         const title = document.getElementById('productSectionTitle');
-        const lang = this.state.lang;
-        const allText = { tr: 'Tüm Saatler', en: 'All Watches', ge: 'ყველა საათი' };
         
         if (this.state.filter === 'all') {
-            title.textContent = allText[lang];
+            title.textContent = 'TÜM SAATLER';
         } else {
-            title.textContent = this.categories[this.state.filter][lang];
+            title.textContent = this.categories[this.state.filter].name.toUpperCase();
         }
     }
 
     renderProductCard(product) {
-        const lang = this.state.lang;
-        
         const mediaItems = product.media.map((item) => {
             return `<img src="${item.src}" class="card-slider-media" alt="${product.name}" loading="lazy">`;
         }).join('');
@@ -2376,10 +2213,10 @@ class WatchStore {
                     <div class="card-specs">
                         <span class="card-spec">${product.specs.dim}</span>
                         <span class="card-spec-dot"></span>
-                        <span class="card-spec">${this.categories[product.category][lang]}</span>
+                        <span class="card-spec">${this.categories[product.category].name}</span>
                     </div>
                     <div class="card-footer">
-                        <span class="card-material">${this.materials[product.material][lang]}</span>
+                        <span class="card-material">${this.materials[product.material]}</span>
                     </div>
                 </div>
             </article>
@@ -2458,7 +2295,6 @@ class WatchStore {
 
                     const touch = e.touches[0];
                     const diffX = touch.clientX - startX;
-                    const diffY = touch.clientY - (e.touches[0].clientY || 0);
 
                     if (isHorizontalSwipe === null) {
                         if (Math.abs(diffX) > 8) {
@@ -2529,7 +2365,6 @@ class WatchStore {
 
     renderCategoryPages() {
         const container = document.getElementById('categoryPages');
-        const lang = this.state.lang;
         let html = '';
 
         for (const [key, cat] of Object.entries(this.categories)) {
@@ -2541,14 +2376,14 @@ class WatchStore {
                             <path d="M19 12H5M12 19l-7-7 7-7"/>
                         </svg>
                     </button>
-                    <span class="category-nav-title">${cat[lang]}</span>
+                    <span class="category-nav-title">${cat.name.toUpperCase()}</span>
                     <div class="category-nav-spacer"></div>
                 </div>
                 <div class="category-hero">
-                    <img src="${cat.image}" alt="${cat[lang]}" loading="lazy">
+                    <img src="${cat.image}" alt="${cat.name}" loading="lazy">
                     <div class="category-hero-overlay">
-                        <h1 class="category-hero-title">${cat[lang]}</h1>
-                        <p class="category-hero-desc">${cat.desc[lang]}</p>
+                        <h1 class="category-hero-title">${cat.name.toUpperCase()}</h1>
+                        <p class="category-hero-desc">${cat.desc}</p>
                     </div>
                 </div>
                 <div class="category-products">
@@ -2581,14 +2416,13 @@ class WatchStore {
     renderCategoryProducts(key) {
         const grid = document.getElementById(`categoryGrid-${key}`);
         const filterBar = document.getElementById(`categoryFilterBar-${key}`);
-        const lang = this.state.lang;
         let products = this.products.filter(p => p.category === key);
         products = this.getSortedProducts(products);
 
         filterBar.innerHTML = `
             ${Object.entries(this.sortOptions).map(([sortKey, val]) => `
                 <button class="category-filter-chip ${this.state.sort === sortKey ? 'active' : ''}" onclick="WatchApp.sortCategoryBy('${key}', '${sortKey}')">
-                    ${val[lang]}
+                    ${val}
                 </button>
             `).join('')}
         `;
@@ -2604,25 +2438,21 @@ class WatchStore {
 
     renderDetailPages() {
         const container = document.getElementById('detailPages');
-        const lang = this.state.lang;
         
         const specLabels = {
-            dim: { tr: 'Kasa Çapı', en: 'Case Diameter', ge: 'კორპუსის დიამეტრი' },
-            color: { tr: 'Renk', en: 'Color', ge: 'ფერი' },
-            material: { tr: 'Malzeme', en: 'Material', ge: 'მასალა' },
-            warranty: { tr: 'Garanti', en: 'Warranty', ge: 'გარანტია' }
+            dim: 'Kasa Çapı',
+            color: 'Renk',
+            material: 'Malzeme',
+            warranty: 'Garanti'
         };
-        
-        const specsTitle = { tr: 'Teknik Özellikler', en: 'Specifications', ge: 'სპეციფიკაციები' };
-        const whatsappText = { tr: 'WhatsApp\'tan Bilgi Al', en: 'Get Info via WhatsApp', ge: 'მიიღეთ ინფო WhatsApp-ით' };
-        const codeText = { tr: 'Ürün Kodu', en: 'Product Code', ge: 'პროდუქტის კოდი' };
 
         container.innerHTML = this.products.map(p => {
             const thumbs = p.media.map((item, i) => {
                 return `<img src="${item.src}" class="gallery-thumb ${i === 0 ? 'active' : ''}" onclick="WatchApp.changeMedia('${p.id}', ${i}, this)" alt="${p.name}" loading="lazy">`;
             }).join('');
 
-            const whatsappMsg = encodeURIComponent(`"${p.code}" kodlu "${p.name}" ürünü hakkında bilgi almak istiyorum.`);
+            const productUrl = `${window.location.origin}${window.location.pathname}#${p.id}`;
+            const whatsappMsg = encodeURIComponent(`"${p.code}" kodlu "${p.name}" ürünü hakkında bilgi almak istiyorum.\n\nÜrün Linki: ${productUrl}`);
             const whatsappLink = `https://wa.me/905300217534?text=${whatsappMsg}`;
 
             const firstMedia = p.media[0];
@@ -2650,48 +2480,48 @@ class WatchStore {
                         <div class="detail-breadcrumb">
                             <span>FETİH SAAT</span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-                            <span>${this.categories[p.category][lang]}</span>
+                            <span>${this.categories[p.category].name}</span>
                         </div>
-                        <h1 class="detail-title">${p.name}</h1>
-                        <div class="detail-product-code">${codeText[lang]}: ${p.code}</div>
-                        <p class="detail-desc">${p.desc[lang]}</p>
+                        <h1 class="detail-title">${p.name.toUpperCase()}</h1>
+                        <div class="detail-product-code">Ürün Kodu: ${p.code}</div>
+                        <p class="detail-desc">${p.desc}</p>
                         
                         <!-- WhatsApp butonu teknik özelliklerin üstünde -->
-                        <a href="${whatsappLink}" target="_blank" class="whatsapp-btn">
+                        <a href="${whatsappLink}" target="_blank" class="whatsapp-btn" onclick="this.href = WatchApp.getWhatsAppLink('${p.id}')">
                             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                             </svg>
-                            ${whatsappText[lang]}
+                            WHATSAPP'TAN BİLGİ AL
                         </a>
                         
-                        <div class="section-label">${specsTitle[lang]}</div>
+                        <div class="section-label">TEKNİK ÖZELLİKLER</div>
                         <div class="specs-grid">
                             <div class="spec-box">
                                 <div class="spec-icon">${this.specIcons.dim}</div>
                                 <div class="spec-text">
                                     <div class="spec-val">${p.specs.dim}</div>
-                                    <div class="spec-label">${specLabels.dim[lang]}</div>
+                                    <div class="spec-label">${specLabels.dim}</div>
                                 </div>
                             </div>
                             <div class="spec-box">
                                 <div class="spec-icon">${this.specIcons.color}</div>
                                 <div class="spec-text">
                                     <div class="spec-val">${p.specs.color}</div>
-                                    <div class="spec-label">${specLabels.color[lang]}</div>
+                                    <div class="spec-label">${specLabels.color}</div>
                                 </div>
                             </div>
                             <div class="spec-box">
                                 <div class="spec-icon">${this.specIcons.material}</div>
                                 <div class="spec-text">
                                     <div class="spec-val">${p.specs.material}</div>
-                                    <div class="spec-label">${specLabels.material[lang]}</div>
+                                    <div class="spec-label">${specLabels.material}</div>
                                 </div>
                             </div>
                             <div class="spec-box">
                                 <div class="spec-icon">${this.specIcons.warranty}</div>
                                 <div class="spec-text">
                                     <div class="spec-val">${p.specs.warranty}</div>
-                                    <div class="spec-label">${specLabels.warranty[lang]}</div>
+                                    <div class="spec-label">${specLabels.warranty}</div>
                                 </div>
                             </div>
                         </div>
@@ -2699,6 +2529,14 @@ class WatchStore {
                 </div>
             </div>`;
         }).join('');
+    }
+
+    getWhatsAppLink(productId) {
+        const p = this.products.find(prod => prod.id === productId);
+        if (!p) return '#';
+        const productUrl = `${window.location.origin}${window.location.pathname}#${p.id}`;
+        const whatsappMsg = encodeURIComponent(`"${p.code}" kodlu "${p.name}" ürünü hakkında bilgi almak istiyorum.\n\nÜrün Linki: ${productUrl}`);
+        return `https://wa.me/905300217534?text=${whatsappMsg}`;
     }
 
     changeMedia(productId, mediaIndex, thumbElement) {
@@ -2776,12 +2614,10 @@ class WatchStore {
 
     renderMobileMenu() {
         const nav = document.getElementById('mobileMenuNav');
-        const lang = this.state.lang;
-        const homeText = { tr: 'Ana Sayfa', en: 'Home', ge: 'მთავარი' };
         
         let html = `
             <li><a href="#" class="mobile-menu-link" onclick="WatchApp.goHome()">
-                ${homeText[lang]}
+                ANA SAYFA
             </a></li>
         `;
 
@@ -2789,7 +2625,7 @@ class WatchStore {
             const count = this.products.filter(p => p.category === key).length;
             html += `
                 <li><a href="#" class="mobile-menu-link" onclick="WatchApp.openCategory('${key}')">
-                    ${val[lang]}
+                    ${val.name.toUpperCase()}
                     <span class="mobile-menu-count">${count}</span>
                 </a></li>
             `;
@@ -2801,8 +2637,17 @@ class WatchStore {
     toggleMobileMenu() {
         const menu = document.getElementById('mobileMenu');
         const btn = document.getElementById('mobileMenuBtn');
-        menu.classList.toggle('active');
-        btn.classList.toggle('active');
+        const isActive = menu.classList.contains('active');
+        
+        if (isActive) {
+            menu.classList.remove('active');
+            btn.classList.remove('active');
+            document.body.style.overflow = '';
+        } else {
+            menu.classList.add('active');
+            btn.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
     }
 
     closeMobileMenu() {
@@ -2810,56 +2655,7 @@ class WatchStore {
         const btn = document.getElementById('mobileMenuBtn');
         menu.classList.remove('active');
         btn.classList.remove('active');
-    }
-
-    setLang(lang) {
-        this.state.lang = lang;
-        
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
-        });
-
-        const activeDetail = this.state.activeDetail;
-        const activeCategory = this.state.activeCategory;
-
-        this.updateLangDOM();
-        this.renderHeroCarousel();
-        this.setupCarouselObserver();
-        this.renderFilterPanelContent();
-        this.renderMobileMenu();
-        this.renderProducts();
-        this.renderCategoryPages();
-        this.renderDetailPages();
-        this.updateSectionTitle();
-        this.updateFilterUI();
-
-        if (activeDetail) {
-            this.state.activeDetail = activeDetail;
-            document.getElementById('homePage').style.display = 'none';
-            const detailPage = document.getElementById(activeDetail);
-            if (detailPage) detailPage.classList.add('active');
-        } else if (activeCategory) {
-            this.state.activeCategory = activeCategory;
-            document.getElementById('homePage').style.display = 'none';
-            const categoryPage = document.getElementById(`category-${activeCategory}`);
-            if (categoryPage) {
-                categoryPage.classList.add('active');
-                this.renderCategoryProducts(activeCategory);
-            }
-        }
-
-        const searchInput = document.getElementById('searchInput');
-        const placeholders = { tr: 'Saat ara...', en: 'Search watches...', ge: 'საათის ძებნა...' };
-        if (searchInput) {
-            searchInput.placeholder = placeholders[lang];
-        }
-    }
-
-    updateLangDOM() {
-        const lang = this.state.lang;
-        document.querySelectorAll('[data-tr][data-en][data-ge]').forEach(el => {
-            el.textContent = el.getAttribute(`data-${lang}`);
-        });
+        document.body.style.overflow = '';
     }
 }
 
