@@ -2,12 +2,19 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>FETİH SAAT | Premium Saat Koleksiyonu</title>
     <meta name="description" content="Zarafet ve prestijin buluştuğu premium saat koleksiyonu. Zamana değer katıyoruz.">
+    
+    <!-- Preload critical images for instant loading -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=800&q=80" fetchpriority="high">
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800&q=80">
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800&q=80">
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=800&q=80">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Bold ve keskin köşeli font eklendi - Bebas Neue ve Oswald -->
+    <link rel="preconnect" href="https://images.unsplash.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -34,6 +41,12 @@
             --whatsapp: #25D366;
         }
 
+        /* Improved scrolling performance */
+        html {
+            scroll-behavior: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         body {
             font-family: 'Inter', -apple-system, sans-serif;
             background: var(--background);
@@ -42,9 +55,17 @@
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
             padding-bottom: env(safe-area-inset-bottom);
+            /* Enable hardware acceleration */
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
 
-        /* Başlık fontları bold ve keskin Bebas Neue ve Oswald olarak değiştirildi */
+        /* Optimize image rendering */
+        img, video {
+            content-visibility: auto;
+            image-rendering: -webkit-optimize-contrast;
+        }
+
         h1, h2, h3, .category-slide-title, .category-hero-title, .detail-title, .footer-logo, .logo, .mobile-menu-logo {
             font-family: 'Bebas Neue', 'Oswald', sans-serif;
             letter-spacing: 0.05em;
@@ -74,6 +95,8 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(0,0,0,0.06);
+            /* Contain for performance */
+            contain: layout style;
         }
 
         .logo {
@@ -100,7 +123,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s ease;
+            transition: background 0.15s ease;
         }
         .search-btn:active {
             background: var(--border);
@@ -123,7 +146,7 @@
             align-items: center;
             justify-content: center;
             gap: 5px;
-            transition: background 0.3s ease;
+            transition: background 0.2s ease;
             position: relative;
             z-index: 10001;
         }
@@ -132,7 +155,7 @@
             height: 2px;
             background: var(--foreground);
             border-radius: 1px;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            transition: transform 0.2s ease, opacity 0.2s ease;
         }
         .mobile-menu-btn.active {
             background: transparent;
@@ -151,7 +174,7 @@
         }
 
         /* ============================================
-           FULLSCREEN MOBILE MENU - FIXED
+           FULLSCREEN MOBILE MENU
         ============================================ */
         .mobile-menu {
             position: fixed;
@@ -163,7 +186,7 @@
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
         }
         .mobile-menu.active {
             opacity: 1;
@@ -184,7 +207,7 @@
             text-decoration: none;
             opacity: 0;
             transform: translateX(-20px);
-            transition: opacity 0.3s 0.1s, transform 0.3s 0.1s;
+            transition: opacity 0.2s 0.05s, transform 0.2s 0.05s;
         }
         .mobile-menu.active .mobile-menu-logo {
             opacity: 1;
@@ -210,7 +233,7 @@
             margin-bottom: 2rem;
             opacity: 0;
             transform: translateY(20px);
-            transition: opacity 0.3s 0.1s, transform 0.3s 0.1s;
+            transition: opacity 0.2s 0.05s, transform 0.2s 0.05s;
         }
         .mobile-menu.active .mobile-menu-category {
             opacity: 1;
@@ -238,7 +261,7 @@
             border-radius: var(--radius);
             transform: translateY(20px);
             opacity: 0;
-            transition: transform 0.3s, opacity 0.3s, background 0.2s;
+            transition: transform 0.2s, opacity 0.2s, background 0.15s;
         }
         .mobile-menu-link:active {
             background: rgba(255,255,255,0.1);
@@ -247,11 +270,11 @@
             transform: translateY(0);
             opacity: 1;
         }
-        .mobile-menu.active .mobile-menu-nav li:nth-child(1) .mobile-menu-link { transition-delay: 0.1s; }
-        .mobile-menu.active .mobile-menu-nav li:nth-child(2) .mobile-menu-link { transition-delay: 0.15s; }
-        .mobile-menu.active .mobile-menu-nav li:nth-child(3) .mobile-menu-link { transition-delay: 0.2s; }
-        .mobile-menu.active .mobile-menu-nav li:nth-child(4) .mobile-menu-link { transition-delay: 0.25s; }
-        .mobile-menu.active .mobile-menu-nav li:nth-child(5) .mobile-menu-link { transition-delay: 0.3s; }
+        .mobile-menu.active .mobile-menu-nav li:nth-child(1) .mobile-menu-link { transition-delay: 0.05s; }
+        .mobile-menu.active .mobile-menu-nav li:nth-child(2) .mobile-menu-link { transition-delay: 0.08s; }
+        .mobile-menu.active .mobile-menu-nav li:nth-child(3) .mobile-menu-link { transition-delay: 0.11s; }
+        .mobile-menu.active .mobile-menu-nav li:nth-child(4) .mobile-menu-link { transition-delay: 0.14s; }
+        .mobile-menu.active .mobile-menu-nav li:nth-child(5) .mobile-menu-link { transition-delay: 0.17s; }
 
         .mobile-menu-count {
             font-family: 'Inter', sans-serif;
@@ -297,7 +320,7 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: background 0.2s;
+            transition: background 0.15s;
         }
         .search-back-btn:active {
             background: var(--border);
@@ -322,7 +345,7 @@
             border-radius: 14px;
             background: var(--muted);
             outline: none;
-            transition: border-color 0.2s, background 0.2s;
+            transition: border-color 0.15s, background 0.15s;
         }
         .search-input:focus {
             border-color: var(--accent);
@@ -348,6 +371,7 @@
             padding: var(--sides);
             padding-bottom: calc(var(--sides) + env(safe-area-inset-bottom));
             -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
 
         .search-empty {
@@ -394,6 +418,7 @@
         ============================================ */
         .hero-carousel-section {
             padding: calc(var(--header-height) + 12px) 0 20px;
+            contain: content;
         }
 
         .carousel-header {
@@ -443,6 +468,8 @@
             aspect-ratio: 16/11;
             scroll-snap-align: center;
             scroll-snap-stop: always;
+            /* Contain for better performance */
+            contain: layout paint;
         }
 
         .hero-slide img,
@@ -536,7 +563,7 @@
             border-radius: 4px;
             background: var(--border);
             cursor: pointer;
-            transition: background 0.3s, width 0.3s;
+            transition: background 0.2s, width 0.2s;
         }
 
         .carousel-dot.active {
@@ -566,7 +593,7 @@
             border: 1.5px solid var(--border);
             border-radius: 100px;
             cursor: pointer;
-            transition: background 0.2s, color 0.2s, border-color 0.2s;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
         }
         .filter-trigger-btn:active {
             background: var(--muted);
@@ -629,7 +656,6 @@
             stroke: var(--foreground);
         }
 
-        /* Filter panel overlay ve panel varsayılan olarak gizli, sadece JavaScript ile açılır */
         .filter-panel-overlay {
             position: fixed;
             inset: 0;
@@ -638,7 +664,7 @@
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
         }
         .filter-panel-overlay.active {
             opacity: 1;
@@ -659,7 +685,7 @@
             transform: translateY(100%);
             visibility: hidden;
             pointer-events: none;
-            transition: transform 0.3s ease, visibility 0.3s ease;
+            transition: transform 0.25s ease, visibility 0.25s ease;
             -webkit-overflow-scrolling: touch;
         }
         .filter-panel.active {
@@ -695,7 +721,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
+            transition: background 0.15s;
         }
         .filter-panel-close:active {
             background: var(--border);
@@ -738,7 +764,7 @@
             border: 1.5px solid transparent;
             border-radius: 100px;
             cursor: pointer;
-            transition: background 0.2s, color 0.2s;
+            transition: background 0.15s, color 0.15s;
         }
         .filter-option:active {
             background: var(--border);
@@ -769,7 +795,7 @@
             border: none;
             border-radius: 14px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.15s;
         }
         .filter-reset-btn:active {
             background: var(--border);
@@ -786,7 +812,7 @@
             border: none;
             border-radius: 14px;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: opacity 0.15s;
         }
         .filter-apply-btn:active {
             opacity: 0.9;
@@ -797,6 +823,8 @@
         ============================================ */
         .product-section {
             padding: 0 var(--sides) calc(var(--sides) + env(safe-area-inset-bottom));
+            /* Contain for performance */
+            contain: content;
         }
 
         .section-title {
@@ -824,6 +852,8 @@
             cursor: pointer;
             border: 1px solid var(--border);
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            /* Contain for better scroll performance */
+            contain: layout paint;
         }
         .product-card:active {
             opacity: 0.95;
@@ -845,7 +875,7 @@
         }
 
         .card-slider.animating {
-            transition: transform 0.3s ease;
+            transition: transform 0.25s ease;
         }
 
         .card-slider-media {
@@ -877,7 +907,7 @@
             height: 5px;
             border-radius: 3px;
             background: rgba(255,255,255,0.5);
-            transition: background 0.3s, width 0.3s;
+            transition: background 0.2s, width 0.2s;
             cursor: pointer;
         }
 
@@ -981,7 +1011,7 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: background 0.15s ease;
         }
         .category-back-btn:active {
             background: var(--border);
@@ -1071,7 +1101,7 @@
             border-radius: 100px;
             cursor: pointer;
             white-space: nowrap;
-            transition: background 0.2s, color 0.2s;
+            transition: background 0.15s, color 0.15s;
             flex-shrink: 0;
         }
         .category-filter-chip:active {
@@ -1121,7 +1151,7 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: background 0.15s ease;
         }
         .detail-back-btn:active {
             background: var(--border);
@@ -1166,7 +1196,7 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            transition: opacity 0.2s ease;
+            transition: opacity 0.15s ease;
         }
 
         .gallery-thumbs {
@@ -1190,7 +1220,7 @@
             cursor: pointer;
             border: 2px solid transparent;
             opacity: 0.5;
-            transition: opacity 0.2s, border-color 0.2s;
+            transition: opacity 0.15s, border-color 0.15s;
         }
         .gallery-thumb:active {
             opacity: 0.8;
@@ -1323,7 +1353,7 @@
             border: none;
             border-radius: 14px;
             cursor: pointer;
-            transition: opacity 0.2s ease;
+            transition: opacity 0.15s ease;
             margin-bottom: 24px;
             text-decoration: none;
         }
@@ -1445,7 +1475,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: background 0.2s, color 0.2s, border-color 0.2s;
+                transition: background 0.15s, color 0.15s, border-color 0.15s;
             }
             .carousel-nav-btn:hover {
                 background: var(--accent);
@@ -1503,15 +1533,6 @@
                 width: 400px;
                 flex-shrink: 0;
                 border-right: 1px solid var(--border);
-            }
-        }
-
-        /* Performance optimizations for mobile */
-        @media (max-width: 767px) {
-            .hero-slide img,
-            .hero-slide video,
-            .card-slider-media {
-                will-change: auto;
             }
         }
     </style>
@@ -1589,7 +1610,6 @@
                 <path d="m21 21-4.35-4.35"/>
             </svg>
         </button>
-        <!-- Dil seçenekleri kaldırıldı, sadece Türkçe -->
         <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="WatchApp.toggleMobileMenu()">
             <span></span><span></span><span></span>
         </button>
@@ -1847,7 +1867,7 @@ class WatchStore {
                 name: "Fetih Prestige Moon Phase",
                 category: "CAT-LUX",
                 material: "MAT-GLD",
-                desc: "Ay evresi komplikasyonu ile donatılmış lüks saat. El yapımı gravür detayları ve limit edisyon üretim.",
+                desc: "Ay evresi komplikasyonlu prestijli saat. 18 ayar altın kasa ve el işçiliği kadran detayları.",
                 specs: { dim: "41mm", color: "Altın/Lacivert", material: "18K Altın", warranty: "10 Yıl" },
                 media: [
                     { type: "image", src: "https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?w=600&q=80" },
@@ -1877,6 +1897,8 @@ class WatchStore {
     }
 
     init() {
+        this.preloadAllImages();
+        
         this.renderHeroCarousel();
         this.renderFilterPanelContent();
         this.renderProducts();
@@ -1888,6 +1910,28 @@ class WatchStore {
         this.setupCarouselObserver();
 
         window.addEventListener('popstate', () => this.checkHash());
+    }
+
+    preloadAllImages() {
+        const allImages = new Set();
+        
+        // Category images
+        Object.values(this.categories).forEach(cat => {
+            allImages.add(cat.image);
+        });
+        
+        // Product images
+        this.products.forEach(product => {
+            product.media.forEach(media => {
+                allImages.add(media.src);
+            });
+        });
+        
+        // Preload all images
+        allImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
     }
 
     openSearch() {
@@ -2068,7 +2112,7 @@ class WatchStore {
         for (const [key, val] of Object.entries(this.categories)) {
             slidesHTML += `
                 <div class="hero-slide" data-category="${key}" onclick="WatchApp.openCategory('${key}')">
-                    <img src="${val.image}" alt="${val.name}" loading="lazy">
+                    <img src="${val.image}" alt="${val.name}" loading="eager" fetchpriority="high" decoding="async">
                     <div class="hero-slide-overlay">
                         <div class="hero-slide-badge">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
@@ -2195,7 +2239,7 @@ class WatchStore {
 
     renderProductCard(product) {
         const mediaItems = product.media.map((item) => {
-            return `<img src="${item.src}" class="card-slider-media" alt="${product.name}" loading="lazy">`;
+            return `<img src="${item.src}" class="card-slider-media" alt="${product.name}" loading="eager" decoding="async">`;
         }).join('');
 
         const dots = product.media.map((_, i) => 
@@ -2270,7 +2314,7 @@ class WatchStore {
                     e.stopPropagation();
                     e.preventDefault();
                     goToSlide(i, true);
-                });
+                }, { passive: false });
             });
 
             mediaContainer.addEventListener('click', (e) => {
@@ -2380,7 +2424,7 @@ class WatchStore {
                     <div class="category-nav-spacer"></div>
                 </div>
                 <div class="category-hero">
-                    <img src="${cat.image}" alt="${cat.name}" loading="lazy">
+                    <img src="${cat.image}" alt="${cat.name}" loading="eager" decoding="async">
                     <div class="category-hero-overlay">
                         <h1 class="category-hero-title">${cat.name.toUpperCase()}</h1>
                         <p class="category-hero-desc">${cat.desc}</p>
@@ -2448,7 +2492,7 @@ class WatchStore {
 
         container.innerHTML = this.products.map(p => {
             const thumbs = p.media.map((item, i) => {
-                return `<img src="${item.src}" class="gallery-thumb ${i === 0 ? 'active' : ''}" onclick="WatchApp.changeMedia('${p.id}', ${i}, this)" alt="${p.name}" loading="lazy">`;
+                return `<img src="${item.src}" class="gallery-thumb ${i === 0 ? 'active' : ''}" onclick="WatchApp.changeMedia('${p.id}', ${i}, this)" alt="${p.name}" loading="eager" decoding="async">`;
             }).join('');
 
             const productUrl = `${window.location.origin}${window.location.pathname}#${p.id}`;
@@ -2456,7 +2500,7 @@ class WatchStore {
             const whatsappLink = `https://wa.me/905300217534?text=${whatsappMsg}`;
 
             const firstMedia = p.media[0];
-            const mainMediaHTML = `<img src="${firstMedia.src}" id="main-${p.id}" class="gallery-main" alt="${p.name}">`;
+            const mainMediaHTML = `<img src="${firstMedia.src}" id="main-${p.id}" class="gallery-main" alt="${p.name}" loading="eager" decoding="async">`;
 
             return `
             <div class="detail-page" id="${p.id}">
@@ -2552,9 +2596,9 @@ class WatchStore {
 
         container.style.opacity = 0;
         setTimeout(() => {
-            container.innerHTML = `<img src="${mediaItem.src}" id="main-${productId}" class="gallery-main" alt="${product.name}">`;
+            container.innerHTML = `<img src="${mediaItem.src}" id="main-${productId}" class="gallery-main" alt="${product.name}" loading="eager" decoding="async">`;
             container.style.opacity = 1;
-        }, 150);
+        }, 100);
     }
 
     openDetail(id) {
