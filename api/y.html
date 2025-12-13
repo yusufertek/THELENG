@@ -7,7 +7,6 @@
     <meta name="description" content="Zarafet ve prestijin buluştuğu premium saat koleksiyonu. Zamana değer katıyoruz.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Bold ve keskin köşeli font eklendi - Bebas Neue ve Oswald -->
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -34,6 +33,58 @@
             --whatsapp: #25D366;
         }
 
+        /* Dark mode CSS variables */
+        [data-theme="dark"] {
+            --background: #0F0F0F;
+            --foreground: #F5F5F5;
+            --card: #1A1A1A;
+            --muted: #252525;
+            --muted-foreground: #A0A0A0;
+            --border: #333333;
+            --accent: #B8956C;
+            --accent-light: #C9A87C;
+        }
+
+        [data-theme="dark"] .header {
+            background: rgba(15, 15, 15, 0.98);
+        }
+
+        [data-theme="dark"] .detail-header,
+        [data-theme="dark"] .category-nav-header {
+            background: rgba(15, 15, 15, 0.98);
+        }
+
+        [data-theme="dark"] .hero-slide-overlay {
+            background: linear-gradient(
+                to top,
+                rgba(0,0,0,0.95) 0%,
+                rgba(0,0,0,0.6) 40%,
+                rgba(0,0,0,0.3) 70%,
+                rgba(0,0,0,0.1) 100%
+            );
+        }
+
+        [data-theme="dark"] .detail-gallery {
+            background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+        }
+
+        [data-theme="dark"] .card-media-container {
+            background: linear-gradient(135deg, #252525 0%, #1a1a1a 100%);
+        }
+
+        [data-theme="dark"] .mobile-menu {
+            background: #0a0a0a;
+        }
+
+        [data-theme="dark"] .filter-panel,
+        [data-theme="dark"] .search-page {
+            background: var(--background);
+        }
+
+        [data-theme="dark"] .search-header {
+            background: var(--card);
+        }
+
         body {
             font-family: 'Inter', -apple-system, sans-serif;
             background: var(--background);
@@ -42,9 +93,9 @@
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
             padding-bottom: env(safe-area-inset-bottom);
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* Başlık fontları bold ve keskin Bebas Neue ve Oswald olarak değiştirildi */
         h1, h2, h3, .category-slide-title, .category-hero-title, .detail-title, .footer-logo, .logo, .mobile-menu-logo {
             font-family: 'Bebas Neue', 'Oswald', sans-serif;
             letter-spacing: 0.05em;
@@ -74,6 +125,7 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(0,0,0,0.06);
+            transition: background 0.3s ease;
         }
 
         .logo {
@@ -90,7 +142,8 @@
             gap: 8px;
         }
 
-        .search-btn {
+        .search-btn,
+        .theme-toggle-btn {
             width: 44px;
             height: 44px;
             border-radius: 12px;
@@ -100,15 +153,33 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s ease;
+            transition: background 0.2s ease, transform 0.2s ease;
         }
-        .search-btn:active {
+        .search-btn:active,
+        .theme-toggle-btn:active {
             background: var(--border);
+            transform: scale(0.95);
         }
-        .search-btn svg {
+        .search-btn svg,
+        .theme-toggle-btn svg {
             width: 22px;
             height: 22px;
             stroke: var(--foreground);
+            transition: stroke 0.3s ease;
+        }
+
+        /* Theme toggle icon animations */
+        .theme-toggle-btn .sun-icon {
+            display: block;
+        }
+        .theme-toggle-btn .moon-icon {
+            display: none;
+        }
+        [data-theme="dark"] .theme-toggle-btn .sun-icon {
+            display: none;
+        }
+        [data-theme="dark"] .theme-toggle-btn .moon-icon {
+            display: block;
         }
 
         .mobile-menu-btn {
@@ -132,7 +203,7 @@
             height: 2px;
             background: var(--foreground);
             border-radius: 1px;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
         }
         .mobile-menu-btn.active {
             background: transparent;
@@ -151,7 +222,7 @@
         }
 
         /* ============================================
-           FULLSCREEN MOBILE MENU - FIXED
+           FULLSCREEN MOBILE MENU
         ============================================ */
         .mobile-menu {
             position: fixed;
@@ -321,6 +392,7 @@
             border: 2px solid var(--border);
             border-radius: 14px;
             background: var(--muted);
+            color: var(--foreground);
             outline: none;
             transition: border-color 0.2s, background 0.2s;
         }
@@ -390,7 +462,7 @@
         }
 
         /* ============================================
-           HERO CAROUSEL - PERFORMANCE OPTIMIZED
+           HERO CAROUSEL
         ============================================ */
         .hero-carousel-section {
             padding: calc(var(--header-height) + 12px) 0 20px;
@@ -545,7 +617,7 @@
         }
 
         /* ============================================
-           FILTER PANEL - MOBILE FIXED
+           FILTER PANEL
         ============================================ */
         .filter-section {
             padding: 0 var(--sides) 16px;
@@ -566,6 +638,7 @@
             border: 1.5px solid var(--border);
             border-radius: 100px;
             cursor: pointer;
+            color: var(--foreground);
             transition: background 0.2s, color 0.2s, border-color 0.2s;
         }
         .filter-trigger-btn:active {
@@ -608,6 +681,7 @@
             font-weight: 600;
             background: var(--muted);
             border-radius: 100px;
+            color: var(--foreground);
         }
         .active-filter-tag.show {
             display: flex;
@@ -629,7 +703,6 @@
             stroke: var(--foreground);
         }
 
-        /* Filter panel overlay ve panel varsayılan olarak gizli, sadece JavaScript ile açılır */
         .filter-panel-overlay {
             position: fixed;
             inset: 0;
@@ -683,6 +756,7 @@
         .filter-panel-title {
             font-size: 1.25rem;
             letter-spacing: 0.05em;
+            color: var(--foreground);
         }
 
         .filter-panel-close {
@@ -738,6 +812,7 @@
             border: 1.5px solid transparent;
             border-radius: 100px;
             cursor: pointer;
+            color: var(--foreground);
             transition: background 0.2s, color 0.2s;
         }
         .filter-option:active {
@@ -769,6 +844,7 @@
             border: none;
             border-radius: 14px;
             cursor: pointer;
+            color: var(--foreground);
             transition: background 0.2s;
         }
         .filter-reset-btn:active {
@@ -814,7 +890,7 @@
         }
 
         /* ============================================
-           PRODUCT CARD - OPTIMIZED
+           PRODUCT CARD
         ============================================ */
         .product-card {
             position: relative;
@@ -824,6 +900,7 @@
             cursor: pointer;
             border: 1px solid var(--border);
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         .product-card:active {
             opacity: 0.95;
@@ -969,6 +1046,7 @@
             justify-content: space-between;
             padding: 0 var(--sides);
             z-index: 100;
+            transition: background 0.3s ease;
         }
 
         .category-back-btn {
@@ -996,6 +1074,7 @@
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.25rem;
             letter-spacing: 0.05em;
+            color: var(--foreground);
         }
 
         .category-nav-spacer {
@@ -1073,6 +1152,7 @@
             white-space: nowrap;
             transition: background 0.2s, color 0.2s;
             flex-shrink: 0;
+            color: var(--foreground);
         }
         .category-filter-chip:active {
             background: var(--border);
@@ -1109,6 +1189,7 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
+            transition: background 0.3s ease;
         }
 
         .detail-back-btn {
@@ -1127,6 +1208,35 @@
             background: var(--border);
         }
         .detail-back-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--foreground);
+        }
+
+        /* Detail header actions for share button */
+        .detail-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-share-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--muted);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .detail-share-btn:active {
+            background: var(--border);
+            transform: scale(0.95);
+        }
+        .detail-share-btn svg {
             width: 20px;
             height: 20px;
             stroke: var(--foreground);
@@ -1151,8 +1261,10 @@
         .detail-gallery {
             background: linear-gradient(135deg, #f8f7f5 0%, #fff 100%);
             padding: 20px;
+            transition: background 0.3s ease;
         }
 
+        /* Mobile swipe gallery */
         .gallery-main-container {
             position: relative;
             width: 100%;
@@ -1160,6 +1272,20 @@
             border-radius: var(--radius);
             overflow: hidden;
             margin-bottom: 12px;
+            touch-action: pan-y pinch-zoom;
+        }
+
+        .gallery-slider {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-slider-item {
+            width: 100%;
+            height: 100%;
+            flex-shrink: 0;
         }
 
         .gallery-main {
@@ -1167,6 +1293,31 @@
             height: 100%;
             object-fit: contain;
             transition: opacity 0.2s ease;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* Gallery dots for mobile swipe */
+        .gallery-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .gallery-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .gallery-dot.active {
+            background: var(--accent);
+            transform: scale(1.2);
         }
 
         .gallery-thumbs {
@@ -1223,6 +1374,7 @@
             margin-bottom: 4px;
             letter-spacing: 0.03em;
             line-height: 1;
+            color: var(--foreground);
         }
 
         .detail-product-code {
@@ -1306,13 +1458,20 @@
             color: var(--muted-foreground);
         }
 
+        /* Action buttons row */
+        .detail-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
         /* WhatsApp Button */
         .whatsapp-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
-            width: 100%;
+            flex: 1;
             padding: 18px 24px;
             font-family: 'Oswald', sans-serif;
             font-size: 1.1rem;
@@ -1323,17 +1482,156 @@
             border: none;
             border-radius: 14px;
             cursor: pointer;
-            transition: opacity 0.2s ease;
-            margin-bottom: 24px;
+            transition: opacity 0.2s ease, transform 0.2s ease;
             text-decoration: none;
         }
         .whatsapp-btn:active {
             opacity: 0.9;
+            transform: scale(0.98);
         }
         .whatsapp-btn svg {
             width: 24px;
             height: 24px;
             fill: currentColor;
+        }
+
+        /* Share button in detail */
+        .share-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            padding: 18px;
+            font-family: 'Oswald', sans-serif;
+            background: var(--muted);
+            color: var(--foreground);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .share-btn:active {
+            background: var(--border);
+            transform: scale(0.98);
+        }
+        .share-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+        }
+
+        /* Share toast notification */
+        .share-toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--foreground);
+            color: var(--background);
+            padding: 14px 24px;
+            border-radius: 100px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .share-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+        .share-toast svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--whatsapp);
+        }
+
+        /* Related products section */
+        .related-products-section {
+            padding: 24px 0;
+            border-top: 1px solid var(--border);
+            margin-top: 24px;
+        }
+
+        .related-products-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--sides);
+            margin-bottom: 16px;
+        }
+
+        .related-products-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted-foreground);
+        }
+
+        .related-products-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 0 var(--sides);
+            padding-bottom: 8px;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .related-products-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .related-product-card {
+            flex-shrink: 0;
+            width: 160px;
+            background: var(--card);
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .related-product-card:active {
+            transform: scale(0.98);
+        }
+
+        .related-product-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            background: var(--muted);
+        }
+
+        .related-product-info {
+            padding: 12px;
+        }
+
+        .related-product-name {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--foreground);
+            margin-bottom: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.2;
+        }
+
+        .related-product-category {
+            font-size: 0.7rem;
+            color: var(--muted-foreground);
         }
 
         /* ============================================
@@ -1464,6 +1762,10 @@
             .card-spec {
                 font-size: 0.75rem;
             }
+
+            .related-product-card {
+                width: 200px;
+            }
         }
 
         @media (min-width: 1024px) {
@@ -1504,9 +1806,12 @@
                 flex-shrink: 0;
                 border-right: 1px solid var(--border);
             }
+
+            .related-product-card {
+                width: 220px;
+            }
         }
 
-        /* Performance optimizations for mobile */
         @media (max-width: 767px) {
             .hero-slide img,
             .hero-slide video,
@@ -1518,10 +1823,18 @@
 </head>
 <body>
 
+<!-- Share Toast -->
+<div class="share-toast" id="shareToast">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    <span>Link kopyalandı!</span>
+</div>
+
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-header">
-        <a href="#" class="mobile-menu-logo" onclick="WatchApp.goHome()">FETİH SAAT</a>
+        <a href="#" class="mobile-menu-logo" onclick="event.preventDefault(); WatchApp.goHome()">FETİH SAAT</a>
     </div>
     <div class="mobile-menu-content">
         <div class="mobile-menu-category">Koleksiyonlar</div>
@@ -1581,7 +1894,7 @@
 
 <!-- Header -->
 <header class="header">
-    <a href="#" class="logo" onclick="WatchApp.goHome()">FETİH SAAT</a>
+    <a href="#" class="logo" onclick="event.preventDefault(); WatchApp.goHome()">FETİH SAAT</a>
     <div class="header-actions">
         <button class="search-btn" onclick="WatchApp.openSearch()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1589,7 +1902,23 @@
                 <path d="m21 21-4.35-4.35"/>
             </svg>
         </button>
-        <!-- Dil seçenekleri kaldırıldı, sadece Türkçe -->
+        <!-- Theme toggle button -->
+        <button class="theme-toggle-btn" onclick="WatchApp.toggleTheme()" title="Tema Değiştir">
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+        </button>
         <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="WatchApp.toggleMobileMenu()">
             <span></span><span></span><span></span>
         </button>
@@ -1692,11 +2021,13 @@ class WatchStore {
             activeDetail: null,
             activeCategory: null,
             carouselIndex: 0,
-            searchQuery: ''
+            searchQuery: '',
+            theme: 'light'
         };
 
         this.hoverIntervals = {};
         this.carouselAutoPlayInterval = null;
+        this.galleryStates = {};
 
         this.categories = {
             "CAT-LUX": { 
@@ -1877,6 +2208,7 @@ class WatchStore {
     }
 
     init() {
+        this.loadTheme();
         this.renderHeroCarousel();
         this.renderFilterPanelContent();
         this.renderProducts();
@@ -1888,6 +2220,55 @@ class WatchStore {
         this.setupCarouselObserver();
 
         window.addEventListener('popstate', () => this.checkHash());
+    }
+
+    loadTheme() {
+        const savedTheme = localStorage.getItem('fetih-theme') || 'light';
+        this.state.theme = savedTheme;
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    toggleTheme() {
+        const newTheme = this.state.theme === 'light' ? 'dark' : 'light';
+        this.state.theme = newTheme;
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('fetih-theme', newTheme);
+    }
+
+    async shareProduct(productId) {
+        const product = this.products.find(p => p.id === productId);
+        if (!product) return;
+
+        const productUrl = `${window.location.origin}${window.location.pathname}#${productId}`;
+        const shareData = {
+            title: `${product.name} | FETİH SAAT`,
+            text: `${product.name} - ${product.desc}`,
+            url: productUrl
+        };
+
+        try {
+            if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+                await navigator.share(shareData);
+            } else {
+                await navigator.clipboard.writeText(productUrl);
+                this.showShareToast();
+            }
+        } catch (err) {
+            try {
+                await navigator.clipboard.writeText(productUrl);
+                this.showShareToast();
+            } catch (clipErr) {
+                console.error('Share failed:', clipErr);
+            }
+        }
+    }
+
+    showShareToast() {
+        const toast = document.getElementById('shareToast');
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2500);
     }
 
     openSearch() {
@@ -2447,16 +2828,32 @@ class WatchStore {
         };
 
         container.innerHTML = this.products.map(p => {
+            const galleryItems = p.media.map((item, i) => {
+                return `<div class="gallery-slider-item"><img src="${item.src}" class="gallery-main" alt="${p.name}" loading="lazy"></div>`;
+            }).join('');
+
+            const galleryDots = p.media.map((_, i) => 
+                `<div class="gallery-dot ${i === 0 ? 'active' : ''}" onclick="WatchApp.goToGallerySlide('${p.id}', ${i})"></div>`
+            ).join('');
+
             const thumbs = p.media.map((item, i) => {
-                return `<img src="${item.src}" class="gallery-thumb ${i === 0 ? 'active' : ''}" onclick="WatchApp.changeMedia('${p.id}', ${i}, this)" alt="${p.name}" loading="lazy">`;
+                return `<img src="${item.src}" class="gallery-thumb ${i === 0 ? 'active' : ''}" onclick="WatchApp.goToGallerySlide('${p.id}', ${i})" alt="${p.name}" loading="lazy">`;
             }).join('');
 
             const productUrl = `${window.location.origin}${window.location.pathname}#${p.id}`;
             const whatsappMsg = encodeURIComponent(`"${p.code}" kodlu "${p.name}" ürünü hakkında bilgi almak istiyorum.\n\nÜrün Linki: ${productUrl}`);
             const whatsappLink = `https://wa.me/905300217534?text=${whatsappMsg}`;
 
-            const firstMedia = p.media[0];
-            const mainMediaHTML = `<img src="${firstMedia.src}" id="main-${p.id}" class="gallery-main" alt="${p.name}">`;
+            const relatedProducts = this.products.filter(prod => prod.id !== p.id).slice(0, 6);
+            const relatedHTML = relatedProducts.map(rp => `
+                <div class="related-product-card" onclick="WatchApp.openDetail('${rp.id}')">
+                    <img src="${rp.media[0].src}" class="related-product-image" alt="${rp.name}" loading="lazy">
+                    <div class="related-product-info">
+                        <div class="related-product-name">${rp.name}</div>
+                        <div class="related-product-category">${this.categories[rp.category].name}</div>
+                    </div>
+                </div>
+            `).join('');
 
             return `
             <div class="detail-page" id="${p.id}">
@@ -2467,13 +2864,28 @@ class WatchStore {
                         </svg>
                     </button>
                     <span class="detail-code">${p.code}</span>
-                    <div class="detail-spacer"></div>
+                    <!-- Share button in header -->
+                    <div class="detail-header-actions">
+                        <button class="detail-share-btn" onclick="WatchApp.shareProduct('${p.id}')" title="Paylaş">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="18" cy="5" r="3"/>
+                                <circle cx="6" cy="12" r="3"/>
+                                <circle cx="18" cy="19" r="3"/>
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                            </svg>
+                        </button>
+                    </div>
                 </header>
                 <div class="detail-content">
                     <div class="detail-gallery">
-                        <div class="gallery-main-container" id="main-container-${p.id}">
-                            ${mainMediaHTML}
+                        <!-- Swipeable gallery -->
+                        <div class="gallery-main-container" id="gallery-container-${p.id}">
+                            <div class="gallery-slider" id="gallery-slider-${p.id}">
+                                ${galleryItems}
+                            </div>
                         </div>
+                        ${p.media.length > 1 ? `<div class="gallery-dots" id="gallery-dots-${p.id}">${galleryDots}</div>` : ''}
                         <div class="gallery-thumbs">${thumbs}</div>
                     </div>
                     <div class="detail-info">
@@ -2486,13 +2898,24 @@ class WatchStore {
                         <div class="detail-product-code">Ürün Kodu: ${p.code}</div>
                         <p class="detail-desc">${p.desc}</p>
                         
-                        <!-- WhatsApp butonu teknik özelliklerin üstünde -->
-                        <a href="${whatsappLink}" target="_blank" class="whatsapp-btn" onclick="this.href = WatchApp.getWhatsAppLink('${p.id}')">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                            </svg>
-                            WHATSAPP'TAN BİLGİ AL
-                        </a>
+                        <!-- Action buttons with share -->
+                        <div class="detail-actions">
+                            <a href="${whatsappLink}" target="_blank" class="whatsapp-btn" onclick="this.href = WatchApp.getWhatsAppLink('${p.id}')">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                </svg>
+                                BİLGİ AL
+                            </a>
+                            <button class="share-btn" onclick="WatchApp.shareProduct('${p.id}')" title="Paylaş">
+                                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                                    <circle cx="18" cy="5" r="3"/>
+                                    <circle cx="6" cy="12" r="3"/>
+                                    <circle cx="18" cy="19" r="3"/>
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                                </svg>
+                            </button>
+                        </div>
                         
                         <div class="section-label">TEKNİK ÖZELLİKLER</div>
                         <div class="specs-grid">
@@ -2525,10 +2948,136 @@ class WatchStore {
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Related products section -->
+                        <div class="related-products-section">
+                            <div class="related-products-header">
+                                <span class="related-products-title">DİĞER SAATLER</span>
+                            </div>
+                            <div class="related-products-scroll">
+                                ${relatedHTML}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>`;
         }).join('');
+
+        // Initialize gallery swipe for each product
+        this.products.forEach(p => {
+            this.initGallerySwipe(p.id, p.media.length);
+        });
+    }
+
+    initGallerySwipe(productId, mediaCount) {
+        if (mediaCount <= 1) return;
+
+        this.galleryStates[productId] = { currentIndex: 0 };
+
+        const container = document.getElementById(`gallery-container-${productId}`);
+        const slider = document.getElementById(`gallery-slider-${productId}`);
+        
+        if (!container || !slider) return;
+
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+        let sliderWidth = 0;
+
+        const getSliderWidth = () => container.offsetWidth;
+
+        const setPosition = (offset, animate = false) => {
+            slider.style.transition = animate ? 'transform 0.3s ease' : 'none';
+            slider.style.transform = `translateX(${offset}px)`;
+        };
+
+        const updateIndicators = (index) => {
+            const dots = document.querySelectorAll(`#gallery-dots-${productId} .gallery-dot`);
+            const thumbs = container.closest('.detail-gallery').querySelectorAll('.gallery-thumb');
+            
+            dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+            thumbs.forEach((thumb, i) => thumb.classList.toggle('active', i === index));
+        };
+
+        const goToSlide = (index, animate = true) => {
+            const currentIndex = Math.max(0, Math.min(index, mediaCount - 1));
+            this.galleryStates[productId].currentIndex = currentIndex;
+            sliderWidth = getSliderWidth();
+            const offset = -currentIndex * sliderWidth;
+            setPosition(offset, animate);
+            updateIndicators(currentIndex);
+        };
+
+        container.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            startX = touch.clientX;
+            currentX = startX;
+            isDragging = true;
+            sliderWidth = getSliderWidth();
+            slider.style.transition = 'none';
+        }, { passive: true });
+
+        container.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const touch = e.touches[0];
+            currentX = touch.clientX;
+            const diffX = currentX - startX;
+            const currentIndex = this.galleryStates[productId].currentIndex;
+            const baseOffset = -currentIndex * sliderWidth;
+            
+            let dragOffset = diffX;
+            if ((currentIndex === 0 && diffX > 0) || (currentIndex === mediaCount - 1 && diffX < 0)) {
+                dragOffset = diffX * 0.25;
+            }
+            
+            setPosition(baseOffset + dragOffset, false);
+        }, { passive: true });
+
+        const handleTouchEnd = () => {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            const diff = startX - currentX;
+            const threshold = sliderWidth * 0.2;
+            const currentIndex = this.galleryStates[productId].currentIndex;
+
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0 && currentIndex < mediaCount - 1) {
+                    goToSlide(currentIndex + 1, true);
+                } else if (diff < 0 && currentIndex > 0) {
+                    goToSlide(currentIndex - 1, true);
+                } else {
+                    goToSlide(currentIndex, true);
+                }
+            } else {
+                goToSlide(currentIndex, true);
+            }
+        };
+
+        container.addEventListener('touchend', handleTouchEnd, { passive: true });
+        container.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+    }
+
+    goToGallerySlide(productId, index) {
+        const container = document.getElementById(`gallery-container-${productId}`);
+        const slider = document.getElementById(`gallery-slider-${productId}`);
+        const product = this.products.find(p => p.id === productId);
+        
+        if (!container || !slider || !product) return;
+
+        const sliderWidth = container.offsetWidth;
+        slider.style.transition = 'transform 0.3s ease';
+        slider.style.transform = `translateX(${-index * sliderWidth}px)`;
+
+        if (this.galleryStates[productId]) {
+            this.galleryStates[productId].currentIndex = index;
+        }
+
+        const dots = document.querySelectorAll(`#gallery-dots-${productId} .gallery-dot`);
+        const thumbs = container.closest('.detail-gallery').querySelectorAll('.gallery-thumb');
+        
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+        thumbs.forEach((thumb, i) => thumb.classList.toggle('active', i === index));
     }
 
     getWhatsAppLink(productId) {
@@ -2537,24 +3086,6 @@ class WatchStore {
         const productUrl = `${window.location.origin}${window.location.pathname}#${p.id}`;
         const whatsappMsg = encodeURIComponent(`"${p.code}" kodlu "${p.name}" ürünü hakkında bilgi almak istiyorum.\n\nÜrün Linki: ${productUrl}`);
         return `https://wa.me/905300217534?text=${whatsappMsg}`;
-    }
-
-    changeMedia(productId, mediaIndex, thumbElement) {
-        const product = this.products.find(p => p.id === productId);
-        if (!product) return;
-
-        const container = document.getElementById(`main-container-${productId}`);
-        const mediaItem = product.media[mediaIndex];
-
-        const parent = thumbElement.closest('.gallery-thumbs');
-        parent.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
-        thumbElement.classList.add('active');
-
-        container.style.opacity = 0;
-        setTimeout(() => {
-            container.innerHTML = `<img src="${mediaItem.src}" id="main-${productId}" class="gallery-main" alt="${product.name}">`;
-            container.style.opacity = 1;
-        }, 150);
     }
 
     openDetail(id) {
@@ -2572,6 +3103,11 @@ class WatchStore {
             this.state.activeDetail = id;
             window.scrollTo(0, 0);
             history.pushState({ detail: id }, '', '#' + id);
+            
+            // Reset gallery to first slide
+            if (this.galleryStates[id]) {
+                this.goToGallerySlide(id, 0);
+            }
         }
     }
 
@@ -2616,7 +3152,7 @@ class WatchStore {
         const nav = document.getElementById('mobileMenuNav');
         
         let html = `
-            <li><a href="#" class="mobile-menu-link" onclick="WatchApp.goHome()">
+            <li><a href="#" class="mobile-menu-link" onclick="event.preventDefault(); WatchApp.goHome()">
                 ANA SAYFA
             </a></li>
         `;
@@ -2624,7 +3160,7 @@ class WatchStore {
         for (const [key, val] of Object.entries(this.categories)) {
             const count = this.products.filter(p => p.category === key).length;
             html += `
-                <li><a href="#" class="mobile-menu-link" onclick="WatchApp.openCategory('${key}')">
+                <li><a href="#category-${key}" class="mobile-menu-link" onclick="event.preventDefault(); WatchApp.openCategory('${key}')">
                     ${val.name.toUpperCase()}
                     <span class="mobile-menu-count">${count}</span>
                 </a></li>
