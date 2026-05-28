@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>LAN P2P Transfer</title>
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #121212;
+      --bg-card: #1e1e1e;
+      --bg-hover: #2a2a2a;
+      --text-primary: #f0f0f0;
+      --text-secondary: #a0a0a0;
+      --border: #333;
+      --accent: #4a4a4a;
+      --success: #4ade80;
+      --error: #f87171;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      text-align: center;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border-radius: 24px;
+      font-size: 0.875rem;
+      margin-top: 16px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--error);
+    }
+
+    .status-dot.online {
+      background: var(--success);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .peer-id-display {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-dark);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 1.1rem;
+      word-break: break-all;
+    }
+
+    .copy-btn {
+      background: var(--accent);
+      border: none;
+      color: var(--text-primary);
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: #5a5a5a;
+    }
+
+    .copy-btn:active {
+      transform: scale(0.98);
+    }
+
+    .input-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--text-secondary);
+    }
+
+    input[type="text"]::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .btn {
+      background: var(--text-primary);
+      color: var(--bg-dark);
+      border: none;
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: #e0e0e0;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      background: var(--accent);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--accent);
+    }
+
+    .connected-section {
+      display: none;
+    }
+
+    .connected-section.active {
+      display: block;
+    }
+
+    .connection-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: var(--bg-dark);
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .connection-info .peer-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .connection-info .avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .disconnect-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--error);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 12px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      border-color: var(--text-secondary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    textarea {
+      width: 100%;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-size: 1rem;
+      resize: vertical;
+      min-height: 120px;
+      outline: none;
+      font-family: inherit;
+      margin-bottom: 12px;
+    }
+
+    textarea:focus {
+      border-color: var(--text-secondary);
+    }
+
+    .file-drop {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 12px;
+    }
+
+    .file-drop:hover,
+    .file-drop.dragover {
+      border-color: var(--text-secondary);
+      background: var(--bg-hover);
+    }
+
+    .file-drop-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      opacity: 0.6;
+    }
+
+    .file-drop p {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .selected-file {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--bg-dark);
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .file-icon {
+      font-size: 1.5rem;
+    }
+
+    .file-name {
+      font-size: 0.875rem;
+      word-break: break-all;
+    }
+
+    .file-size {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .remove-file {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.25rem;
+      padding: 4px;
+    }
+
+    .progress-container {
+      margin-top: 16px;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-dark);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--success);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    .progress-text {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 16px;
+      max-height: 300px;
+    }
+
+    .message {
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      border-radius: 12px;
+      max-width: 85%;
+      word-break: break-word;
+    }
+
+    .message.sent {
+      background: var(--accent);
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.received {
+      background: var(--bg-dark);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message.file {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .message .file-download {
+      background: var(--bg-hover);
+      border: none;
+      color: var(--text-primary);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+
+    .message-time {
+      font-size: 0.625rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+      z-index: 100;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 400px) {
+      .container {
+        padding: 12px;
+      }
+
+      header h1 {
+        font-size: 1.25rem;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .input-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📡 P2P Transfer</h1>
+      <p>Aynı ağdaki cihazlar arasında dosya paylaşımı</p>
+      <div class="status-badge">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Bağlanıyor...</span>
+      </div>
+    </header>
+
+    <!-- Connection Section -->
+    <div id="connectionSection">
+      <div class="card">
+        <div class="card-title">Senin Peer ID</div>
+        <div class="peer-id-display">
+          <span id="myPeerId">Yükleniyor...</span>
+          <button class="copy-btn" onclick="copyPeerId()">Kopyala</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Cihaza Bağlan</div>
+        <div class="input-group">
+          <input type="text" id="remotePeerId" placeholder="Peer ID girin">
+          <button class="btn" onclick="connectToPeer()">Bağlan</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connected Section -->
+    <div class="connected-section" id="connectedSection">
+      <div class="card">
+        <div class="connection-info">
+          <div class="peer-name">
+            <div class="avatar" id="peerAvatar">?</div>
+            <div>
+              <div id="connectedPeerName">Bağlı Cihaz</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);" id="connectedPeerId"></div>
+            </div>
+          </div>
+          <button class="disconnect-btn" onclick="disconnect()">Bağlantıyı Kes</button>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('text')">💬 Mesaj</button>
+          <button class="tab" onclick="switchTab('file')">📁 Dosya</button>
+        </div>
+
+        <!-- Text Tab -->
+        <div class="tab-content active" id="textTab">
+          <div class="messages" id="messages">
+            <div class="empty-state">
+              <div class="empty-state-icon">💬</div>
+              <p>Henüz mesaj yok</p>
+            </div>
+          </div>
+          <textarea id="messageInput" placeholder="Mesajınızı yazın..."></textarea>
+          <button class="btn" onclick="sendMessage()" style="width: 100%;">Gönder</button>
+        </div>
+
+        <!-- File Tab -->
+        <div class="tab-content" id="fileTab">
+          <div class="file-drop" id="fileDrop" onclick="document.getElementById('fileInput').click()">
+            <div class="file-drop-icon">📂</div>
+            <p>Dosya seçmek için tıklayın<br>veya sürükleyip bırakın</p>
+          </div>
+          <input type="file" class="file-input" id="fileInput" onchange="handleFileSelect(event)">
+          
+          <div id="selectedFileContainer" style="display: none;">
+            <div class="selected-file">
+              <div class="file-info">
+                <span class="file-icon">📄</span>
+                <div>
+                  <div class="file-name" id="selectedFileName"></div>
+                  <div class="file-size" id="selectedFileSize"></div>
+                </div>
+              </div>
+              <button class="remove-file" onclick="removeSelectedFile()">✕</button>
+            </div>
+            <button class="btn" onclick="sendFile()" style="width: 100%;">Dosyayı Gönder</button>
+          </div>
+
+          <div class="progress-container" id="progressContainer" style="display: none;">
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">%0</div>
+          </div>
+
+          <div class="messages" id="fileMessages" style="margin-top: 16px;">
+            <div class="empty-state">
+              <div class="empty-state-icon">📁</div>
+              <p>Alınan dosyalar burada görünecek</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let peer = null;
+    let conn = null;
+    let selectedFile = null;
+    let receivingFile = null;
+    let receivedChunks = [];
+
+    const CHUNK_SIZE = 16384;
+
+    function init() {
+      const randomId = 'P' + Math.random().toString(36).substring(2, 8).toUpperCase();
+      
+      peer = new Peer(randomId, {
+        debug: 0
+      });
+
+      peer.on('open', (id) => {
+        document.getElementById('myPeerId').textContent = id;
+        document.getElementById('statusDot').classList.add('online');
+        document.getElementById('statusText').textContent = 'Çevrimiçi';
+      });
+
+      peer.on('connection', (connection) => {
+        if (conn) {
+          connection.close();
+          return;
+        }
+        conn = connection;
+        setupConnection();
+      });
+
+      peer.on('error', (err) => {
+        console.error('Peer error:', err);
+        if (err.type === 'peer-unavailable') {
+          showToast('Cihaz bulunamadı');
+        } else {
+          showToast('Bağlantı hatası: ' + err.type);
+        }
+      });
+
+      peer.on('disconnected', () => {
+        document.getElementById('statusDot').classList.remove('online');
+        document.getElementById('statusText').textContent = 'Bağlantı kesildi';
+      });
+
+      setupDragDrop();
+    }
+
+    function connectToPeer() {
+      const remotePeerId = document.getElementById('remotePeerId').value.trim();
+      if (!remotePeerId) {
+        showToast('Peer ID girin');
+        return;
+      }
+
+      conn = peer.connect(remotePeerId, { reliable: true });
+      setupConnection();
+    }
+
+    function setupConnection() {
+      conn.on('open', () => {
+        showConnectedUI();
+        showToast('Bağlantı kuruldu!');
+      });
+
+      conn.on('data', (data) => {
+        handleIncomingData(data);
+      });
+
+      conn.on('close', () => {
+        disconnect();
+        showToast('Bağlantı kapandı');
+      });
+
+      conn.on('error', (err) => {
+        console.error('Connection error:', err);
+        showToast('Bağlantı hatası');
+      });
+    }
+
+    function showConnectedUI() {
+      document.getElementById('connectionSection').style.display = 'none';
+      document.getElementById('connectedSection').classList.add('active');
+      document.getElementById('connectedPeerId').textContent = conn.peer;
+      document.getElementById('peerAvatar').textContent = conn.peer.charAt(0);
+      document.getElementById('connectedPeerName').textContent = 'Cihaz ' + conn.peer;
+    }
+
+    function disconnect() {
+      if (conn) {
+        conn.close();
+        conn = null;
+      }
+      document.getElementById('connectionSection').style.display = 'block';
+      document.getElementById('connectedSection').classList.remove('active');
+      document.getElementById('remotePeerId').value = '';
+      resetUI();
+    }
+
+    function resetUI() {
+      document.getElementById('messages').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">💬</div>
+          <p>Henüz mesaj yok</p>
+        </div>
+      `;
+      document.getElementById('fileMessages').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">📁</div>
+          <p>Alınan dosyalar burada görünecek</p>
+        </div>
+      `;
+      removeSelectedFile();
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      
+      if (tab === 'text') {
+        document.querySelectorAll('.tab')[0].classList.add('active');
+        document.getElementById('textTab').classList.add('active');
+      } else {
+        document.querySelectorAll('.tab')[1].classList.add('active');
+        document.getElementById('fileTab').classList.add('active');
+      }
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const text = input.value.trim();
+      if (!text || !conn) return;
+
+      conn.send({ type: 'text', content: text });
+      addMessage(text, true);
+      input.value = '';
+    }
+
+    function addMessage(content, sent, isFile = false, fileData = null) {
+      const container = isFile ? document.getElementById('fileMessages') : document.getElementById('messages');
+      
+      if (container.querySelector('.empty-state')) {
+        container.innerHTML = '';
+      }
+
+      const msg = document.createElement('div');
+      msg.className = `message ${sent ? 'sent' : 'received'}`;
+      
+      if (isFile && fileData) {
+        msg.classList.add('file');
+        msg.innerHTML = `
+          <span class="file-icon">📄</span>
+          <div>
+            <div class="file-name">${fileData.name}</div>
+            <div class="file-size">${formatSize(fileData.size)}</div>
+          </div>
+          <button class="file-download" onclick="downloadFile('${fileData.id}')">İndir</button>
+        `;
+      } else {
+        msg.textContent = content;
+      }
+
+      const time = document.createElement('div');
+      time.className = 'message-time';
+      time.textContent = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+      msg.appendChild(time);
+
+      container.appendChild(msg);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function handleIncomingData(data) {
+      if (data.type === 'text') {
+        addMessage(data.content, false);
+      } else if (data.type === 'file-start') {
+        receivingFile = {
+          name: data.name,
+          size: data.size,
+          totalChunks: data.totalChunks
+        };
+        receivedChunks = [];
+        showProgress(0, 'Dosya alınıyor...');
+      } else if (data.type === 'file-chunk') {
+        receivedChunks.push(data.chunk);
+        const progress = (receivedChunks.length / receivingFile.totalChunks) * 100;
+        showProgress(progress, `%${Math.round(progress)} alındı`);
+      } else if (data.type === 'file-end') {
+        const blob = new Blob(receivedChunks);
+        const id = 'file_' + Date.now();
+        window[id] = { blob, name: receivingFile.name };
+        
+        addMessage('', false, true, {
+          name: receivingFile.name,
+          size: receivingFile.size,
+          id: id
+        });
+        
+        hideProgress();
+        showToast('Dosya alındı: ' + receivingFile.name);
+        receivingFile = null;
+        receivedChunks = [];
+      }
+    }
+
+    function downloadFile(id) {
+      const file = window[id];
+      if (!file) return;
+
+      const url = URL.createObjectURL(file.blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = file.name;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function setupDragDrop() {
+      const dropZone = document.getElementById('fileDrop');
+      
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
+        dropZone.addEventListener(event, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        });
+      });
+
+      ['dragenter', 'dragover'].forEach(event => {
+        dropZone.addEventListener(event, () => dropZone.classList.add('dragover'));
+      });
+
+      ['dragleave', 'drop'].forEach(event => {
+        dropZone.addEventListener(event, () => dropZone.classList.remove('dragover'));
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          setSelectedFile(files[0]);
+        }
+      });
+    }
+
+    function handleFileSelect(e) {
+      if (e.target.files.length > 0) {
+        setSelectedFile(e.target.files[0]);
+      }
+    }
+
+    function setSelectedFile(file) {
+      selectedFile = file;
+      document.getElementById('fileDrop').style.display = 'none';
+      document.getElementById('selectedFileContainer').style.display = 'block';
+      document.getElementById('selectedFileName').textContent = file.name;
+      document.getElementById('selectedFileSize').textContent = formatSize(file.size);
+    }
+
+    function removeSelectedFile() {
+      selectedFile = null;
+      document.getElementById('fileDrop').style.display = 'block';
+      document.getElementById('selectedFileContainer').style.display = 'none';
+      document.getElementById('fileInput').value = '';
+    }
+
+    async function sendFile() {
+      if (!selectedFile || !conn) return;
+
+      const file = selectedFile;
+      const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+
+      conn.send({
+        type: 'file-start',
+        name: file.name,
+        size: file.size,
+        totalChunks: totalChunks
+      });
+
+      const reader = new FileReader();
+      let offset = 0;
+
+      const readNextChunk = () => {
+        const slice = file.slice(offset, offset + CHUNK_SIZE);
+        reader.readAsArrayBuffer(slice);
+      };
+
+      reader.onload = (e) => {
+        conn.send({
+          type: 'file-chunk',
+          chunk: e.target.result
+        });
+
+        offset += CHUNK_SIZE;
+        const progress = Math.min((offset / file.size) * 100, 100);
+        showProgress(progress, `%${Math.round(progress)} gönderildi`);
+
+        if (offset < file.size) {
+          readNextChunk();
+        } else {
+          conn.send({ type: 'file-end' });
+          hideProgress();
+          showToast('Dosya gönderildi!');
+          removeSelectedFile();
+        }
+      };
+
+      showProgress(0, 'Gönderiliyor...');
+      readNextChunk();
+    }
+
+    function showProgress(percent, text) {
+      document.getElementById('progressContainer').style.display = 'block';
+      document.getElementById('progressFill').style.width = percent + '%';
+      document.getElementById('progressText').textContent = text;
+    }
+
+    function hideProgress() {
+      document.getElementById('progressContainer').style.display = 'none';
+    }
+
+    function copyPeerId() {
+      const id = document.getElementById('myPeerId').textContent;
+      navigator.clipboard.writeText(id).then(() => {
+        showToast('Kopyalandı!');
+      });
+    }
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+      return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    document.getElementById('remotePeerId').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        connectToPeer();
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>
