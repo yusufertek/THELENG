@@ -4,12 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>P2P Transfer - Audio & QR</title>
-    
-    <!-- Libraries loaded at end of body for performance -->
-    
+    <title>QR Transfer</title>
     <style>
         * {
             margin: 0;
@@ -18,151 +13,66 @@
         }
 
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #141414;
-            --bg-tertiary: #1a1a1a;
+            --bg: #0a0a0a;
             --bg-card: #111111;
-            --border-color: #2a2a2a;
-            --border-light: #333333;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --text-muted: #666666;
-            --accent: #ffffff;
-            --accent-dim: #888888;
-            --success: #4ade80;
-            --error: #f87171;
-            --warning: #fbbf24;
+            --bg-secondary: #1a1a1a;
+            --border: #2a2a2a;
+            --text: #ffffff;
+            --text-secondary: #888888;
+            --text-muted: #555555;
+            --success: #22c55e;
+            --error: #ef4444;
             --radius: 16px;
             --radius-sm: 10px;
-            --radius-xs: 6px;
-            --shadow: 0 4px 24px rgba(0,0,0,0.4);
-            --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
         }
 
         html, body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             min-height: 100dvh;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-light);
-            border-radius: 3px;
-        }
-
-        /* Main Container */
-        .app-container {
-            max-width: 480px;
+        .app {
+            max-width: 440px;
             margin: 0 auto;
             padding: 16px;
             min-height: 100vh;
             min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
         }
 
         /* Header */
         .header {
             text-align: center;
-            padding: 24px 0 20px;
-            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
             margin-bottom: 20px;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 8px;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--text-primary);
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon svg {
-            width: 24px;
-            height: 24px;
-            color: var(--bg-primary);
-        }
-
-        .logo h1 {
+        .header h1 {
             font-size: 1.5rem;
             font-weight: 600;
-            letter-spacing: -0.02em;
+            margin-bottom: 4px;
         }
 
-        .subtitle {
+        .header p {
             color: var(--text-secondary);
             font-size: 0.875rem;
         }
 
-        /* Status Bar */
-        .status-bar {
+        /* Tabs */
+        .tabs {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 10px 16px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-            margin-bottom: 20px;
-            font-size: 0.813rem;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--text-muted);
-            animation: pulse 2s infinite;
-        }
-
-        .status-dot.connected {
-            background: var(--success);
-        }
-
-        .status-dot.error {
-            background: var(--error);
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Tab Navigation */
-        .tab-nav {
-            display: flex;
-            background: var(--bg-secondary);
+            background: var(--bg-card);
             border-radius: var(--radius);
             padding: 4px;
             margin-bottom: 20px;
-            gap: 4px;
         }
 
         .tab-btn {
             flex: 1;
-            padding: 12px 16px;
+            padding: 12px;
             border: none;
             background: transparent;
             color: var(--text-secondary);
@@ -170,319 +80,97 @@
             font-weight: 500;
             border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .tab-btn:hover {
-            color: var(--text-primary);
-            background: var(--bg-tertiary);
+            transition: all 0.2s;
         }
 
         .tab-btn.active {
-            background: var(--text-primary);
-            color: var(--bg-primary);
+            background: var(--text);
+            color: var(--bg);
         }
 
-        .tab-btn svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Tab Content */
         .tab-content {
             display: none;
-            flex: 1;
         }
 
         .tab-content.active {
-            display: flex;
-            flex-direction: column;
+            display: block;
         }
 
-        /* Cards */
+        /* Card */
         .card {
             background: var(--bg-card);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 20px;
             margin-bottom: 16px;
         }
 
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
         .card-title {
-            font-size: 0.938rem;
+            font-size: 0.875rem;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card-title svg {
-            width: 18px;
-            height: 18px;
-            color: var(--text-secondary);
-        }
-
-        /* QR Display */
-        .qr-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .qr-wrapper {
-            background: #ffffff;
-            padding: 16px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .qr-wrapper canvas {
-            display: block;
-            width: 200px !important;
-            height: 200px !important;
-        }
-
-        .qr-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(255,255,255,0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.15s;
-            pointer-events: none;
-        }
-
-        .qr-wrapper.refreshing .qr-overlay {
-            opacity: 1;
-        }
-
-        /* Scanner */
-        .scanner-container {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1;
-            max-width: 300px;
-            margin: 0 auto;
-            border-radius: var(--radius);
-            overflow: hidden;
-            background: var(--bg-tertiary);
-        }
-
-        #qr-reader {
-            width: 100% !important;
-            border: none !important;
-        }
-
-        #qr-reader video {
-            border-radius: var(--radius);
-        }
-
-        #qr-reader__scan_region {
-            background: transparent !important;
-        }
-
-        #qr-reader__dashboard {
-            display: none !important;
-        }
-
-        .scanner-overlay {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .scanner-corners {
-            position: absolute;
-            inset: 20%;
-            border: 2px solid var(--text-primary);
-            border-radius: var(--radius-sm);
-            opacity: 0.8;
-        }
-
-        .scanner-line {
-            position: absolute;
-            left: 20%;
-            right: 20%;
-            height: 2px;
-            background: var(--text-primary);
-            top: 20%;
-            animation: scan 2s ease-in-out infinite;
-        }
-
-        @keyframes scan {
-            0%, 100% { top: 20%; }
-            50% { top: 78%; }
-        }
-
-        /* Speed Control */
-        .speed-control {
-            margin-top: 16px;
-        }
-
-        .speed-label {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.813rem;
-            color: var(--text-secondary);
-        }
-
-        .speed-value {
-            font-weight: 600;
-            color: var(--text-primary);
-            font-variant-numeric: tabular-nums;
-        }
-
-        .speed-slider {
-            width: 100%;
-            height: 6px;
-            -webkit-appearance: none;
-            appearance: none;
-            background: var(--bg-tertiary);
-            border-radius: 3px;
-            outline: none;
-        }
-
-        .speed-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            background: var(--text-primary);
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: var(--shadow);
-        }
-
-        .speed-slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            background: var(--text-primary);
-            border-radius: 50%;
-            cursor: pointer;
-            border: none;
-        }
-
-        .speed-presets {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .preset-btn {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            font-weight: 500;
-            border-radius: var(--radius-xs);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .preset-btn:hover, .preset-btn.active {
-            border-color: var(--text-primary);
-            color: var(--text-primary);
-        }
-
-        /* Input & Textarea */
-        .input-group {
             margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .input-label {
-            display: block;
-            font-size: 0.813rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .text-input {
+        /* Input */
+        .textarea {
             width: 100%;
-            padding: 14px 16px;
+            min-height: 100px;
+            padding: 14px;
             background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             border-radius: var(--radius-sm);
-            color: var(--text-primary);
+            color: var(--text);
             font-size: 0.938rem;
-            resize: none;
-            transition: border-color 0.2s;
+            resize: vertical;
+            font-family: inherit;
         }
 
-        .text-input:focus {
+        .textarea:focus {
             outline: none;
-            border-color: var(--text-primary);
+            border-color: var(--text-secondary);
         }
 
-        .text-input::placeholder {
+        .textarea::placeholder {
             color: var(--text-muted);
         }
 
         /* Buttons */
         .btn {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 14px 24px;
+            width: 100%;
+            padding: 14px;
             border: none;
             border-radius: var(--radius-sm);
             font-size: 0.938rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            width: 100%;
-        }
-
-        .btn svg {
-            width: 18px;
-            height: 18px;
         }
 
         .btn-primary {
-            background: var(--text-primary);
-            color: var(--bg-primary);
+            background: var(--text);
+            color: var(--bg);
         }
 
         .btn-primary:hover {
-            background: var(--accent-dim);
+            opacity: 0.9;
         }
 
         .btn-primary:disabled {
-            background: var(--border-light);
-            color: var(--text-muted);
+            background: var(--text-muted);
             cursor: not-allowed;
         }
 
         .btn-secondary {
             background: var(--bg-secondary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-tertiary);
-            border-color: var(--border-light);
+            color: var(--text);
+            border: 1px solid var(--border);
         }
 
         .btn-danger {
@@ -492,250 +180,263 @@
 
         .btn-group {
             display: flex;
-            gap: 12px;
+            gap: 10px;
+            margin-top: 16px;
         }
 
         .btn-group .btn {
             flex: 1;
         }
 
+        /* QR Container */
+        .qr-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-box {
+            background: white;
+            padding: 16px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+        }
+
+        #qrCanvas {
+            display: block;
+            width: 200px;
+            height: 200px;
+        }
+
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            text-align: center;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+        }
+
+        /* Speed Control */
+        .speed-section {
+            width: 100%;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .speed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .speed-label {
+            font-size: 0.813rem;
+            color: var(--text-secondary);
+        }
+
+        .speed-value {
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .speed-slider {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--text);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .speed-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--text);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .speed-presets {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .preset-btn {
+            padding: 8px 4px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 0.688rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preset-btn:hover,
+        .preset-btn.active {
+            border-color: var(--text);
+            color: var(--text);
+        }
+
         /* Progress */
-        .progress-container {
-            margin: 16px 0;
+        .progress-section {
+            margin-top: 16px;
         }
 
         .progress-bar {
             height: 6px;
-            background: var(--bg-tertiary);
+            background: var(--bg-secondary);
             border-radius: 3px;
             overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
-            background: var(--text-primary);
+            background: var(--text);
             border-radius: 3px;
-            transition: width 0.3s ease;
+            transition: width 0.15s;
             width: 0%;
         }
 
-        .progress-text {
+        .progress-info {
             display: flex;
             justify-content: space-between;
+            margin-top: 8px;
             font-size: 0.75rem;
             color: var(--text-secondary);
-            margin-top: 8px;
         }
 
-        /* Data Display */
-        .data-display {
+        /* Scanner */
+        .scanner-area {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            aspect-ratio: 1;
+            margin: 0 auto;
             background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        #scannerVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .scanner-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .scanner-frame {
+            position: absolute;
+            inset: 15%;
+            border: 2px solid var(--text);
+            border-radius: 8px;
+            opacity: 0.7;
+        }
+
+        .scan-line {
+            position: absolute;
+            left: 15%;
+            right: 15%;
+            height: 2px;
+            background: var(--success);
+            top: 15%;
+            animation: scanning 2s ease-in-out infinite;
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        @keyframes scanning {
+            0%, 100% { top: 15%; }
+            50% { top: 83%; }
+        }
+
+        .scanner-status {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Received Data */
+        .received-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
             border-radius: var(--radius-sm);
             padding: 16px;
-            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-            font-size: 0.813rem;
-            color: var(--text-secondary);
-            max-height: 200px;
+            min-height: 120px;
+            max-height: 300px;
             overflow-y: auto;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.813rem;
             word-break: break-all;
             line-height: 1.6;
+            color: var(--text-secondary);
         }
 
-        .data-display.success {
+        .received-box.has-data {
             border-color: var(--success);
             color: var(--success);
         }
 
-        .data-display.error {
-            border-color: var(--error);
-            color: var(--error);
-        }
-
-        /* Session Info */
-        .session-info {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .session-badge {
+        .received-empty {
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 8px 12px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-xs);
-            font-size: 0.75rem;
-        }
-
-        .session-badge svg {
-            width: 14px;
-            height: 14px;
-            color: var(--text-secondary);
-        }
-
-        .session-badge span {
-            color: var(--text-secondary);
-        }
-
-        .session-badge strong {
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        /* Audio Visualizer */
-        .visualizer-container {
-            height: 60px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-            margin: 16px 0;
-            display: flex;
-            align-items: flex-end;
             justify-content: center;
-            gap: 2px;
-            padding: 8px;
-        }
-
-        .visualizer-bar {
-            width: 4px;
-            background: var(--text-primary);
-            border-radius: 2px;
-            transition: height 0.05s ease;
-            min-height: 4px;
-        }
-
-        /* Messages Log */
-        .messages-log {
-            max-height: 300px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .message-item {
-            padding: 12px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-            font-size: 0.875rem;
-        }
-
-        .message-item.sent {
-            background: var(--bg-tertiary);
-            border-left: 3px solid var(--text-primary);
-        }
-
-        .message-item.received {
-            border-left: 3px solid var(--success);
-        }
-
-        .message-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.688rem;
+            height: 100px;
             color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .message-content {
-            color: var(--text-primary);
-            word-break: break-word;
-        }
-
-        /* Permissions */
-        .permissions-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .permission-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-        }
-
-        .permission-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .permission-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--bg-tertiary);
-            border-radius: var(--radius-xs);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .permission-icon svg {
-            width: 18px;
-            height: 18px;
-            color: var(--text-secondary);
-        }
-
-        .permission-icon.granted svg {
-            color: var(--success);
-        }
-
-        .permission-text {
             font-size: 0.875rem;
         }
 
-        .permission-status {
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-weight: 500;
-        }
-
-        .permission-status.granted {
-            background: rgba(74, 222, 128, 0.15);
-            color: var(--success);
-        }
-
-        .permission-status.denied {
-            background: rgba(248, 113, 113, 0.15);
-            color: var(--error);
-        }
-
-        .permission-status.pending {
-            background: var(--bg-tertiary);
-            color: var(--text-secondary);
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
-        }
-
-        .empty-state svg {
-            width: 48px;
-            height: 48px;
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
             margin-bottom: 16px;
-            opacity: 0.5;
         }
 
-        .empty-state h3 {
-            font-size: 1rem;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: var(--text-primary);
+        .stat-item {
+            background: var(--bg-secondary);
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            text-align: center;
         }
 
-        .empty-state p {
-            font-size: 0.875rem;
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-label {
+            font-size: 0.688rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
         }
 
         /* Toast */
@@ -745,1140 +446,581 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
             width: calc(100% - 32px);
-            max-width: 400px;
+            max-width: 380px;
         }
 
         .toast {
-            padding: 14px 20px;
+            padding: 14px 18px;
             background: var(--bg-card);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            animation: slideUp 0.3s ease;
+            margin-top: 8px;
+            animation: slideIn 0.3s ease;
+            font-size: 0.875rem;
         }
 
         .toast.success {
             border-color: var(--success);
+            color: var(--success);
         }
 
         .toast.error {
             border-color: var(--error);
-        }
-
-        .toast svg {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-
-        .toast.success svg {
-            color: var(--success);
-        }
-
-        .toast.error svg {
             color: var(--error);
         }
 
-        .toast-message {
-            flex: 1;
-            font-size: 0.875rem;
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Chunk indicator */
+        .chunk-indicator {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 12px;
         }
 
-        /* Loading Spinner */
-        .spinner {
-            width: 24px;
-            height: 24px;
-            border: 2px solid var(--bg-tertiary);
-            border-top-color: var(--text-primary);
+        .chunk-dot {
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            background: var(--border);
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .chunk-dot.active {
+            background: var(--text);
         }
 
-        /* Responsive */
-        @media (max-width: 480px) {
-            .app-container {
-                padding: 12px;
-            }
-
-            .header {
-                padding: 16px 0;
-            }
-
-            .logo h1 {
-                font-size: 1.25rem;
-            }
-
-            .card {
-                padding: 16px;
-            }
-
-            .qr-wrapper canvas {
-                width: 180px !important;
-                height: 180px !important;
-            }
-
-            .btn {
-                padding: 12px 20px;
-            }
-
-            .speed-presets {
-                flex-wrap: wrap;
-            }
-
-            .preset-btn {
-                min-width: calc(50% - 4px);
-            }
+        .chunk-dot.received {
+            background: var(--success);
         }
 
-        @media (min-width: 768px) {
-            .app-container {
-                max-width: 600px;
-            }
-
-            .qr-wrapper canvas {
-                width: 240px !important;
-                height: 240px !important;
-            }
-        }
-
-        /* Animation for QR refresh */
-        .qr-flash {
-            animation: flash 0.1s ease;
-        }
-
-        @keyframes flash {
-            0% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-
-        /* Hide scanner controls */
-        #qr-reader__dashboard_section_swaplink,
-        #qr-reader__dashboard_section_csr button,
-        #qr-reader__status_span {
+        /* Hidden */
+        .hidden {
             display: none !important;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
+    <div class="app">
         <header class="header">
-            <div class="logo">
-                <div class="logo-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                    </svg>
-                </div>
-                <h1>P2P Transfer</h1>
-            </div>
-            <p class="subtitle">Audio & QR ile güvenli veri aktarımı</p>
+            <h1>QR Transfer</h1>
+            <p>Cihazlar arasi hizli veri aktarimi</p>
         </header>
 
-        <!-- Status Bar -->
-        <div class="status-bar">
-            <span class="status-dot" id="statusDot"></span>
-            <span id="statusText">Bağlantı bekleniyor...</span>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="send">Gonder</button>
+            <button class="tab-btn" data-tab="receive">Al</button>
         </div>
 
-        <!-- Tab Navigation -->
-        <nav class="tab-nav">
-            <button class="tab-btn active" data-tab="send">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-                </svg>
-                Gönder
-            </button>
-            <button class="tab-btn" data-tab="receive">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-                </svg>
-                Al
-            </button>
-            <button class="tab-btn" data-tab="settings">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
-                </svg>
-                Ayarlar
-            </button>
-        </nav>
-
-        <!-- Send Tab -->
+        <!-- SEND TAB -->
         <div class="tab-content active" id="tab-send">
-            <!-- Session Info -->
-            <div class="session-info">
-                <div class="session-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                        <path d="M7 11V7a5 5 0 0110 0v4"/>
-                    </svg>
-                    <span>Session:</span>
-                    <strong id="sessionId">-</strong>
-                </div>
-                <div class="session-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-                        <line x1="12" y1="18" x2="12.01" y2="18"/>
-                    </svg>
-                    <span>Device:</span>
-                    <strong id="deviceId">-</strong>
+            <div class="card">
+                <div class="card-title">Gonderilecek Veri</div>
+                <textarea class="textarea" id="sendData" placeholder="Gondermek istediginiz metni buraya yazin..."></textarea>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="startBtn">Gondermeye Basla</button>
+                    <button class="btn btn-danger hidden" id="stopBtn">Durdur</button>
                 </div>
             </div>
 
-            <!-- QR Code Card -->
             <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="7" height="7"/>
-                            <rect x="14" y="3" width="7" height="7"/>
-                            <rect x="14" y="14" width="7" height="7"/>
-                            <rect x="3" y="14" width="7" height="7"/>
-                        </svg>
-                        QR Kod
-                    </h2>
-                    <button class="btn btn-secondary" style="width: auto; padding: 8px 12px; font-size: 0.75rem;" id="refreshQRBtn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
-                            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-                        </svg>
-                        Yenile
-                    </button>
-                </div>
-                <div class="qr-container">
-                    <div class="qr-wrapper" id="qrWrapper">
-                        <canvas id="qrCanvas"></canvas>
-                        <div class="qr-overlay">
-                            <div class="spinner"></div>
+                <div class="card-title">QR Kod</div>
+                <div class="qr-area">
+                    <div class="qr-box" id="qrBox">
+                        <div class="qr-placeholder" id="qrPlaceholder">Veri girin ve gondermeye baslayin</div>
+                        <canvas id="qrCanvas" class="hidden"></canvas>
+                    </div>
+
+                    <div class="progress-section hidden" id="sendProgress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-info">
+                            <span id="chunkInfo">0 / 0</span>
+                            <span id="byteInfo">0 byte</span>
+                        </div>
+                        <div class="chunk-indicator" id="chunkIndicator"></div>
+                    </div>
+
+                    <div class="speed-section">
+                        <div class="speed-header">
+                            <span class="speed-label">QR Degisim Hizi</span>
+                            <span class="speed-value" id="speedValue">200ms</span>
+                        </div>
+                        <input type="range" class="speed-slider" id="speedSlider" min="30" max="2000" value="200">
+                        <div class="speed-presets">
+                            <button class="preset-btn" data-speed="30">Ultra</button>
+                            <button class="preset-btn" data-speed="50">Cok Hizli</button>
+                            <button class="preset-btn active" data-speed="200">Hizli</button>
+                            <button class="preset-btn" data-speed="500">Normal</button>
                         </div>
                     </div>
-                </div>
-
-                <!-- Speed Control -->
-                <div class="speed-control">
-                    <div class="speed-label">
-                        <span>QR Değişim Hızı</span>
-                        <span class="speed-value"><span id="speedValue">1000</span> ms</span>
-                    </div>
-                    <input type="range" class="speed-slider" id="speedSlider" min="50" max="3000" value="1000" step="50">
-                    <div class="speed-presets">
-                        <button class="preset-btn" data-speed="50">Ultra (50ms)</button>
-                        <button class="preset-btn" data-speed="100">Hızlı (100ms)</button>
-                        <button class="preset-btn" data-speed="500">Normal (500ms)</button>
-                        <button class="preset-btn active" data-speed="1000">Yavaş (1s)</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Data Input Card -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
-                        </svg>
-                        Veri Gönder
-                    </h2>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Göndermek istediğiniz metin veya veri</label>
-                    <textarea class="text-input" id="sendData" rows="4" placeholder="Metin, URL veya veri girin..."></textarea>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" id="startSendBtn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
-                        </svg>
-                        Gönder
-                    </button>
-                    <button class="btn btn-secondary" id="stopSendBtn" style="display: none;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="6" y="4" width="4" height="16"/>
-                            <rect x="14" y="4" width="4" height="16"/>
-                        </svg>
-                        Durdur
-                    </button>
-                </div>
-
-                <!-- Progress -->
-                <div class="progress-container" id="sendProgress" style="display: none;">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="sendProgressFill"></div>
-                    </div>
-                    <div class="progress-text">
-                        <span id="sendProgressText">0%</span>
-                        <span id="sendChunkText">0 / 0 parça</span>
-                    </div>
-                </div>
-
-                <!-- Audio Visualizer -->
-                <div class="visualizer-container" id="sendVisualizer" style="display: none;">
-                    <!-- Bars will be added dynamically -->
                 </div>
             </div>
         </div>
 
-        <!-- Receive Tab -->
+        <!-- RECEIVE TAB -->
         <div class="tab-content" id="tab-receive">
-            <!-- Scanner Card -->
             <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
-                            <circle cx="12" cy="13" r="4"/>
-                        </svg>
-                        QR Tarama
-                    </h2>
-                    <button class="btn btn-secondary" style="width: auto; padding: 8px 12px; font-size: 0.75rem;" id="toggleScannerBtn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
-                        </svg>
-                        Başlat
-                    </button>
-                </div>
-                <div class="scanner-container" id="scannerContainer">
-                    <div id="qr-reader"></div>
+                <div class="card-title">QR Tarayici</div>
+                <div class="scanner-area" id="scannerArea">
+                    <video id="scannerVideo" autoplay playsinline></video>
                     <div class="scanner-overlay">
-                        <div class="scanner-corners"></div>
-                        <div class="scanner-line"></div>
+                        <div class="scanner-frame"></div>
+                        <div class="scan-line"></div>
                     </div>
+                </div>
+                <div class="scanner-status" id="scannerStatus">Tarayiciyi baslatmak icin asagidaki butona tiklayin</div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="toggleScanner">Tarayiciyi Baslat</button>
                 </div>
             </div>
 
-            <!-- Audio Receive Card -->
             <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
-                            <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/>
-                        </svg>
-                        Ses Alımı
-                    </h2>
-                    <button class="btn btn-secondary" style="width: auto; padding: 8px 12px; font-size: 0.75rem;" id="toggleAudioBtn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
-                        </svg>
-                        Dinle
-                    </button>
-                </div>
-                <div class="visualizer-container" id="receiveVisualizer">
-                    <!-- Bars will be added dynamically -->
-                </div>
-            </div>
-
-            <!-- Received Data -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
-                            <path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/>
-                        </svg>
-                        Alınan Veriler
-                    </h2>
-                    <button class="btn btn-secondary" style="width: auto; padding: 8px 12px; font-size: 0.75rem;" id="clearReceivedBtn">
-                        Temizle
-                    </button>
-                </div>
-                <div class="messages-log" id="receivedMessages">
-                    <div class="empty-state">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
-                            <path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/>
-                        </svg>
-                        <h3>Henüz veri yok</h3>
-                        <p>QR tarayıcıyı başlatın veya ses dinlemeyi aktifleştirin</p>
+                <div class="card-title">Alinan Veriler</div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="receivedChunks">0</div>
+                        <div class="stat-label">Parca</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalChunks">?</div>
+                        <div class="stat-label">Toplam</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="receivedBytes">0</div>
+                        <div class="stat-label">Byte</div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Settings Tab -->
-        <div class="tab-content" id="tab-settings">
-            <!-- Permissions -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        </svg>
-                        İzinler
-                    </h2>
-                </div>
-                <div class="permissions-list">
-                    <div class="permission-item">
-                        <div class="permission-info">
-                            <div class="permission-icon" id="cameraPermIcon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
-                                    <circle cx="12" cy="13" r="4"/>
-                                </svg>
-                            </div>
-                            <span class="permission-text">Kamera</span>
-                        </div>
-                        <span class="permission-status pending" id="cameraPermStatus">Bekliyor</span>
-                    </div>
-                    <div class="permission-item">
-                        <div class="permission-info">
-                            <div class="permission-icon" id="micPermIcon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
-                                    <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/>
-                                </svg>
-                            </div>
-                            <span class="permission-text">Mikrofon</span>
-                        </div>
-                        <span class="permission-status pending" id="micPermStatus">Bekliyor</span>
-                    </div>
-                    <div class="permission-item">
-                        <div class="permission-info">
-                            <div class="permission-icon" id="audioPermIcon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                                    <path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>
-                                </svg>
-                            </div>
-                            <span class="permission-text">Ses Çıkışı</span>
-                        </div>
-                        <span class="permission-status pending" id="audioPermStatus">Bekliyor</span>
-                    </div>
-                </div>
-                <button class="btn btn-primary" style="margin-top: 16px;" id="requestPermBtn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    </svg>
-                    Tüm İzinleri İste
-                </button>
-            </div>
-
-            <!-- Audio Settings -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                            <path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>
-                        </svg>
-                        Ses Ayarları
-                    </h2>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Ses Modu</label>
-                    <div class="speed-presets" style="margin-top: 0;">
-                        <button class="preset-btn active" data-mode="audible" id="modeAudible">Normal</button>
-                        <button class="preset-btn" data-mode="ultrasonic" id="modeUltrasonic">Ultrasonik</button>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Ses Seviyesi</label>
-                    <input type="range" class="speed-slider" id="volumeSlider" min="0" max="100" value="80">
-                </div>
-            </div>
-
-            <!-- Session Management -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
-                            <circle cx="9" cy="7" r="4"/>
-                            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
-                        </svg>
-                        Oturum
-                    </h2>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Oturum ID</label>
-                    <input type="text" class="text-input" id="sessionInput" placeholder="Otomatik oluşturuldu" readonly>
+                <div class="chunk-indicator" id="receiveChunkIndicator"></div>
+                <div class="received-box" id="receivedData">
+                    <div class="received-empty">Henuz veri alinmadi</div>
                 </div>
                 <div class="btn-group">
-                    <button class="btn btn-secondary" id="newSessionBtn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-                        </svg>
-                        Yeni Oturum
-                    </button>
-                    <button class="btn btn-secondary" id="copySessionBtn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                        </svg>
-                        Kopyala
-                    </button>
+                    <button class="btn btn-secondary" id="copyReceived">Kopyala</button>
+                    <button class="btn btn-secondary" id="clearReceived">Temizle</button>
                 </div>
-            </div>
-
-            <!-- About -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M12 16v-4M12 8h.01"/>
-                        </svg>
-                        Hakkında
-                    </h2>
-                </div>
-                <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">
-                    P2P Transfer, cihazlar arası güvenli veri aktarımı sağlayan sunucusuz bir sistemdir. 
-                    QR kod ile eşleşme ve ses dalgaları ile veri transferi yapar. 
-                    Tüm veriler yerel olarak işlenir, sunucuya gönderilmez.
-                </p>
             </div>
         </div>
+
+        <div class="toast-container" id="toastContainer"></div>
     </div>
 
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
-
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <script>
-        // ========================================
-        // P2P TRANSFER SYSTEM - MAIN APPLICATION
-        // ========================================
-
-        // Utility Functions
-        const Utils = {
-            generateId: (length = 8) => {
-                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                let result = '';
-                for (let i = 0; i < length; i++) {
-                    result += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                return result;
-            },
-            
-            formatTime: (date = new Date()) => {
-                return date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            },
-            
-            chunkString: (str, size) => {
-                const chunks = [];
-                for (let i = 0; i < str.length; i += size) {
-                    chunks.push(str.slice(i, i + size));
-                }
-                return chunks;
-            },
-            
-            debounce: (func, wait) => {
-                let timeout;
-                return function executedFunction(...args) {
-                    const later = () => {
-                        clearTimeout(timeout);
-                        func(...args);
-                    };
-                    clearTimeout(timeout);
-                    timeout = setTimeout(later, wait);
-                };
-            }
-        };
-
-        // Toast Notifications
+        // Toast System
         const Toast = {
-            show: (message, type = 'info') => {
+            show(message, type = 'info') {
                 const container = document.getElementById('toastContainer');
                 const toast = document.createElement('div');
                 toast.className = `toast ${type}`;
-                
-                const icon = type === 'success' 
-                    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>'
-                    : type === 'error'
-                    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
-                    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>';
-                
-                toast.innerHTML = `${icon}<span class="toast-message">${message}</span>`;
+                toast.textContent = message;
                 container.appendChild(toast);
-                
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    toast.style.transform = 'translateY(20px)';
-                    setTimeout(() => toast.remove(), 300);
-                }, 3000);
+                setTimeout(() => toast.remove(), 3000);
             }
         };
 
-        // Session Manager
-        const SessionManager = {
-            sessionId: null,
-            deviceId: null,
-            
-            init: () => {
-                SessionManager.deviceId = localStorage.getItem('deviceId') || Utils.generateId(6);
-                localStorage.setItem('deviceId', SessionManager.deviceId);
-                
-                SessionManager.sessionId = Utils.generateId(8);
-                
-                document.getElementById('sessionId').textContent = SessionManager.sessionId;
-                document.getElementById('deviceId').textContent = SessionManager.deviceId;
-                document.getElementById('sessionInput').value = SessionManager.sessionId;
-            },
-            
-            createNew: () => {
-                SessionManager.sessionId = Utils.generateId(8);
-                document.getElementById('sessionId').textContent = SessionManager.sessionId;
-                document.getElementById('sessionInput').value = SessionManager.sessionId;
-                QRManager.generate();
-                Toast.show('Yeni oturum oluşturuldu', 'success');
-            },
-            
-            getPayload: (data = null) => {
-                return {
-                    sessionId: SessionManager.sessionId,
-                    deviceId: SessionManager.deviceId,
-                    timestamp: Date.now(),
-                    data: data
-                };
-            }
-        };
-
-        // QR Code Manager
-        const QRManager = {
+        // QR Transfer System
+        const QRTransfer = {
             canvas: null,
-            refreshInterval: null,
-            refreshRate: 1000,
-            currentChunk: 0,
             chunks: [],
+            currentChunk: 0,
+            interval: null,
+            speed: 200,
+            chunkSize: 100,
             isSending: false,
-            
-            init: () => {
-                QRManager.canvas = document.getElementById('qrCanvas');
-                QRManager.generate();
-                QRManager.setupControls();
+
+            init() {
+                this.canvas = document.getElementById('qrCanvas');
+                this.setupEvents();
             },
-            
-            generate: (data = null) => {
-                const wrapper = document.getElementById('qrWrapper');
-                const payload = data || SessionManager.getPayload();
+
+            setupEvents() {
+                // Start/Stop buttons
+                document.getElementById('startBtn').addEventListener('click', () => this.startSending());
+                document.getElementById('stopBtn').addEventListener('click', () => this.stopSending());
+
+                // Speed controls
+                const slider = document.getElementById('speedSlider');
+                slider.addEventListener('input', (e) => {
+                    this.speed = parseInt(e.target.value);
+                    document.getElementById('speedValue').textContent = this.speed + 'ms';
+                    this.updatePresetButtons();
+                    if (this.isSending) {
+                        this.restartInterval();
+                    }
+                });
+
+                // Preset buttons
+                document.querySelectorAll('.preset-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const speed = parseInt(btn.dataset.speed);
+                        this.speed = speed;
+                        slider.value = speed;
+                        document.getElementById('speedValue').textContent = speed + 'ms';
+                        this.updatePresetButtons();
+                        if (this.isSending) {
+                            this.restartInterval();
+                        }
+                    });
+                });
+            },
+
+            updatePresetButtons() {
+                document.querySelectorAll('.preset-btn').forEach(btn => {
+                    const speed = parseInt(btn.dataset.speed);
+                    btn.classList.toggle('active', speed === this.speed);
+                });
+            },
+
+            prepareData(text) {
+                // Create chunks with metadata
+                const encoded = encodeURIComponent(text);
+                const chunks = [];
+                const totalChunks = Math.ceil(encoded.length / this.chunkSize);
                 
-                wrapper.classList.add('refreshing');
+                for (let i = 0; i < encoded.length; i += this.chunkSize) {
+                    const chunkData = encoded.slice(i, i + this.chunkSize);
+                    const chunkIndex = Math.floor(i / this.chunkSize);
+                    // Format: QRT|chunkIndex|totalChunks|data
+                    chunks.push(`QRT|${chunkIndex}|${totalChunks}|${chunkData}`);
+                }
                 
-                QRCode.toCanvas(QRManager.canvas, JSON.stringify(payload), {
+                return chunks;
+            },
+
+            startSending() {
+                const text = document.getElementById('sendData').value.trim();
+                if (!text) {
+                    Toast.show('Lutfen gondermek icin metin girin', 'error');
+                    return;
+                }
+
+                this.chunks = this.prepareData(text);
+                this.currentChunk = 0;
+                this.isSending = true;
+
+                // Update UI
+                document.getElementById('startBtn').classList.add('hidden');
+                document.getElementById('stopBtn').classList.remove('hidden');
+                document.getElementById('qrPlaceholder').classList.add('hidden');
+                document.getElementById('qrCanvas').classList.remove('hidden');
+                document.getElementById('sendProgress').classList.remove('hidden');
+
+                // Create chunk indicators
+                this.createChunkIndicators();
+
+                // Update byte info
+                document.getElementById('byteInfo').textContent = new Blob([text]).size + ' byte';
+
+                // Start generating QR codes
+                this.generateQR();
+                this.interval = setInterval(() => this.generateQR(), this.speed);
+
+                Toast.show('Gonderim basladi - ' + this.chunks.length + ' parca', 'success');
+            },
+
+            stopSending() {
+                this.isSending = false;
+                if (this.interval) {
+                    clearInterval(this.interval);
+                    this.interval = null;
+                }
+
+                document.getElementById('startBtn').classList.remove('hidden');
+                document.getElementById('stopBtn').classList.add('hidden');
+
+                Toast.show('Gonderim durduruldu', 'info');
+            },
+
+            restartInterval() {
+                if (this.interval) {
+                    clearInterval(this.interval);
+                }
+                this.interval = setInterval(() => this.generateQR(), this.speed);
+            },
+
+            createChunkIndicators() {
+                const container = document.getElementById('chunkIndicator');
+                container.innerHTML = '';
+                for (let i = 0; i < this.chunks.length; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'chunk-dot';
+                    dot.dataset.index = i;
+                    container.appendChild(dot);
+                }
+            },
+
+            generateQR() {
+                if (!this.isSending || this.chunks.length === 0) return;
+
+                const chunk = this.chunks[this.currentChunk];
+                
+                QRCode.toCanvas(this.canvas, chunk, {
                     width: 200,
-                    margin: 2,
+                    margin: 1,
                     color: {
                         dark: '#000000',
                         light: '#ffffff'
                     },
-                    errorCorrectionLevel: 'M'
-                }, (error) => {
-                    wrapper.classList.remove('refreshing');
-                    if (error) {
-                        console.error('QR generation error:', error);
-                        Toast.show('QR oluşturma hatası', 'error');
-                    } else {
-                        QRManager.canvas.classList.add('qr-flash');
-                        setTimeout(() => QRManager.canvas.classList.remove('qr-flash'), 100);
-                    }
+                    errorCorrectionLevel: 'L'
                 });
+
+                // Update progress
+                const progress = ((this.currentChunk + 1) / this.chunks.length) * 100;
+                document.getElementById('progressFill').style.width = progress + '%';
+                document.getElementById('chunkInfo').textContent = (this.currentChunk + 1) + ' / ' + this.chunks.length;
+
+                // Update chunk indicators
+                document.querySelectorAll('#chunkIndicator .chunk-dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === this.currentChunk);
+                });
+
+                // Move to next chunk (loop)
+                this.currentChunk = (this.currentChunk + 1) % this.chunks.length;
+            }
+        };
+
+        // QR Scanner System
+        const QRScanner = {
+            video: null,
+            stream: null,
+            isScanning: false,
+            receivedChunks: new Map(),
+            totalChunks: null,
+            lastScan: '',
+            scanInterval: null,
+
+            init() {
+                this.video = document.getElementById('scannerVideo');
+                this.setupEvents();
             },
-            
-            startSending: (data) => {
-                if (!data.trim()) {
-                    Toast.show('Lütfen veri girin', 'error');
+
+            setupEvents() {
+                document.getElementById('toggleScanner').addEventListener('click', () => this.toggle());
+                document.getElementById('copyReceived').addEventListener('click', () => this.copyData());
+                document.getElementById('clearReceived').addEventListener('click', () => this.clearData());
+            },
+
+            async toggle() {
+                if (this.isScanning) {
+                    this.stop();
+                } else {
+                    await this.start();
+                }
+            },
+
+            async start() {
+                try {
+                    this.stream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'environment' }
+                    });
+                    
+                    this.video.srcObject = this.stream;
+                    this.isScanning = true;
+                    
+                    document.getElementById('toggleScanner').textContent = 'Tarayiciyi Durdur';
+                    document.getElementById('toggleScanner').classList.remove('btn-primary');
+                    document.getElementById('toggleScanner').classList.add('btn-danger');
+                    document.getElementById('scannerStatus').textContent = 'Tarama aktif - QR kodlari kameraya gosterin';
+
+                    // Start scanning with canvas-based detection
+                    this.startScanning();
+                    
+                    Toast.show('Kamera baslatildi', 'success');
+                } catch (err) {
+                    Toast.show('Kamera erisimi reddedildi', 'error');
+                    console.error(err);
+                }
+            },
+
+            stop() {
+                if (this.stream) {
+                    this.stream.getTracks().forEach(track => track.stop());
+                    this.stream = null;
+                }
+                
+                if (this.scanInterval) {
+                    clearInterval(this.scanInterval);
+                    this.scanInterval = null;
+                }
+
+                this.isScanning = false;
+                this.video.srcObject = null;
+                
+                document.getElementById('toggleScanner').textContent = 'Tarayiciyi Baslat';
+                document.getElementById('toggleScanner').classList.add('btn-primary');
+                document.getElementById('toggleScanner').classList.remove('btn-danger');
+                document.getElementById('scannerStatus').textContent = 'Tarayici durduruldu';
+            },
+
+            startScanning() {
+                // Create a canvas for frame capture
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // Load jsQR for decoding
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js';
+                script.onload = () => {
+                    this.scanInterval = setInterval(() => {
+                        if (!this.isScanning || !this.video.videoWidth) return;
+
+                        canvas.width = this.video.videoWidth;
+                        canvas.height = this.video.videoHeight;
+                        ctx.drawImage(this.video, 0, 0);
+
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                        if (code && code.data && code.data !== this.lastScan) {
+                            this.lastScan = code.data;
+                            this.processQRData(code.data);
+                            
+                            // Reset lastScan after a short delay to allow re-scanning same code
+                            setTimeout(() => {
+                                if (this.lastScan === code.data) {
+                                    this.lastScan = '';
+                                }
+                            }, 100);
+                        }
+                    }, 50); // Scan every 50ms for speed
+                };
+                document.head.appendChild(script);
+            },
+
+            processQRData(data) {
+                // Check if it's our format: QRT|index|total|data
+                if (!data.startsWith('QRT|')) {
+                    // Not our format, show raw data
+                    this.showRawData(data);
                     return;
                 }
-                
-                QRManager.isSending = true;
-                QRManager.chunks = Utils.chunkString(data, 100);
-                QRManager.currentChunk = 0;
-                
-                document.getElementById('startSendBtn').style.display = 'none';
-                document.getElementById('stopSendBtn').style.display = 'flex';
-                document.getElementById('sendProgress').style.display = 'block';
-                
-                QRManager.sendNextChunk();
-                QRManager.refreshInterval = setInterval(() => {
-                    QRManager.sendNextChunk();
-                }, QRManager.refreshRate);
-                
-                Toast.show('Veri gönderimi başladı', 'success');
-                StatusManager.update('connected', 'Veri gönderiliyor...');
-            },
-            
-            sendNextChunk: () => {
-                if (!QRManager.isSending) return;
-                
-                const payload = {
-                    ...SessionManager.getPayload(),
-                    type: 'data',
-                    chunk: QRManager.currentChunk,
-                    total: QRManager.chunks.length,
-                    data: QRManager.chunks[QRManager.currentChunk]
-                };
-                
-                QRManager.generate(payload);
-                
-                const progress = ((QRManager.currentChunk + 1) / QRManager.chunks.length) * 100;
-                document.getElementById('sendProgressFill').style.width = `${progress}%`;
-                document.getElementById('sendProgressText').textContent = `${Math.round(progress)}%`;
-                document.getElementById('sendChunkText').textContent = `${QRManager.currentChunk + 1} / ${QRManager.chunks.length} parça`;
-                
-                QRManager.currentChunk = (QRManager.currentChunk + 1) % QRManager.chunks.length;
-            },
-            
-            stopSending: () => {
-                QRManager.isSending = false;
-                clearInterval(QRManager.refreshInterval);
-                QRManager.refreshInterval = null;
-                
-                document.getElementById('startSendBtn').style.display = 'flex';
-                document.getElementById('stopSendBtn').style.display = 'none';
-                document.getElementById('sendProgress').style.display = 'none';
-                
-                QRManager.generate();
-                Toast.show('Gönderim durduruldu', 'info');
-                StatusManager.update('default', 'Bağlantı bekleniyor...');
-            },
-            
-            setRefreshRate: (rate) => {
-                QRManager.refreshRate = rate;
-                document.getElementById('speedValue').textContent = rate;
-                
-                if (QRManager.isSending) {
-                    clearInterval(QRManager.refreshInterval);
-                    QRManager.refreshInterval = setInterval(() => {
-                        QRManager.sendNextChunk();
-                    }, rate);
+
+                const parts = data.split('|');
+                if (parts.length !== 4) return;
+
+                const chunkIndex = parseInt(parts[1]);
+                const totalChunks = parseInt(parts[2]);
+                const chunkData = parts[3];
+
+                // Store chunk
+                if (!this.receivedChunks.has(chunkIndex)) {
+                    this.receivedChunks.set(chunkIndex, chunkData);
+                    this.totalChunks = totalChunks;
+                    
+                    // Update UI
+                    this.updateReceiveUI();
+
+                    // Check if complete
+                    if (this.receivedChunks.size === totalChunks) {
+                        this.assembleData();
+                    }
                 }
             },
-            
-            setupControls: () => {
-                const slider = document.getElementById('speedSlider');
-                const presets = document.querySelectorAll('.preset-btn[data-speed]');
+
+            showRawData(data) {
+                const box = document.getElementById('receivedData');
+                box.innerHTML = data;
+                box.classList.add('has-data');
+                Toast.show('QR kod okundu', 'success');
+            },
+
+            updateReceiveUI() {
+                document.getElementById('receivedChunks').textContent = this.receivedChunks.size;
+                document.getElementById('totalChunks').textContent = this.totalChunks || '?';
+
+                // Update chunk indicators
+                const container = document.getElementById('receiveChunkIndicator');
+                container.innerHTML = '';
                 
-                slider.addEventListener('input', (e) => {
-                    QRManager.setRefreshRate(parseInt(e.target.value));
-                    presets.forEach(btn => btn.classList.remove('active'));
-                });
-                
-                presets.forEach(btn => {
+                if (this.totalChunks) {
+                    for (let i = 0; i < this.totalChunks; i++) {
+                        const dot = document.createElement('div');
+                        dot.className = 'chunk-dot' + (this.receivedChunks.has(i) ? ' received' : '');
+                        container.appendChild(dot);
+                    }
+                }
+
+                // Show progress in data box
+                const box = document.getElementById('receivedData');
+                const percent = this.totalChunks ? Math.round((this.receivedChunks.size / this.totalChunks) * 100) : 0;
+                box.innerHTML = `Aliniyor... %${percent} (${this.receivedChunks.size}/${this.totalChunks} parca)`;
+            },
+
+            assembleData() {
+                // Sort chunks and combine
+                const sorted = Array.from(this.receivedChunks.entries())
+                    .sort((a, b) => a[0] - b[0])
+                    .map(entry => entry[1])
+                    .join('');
+
+                try {
+                    const decoded = decodeURIComponent(sorted);
+                    
+                    document.getElementById('receivedData').innerHTML = decoded;
+                    document.getElementById('receivedData').classList.add('has-data');
+                    document.getElementById('receivedBytes').textContent = new Blob([decoded]).size;
+
+                    Toast.show('Veri basariyla alindi!', 'success');
+                } catch (e) {
+                    document.getElementById('receivedData').innerHTML = 'Cozumleme hatasi: ' + e.message;
+                    Toast.show('Veri cozumlenemedi', 'error');
+                }
+            },
+
+            copyData() {
+                const data = document.getElementById('receivedData').textContent;
+                if (data && !data.includes('Henuz veri') && !data.includes('Aliniyor')) {
+                    navigator.clipboard.writeText(data);
+                    Toast.show('Panoya kopyalandi', 'success');
+                }
+            },
+
+            clearData() {
+                this.receivedChunks.clear();
+                this.totalChunks = null;
+                document.getElementById('receivedChunks').textContent = '0';
+                document.getElementById('totalChunks').textContent = '?';
+                document.getElementById('receivedBytes').textContent = '0';
+                document.getElementById('receiveChunkIndicator').innerHTML = '';
+                document.getElementById('receivedData').innerHTML = '<div class="received-empty">Henuz veri alinmadi</div>';
+                document.getElementById('receivedData').classList.remove('has-data');
+                Toast.show('Veriler temizlendi', 'info');
+            }
+        };
+
+        // Tab System
+        const TabSystem = {
+            init() {
+                document.querySelectorAll('.tab-btn').forEach(btn => {
                     btn.addEventListener('click', () => {
-                        const speed = parseInt(btn.dataset.speed);
-                        slider.value = speed;
-                        QRManager.setRefreshRate(speed);
-                        presets.forEach(b => b.classList.remove('active'));
+                        const tabId = btn.dataset.tab;
+                        
+                        // Update buttons
+                        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                         btn.classList.add('active');
+                        
+                        // Update content
+                        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                        document.getElementById('tab-' + tabId).classList.add('active');
                     });
                 });
             }
         };
 
-        // QR Scanner Manager
-        const ScannerManager = {
-            scanner: null,
-            isRunning: false,
-            receivedChunks: new Map(),
-            
-            init: async () => {
-                ScannerManager.scanner = new Html5Qrcode('qr-reader');
-            },
-            
-            start: async () => {
-                try {
-                    const config = {
-                        fps: 30,
-                        qrbox: { width: 200, height: 200 },
-                        aspectRatio: 1.0
-                    };
-                    
-                    await ScannerManager.scanner.start(
-                        { facingMode: 'environment' },
-                        config,
-                        ScannerManager.onScanSuccess,
-                        () => {}
-                    );
-                    
-                    ScannerManager.isRunning = true;
-                    document.getElementById('toggleScannerBtn').innerHTML = `
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
-                            <rect x="6" y="4" width="4" height="16"/>
-                            <rect x="14" y="4" width="4" height="16"/>
-                        </svg>
-                        Durdur
-                    `;
-                    
-                    PermissionManager.updateStatus('camera', 'granted');
-                    Toast.show('Tarayıcı başlatıldı', 'success');
-                    StatusManager.update('connected', 'QR taranıyor...');
-                } catch (err) {
-                    console.error('Scanner error:', err);
-                    PermissionManager.updateStatus('camera', 'denied');
-                    Toast.show('Kamera erişimi reddedildi', 'error');
-                }
-            },
-            
-            stop: async () => {
-                if (ScannerManager.isRunning) {
-                    await ScannerManager.scanner.stop();
-                    ScannerManager.isRunning = false;
-                    document.getElementById('toggleScannerBtn').innerHTML = `
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
-                        </svg>
-                        Başlat
-                    `;
-                    StatusManager.update('default', 'Bağlantı bekleniyor...');
-                }
-            },
-            
-            toggle: async () => {
-                if (ScannerManager.isRunning) {
-                    await ScannerManager.stop();
-                } else {
-                    await ScannerManager.start();
-                }
-            },
-            
-            onScanSuccess: (decodedText) => {
-                try {
-                    const data = JSON.parse(decodedText);
-                    
-                    if (data.type === 'data' && data.total) {
-                        // Multi-chunk data
-                        const key = `${data.sessionId}-${data.timestamp}`;
-                        
-                        if (!ScannerManager.receivedChunks.has(key)) {
-                            ScannerManager.receivedChunks.set(key, {
-                                total: data.total,
-                                chunks: new Array(data.total).fill(null),
-                                received: new Set()
-                            });
-                        }
-                        
-                        const session = ScannerManager.receivedChunks.get(key);
-                        
-                        if (!session.received.has(data.chunk)) {
-                            session.chunks[data.chunk] = data.data;
-                            session.received.add(data.chunk);
-                            
-                            if (session.received.size === session.total) {
-                                const fullData = session.chunks.join('');
-                                DataManager.addReceived(fullData, 'qr');
-                                ScannerManager.receivedChunks.delete(key);
-                            }
-                        }
-                    } else if (data.data) {
-                        // Single chunk data
-                        DataManager.addReceived(data.data, 'qr');
-                    } else {
-                        // Session handshake
-                        DataManager.addReceived(`Session: ${data.sessionId} | Device: ${data.deviceId}`, 'qr-session');
-                    }
-                } catch (e) {
-                    // Plain text QR
-                    DataManager.addReceived(decodedText, 'qr');
-                }
-            }
-        };
-
-        // Audio Manager (Simplified - without ggwave for now)
-        const AudioManager = {
-            audioContext: null,
-            analyser: null,
-            microphone: null,
-            isListening: false,
-            visualizerBars: 32,
-            
-            init: () => {
-                AudioManager.createVisualizer('sendVisualizer');
-                AudioManager.createVisualizer('receiveVisualizer');
-            },
-            
-            createVisualizer: (containerId) => {
-                const container = document.getElementById(containerId);
-                container.innerHTML = '';
-                for (let i = 0; i < AudioManager.visualizerBars; i++) {
-                    const bar = document.createElement('div');
-                    bar.className = 'visualizer-bar';
-                    bar.style.height = '4px';
-                    container.appendChild(bar);
-                }
-            },
-            
-            startListening: async () => {
-                try {
-                    AudioManager.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    
-                    AudioManager.microphone = AudioManager.audioContext.createMediaStreamSource(stream);
-                    AudioManager.analyser = AudioManager.audioContext.createAnalyser();
-                    AudioManager.analyser.fftSize = 64;
-                    
-                    AudioManager.microphone.connect(AudioManager.analyser);
-                    AudioManager.isListening = true;
-                    
-                    PermissionManager.updateStatus('mic', 'granted');
-                    PermissionManager.updateStatus('audio', 'granted');
-                    
-                    document.getElementById('toggleAudioBtn').innerHTML = `
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
-                            <rect x="6" y="4" width="4" height="16"/>
-                            <rect x="14" y="4" width="4" height="16"/>
-                        </svg>
-                        Durdur
-                    `;
-                    
-                    AudioManager.visualize();
-                    Toast.show('Ses dinleme başladı', 'success');
-                    StatusManager.update('connected', 'Ses dinleniyor...');
-                } catch (err) {
-                    console.error('Audio error:', err);
-                    PermissionManager.updateStatus('mic', 'denied');
-                    Toast.show('Mikrofon erişimi reddedildi', 'error');
-                }
-            },
-            
-            stopListening: () => {
-                if (AudioManager.microphone) {
-                    AudioManager.microphone.disconnect();
-                }
-                if (AudioManager.audioContext) {
-                    AudioManager.audioContext.close();
-                }
-                AudioManager.isListening = false;
-                
-                document.getElementById('toggleAudioBtn').innerHTML = `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
-                        <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
-                    Dinle
-                `;
-                
-                StatusManager.update('default', 'Bağlantı bekleniyor...');
-            },
-            
-            toggleListening: () => {
-                if (AudioManager.isListening) {
-                    AudioManager.stopListening();
-                } else {
-                    AudioManager.startListening();
-                }
-            },
-            
-            visualize: () => {
-                if (!AudioManager.isListening) return;
-                
-                const bufferLength = AudioManager.analyser.frequencyBinCount;
-                const dataArray = new Uint8Array(bufferLength);
-                AudioManager.analyser.getByteFrequencyData(dataArray);
-                
-                const bars = document.querySelectorAll('#receiveVisualizer .visualizer-bar');
-                bars.forEach((bar, i) => {
-                    const value = dataArray[i] || 0;
-                    const height = Math.max(4, (value / 255) * 50);
-                    bar.style.height = `${height}px`;
-                });
-                
-                requestAnimationFrame(AudioManager.visualize);
-            }
-        };
-
-        // Data Manager
-        const DataManager = {
-            received: [],
-            
-            addReceived: (data, source = 'unknown') => {
-                const item = {
-                    id: Utils.generateId(6),
-                    data: data,
-                    source: source,
-                    timestamp: new Date()
-                };
-                
-                DataManager.received.push(item);
-                DataManager.renderReceived();
-                Toast.show('Yeni veri alındı!', 'success');
-            },
-            
-            renderReceived: () => {
-                const container = document.getElementById('receivedMessages');
-                
-                if (DataManager.received.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
-                                <path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/>
-                            </svg>
-                            <h3>Henüz veri yok</h3>
-                            <p>QR tarayıcıyı başlatın veya ses dinlemeyi aktifleştirin</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                container.innerHTML = DataManager.received.map(item => `
-                    <div class="message-item received">
-                        <div class="message-meta">
-                            <span>${item.source.toUpperCase()}</span>
-                            <span>${Utils.formatTime(item.timestamp)}</span>
-                        </div>
-                        <div class="message-content">${item.data}</div>
-                    </div>
-                `).reverse().join('');
-            },
-            
-            clear: () => {
-                DataManager.received = [];
-                DataManager.renderReceived();
-                Toast.show('Veriler temizlendi', 'info');
-            }
-        };
-
-        // Permission Manager
-        const PermissionManager = {
-            updateStatus: (type, status) => {
-                const statusEl = document.getElementById(`${type}PermStatus`);
-                const iconEl = document.getElementById(`${type}PermIcon`);
-                
-                statusEl.className = `permission-status ${status}`;
-                statusEl.textContent = status === 'granted' ? 'İzin Verildi' : 
-                                       status === 'denied' ? 'Reddedildi' : 'Bekliyor';
-                
-                if (status === 'granted') {
-                    iconEl.classList.add('granted');
-                } else {
-                    iconEl.classList.remove('granted');
-                }
-            },
-            
-            requestAll: async () => {
-                try {
-                    await navigator.mediaDevices.getUserMedia({ video: true });
-                    PermissionManager.updateStatus('camera', 'granted');
-                } catch (e) {
-                    PermissionManager.updateStatus('camera', 'denied');
-                }
-                
-                try {
-                    await navigator.mediaDevices.getUserMedia({ audio: true });
-                    PermissionManager.updateStatus('mic', 'granted');
-                    PermissionManager.updateStatus('audio', 'granted');
-                } catch (e) {
-                    PermissionManager.updateStatus('mic', 'denied');
-                }
-                
-                Toast.show('İzin kontrolü tamamlandı', 'info');
-            }
-        };
-
-        // Status Manager
-        const StatusManager = {
-            update: (status, text) => {
-                const dot = document.getElementById('statusDot');
-                const textEl = document.getElementById('statusText');
-                
-                dot.className = 'status-dot';
-                if (status === 'connected') dot.classList.add('connected');
-                if (status === 'error') dot.classList.add('error');
-                
-                textEl.textContent = text;
-            }
-        };
-
-        // Tab Manager
-        const TabManager = {
-            init: () => {
-                const tabs = document.querySelectorAll('.tab-btn');
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', () => TabManager.switch(tab.dataset.tab));
-                });
-            },
-            
-            switch: (tabId) => {
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.tab === tabId);
-                });
-                
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.toggle('active', content.id === `tab-${tabId}`);
-                });
-            }
-        };
-
-        // Initialize App
-        const initApp = () => {
-            // Initialize managers
-            SessionManager.init();
-            TabManager.init();
-            QRManager.init();
-            ScannerManager.init();
-            AudioManager.init();
-            
-            // Event listeners
-            document.getElementById('refreshQRBtn').addEventListener('click', () => QRManager.generate());
-            document.getElementById('startSendBtn').addEventListener('click', () => {
-                QRManager.startSending(document.getElementById('sendData').value);
-            });
-            document.getElementById('stopSendBtn').addEventListener('click', () => QRManager.stopSending());
-            document.getElementById('toggleScannerBtn').addEventListener('click', () => ScannerManager.toggle());
-            document.getElementById('toggleAudioBtn').addEventListener('click', () => AudioManager.toggleListening());
-            document.getElementById('clearReceivedBtn').addEventListener('click', () => DataManager.clear());
-            document.getElementById('requestPermBtn').addEventListener('click', () => PermissionManager.requestAll());
-            document.getElementById('newSessionBtn').addEventListener('click', () => SessionManager.createNew());
-            document.getElementById('copySessionBtn').addEventListener('click', () => {
-                navigator.clipboard.writeText(SessionManager.sessionId);
-                Toast.show('Oturum ID kopyalandı', 'success');
-            });
-            
-            // Audio mode toggle
-            document.getElementById('modeAudible').addEventListener('click', function() {
-                this.classList.add('active');
-                document.getElementById('modeUltrasonic').classList.remove('active');
-            });
-            document.getElementById('modeUltrasonic').addEventListener('click', function() {
-                this.classList.add('active');
-                document.getElementById('modeAudible').classList.remove('active');
-            });
-            
-            Toast.show('P2P Transfer hazır', 'success');
-        };
-
-        // Wait for libraries to load
-        const waitForLibraries = () => {
-            return new Promise((resolve) => {
-                const check = () => {
-                    if (typeof QRCode !== 'undefined' && typeof Html5Qrcode !== 'undefined') {
-                        resolve();
-                    } else {
-                        setTimeout(check, 50);
-                    }
-                };
-                check();
-            });
-        };
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            await waitForLibraries();
-            initApp();
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            TabSystem.init();
+            QRTransfer.init();
+            QRScanner.init();
+            Toast.show('QR Transfer hazir', 'success');
         });
     </script>
-    
-    <!-- Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </body>
 </html>
