@@ -1,1026 +1,949 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0a0a0a">
-    <title>QR Transfer</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg: #0a0a0a;
-            --bg-card: #111111;
-            --bg-secondary: #1a1a1a;
-            --border: #2a2a2a;
-            --text: #ffffff;
-            --text-secondary: #888888;
-            --text-muted: #555555;
-            --success: #22c55e;
-            --error: #ef4444;
-            --radius: 16px;
-            --radius-sm: 10px;
-        }
-
-        html, body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            min-height: 100dvh;
-        }
-
-        .app {
-            max-width: 440px;
-            margin: 0 auto;
-            padding: 16px;
-            min-height: 100vh;
-            min-height: 100dvh;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .header p {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 4px;
-            margin-bottom: 20px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            font-weight: 500;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .tab-btn.active {
-            background: var(--text);
-            color: var(--bg);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Card */
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 16px;
-        }
-
-        .card-title {
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Input */
-        .textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 14px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            color: var(--text);
-            font-size: 0.938rem;
-            resize: vertical;
-            font-family: inherit;
-        }
-
-        .textarea:focus {
-            outline: none;
-            border-color: var(--text-secondary);
-        }
-
-        .textarea::placeholder {
-            color: var(--text-muted);
-        }
-
-        /* Buttons */
-        .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 0.938rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: var(--text);
-            color: var(--bg);
-        }
-
-        .btn-primary:hover {
-            opacity: 0.9;
-        }
-
-        .btn-primary:disabled {
-            background: var(--text-muted);
-            cursor: not-allowed;
-        }
-
-        .btn-secondary {
-            background: var(--bg-secondary);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-
-        .btn-danger {
-            background: var(--error);
-            color: white;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 16px;
-        }
-
-        .btn-group .btn {
-            flex: 1;
-        }
-
-        /* QR Container */
-        .qr-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .qr-box {
-            background: white;
-            padding: 16px;
-            border-radius: var(--radius);
-            margin-bottom: 16px;
-        }
-
-        #qrCanvas {
-            display: block;
-            width: 200px;
-            height: 200px;
-        }
-
-        .qr-placeholder {
-            width: 200px;
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 0.875rem;
-            text-align: center;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-        }
-
-        /* Speed Control */
-        .speed-section {
-            width: 100%;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border);
-        }
-
-        .speed-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .speed-label {
-            font-size: 0.813rem;
-            color: var(--text-secondary);
-        }
-
-        .speed-value {
-            font-size: 0.875rem;
-            font-weight: 600;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .speed-slider {
-            width: 100%;
-            height: 6px;
-            -webkit-appearance: none;
-            background: var(--bg-secondary);
-            border-radius: 3px;
-            outline: none;
-        }
-
-        .speed-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            background: var(--text);
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .speed-slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            background: var(--text);
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-        }
-
-        .speed-presets {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .preset-btn {
-            padding: 8px 4px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text-secondary);
-            font-size: 0.688rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .preset-btn:hover,
-        .preset-btn.active {
-            border-color: var(--text);
-            color: var(--text);
-        }
-
-        /* Progress */
-        .progress-section {
-            margin-top: 16px;
-        }
-
-        .progress-bar {
-            height: 6px;
-            background: var(--bg-secondary);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--text);
-            border-radius: 3px;
-            transition: width 0.15s;
-            width: 0%;
-        }
-
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 8px;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        /* Scanner */
-        .scanner-area {
-            position: relative;
-            width: 100%;
-            max-width: 300px;
-            aspect-ratio: 1;
-            margin: 0 auto;
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-
-        #scannerVideo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .scanner-overlay {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-        }
-
-        .scanner-frame {
-            position: absolute;
-            inset: 15%;
-            border: 2px solid var(--text);
-            border-radius: 8px;
-            opacity: 0.7;
-        }
-
-        .scan-line {
-            position: absolute;
-            left: 15%;
-            right: 15%;
-            height: 2px;
-            background: var(--success);
-            top: 15%;
-            animation: scanning 2s ease-in-out infinite;
-            box-shadow: 0 0 8px var(--success);
-        }
-
-        @keyframes scanning {
-            0%, 100% { top: 15%; }
-            50% { top: 83%; }
-        }
-
-        .scanner-status {
-            text-align: center;
-            padding: 20px;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        /* Received Data */
-        .received-box {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 16px;
-            min-height: 120px;
-            max-height: 300px;
-            overflow-y: auto;
-            font-family: 'SF Mono', Monaco, monospace;
-            font-size: 0.813rem;
-            word-break: break-all;
-            line-height: 1.6;
-            color: var(--text-secondary);
-        }
-
-        .received-box.has-data {
-            border-color: var(--success);
-            color: var(--success);
-        }
-
-        .received-empty {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100px;
-            color: var(--text-muted);
-            font-size: 0.875rem;
-        }
-
-        /* Stats */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .stat-item {
-            background: var(--bg-secondary);
-            padding: 12px;
-            border-radius: var(--radius-sm);
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.25rem;
-            font-weight: 600;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .stat-label {
-            font-size: 0.688rem;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-
-        /* Toast */
-        .toast-container {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            width: calc(100% - 32px);
-            max-width: 380px;
-        }
-
-        .toast {
-            padding: 14px 18px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            margin-top: 8px;
-            animation: slideIn 0.3s ease;
-            font-size: 0.875rem;
-        }
-
-        .toast.success {
-            border-color: var(--success);
-            color: var(--success);
-        }
-
-        .toast.error {
-            border-color: var(--error);
-            color: var(--error);
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Chunk indicator */
-        .chunk-indicator {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            margin-top: 12px;
-        }
-
-        .chunk-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--border);
-        }
-
-        .chunk-dot.active {
-            background: var(--text);
-        }
-
-        .chunk-dot.received {
-            background: var(--success);
-        }
-
-        /* Hidden */
-        .hidden {
-            display: none !important;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>LAN P2P Transfer</title>
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #121212;
+      --bg-card: #1e1e1e;
+      --bg-hover: #2a2a2a;
+      --text-primary: #f0f0f0;
+      --text-secondary: #a0a0a0;
+      --border: #333;
+      --accent: #4a4a4a;
+      --success: #4ade80;
+      --error: #f87171;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      text-align: center;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border-radius: 24px;
+      font-size: 0.875rem;
+      margin-top: 16px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--error);
+    }
+
+    .status-dot.online {
+      background: var(--success);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .peer-id-display {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-dark);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 1.1rem;
+      word-break: break-all;
+    }
+
+    .copy-btn {
+      background: var(--accent);
+      border: none;
+      color: var(--text-primary);
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: #5a5a5a;
+    }
+
+    .copy-btn:active {
+      transform: scale(0.98);
+    }
+
+    .input-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--text-secondary);
+    }
+
+    input[type="text"]::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .btn {
+      background: var(--text-primary);
+      color: var(--bg-dark);
+      border: none;
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: #e0e0e0;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      background: var(--accent);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--accent);
+    }
+
+    .connected-section {
+      display: none;
+    }
+
+    .connected-section.active {
+      display: block;
+    }
+
+    .connection-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: var(--bg-dark);
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .connection-info .peer-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .connection-info .avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .disconnect-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--error);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 12px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      border-color: var(--text-secondary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    textarea {
+      width: 100%;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-size: 1rem;
+      resize: vertical;
+      min-height: 120px;
+      outline: none;
+      font-family: inherit;
+      margin-bottom: 12px;
+    }
+
+    textarea:focus {
+      border-color: var(--text-secondary);
+    }
+
+    .file-drop {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 12px;
+    }
+
+    .file-drop:hover,
+    .file-drop.dragover {
+      border-color: var(--text-secondary);
+      background: var(--bg-hover);
+    }
+
+    .file-drop-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      opacity: 0.6;
+    }
+
+    .file-drop p {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .selected-file {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--bg-dark);
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .file-icon {
+      font-size: 1.5rem;
+    }
+
+    .file-name {
+      font-size: 0.875rem;
+      word-break: break-all;
+    }
+
+    .file-size {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .remove-file {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.25rem;
+      padding: 4px;
+    }
+
+    .progress-container {
+      margin-top: 16px;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-dark);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--success);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    .progress-text {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 16px;
+      max-height: 300px;
+    }
+
+    .message {
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      border-radius: 12px;
+      max-width: 85%;
+      word-break: break-word;
+    }
+
+    .message.sent {
+      background: var(--accent);
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.received {
+      background: var(--bg-dark);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message.file {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .message .file-download {
+      background: var(--bg-hover);
+      border: none;
+      color: var(--text-primary);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+
+    .message-time {
+      font-size: 0.625rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+      z-index: 100;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 400px) {
+      .container {
+        padding: 12px;
+      }
+
+      header h1 {
+        font-size: 1.25rem;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .input-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="app">
-        <header class="header">
-            <h1>QR Transfer</h1>
-            <p>Cihazlar arasi hizli veri aktarimi</p>
-        </header>
+  <div class="container">
+    <header>
+      <h1>📡 P2P Transfer</h1>
+      <p>Aynı ağdaki cihazlar arasında dosya paylaşımı</p>
+      <div class="status-badge">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Bağlanıyor...</span>
+      </div>
+    </header>
 
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="send">Gonder</button>
-            <button class="tab-btn" data-tab="receive">Al</button>
+    <!-- Connection Section -->
+    <div id="connectionSection">
+      <div class="card">
+        <div class="card-title">Senin Peer ID</div>
+        <div class="peer-id-display">
+          <span id="myPeerId">Yükleniyor...</span>
+          <button class="copy-btn" onclick="copyPeerId()">Kopyala</button>
         </div>
+      </div>
 
-        <!-- SEND TAB -->
-        <div class="tab-content active" id="tab-send">
-            <div class="card">
-                <div class="card-title">Gonderilecek Veri</div>
-                <textarea class="textarea" id="sendData" placeholder="Gondermek istediginiz metni buraya yazin..."></textarea>
-                
-                <div class="btn-group">
-                    <button class="btn btn-primary" id="startBtn">Gondermeye Basla</button>
-                    <button class="btn btn-danger hidden" id="stopBtn">Durdur</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">QR Kod</div>
-                <div class="qr-area">
-                    <div class="qr-box" id="qrBox">
-                        <div class="qr-placeholder" id="qrPlaceholder">Veri girin ve gondermeye baslayin</div>
-                        <canvas id="qrCanvas" class="hidden"></canvas>
-                    </div>
-
-                    <div class="progress-section hidden" id="sendProgress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressFill"></div>
-                        </div>
-                        <div class="progress-info">
-                            <span id="chunkInfo">0 / 0</span>
-                            <span id="byteInfo">0 byte</span>
-                        </div>
-                        <div class="chunk-indicator" id="chunkIndicator"></div>
-                    </div>
-
-                    <div class="speed-section">
-                        <div class="speed-header">
-                            <span class="speed-label">QR Degisim Hizi</span>
-                            <span class="speed-value" id="speedValue">200ms</span>
-                        </div>
-                        <input type="range" class="speed-slider" id="speedSlider" min="30" max="2000" value="200">
-                        <div class="speed-presets">
-                            <button class="preset-btn" data-speed="30">Ultra</button>
-                            <button class="preset-btn" data-speed="50">Cok Hizli</button>
-                            <button class="preset-btn active" data-speed="200">Hizli</button>
-                            <button class="preset-btn" data-speed="500">Normal</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="card">
+        <div class="card-title">Cihaza Bağlan</div>
+        <div class="input-group">
+          <input type="text" id="remotePeerId" placeholder="Peer ID girin">
+          <button class="btn" onclick="connectToPeer()">Bağlan</button>
         </div>
-
-        <!-- RECEIVE TAB -->
-        <div class="tab-content" id="tab-receive">
-            <div class="card">
-                <div class="card-title">QR Tarayici</div>
-                <div class="scanner-area" id="scannerArea">
-                    <video id="scannerVideo" autoplay playsinline></video>
-                    <div class="scanner-overlay">
-                        <div class="scanner-frame"></div>
-                        <div class="scan-line"></div>
-                    </div>
-                </div>
-                <div class="scanner-status" id="scannerStatus">Tarayiciyi baslatmak icin asagidaki butona tiklayin</div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" id="toggleScanner">Tarayiciyi Baslat</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">Alinan Veriler</div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="receivedChunks">0</div>
-                        <div class="stat-label">Parca</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="totalChunks">?</div>
-                        <div class="stat-label">Toplam</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="receivedBytes">0</div>
-                        <div class="stat-label">Byte</div>
-                    </div>
-                </div>
-                <div class="chunk-indicator" id="receiveChunkIndicator"></div>
-                <div class="received-box" id="receivedData">
-                    <div class="received-empty">Henuz veri alinmadi</div>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-secondary" id="copyReceived">Kopyala</button>
-                    <button class="btn btn-secondary" id="clearReceived">Temizle</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="toast-container" id="toastContainer"></div>
+      </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <script>
-        // Toast System
-        const Toast = {
-            show(message, type = 'info') {
-                const container = document.getElementById('toastContainer');
-                const toast = document.createElement('div');
-                toast.className = `toast ${type}`;
-                toast.textContent = message;
-                container.appendChild(toast);
-                setTimeout(() => toast.remove(), 3000);
-            }
+    <!-- Connected Section -->
+    <div class="connected-section" id="connectedSection">
+      <div class="card">
+        <div class="connection-info">
+          <div class="peer-name">
+            <div class="avatar" id="peerAvatar">?</div>
+            <div>
+              <div id="connectedPeerName">Bağlı Cihaz</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);" id="connectedPeerId"></div>
+            </div>
+          </div>
+          <button class="disconnect-btn" onclick="disconnect()">Bağlantıyı Kes</button>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('text')">💬 Mesaj</button>
+          <button class="tab" onclick="switchTab('file')">📁 Dosya</button>
+        </div>
+
+        <!-- Text Tab -->
+        <div class="tab-content active" id="textTab">
+          <div class="messages" id="messages">
+            <div class="empty-state">
+              <div class="empty-state-icon">💬</div>
+              <p>Henüz mesaj yok</p>
+            </div>
+          </div>
+          <textarea id="messageInput" placeholder="Mesajınızı yazın..."></textarea>
+          <button class="btn" onclick="sendMessage()" style="width: 100%;">Gönder</button>
+        </div>
+
+        <!-- File Tab -->
+        <div class="tab-content" id="fileTab">
+          <div class="file-drop" id="fileDrop" onclick="document.getElementById('fileInput').click()">
+            <div class="file-drop-icon">📂</div>
+            <p>Dosya seçmek için tıklayın<br>veya sürükleyip bırakın</p>
+          </div>
+          <input type="file" class="file-input" id="fileInput" onchange="handleFileSelect(event)">
+          
+          <div id="selectedFileContainer" style="display: none;">
+            <div class="selected-file">
+              <div class="file-info">
+                <span class="file-icon">📄</span>
+                <div>
+                  <div class="file-name" id="selectedFileName"></div>
+                  <div class="file-size" id="selectedFileSize"></div>
+                </div>
+              </div>
+              <button class="remove-file" onclick="removeSelectedFile()">✕</button>
+            </div>
+            <button class="btn" onclick="sendFile()" style="width: 100%;">Dosyayı Gönder</button>
+          </div>
+
+          <div class="progress-container" id="progressContainer" style="display: none;">
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">%0</div>
+          </div>
+
+          <div class="messages" id="fileMessages" style="margin-top: 16px;">
+            <div class="empty-state">
+              <div class="empty-state-icon">📁</div>
+              <p>Alınan dosyalar burada görünecek</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let peer = null;
+    let conn = null;
+    let selectedFile = null;
+    let receivingFile = null;
+    let receivedChunks = [];
+
+    const CHUNK_SIZE = 16384;
+
+    function init() {
+      const randomId = 'P' + Math.random().toString(36).substring(2, 8).toUpperCase();
+      
+      peer = new Peer(randomId, {
+        debug: 0
+      });
+
+      peer.on('open', (id) => {
+        document.getElementById('myPeerId').textContent = id;
+        document.getElementById('statusDot').classList.add('online');
+        document.getElementById('statusText').textContent = 'Çevrimiçi';
+      });
+
+      peer.on('connection', (connection) => {
+        if (conn) {
+          connection.close();
+          return;
+        }
+        conn = connection;
+        setupConnection();
+      });
+
+      peer.on('error', (err) => {
+        console.error('Peer error:', err);
+        if (err.type === 'peer-unavailable') {
+          showToast('Cihaz bulunamadı');
+        } else {
+          showToast('Bağlantı hatası: ' + err.type);
+        }
+      });
+
+      peer.on('disconnected', () => {
+        document.getElementById('statusDot').classList.remove('online');
+        document.getElementById('statusText').textContent = 'Bağlantı kesildi';
+      });
+
+      setupDragDrop();
+    }
+
+    function connectToPeer() {
+      const remotePeerId = document.getElementById('remotePeerId').value.trim();
+      if (!remotePeerId) {
+        showToast('Peer ID girin');
+        return;
+      }
+
+      conn = peer.connect(remotePeerId, { reliable: true });
+      setupConnection();
+    }
+
+    function setupConnection() {
+      conn.on('open', () => {
+        showConnectedUI();
+        showToast('Bağlantı kuruldu!');
+      });
+
+      conn.on('data', (data) => {
+        handleIncomingData(data);
+      });
+
+      conn.on('close', () => {
+        disconnect();
+        showToast('Bağlantı kapandı');
+      });
+
+      conn.on('error', (err) => {
+        console.error('Connection error:', err);
+        showToast('Bağlantı hatası');
+      });
+    }
+
+    function showConnectedUI() {
+      document.getElementById('connectionSection').style.display = 'none';
+      document.getElementById('connectedSection').classList.add('active');
+      document.getElementById('connectedPeerId').textContent = conn.peer;
+      document.getElementById('peerAvatar').textContent = conn.peer.charAt(0);
+      document.getElementById('connectedPeerName').textContent = 'Cihaz ' + conn.peer;
+    }
+
+    function disconnect() {
+      if (conn) {
+        conn.close();
+        conn = null;
+      }
+      document.getElementById('connectionSection').style.display = 'block';
+      document.getElementById('connectedSection').classList.remove('active');
+      document.getElementById('remotePeerId').value = '';
+      resetUI();
+    }
+
+    function resetUI() {
+      document.getElementById('messages').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">💬</div>
+          <p>Henüz mesaj yok</p>
+        </div>
+      `;
+      document.getElementById('fileMessages').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">📁</div>
+          <p>Alınan dosyalar burada görünecek</p>
+        </div>
+      `;
+      removeSelectedFile();
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      
+      if (tab === 'text') {
+        document.querySelectorAll('.tab')[0].classList.add('active');
+        document.getElementById('textTab').classList.add('active');
+      } else {
+        document.querySelectorAll('.tab')[1].classList.add('active');
+        document.getElementById('fileTab').classList.add('active');
+      }
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const text = input.value.trim();
+      if (!text || !conn) return;
+
+      conn.send({ type: 'text', content: text });
+      addMessage(text, true);
+      input.value = '';
+    }
+
+    function addMessage(content, sent, isFile = false, fileData = null) {
+      const container = isFile ? document.getElementById('fileMessages') : document.getElementById('messages');
+      
+      if (container.querySelector('.empty-state')) {
+        container.innerHTML = '';
+      }
+
+      const msg = document.createElement('div');
+      msg.className = `message ${sent ? 'sent' : 'received'}`;
+      
+      if (isFile && fileData) {
+        msg.classList.add('file');
+        msg.innerHTML = `
+          <span class="file-icon">📄</span>
+          <div>
+            <div class="file-name">${fileData.name}</div>
+            <div class="file-size">${formatSize(fileData.size)}</div>
+          </div>
+          <button class="file-download" onclick="downloadFile('${fileData.id}')">İndir</button>
+        `;
+      } else {
+        msg.textContent = content;
+      }
+
+      const time = document.createElement('div');
+      time.className = 'message-time';
+      time.textContent = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+      msg.appendChild(time);
+
+      container.appendChild(msg);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function handleIncomingData(data) {
+      if (data.type === 'text') {
+        addMessage(data.content, false);
+      } else if (data.type === 'file-start') {
+        receivingFile = {
+          name: data.name,
+          size: data.size,
+          totalChunks: data.totalChunks
         };
-
-        // QR Transfer System
-        const QRTransfer = {
-            canvas: null,
-            chunks: [],
-            currentChunk: 0,
-            interval: null,
-            speed: 200,
-            chunkSize: 100,
-            isSending: false,
-
-            init() {
-                this.canvas = document.getElementById('qrCanvas');
-                this.setupEvents();
-            },
-
-            setupEvents() {
-                // Start/Stop buttons
-                document.getElementById('startBtn').addEventListener('click', () => this.startSending());
-                document.getElementById('stopBtn').addEventListener('click', () => this.stopSending());
-
-                // Speed controls
-                const slider = document.getElementById('speedSlider');
-                slider.addEventListener('input', (e) => {
-                    this.speed = parseInt(e.target.value);
-                    document.getElementById('speedValue').textContent = this.speed + 'ms';
-                    this.updatePresetButtons();
-                    if (this.isSending) {
-                        this.restartInterval();
-                    }
-                });
-
-                // Preset buttons
-                document.querySelectorAll('.preset-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const speed = parseInt(btn.dataset.speed);
-                        this.speed = speed;
-                        slider.value = speed;
-                        document.getElementById('speedValue').textContent = speed + 'ms';
-                        this.updatePresetButtons();
-                        if (this.isSending) {
-                            this.restartInterval();
-                        }
-                    });
-                });
-            },
-
-            updatePresetButtons() {
-                document.querySelectorAll('.preset-btn').forEach(btn => {
-                    const speed = parseInt(btn.dataset.speed);
-                    btn.classList.toggle('active', speed === this.speed);
-                });
-            },
-
-            prepareData(text) {
-                // Create chunks with metadata
-                const encoded = encodeURIComponent(text);
-                const chunks = [];
-                const totalChunks = Math.ceil(encoded.length / this.chunkSize);
-                
-                for (let i = 0; i < encoded.length; i += this.chunkSize) {
-                    const chunkData = encoded.slice(i, i + this.chunkSize);
-                    const chunkIndex = Math.floor(i / this.chunkSize);
-                    // Format: QRT|chunkIndex|totalChunks|data
-                    chunks.push(`QRT|${chunkIndex}|${totalChunks}|${chunkData}`);
-                }
-                
-                return chunks;
-            },
-
-            startSending() {
-                const text = document.getElementById('sendData').value.trim();
-                if (!text) {
-                    Toast.show('Lutfen gondermek icin metin girin', 'error');
-                    return;
-                }
-
-                this.chunks = this.prepareData(text);
-                this.currentChunk = 0;
-                this.isSending = true;
-
-                // Update UI
-                document.getElementById('startBtn').classList.add('hidden');
-                document.getElementById('stopBtn').classList.remove('hidden');
-                document.getElementById('qrPlaceholder').classList.add('hidden');
-                document.getElementById('qrCanvas').classList.remove('hidden');
-                document.getElementById('sendProgress').classList.remove('hidden');
-
-                // Create chunk indicators
-                this.createChunkIndicators();
-
-                // Update byte info
-                document.getElementById('byteInfo').textContent = new Blob([text]).size + ' byte';
-
-                // Start generating QR codes
-                this.generateQR();
-                this.interval = setInterval(() => this.generateQR(), this.speed);
-
-                Toast.show('Gonderim basladi - ' + this.chunks.length + ' parca', 'success');
-            },
-
-            stopSending() {
-                this.isSending = false;
-                if (this.interval) {
-                    clearInterval(this.interval);
-                    this.interval = null;
-                }
-
-                document.getElementById('startBtn').classList.remove('hidden');
-                document.getElementById('stopBtn').classList.add('hidden');
-
-                Toast.show('Gonderim durduruldu', 'info');
-            },
-
-            restartInterval() {
-                if (this.interval) {
-                    clearInterval(this.interval);
-                }
-                this.interval = setInterval(() => this.generateQR(), this.speed);
-            },
-
-            createChunkIndicators() {
-                const container = document.getElementById('chunkIndicator');
-                container.innerHTML = '';
-                for (let i = 0; i < this.chunks.length; i++) {
-                    const dot = document.createElement('div');
-                    dot.className = 'chunk-dot';
-                    dot.dataset.index = i;
-                    container.appendChild(dot);
-                }
-            },
-
-            generateQR() {
-                if (!this.isSending || this.chunks.length === 0) return;
-
-                const chunk = this.chunks[this.currentChunk];
-                
-                QRCode.toCanvas(this.canvas, chunk, {
-                    width: 200,
-                    margin: 1,
-                    color: {
-                        dark: '#000000',
-                        light: '#ffffff'
-                    },
-                    errorCorrectionLevel: 'L'
-                });
-
-                // Update progress
-                const progress = ((this.currentChunk + 1) / this.chunks.length) * 100;
-                document.getElementById('progressFill').style.width = progress + '%';
-                document.getElementById('chunkInfo').textContent = (this.currentChunk + 1) + ' / ' + this.chunks.length;
-
-                // Update chunk indicators
-                document.querySelectorAll('#chunkIndicator .chunk-dot').forEach((dot, i) => {
-                    dot.classList.toggle('active', i === this.currentChunk);
-                });
-
-                // Move to next chunk (loop)
-                this.currentChunk = (this.currentChunk + 1) % this.chunks.length;
-            }
-        };
-
-        // QR Scanner System
-        const QRScanner = {
-            video: null,
-            stream: null,
-            isScanning: false,
-            receivedChunks: new Map(),
-            totalChunks: null,
-            lastScan: '',
-            scanInterval: null,
-
-            init() {
-                this.video = document.getElementById('scannerVideo');
-                this.setupEvents();
-            },
-
-            setupEvents() {
-                document.getElementById('toggleScanner').addEventListener('click', () => this.toggle());
-                document.getElementById('copyReceived').addEventListener('click', () => this.copyData());
-                document.getElementById('clearReceived').addEventListener('click', () => this.clearData());
-            },
-
-            async toggle() {
-                if (this.isScanning) {
-                    this.stop();
-                } else {
-                    await this.start();
-                }
-            },
-
-            async start() {
-                try {
-                    this.stream = await navigator.mediaDevices.getUserMedia({
-                        video: { facingMode: 'environment' }
-                    });
-                    
-                    this.video.srcObject = this.stream;
-                    this.isScanning = true;
-                    
-                    document.getElementById('toggleScanner').textContent = 'Tarayiciyi Durdur';
-                    document.getElementById('toggleScanner').classList.remove('btn-primary');
-                    document.getElementById('toggleScanner').classList.add('btn-danger');
-                    document.getElementById('scannerStatus').textContent = 'Tarama aktif - QR kodlari kameraya gosterin';
-
-                    // Start scanning with canvas-based detection
-                    this.startScanning();
-                    
-                    Toast.show('Kamera baslatildi', 'success');
-                } catch (err) {
-                    Toast.show('Kamera erisimi reddedildi', 'error');
-                    console.error(err);
-                }
-            },
-
-            stop() {
-                if (this.stream) {
-                    this.stream.getTracks().forEach(track => track.stop());
-                    this.stream = null;
-                }
-                
-                if (this.scanInterval) {
-                    clearInterval(this.scanInterval);
-                    this.scanInterval = null;
-                }
-
-                this.isScanning = false;
-                this.video.srcObject = null;
-                
-                document.getElementById('toggleScanner').textContent = 'Tarayiciyi Baslat';
-                document.getElementById('toggleScanner').classList.add('btn-primary');
-                document.getElementById('toggleScanner').classList.remove('btn-danger');
-                document.getElementById('scannerStatus').textContent = 'Tarayici durduruldu';
-            },
-
-            startScanning() {
-                // Create a canvas for frame capture
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-
-                // Load jsQR for decoding
-                const script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js';
-                script.onload = () => {
-                    this.scanInterval = setInterval(() => {
-                        if (!this.isScanning || !this.video.videoWidth) return;
-
-                        canvas.width = this.video.videoWidth;
-                        canvas.height = this.video.videoHeight;
-                        ctx.drawImage(this.video, 0, 0);
-
-                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                        const code = jsQR(imageData.data, imageData.width, imageData.height);
-
-                        if (code && code.data && code.data !== this.lastScan) {
-                            this.lastScan = code.data;
-                            this.processQRData(code.data);
-                            
-                            // Reset lastScan after a short delay to allow re-scanning same code
-                            setTimeout(() => {
-                                if (this.lastScan === code.data) {
-                                    this.lastScan = '';
-                                }
-                            }, 100);
-                        }
-                    }, 50); // Scan every 50ms for speed
-                };
-                document.head.appendChild(script);
-            },
-
-            processQRData(data) {
-                // Check if it's our format: QRT|index|total|data
-                if (!data.startsWith('QRT|')) {
-                    // Not our format, show raw data
-                    this.showRawData(data);
-                    return;
-                }
-
-                const parts = data.split('|');
-                if (parts.length !== 4) return;
-
-                const chunkIndex = parseInt(parts[1]);
-                const totalChunks = parseInt(parts[2]);
-                const chunkData = parts[3];
-
-                // Store chunk
-                if (!this.receivedChunks.has(chunkIndex)) {
-                    this.receivedChunks.set(chunkIndex, chunkData);
-                    this.totalChunks = totalChunks;
-                    
-                    // Update UI
-                    this.updateReceiveUI();
-
-                    // Check if complete
-                    if (this.receivedChunks.size === totalChunks) {
-                        this.assembleData();
-                    }
-                }
-            },
-
-            showRawData(data) {
-                const box = document.getElementById('receivedData');
-                box.innerHTML = data;
-                box.classList.add('has-data');
-                Toast.show('QR kod okundu', 'success');
-            },
-
-            updateReceiveUI() {
-                document.getElementById('receivedChunks').textContent = this.receivedChunks.size;
-                document.getElementById('totalChunks').textContent = this.totalChunks || '?';
-
-                // Update chunk indicators
-                const container = document.getElementById('receiveChunkIndicator');
-                container.innerHTML = '';
-                
-                if (this.totalChunks) {
-                    for (let i = 0; i < this.totalChunks; i++) {
-                        const dot = document.createElement('div');
-                        dot.className = 'chunk-dot' + (this.receivedChunks.has(i) ? ' received' : '');
-                        container.appendChild(dot);
-                    }
-                }
-
-                // Show progress in data box
-                const box = document.getElementById('receivedData');
-                const percent = this.totalChunks ? Math.round((this.receivedChunks.size / this.totalChunks) * 100) : 0;
-                box.innerHTML = `Aliniyor... %${percent} (${this.receivedChunks.size}/${this.totalChunks} parca)`;
-            },
-
-            assembleData() {
-                // Sort chunks and combine
-                const sorted = Array.from(this.receivedChunks.entries())
-                    .sort((a, b) => a[0] - b[0])
-                    .map(entry => entry[1])
-                    .join('');
-
-                try {
-                    const decoded = decodeURIComponent(sorted);
-                    
-                    document.getElementById('receivedData').innerHTML = decoded;
-                    document.getElementById('receivedData').classList.add('has-data');
-                    document.getElementById('receivedBytes').textContent = new Blob([decoded]).size;
-
-                    Toast.show('Veri basariyla alindi!', 'success');
-                } catch (e) {
-                    document.getElementById('receivedData').innerHTML = 'Cozumleme hatasi: ' + e.message;
-                    Toast.show('Veri cozumlenemedi', 'error');
-                }
-            },
-
-            copyData() {
-                const data = document.getElementById('receivedData').textContent;
-                if (data && !data.includes('Henuz veri') && !data.includes('Aliniyor')) {
-                    navigator.clipboard.writeText(data);
-                    Toast.show('Panoya kopyalandi', 'success');
-                }
-            },
-
-            clearData() {
-                this.receivedChunks.clear();
-                this.totalChunks = null;
-                document.getElementById('receivedChunks').textContent = '0';
-                document.getElementById('totalChunks').textContent = '?';
-                document.getElementById('receivedBytes').textContent = '0';
-                document.getElementById('receiveChunkIndicator').innerHTML = '';
-                document.getElementById('receivedData').innerHTML = '<div class="received-empty">Henuz veri alinmadi</div>';
-                document.getElementById('receivedData').classList.remove('has-data');
-                Toast.show('Veriler temizlendi', 'info');
-            }
-        };
-
-        // Tab System
-        const TabSystem = {
-            init() {
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const tabId = btn.dataset.tab;
-                        
-                        // Update buttons
-                        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
-                        
-                        // Update content
-                        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                        document.getElementById('tab-' + tabId).classList.add('active');
-                    });
-                });
-            }
-        };
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            TabSystem.init();
-            QRTransfer.init();
-            QRScanner.init();
-            Toast.show('QR Transfer hazir', 'success');
+        receivedChunks = [];
+        showProgress(0, 'Dosya alınıyor...');
+      } else if (data.type === 'file-chunk') {
+        receivedChunks.push(data.chunk);
+        const progress = (receivedChunks.length / receivingFile.totalChunks) * 100;
+        showProgress(progress, `%${Math.round(progress)} alındı`);
+      } else if (data.type === 'file-end') {
+        const blob = new Blob(receivedChunks);
+        const id = 'file_' + Date.now();
+        window[id] = { blob, name: receivingFile.name };
+        
+        addMessage('', false, true, {
+          name: receivingFile.name,
+          size: receivingFile.size,
+          id: id
         });
-    </script>
+        
+        hideProgress();
+        showToast('Dosya alındı: ' + receivingFile.name);
+        receivingFile = null;
+        receivedChunks = [];
+      }
+    }
+
+    function downloadFile(id) {
+      const file = window[id];
+      if (!file) return;
+
+      const url = URL.createObjectURL(file.blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = file.name;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function setupDragDrop() {
+      const dropZone = document.getElementById('fileDrop');
+      
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
+        dropZone.addEventListener(event, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        });
+      });
+
+      ['dragenter', 'dragover'].forEach(event => {
+        dropZone.addEventListener(event, () => dropZone.classList.add('dragover'));
+      });
+
+      ['dragleave', 'drop'].forEach(event => {
+        dropZone.addEventListener(event, () => dropZone.classList.remove('dragover'));
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          setSelectedFile(files[0]);
+        }
+      });
+    }
+
+    function handleFileSelect(e) {
+      if (e.target.files.length > 0) {
+        setSelectedFile(e.target.files[0]);
+      }
+    }
+
+    function setSelectedFile(file) {
+      selectedFile = file;
+      document.getElementById('fileDrop').style.display = 'none';
+      document.getElementById('selectedFileContainer').style.display = 'block';
+      document.getElementById('selectedFileName').textContent = file.name;
+      document.getElementById('selectedFileSize').textContent = formatSize(file.size);
+    }
+
+    function removeSelectedFile() {
+      selectedFile = null;
+      document.getElementById('fileDrop').style.display = 'block';
+      document.getElementById('selectedFileContainer').style.display = 'none';
+      document.getElementById('fileInput').value = '';
+    }
+
+    async function sendFile() {
+      if (!selectedFile || !conn) return;
+
+      const file = selectedFile;
+      const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+
+      conn.send({
+        type: 'file-start',
+        name: file.name,
+        size: file.size,
+        totalChunks: totalChunks
+      });
+
+      const reader = new FileReader();
+      let offset = 0;
+
+      const readNextChunk = () => {
+        const slice = file.slice(offset, offset + CHUNK_SIZE);
+        reader.readAsArrayBuffer(slice);
+      };
+
+      reader.onload = (e) => {
+        conn.send({
+          type: 'file-chunk',
+          chunk: e.target.result
+        });
+
+        offset += CHUNK_SIZE;
+        const progress = Math.min((offset / file.size) * 100, 100);
+        showProgress(progress, `%${Math.round(progress)} gönderildi`);
+
+        if (offset < file.size) {
+          readNextChunk();
+        } else {
+          conn.send({ type: 'file-end' });
+          hideProgress();
+          showToast('Dosya gönderildi!');
+          removeSelectedFile();
+        }
+      };
+
+      showProgress(0, 'Gönderiliyor...');
+      readNextChunk();
+    }
+
+    function showProgress(percent, text) {
+      document.getElementById('progressContainer').style.display = 'block';
+      document.getElementById('progressFill').style.width = percent + '%';
+      document.getElementById('progressText').textContent = text;
+    }
+
+    function hideProgress() {
+      document.getElementById('progressContainer').style.display = 'none';
+    }
+
+    function copyPeerId() {
+      const id = document.getElementById('myPeerId').textContent;
+      navigator.clipboard.writeText(id).then(() => {
+        showToast('Kopyalandı!');
+      });
+    }
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+      return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    document.getElementById('remotePeerId').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        connectToPeer();
+      }
+    });
+
+    init();
+  </script>
 </body>
 </html>
